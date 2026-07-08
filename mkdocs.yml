@@ -1,0 +1,92 @@
+site_name: Acceso a Datos
+
+theme:
+  name: material
+  language: es
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: red
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Modo oscuro
+    - scheme: slate
+      primary: red
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Modo Claro
+  features:
+    - navigation.top
+    - navigation.tracking
+    - navigation.footer
+    - content.code.copy
+    - content.code.select
+
+nav:
+  - Inicio: index.md
+  - Tema 0 - Introducción:
+      - Tema 0 - Introducción: tema0/index.md
+      - Git y GitHub:
+          - Introducción a Git: tema0/introduccion-git.md
+          - Actividad 0.1 - Git local: tema0/actividad_0_1.md
+          - Ramas en Git: tema0/ramas.md
+          - Actividad 0.2 - Ramas en Git: tema0/actividad_0_2.md
+          - GitHub y repositorios remotos: tema0/github.md
+          - Actividad 0.3 - Tu portafolio en GitHub: tema0/actividad_0_3.md
+          - Colaboración en GitHub: tema0/colaboracion.md
+          - Actividad 0.4 - Contribuir a un portafolio: tema0/actividad_0_4.md
+          - Integración continua con GitHub Actions: tema0/github-actions.md
+          - Actividad 0.5 - Pipeline de CI: tema0/actividad_0_5.md
+      - Docker y Dev Container:
+          - Introducción a Docker: tema0/introduccion-docker.md
+          - Actividad 0.6 - WordPress con Docker Compose: tema0/actividad_0_6.md
+          - Dev Containers: tema0/dev-containers.md
+          - Actividad 0.7 - Tu primer Dev Container: tema0/actividad_0_7.md
+  - Tema 1:
+      - Tema 1 - Introducción: tema1/index.md
+      - Ejemplo de apartado: tema1/ejemplo-apartado.md
+      - Actividad 1.1: tema1/actividad_1_1.md
+
+  # A medida que crees temas nuevos, añade aquí sus páginas siguiendo el mismo
+  # patrón: index.md del tema, luego apartados de teoría intercalados con sus
+  # actividades en el orden en que se deben estudiar.
+  #
+  # - Tema 2:
+  #     - Tema 2 - Introducción: tema2/index.md
+  #     - ...
+
+markdown_extensions:
+  - md_in_html
+  - attr_list
+  - admonition             # (solo una vez)
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:    # usa este, NO 'codehilite'
+      anchor_linenums: true
+      linenums: true
+      auto_title: true
+      pygments_lang_class: true
+  - pymdownx.mark
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.superfences:  # habilita Mermaid como fence
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_css:
+  - css/extra.css
+
+plugins:
+  - search
+  - mkdocs-pdf

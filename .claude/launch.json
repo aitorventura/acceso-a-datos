@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "acceso-a-datos-docs",
+      "runtimeExecutable": "C:\\Users\\Aitor\\AppData\\Roaming\\Python\\Python314\\Scripts\\mkdocs.exe",
+      "runtimeArgs": ["serve", "-a", "127.0.0.1:8001"],
+      "port": 8001
+    }
+  ]
+}
