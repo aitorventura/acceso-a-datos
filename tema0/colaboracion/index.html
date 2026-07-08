@@ -1,0 +1,1374 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../actividad_0_3/">
+      
+      
+        <link rel="next" href="../actividad_0_4/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Colaboración en GitHub - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-colaboracion-y-gestion-de-proyectos-en-github" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Colaboración en GitHub
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#forks-bifurcaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      🍴 Forks (Bifurcaciones)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🍴 Forks (Bifurcaciones)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sincronizacion-del-fork" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sincronización del Fork
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-requests-prs" class="md-nav__link">
+    <span class="md-ellipsis">
+      📩 Pull Requests (PRs)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📩 Pull Requests (PRs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abrir-una-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Abrir una Pull Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enlazar-prs-con-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enlazar PRs con Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gestion-del-proyecto-issues-y-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎫 Gestión del proyecto: Issues y Projects
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#otras-herramientas-del-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Otras herramientas del repositorio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecciones-de-ramas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔒 Protecciones de ramas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#forks-bifurcaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      🍴 Forks (Bifurcaciones)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🍴 Forks (Bifurcaciones)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sincronizacion-del-fork" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sincronización del Fork
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-requests-prs" class="md-nav__link">
+    <span class="md-ellipsis">
+      📩 Pull Requests (PRs)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📩 Pull Requests (PRs)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abrir-una-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Abrir una Pull Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enlazar-prs-con-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enlazar PRs con Issues
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gestion-del-proyecto-issues-y-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎫 Gestión del proyecto: Issues y Projects
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#otras-herramientas-del-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Otras herramientas del repositorio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecciones-de-ramas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔒 Protecciones de ramas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="4-colaboracion-y-gestion-de-proyectos-en-github">🤝 4. Colaboración y Gestión de Proyectos en GitHub<a class="headerlink" href="#4-colaboracion-y-gestion-de-proyectos-en-github" title="Permanent link">¶</a></h1>
+<p><embed alt="Colaboración y Gestión de Proyectos en GitHub" src="../diapositivas/colaboracion.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/colaboracion.pdf" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
+<hr>
+<p>Git y GitHub no son solo una herramienta para guardar código: son la base sobre la que se organiza el trabajo en equipo en la mayoría de empresas de software. En este apartado veremos cómo contribuir a proyectos ajenos y cómo gestionar el trabajo dentro de un equipo usando las herramientas que GitHub pone a disposición.</p>
+<hr>
+<h2 id="forks-bifurcaciones">🍴 Forks (Bifurcaciones)<a class="headerlink" href="#forks-bifurcaciones" title="Permanent link">¶</a></h2>
+<p>Un <strong>Fork</strong> es una copia de un repositorio ajeno que GitHub crea dentro de tu propia cuenta. La diferencia respecto a un clon normal es que el fork vive en el servidor, bajo tu usuario, y tú tienes control total sobre él.</p>
+<p>El caso típico: encuentras un proyecto en GitHub que te interesa mejorar, pero no eres colaborador del repositorio original y no puedes hacer <code>push</code> directamente. La solución es hacer un fork: pulsas el botón "Fork" en la esquina superior derecha y GitHub copia todo el repositorio bajo tu cuenta en cuestión de segundos.</p>
+<p>A partir de ahí puedes clonar tu copia, crear ramas, modificar lo que quieras y hacer push sin afectar en absoluto al proyecto original. GitHub mantiene internamente la referencia al repositorio de origen, lo que facilita después proponer tus cambios de vuelta al autor mediante una Pull Request.</p>
+<div class="admonition tip">
+<p class="admonition-title">¿Fork o clone directo?</p>
+<p>Clona directamente si ya eres colaborador del repositorio y tienes permisos de escritura. Haz un fork cuando quieras contribuir a un proyecto ajeno donde no tienes permisos: tu fork actúa como puerta de entrada para proponer cambios mediante Pull Request.</p>
+</div>
+<p><img alt="Botón Fork en GitHub" src="../img/colaboracion/menu_fork.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el botón Fork en la esquina superior derecha de un repositorio ajeno.</p>
+<p><img alt="Crear Fork" src="../img/colaboracion/fork.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> la pantalla de creación del fork, donde se elige bajo qué cuenta o organización se crea la copia.</p>
+<h3 id="sincronizacion-del-fork">Sincronización del Fork<a class="headerlink" href="#sincronizacion-del-fork" title="Permanent link">¶</a></h3>
+<p>Con el tiempo, el repositorio original seguirá recibiendo commits. Para poner tu fork al día sin tener que hacerlo a mano, GitHub ofrece el botón <strong>Sync fork</strong> en la página principal de tu repositorio bifurcado.</p>
+<div class="admonition tip">
+<p class="admonition-title">¿Qué es upstream?</p>
+<p>En el contexto de los forks, <strong>upstream</strong> es el nombre que se le da al repositorio original del que proviene tu fork. Tu copia es <code>origin</code>; el proyecto del que la hiciste es <code>upstream</code>. Cuando sincronizas el fork, estás trayendo los cambios de <code>upstream</code> a tu <code>origin</code>.</p>
+</div>
+<p>Si el repositorio original y el tuyo han avanzado por separado, la sincronización puede generar conflictos que tendrás que resolver igual que harías con un <code>git pull</code> con cambios divergentes. Por eso conviene sincronizar antes de empezar a trabajar en una nueva funcionalidad, no después.</p>
+<hr>
+<h2 id="pull-requests-prs">📩 Pull Requests (PRs)<a class="headerlink" href="#pull-requests-prs" title="Permanent link">¶</a></h2>
+<p>Una <strong>Pull Request</strong> es una propuesta formal para integrar los commits de una rama en otra. Le estás diciendo a los responsables del repositorio: "He hecho estos cambios en esta rama; ¿los revisáis y los integráis en <code>main</code>?"</p>
+<p>Es el mecanismo estándar en la industria tanto para contribuir a proyectos de terceros (desde un fork) como para trabajar en equipo dentro del mismo repositorio (desde una rama propia hacia <code>main</code>).</p>
+<p>El flujo completo, desde el fork hasta el merge, tiene este aspecto:</p>
+<pre class="mermaid"><code>flowchart LR
+    A[Repositorio original] --&gt;|Fork| B[Tu fork en GitHub]
+    B --&gt;|git clone| C[Tu copia local]
+    C --&gt;|git switch -c mi-rama| D["Rama local (trabajar + commits)"]
+    D --&gt;|git push| B
+    B --&gt;|Abrir PR| E{Revisión}
+    E --&gt;|Aprobada| F[Merge en main]
+    E --&gt;|Cambios pedidos| D</code></pre>
+<h3 id="abrir-una-pull-request">Abrir una Pull Request<a class="headerlink" href="#abrir-una-pull-request" title="Permanent link">¶</a></h3>
+<p>Cuando subes una rama nueva con <code>git push</code>, GitHub muestra automáticamente un aviso con el botón <strong>"Compare &amp; pull request"</strong>. Al pulsarlo, llegas al formulario de creación de la PR, donde tienes que configurar cuatro selectores:</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Qué indica</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Base repository</strong></td>
+<td>Dónde va a ir el código</td>
+<td><code>torvalds/linux</code></td>
+</tr>
+<tr>
+<td><strong>Base</strong></td>
+<td>La rama de destino</td>
+<td><code>main</code></td>
+</tr>
+<tr>
+<td><strong>Head repository</strong></td>
+<td>Desde dónde ofreces los cambios</td>
+<td><code>tu-usuario/linux</code></td>
+</tr>
+<tr>
+<td><strong>Compare</strong></td>
+<td>La rama con tus commits</td>
+<td><code>arreglo-bug-red</code></td>
+</tr>
+</tbody>
+</table>
+<p>Si la PR es dentro del mismo repositorio (sin fork), base y head son el mismo repositorio y solo cambian las ramas.</p>
+<p>Además de los selectores, escribe un <strong>título claro</strong> y una <strong>descripción</strong> que explique qué problema resuelve el cambio y cómo funciona. Eso facilita la revisión y queda como documentación permanente del proyecto.</p>
+<p><img alt="Aviso de nueva rama para PR" src="../img/colaboracion/nueva_rama_peticion_pr.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el aviso que aparece en el repositorio justo después de hacer push de una rama nueva, con el botón para crear la PR directamente.</p>
+<p><img alt="Crear Pull Request" src="../img/colaboracion/pr.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el formulario de apertura de la Pull Request con los selectores de rama y el campo de descripción.</p>
+<p><img alt="Pull Request abierta" src="../img/colaboracion/pr_hecha.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> la PR ya abierta, donde el equipo puede revisar el código línea a línea, comentar y aprobar los cambios.</p>
+<p><img alt="Confirmar Merge" src="../img/colaboracion/confirm-merge.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el botón Merge pull request que activa el administrador una vez el equipo ha dado el visto bueno.</p>
+<p><img alt="Pull Request Fusionada" src="../img/colaboracion/pr-merged.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> la PR en estado "Merged" (etiqueta morada), confirmando que los cambios han pasado a la rama principal.</p>
+<div class="admonition info">
+<p class="admonition-title">PR desde el mismo repositorio vs desde un Fork</p>
+<p>En las capturas anteriores la PR se hace desde una rama propia del mismo repositorio. Si contribuyes desde un fork, los selectores "Base repository" y "Head repository" apuntarán a repositorios distintos: el del autor original y el tuyo respectivamente.</p>
+</div>
+<h3 id="enlazar-prs-con-issues">Enlazar PRs con Issues<a class="headerlink" href="#enlazar-prs-con-issues" title="Permanent link">¶</a></h3>
+<p>En proyectos con muchos colaboradores el trabajo se organiza con <strong>Issues</strong> (veremos su funcionamiento completo en la sección siguiente) — tareas o errores documentados con un número. Si en la descripción de tu PR escribes <code>Closes #10</code>, GitHub cierra automáticamente el Issue #10 en el momento en que se aprueba el merge. Esto evita trabajo de gestión manual y deja un historial claro de qué PR resolvió qué problema.</p>
+<p>Las palabras que activan el cierre automático son: <code>Closes</code>, <code>Fixes</code> y <code>Resolves</code> (cualquiera de las tres, seguida del número con <code>#</code>).</p>
+<hr>
+<h2 id="gestion-del-proyecto-issues-y-projects">🎫 Gestión del proyecto: Issues y Projects<a class="headerlink" href="#gestion-del-proyecto-issues-y-projects" title="Permanent link">¶</a></h2>
+<p>Además del código, GitHub ofrece herramientas integradas para organizar el trabajo del equipo.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Issues</th>
+<th>Projects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Para qué sirve</strong></td>
+<td>Registrar tareas, errores o propuestas de mejora</td>
+<td>Visualizar y priorizar el trabajo del equipo</td>
+</tr>
+<tr>
+<td><strong>Unidad de trabajo</strong></td>
+<td>Un ticket por tarea o bug, con su hilo de conversación</td>
+<td>Tablero con columnas (<code>To Do</code>, <code>In Progress</code>, <code>Done</code>)</td>
+</tr>
+<tr>
+<td><strong>Integración</strong></td>
+<td>Se cierran automáticamente con palabras clave en PRs</td>
+<td>Las tarjetas enlazan a Issues y PRs; se mueven solas al fusionar</td>
+</tr>
+<tr>
+<td><strong>Cuándo usarlo</strong></td>
+<td>Siempre que hay algo por hacer o un bug que reportar</td>
+<td>Cuando el equipo necesita ver el estado global del proyecto</td>
+</tr>
+</tbody>
+</table>
+<p>Cada Issue puede tener asignados responsables (<em>Assignees</em>), etiquetas de colores (<em>Labels</em> como <code>bug</code>, <code>enhancement</code>, <code>documentation</code>) y fechas de entrega (<em>Milestones</em>).</p>
+<hr>
+<h2 id="otras-herramientas-del-repositorio">📚 Otras herramientas del repositorio<a class="headerlink" href="#otras-herramientas-del-repositorio" title="Permanent link">¶</a></h2>
+<p><strong>Wiki</strong> — Espacio de documentación con estructura de páginas. Ideal para manuales de uso, guías para nuevos colaboradores o FAQs. Mantiene el <code>README.md</code> limpio y navegable.</p>
+<p><strong>Actions</strong> — Permite automatizar tareas que se ejecutan en respuesta a eventos del repositorio: pasar tests cuando alguien abre una PR, desplegar la aplicación cuando se fusiona en <code>main</code>, generar documentación automáticamente... Lo veremos con detalle en la <a href="../github-actions/">sección siguiente</a>.</p>
+<hr>
+<h2 id="protecciones-de-ramas">🔒 Protecciones de ramas<a class="headerlink" href="#protecciones-de-ramas" title="Permanent link">¶</a></h2>
+<p>Cuando varias personas hacen PRs hacia <code>main</code>, conviene blindar esa rama para evitar que alguien suba código directamente sin revisión. En <strong>Settings → Rules</strong> los administradores pueden exigir que:</p>
+<ul>
+<li>Todo el código entre por PR, bloqueando el <code>push</code> directo a <code>main</code>.</li>
+<li>Al menos un compañero haya revisado y aprobado el código antes del merge.</li>
+<li>Los tests automatizados pasen antes de que el botón de merge se active.</li>
+</ul>
+<p>Esto no es burocracia: es lo que impide que un error de un miembro del equipo rompa el proyecto para todos los demás.</p>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Resumen</p>
+<ul>
+<li><strong>Fork</strong>: copia de un repositorio ajeno bajo tu cuenta. Tú tienes control total; el original no se toca.</li>
+<li><strong>Sync fork</strong>: sincroniza tu fork con los nuevos commits del repositorio original (<code>upstream</code>).</li>
+<li><strong>Pull Request</strong>: propuesta formal para integrar una rama en otra. Pasa por revisión del equipo antes del merge.</li>
+<li><code>Closes #10</code> en la descripción de una PR cierra el Issue #10 automáticamente al hacer merge.</li>
+<li><strong>Issues</strong>: sistema de seguimiento de tareas y errores. Cada tarea es un ticket numerado.</li>
+<li><strong>Projects</strong>: tablero visual que agrupa Issues y PRs por estado.</li>
+<li><strong>Branch protection</strong>: reglas que obligan a usar PRs y pasar tests antes de tocar <code>main</code>.</li>
+</ul>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../actividad_0_3/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 0.3 - Tu portafolio en GitHub">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.3 - Tu portafolio en GitHub
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../actividad_0_4/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 0.4 - Contribuir a un portafolio">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.4 - Contribuir a un portafolio
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

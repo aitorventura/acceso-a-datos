@@ -1,0 +1,1544 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../actividad_0_5/">
+      
+      
+        <link rel="next" href="../actividad_0_6/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Introducción a Docker - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-introduccion-a-docker" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introducción a Docker
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es Docker?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 ¿Qué es Docker?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-que-resuelve" class="md-nav__link">
+    <span class="md-ellipsis">
+      El problema que resuelve
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-vs-maquina-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      🆚 Docker vs. máquina virtual
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conceptos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Conceptos clave
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 Conceptos clave">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagen-la-plantilla-que-no-cambia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Imagen: la plantilla que no cambia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contenedor-la-imagen-puesta-en-marcha" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contenedor: la imagen puesta en marcha
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumen-lo-unico-que-sobrevive-al-contenedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Volumen: lo único que sobrevive al contenedor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-de-donde-salen-las-imagenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry: de dónde salen las imágenes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#puerto-mapeado-como-entrar-en-algo-que-esta-aislado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Puerto mapeado: cómo entrar en algo que está aislado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-basicos-de-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Comandos básicos de Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-compose-orquestar-varios-contenedores-a-la-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧵 Docker Compose: orquestar varios contenedores a la vez
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#un-docker-composeyml-sencillo-una-sola-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un docker-compose.yml sencillo: una sola base de datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-basicos-de-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Comandos básicos de Docker Compose
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es Docker?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 ¿Qué es Docker?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-que-resuelve" class="md-nav__link">
+    <span class="md-ellipsis">
+      El problema que resuelve
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-vs-maquina-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      🆚 Docker vs. máquina virtual
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conceptos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Conceptos clave
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 Conceptos clave">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagen-la-plantilla-que-no-cambia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Imagen: la plantilla que no cambia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contenedor-la-imagen-puesta-en-marcha" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contenedor: la imagen puesta en marcha
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumen-lo-unico-que-sobrevive-al-contenedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Volumen: lo único que sobrevive al contenedor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-de-donde-salen-las-imagenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry: de dónde salen las imágenes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#puerto-mapeado-como-entrar-en-algo-que-esta-aislado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Puerto mapeado: cómo entrar en algo que está aislado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-basicos-de-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Comandos básicos de Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-compose-orquestar-varios-contenedores-a-la-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧵 Docker Compose: orquestar varios contenedores a la vez
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#un-docker-composeyml-sencillo-una-sola-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un docker-compose.yml sencillo: una sola base de datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-basicos-de-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Comandos básicos de Docker Compose
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="1-introduccion-a-docker">🐳 1. Introducción a Docker<a class="headerlink" href="#1-introduccion-a-docker" title="Permanent link">¶</a></h1>
+<p><embed alt="Introducción a Docker" src="../diapositivas/introduccion-docker.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/introduccion-docker.pdf" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
+<hr>
+<p>Durante el curso vas a trabajar con varios motores de bases de datos a la vez (relacional, documental, en memoria...) y con herramientas auxiliares que necesitan su propio servidor. Instalar todo eso directamente en tu ordenador —con las versiones correctas, sin que choquen entre sí, e igual en el instituto que en casa— es un dolor de cabeza. <strong>Docker</strong> resuelve exactamente ese problema, y lo vamos a usar durante todo el módulo para levantar y gestionar el proyecto del curso.</p>
+<hr>
+<h2 id="que-es-docker">🧠 ¿Qué es Docker?<a class="headerlink" href="#que-es-docker" title="Permanent link">¶</a></h2>
+<p><strong>Docker</strong> es una herramienta que permite ejecutar aplicaciones dentro de <strong>contenedores</strong>: entornos aislados y ligeros que incluyen todo lo que la aplicación necesita para funcionar (código, dependencias, configuración) sin tocar el sistema operativo de tu máquina.</p>
+<div class="admonition tip">
+<p class="admonition-title">Metáfora: una caja estanca</p>
+<p>Piensa en un contenedor como una caja sellada que lleva dentro exactamente lo que necesita para funcionar. No importa si tu ordenador tiene Windows, macOS o Linux, ni qué versión de Python o de PostgreSQL tengas instalada: dentro de la caja siempre es el mismo entorno.</p>
+</div>
+<h3 id="el-problema-que-resuelve">El problema que resuelve<a class="headerlink" href="#el-problema-que-resuelve" title="Permanent link">¶</a></h3>
+<p>Sin Docker, instalar el entorno de un proyecto suele terminar así:</p>
+<ul>
+<li>"En mi ordenador funciona, en el tuyo no" — porque tenéis versiones distintas de la base de datos.</li>
+<li>Necesitas PostgreSQL para un proyecto y MongoDB para otro, con versiones incompatibles entre sí.</li>
+<li>Desinstalar un servicio deja archivos de configuración y datos sueltos por todo el sistema.</li>
+<li>Configurar un ordenador nuevo (o el del instituto) desde cero lleva media mañana.</li>
+</ul>
+<p>Con Docker, cada servicio vive en su propio contenedor: se instala con un comando, se borra con otro, y no deja rastro en tu sistema si no quieres.</p>
+<hr>
+<h2 id="docker-vs-maquina-virtual">🆚 Docker vs. máquina virtual<a class="headerlink" href="#docker-vs-maquina-virtual" title="Permanent link">¶</a></h2>
+<p>Es habitual confundir contenedores con máquinas virtuales, pero no comparten recursos de la misma forma:</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph VM["💻 Máquina virtual"]
+        direction TB
+        HW1[Hardware] --&gt; HV[Hipervisor]
+        HV --&gt; SO1[Sistema operativo invitado 1]
+        HV --&gt; SO2[Sistema operativo invitado 2]
+        SO1 --&gt; A1[Aplicación A]
+        SO2 --&gt; A2[Aplicación B]
+    end
+    subgraph DK["🐳 Docker"]
+        direction TB
+        HW2[Hardware] --&gt; SOH[Sistema operativo del host]
+        SOH --&gt; DE[Docker Engine]
+        DE --&gt; C1[Contenedor A]
+        DE --&gt; C2[Contenedor B]
+    end</code></pre>
+<p>Cada máquina virtual carga un sistema operativo completo propio, lo que la hace pesada y lenta de arrancar. Los contenedores comparten el kernel del sistema operativo del host y solo empaquetan la aplicación y sus dependencias: por eso arrancan en segundos y pesan una fracción de una máquina virtual equivalente.</p>
+<p>Ojo con una idea equivocada bastante común: Docker no sustituye a tu sistema operativo, ni monta una máquina virtual completa por debajo. Sigues teniendo un único Windows, macOS o Linux instalado; lo único que hace Docker es añadir una capa para ejecutar aplicaciones aisladas dentro de ese sistema. Lo que sustituye, en realidad, es la costumbre de instalar el programa directamente en tu máquina.</p>
+<hr>
+<h2 id="conceptos-clave">🧩 Conceptos clave<a class="headerlink" href="#conceptos-clave" title="Permanent link">¶</a></h2>
+<p>Antes de tocar un solo comando, conviene tener claras cinco palabras que vas a ver todo el rato: imagen, contenedor, registry, volumen y puerto mapeado.</p>
+<h3 id="imagen-la-plantilla-que-no-cambia">Imagen: la plantilla que no cambia<a class="headerlink" href="#imagen-la-plantilla-que-no-cambia" title="Permanent link">¶</a></h3>
+<p>Una <strong>imagen</strong> es un paquete de solo lectura con todo lo necesario para arrancar un programa: el sistema base, el software instalado y la configuración de fábrica. <code>postgres:18-alpine</code> es una imagen: PostgreSQL en su versión 18, construida sobre una base Linux minimalista (<code>alpine</code>). Una imagen no se modifica una vez creada — si necesitas cambiar algo, construyes una imagen nueva, no editas la que ya existe. Por eso se dice que es <strong>inmutable</strong>.</p>
+<h3 id="contenedor-la-imagen-puesta-en-marcha">Contenedor: la imagen puesta en marcha<a class="headerlink" href="#contenedor-la-imagen-puesta-en-marcha" title="Permanent link">¶</a></h3>
+<p>Un <strong>contenedor</strong> es lo que resulta de arrancar una imagen: un proceso en ejecución, aislado del resto de tu sistema, con su propio sistema de archivos y su propia red. Puedes arrancar varios contenedores a partir de la misma imagen — por ejemplo, dos contenedores de <code>postgres:18-alpine</code> con datos completamente distintos — y no se pisarán entre sí porque cada uno vive en su burbuja.</p>
+<div class="admonition example">
+<p class="admonition-title">La imagen es la receta; el contenedor, el pastel horneado</p>
+<p>La <strong>imagen</strong> es como la receta de un pastel: un documento fijo que no cambia. El <strong>contenedor</strong> es el pastel que sale del horno al seguir esa receta. Con la misma receta puedes hornear tantos pasteles como quieras, y cada uno es un pastel independiente — si te comes uno, los demás siguen intactos.</p>
+</div>
+<p>Esta es la relación entre los cuatro conceptos, de dónde sale una imagen a dónde van a parar sus datos:</p>
+<pre class="mermaid"><code>flowchart LR
+    R[("📦 Registry&lt;br/&gt;Docker Hub")] -- docker pull --&gt; I["Imagen&lt;br/&gt;postgres:18-alpine"]
+    I -- docker run --&gt; C1["Contenedor 1"]
+    I -- docker run --&gt; C2["Contenedor 2"]
+    C1 -. datos que deben sobrevivir .-&gt; V[("Volumen")]</code></pre>
+<h3 id="volumen-lo-unico-que-sobrevive-al-contenedor">Volumen: lo único que sobrevive al contenedor<a class="headerlink" href="#volumen-lo-unico-que-sobrevive-al-contenedor" title="Permanent link">¶</a></h3>
+<p>Un contenedor está pensado para poder borrarse y recrearse sin drama, y ahí está la trampa: si una base de datos guarda sus ficheros solo dentro del contenedor, al eliminarlo pierdes todos los datos con él. Un <strong>volumen</strong> es justo lo contrario: un espacio de almacenamiento que Docker gestiona por fuera del contenedor, así que sobrevive aunque el contenedor se borre y se vuelva a crear desde cero. Es como guardar tus fotos en una nube en vez de en el propio ordenador: si el ordenador se estropea, las fotos siguen ahí.</p>
+<h3 id="registry-de-donde-salen-las-imagenes">Registry: de dónde salen las imágenes<a class="headerlink" href="#registry-de-donde-salen-las-imagenes" title="Permanent link">¶</a></h3>
+<p>Un <strong>registry</strong> es un servidor donde la gente publica imágenes para que otros las descarguen, algo parecido a una tienda de aplicaciones pero para contenedores. <strong>Docker Hub</strong> es el registry público más usado, y ahí es donde viven las imágenes oficiales que vas a usar en este módulo (<code>postgres</code>, <code>mongo</code>, <code>redis</code>...). Cuando ejecutas <code>docker pull postgres:18-alpine</code>, le estás pidiendo a Docker Hub exactamente esa imagen.</p>
+<h3 id="puerto-mapeado-como-entrar-en-algo-que-esta-aislado">Puerto mapeado: cómo entrar en algo que está aislado<a class="headerlink" href="#puerto-mapeado-como-entrar-en-algo-que-esta-aislado" title="Permanent link">¶</a></h3>
+<p>Por defecto, un contenedor está aislado de la red de tu ordenador — nada de fuera puede hablar con lo que hay dentro, ni falta que hace la mayoría de las veces. El problema es que sí necesitas conectarte tú, desde tu máquina, a la base de datos que corre ahí dentro. Un <strong>puerto mapeado</strong> abre una puerta concreta entre los dos: asocia un puerto de tu máquina con el puerto en el que escucha el servicio dentro del contenedor, para que puedas llegar hasta él desde fuera.</p>
+<p>Resumen en una frase por concepto, para consulta rápida:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>En una frase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Imagen</strong></td>
+<td>Plantilla inmutable de la que se crean contenedores.</td>
+</tr>
+<tr>
+<td><strong>Contenedor</strong></td>
+<td>Una imagen puesta en marcha; puede haber varios a la vez.</td>
+</tr>
+<tr>
+<td><strong>Registry</strong></td>
+<td>Servidor donde se publican y descargan imágenes (Docker Hub).</td>
+</tr>
+<tr>
+<td><strong>Volumen</strong></td>
+<td>Almacenamiento fuera del contenedor que sobrevive a su borrado.</td>
+</tr>
+<tr>
+<td><strong>Puerto mapeado</strong></td>
+<td>Puerta entre un puerto de tu máquina y uno del contenedor.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="comandos-basicos-de-docker">⚙️ Comandos básicos de Docker<a class="headerlink" href="#comandos-basicos-de-docker" title="Permanent link">¶</a></h2>
+<p>No hace falta memorizarlos, pero conviene reconocerlos:</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker pull &lt;imagen&gt;</code></td>
+<td>Descarga una imagen desde un registry (Docker Hub por defecto).</td>
+</tr>
+<tr>
+<td><code>docker images</code></td>
+<td>Lista las imágenes descargadas en tu máquina.</td>
+</tr>
+<tr>
+<td><code>docker run &lt;imagen&gt;</code></td>
+<td>Crea y arranca un contenedor a partir de una imagen.</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>Lista los contenedores en ejecución. <code>docker ps -a</code> incluye también los detenidos.</td>
+</tr>
+<tr>
+<td><code>docker stop &lt;contenedor&gt;</code></td>
+<td>Detiene un contenedor en ejecución sin borrarlo.</td>
+</tr>
+<tr>
+<td><code>docker rm &lt;contenedor&gt;</code></td>
+<td>Elimina un contenedor detenido.</td>
+</tr>
+<tr>
+<td><code>docker logs &lt;contenedor&gt;</code></td>
+<td>Muestra la salida (logs) de un contenedor.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="docker-compose-orquestar-varios-contenedores-a-la-vez">🧵 Docker Compose: orquestar varios contenedores a la vez<a class="headerlink" href="#docker-compose-orquestar-varios-contenedores-a-la-vez" title="Permanent link">¶</a></h2>
+<p>Un proyecto real casi nunca necesita un único contenedor: necesita una base de datos relacional, quizás una documental, una caché en memoria, un gestor de colas... Arrancar cada uno a mano con <code>docker run</code> y recordar todas sus opciones (puertos, variables de entorno, volúmenes) no escala.</p>
+<p><strong>Docker Compose</strong> resuelve esto con un fichero <code>docker-compose.yml</code>: describes todos los servicios que tu proyecto necesita, en un único fichero declarativo, y Docker se encarga de crearlos, conectarlos y arrancarlos juntos con un solo comando.</p>
+<hr>
+<h2 id="un-docker-composeyml-sencillo-una-sola-base-de-datos">Un <code>docker-compose.yml</code> sencillo: una sola base de datos<a class="headerlink" href="#un-docker-composeyml-sencillo-una-sola-base-de-datos" title="Permanent link">¶</a></h2>
+<p>Para practicar no hace falta arrancar cinco servicios a la vez. El caso más simple posible tiene uno solo — una base de datos PostgreSQL con sus datos guardados en un volumen:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alumno</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alumno123</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prueba</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_data:/var/lib/postgresql/data</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">  </span><span class="nt">db_data</span><span class="p">:</span>
+</code></pre></div></td></tr></table></div>
+<p>Con esto guardado como <code>docker-compose.yml</code> y ejecutando <code>docker compose up -d</code>, Docker descarga la imagen <code>postgres:18-alpine</code> si no la tienes ya, crea el contenedor <code>db</code>, le pasa usuario, contraseña y nombre de base de datos por <code>environment</code>, abre el puerto <code>5432</code> de tu máquina hacia el <code>5432</code> del contenedor, y guarda los datos en el volumen <code>db_data</code> para que sobrevivan aunque el contenedor se recree. Te conectarías desde cualquier cliente (DBeaver, <code>psql</code>, tu propio código) a <code>localhost:5432</code> con esas credenciales.</p>
+<div class="admonition tip">
+<p class="admonition-title">Si ya tienes PostgreSQL instalado en tu máquina</p>
+<p>Aquí el puerto no se ha remapeado (<code>5432:5432</code>, el mismo número a los dos lados). Si tu ordenador ya tiene un PostgreSQL local escuchando ahí, este contenedor chocará con él — en ese caso, cambia el primer número, por ejemplo a <code>"5444:5432"</code>, y conéctate a <code>localhost:5444</code>.</p>
+</div>
+<p>Este ejemplo tiene un único servicio, así que no hace falta que hable con nadie más. En cuanto un proyecto necesita dos o más —por ejemplo, una aplicación web y su propia base de datos—, entran en juego dos cosas que aquí no se ven: los contenedores se dirigen unos a otros por red usando el <strong>nombre del servicio</strong> como si fuera una dirección, y <code>depends_on</code> decide en qué orden arrancan. Vas a practicar exactamente esto en la Actividad 0.6, montando un WordPress completo con su base de datos.</p>
+<hr>
+<h2 id="comandos-basicos-de-docker-compose">🚀 Comandos básicos de Docker Compose<a class="headerlink" href="#comandos-basicos-de-docker-compose" title="Permanent link">¶</a></h2>
+<p>Con el fichero <code>docker-compose.yml</code> en la raíz del proyecto:</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker compose up -d</code></td>
+<td>Crea y arranca todos los servicios definidos. <code>-d</code> los deja corriendo en segundo plano (<em>detached</em>).</td>
+</tr>
+<tr>
+<td><code>docker compose ps</code></td>
+<td>Lista los servicios del proyecto y su estado.</td>
+</tr>
+<tr>
+<td><code>docker compose logs -f &lt;servicio&gt;</code></td>
+<td>Muestra los logs de un servicio en tiempo real (<code>-f</code> de <em>follow</em>).</td>
+</tr>
+<tr>
+<td><code>docker compose stop</code></td>
+<td>Detiene todos los servicios sin eliminarlos.</td>
+</tr>
+<tr>
+<td><code>docker compose down</code></td>
+<td>Detiene y elimina los contenedores y la red creada. Los volúmenes con nombre <strong>no</strong> se borran.</td>
+</tr>
+<tr>
+<td><code>docker compose down -v</code></td>
+<td>Igual que <code>down</code>, pero además elimina los volúmenes — borra también los datos. Úsalo solo si quieres empezar de cero.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition danger">
+<p class="admonition-title"><code>down -v</code> borra los datos de verdad</p>
+<p>Si tienes datos importantes en tus bases de datos de desarrollo, <code>docker compose down -v</code> los elimina sin posibilidad de recuperarlos. Para un reinicio normal, usa <code>docker compose down</code> (sin <code>-v</code>) o <code>docker compose stop</code>.</p>
+</div>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<ul>
+<li><strong>Docker</strong> ejecuta aplicaciones en <strong>contenedores</strong>: entornos aislados y ligeros, más rápidos y baratos que una máquina virtual porque comparten el kernel del sistema operativo del host.</li>
+<li>Una <strong>imagen</strong> es la plantilla inmutable (la receta); un <strong>contenedor</strong> es una instancia en ejecución de esa imagen (el pastel horneado).</li>
+<li>Un <strong>volumen</strong> guarda datos fuera del contenedor para que sobrevivan a su borrado; sin volumen, los datos de una base de datos desaparecen si el contenedor se elimina.</li>
+<li><strong>Docker Compose</strong> describe varios contenedores relacionados en un único <code>docker-compose.yml</code> y los levanta todos juntos con <code>docker compose up -d</code>.</li>
+<li>En un <code>docker-compose.yml</code>, cada entrada bajo <code>services:</code> es un contenedor; <code>ports</code> mapea <code>host:contenedor</code>; <code>volumes</code> puede montar una carpeta local (bind mount) o un volumen con nombre gestionado por Docker; <code>environment</code> pasa variables de configuración; <code>depends_on</code> fija el orden de arranque (no espera a que el servicio esté listo, solo a que arranque).</li>
+<li><code>docker compose down</code> para y elimina contenedores pero conserva los volúmenes; <code>docker compose down -v</code> también borra los datos.</li>
+</ul>
+</details></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../actividad_0_5/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 0.5 - Pipeline de CI">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.5 - Pipeline de CI
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../actividad_0_6/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 0.6 - WordPress con Docker Compose">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.6 - WordPress con Docker Compose
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,210 @@
+/* Cambiar el fondo del footer (anterior/siguiente + made with...) */
+.md-footer {
+  background-color: #7f0000 !important;  /* Rojo oscuro (granate) */
+}
+
+/* Cambiar el color del texto dentro del footer */
+.md-footer,
+.md-footer__link,
+.md-footer__direction {
+  color: #ffffff !important;
+}
+
+.md-footer-meta {
+  background-color: #4a0000 !important; /* rojo más oscuro del fondo lateral */
+}
+
+.md-footer-meta__inner {
+  max-width: 100% !important;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.7rem;
+  color: white !important;
+  background-color: inherit !important; /* mantiene el mismo fondo */
+}
+
+.md-footer-meta__inner a {
+  color: white !important;
+  text-decoration: underline;
+}
+
+.md-footer-meta__inner a:hover {
+  color: #ffab91 !important;
+}
+
+
+/* Tabs coloreadas (funciona con pymdownx.tabbed con y sin alternate_style) */
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label,
+.md-typeset .tabs-colored .tabbed-set > label{
+  box-shadow:none!important;
+  border-radius:.35rem .35rem 0 0!important;
+  margin-right:.15rem!important;
+}
+
+/* Paleta cálida en tono rojizo, coherente con el rojo/naranja quemado del tema.
+   1=coral, 2=terracota, 3=granate/vino, 4=bronce, 5=ladrillo, 6=marsala —
+   mismo timbre cálido que el resto del sitio. */
+
+/* Base (no activo) */
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(1),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(1){
+  background:#fbe0d9!important;  /* coral claro */
+  color:#8a3a1e!important;
+}
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(2),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(2){
+  background:#f3dcd4!important;  /* terracota claro */
+  color:#6b2e1f!important;
+}
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(3),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(3){
+  background:#f1dbe0!important;  /* granate/vino claro */
+  color:#5c1f30!important;
+}
+
+/* Base (no activo) — pestañas 4, 5 y 6 */
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(4),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(4){
+  background:#f7e6c8!important;  /* bronce claro */
+  color:#6b4a08!important;
+}
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(5),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(5){
+  background:#f5ddd6!important;  /* ladrillo claro */
+  color:#6e2318!important;
+}
+.md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(6),
+.md-typeset .tabs-colored .tabbed-set > label:nth-of-type(6){
+  background:#f2dde1!important;  /* marsala claro */
+  color:#5c2626!important;
+}
+
+/* Activo (alternate_style) */
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(1):checked ~ .tabbed-labels > label:nth-of-type(1){
+  background:#e2622d!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(2):checked ~ .tabbed-labels > label:nth-of-type(2){
+  background:#b5533c!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(3):checked ~ .tabbed-labels > label:nth-of-type(3){
+  background:#8e2439!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(4):checked ~ .tabbed-labels > label:nth-of-type(4){
+  background:#c17817!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(5):checked ~ .tabbed-labels > label:nth-of-type(5){
+  background:#a13d2e!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(6):checked ~ .tabbed-labels > label:nth-of-type(6){
+  background:#9c4f4f!important; color:#fff!important;
+}
+
+/* Activo (sin alternate_style) */
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(1):checked + label{
+  background:#e2622d!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(2):checked + label{
+  background:#b5533c!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(3):checked + label{
+  background:#8e2439!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(4):checked + label{
+  background:#c17817!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(5):checked + label{
+  background:#a13d2e!important; color:#fff!important;
+}
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(6):checked + label{
+  background:#9c4f4f!important; color:#fff!important;
+}
+
+/* Fondo + borde completo redondeado del panel de contenido según la pestaña activa (alternate_style) */
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(1):checked ~ .tabbed-content{ background:#fdece4!important; border:1px solid #e2622d!important; border-top:2px solid #e2622d!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(2):checked ~ .tabbed-content{ background:#faebe6!important; border:1px solid #b5533c!important; border-top:2px solid #b5533c!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(3):checked ~ .tabbed-content{ background:#f8e6ea!important; border:1px solid #8e2439!important; border-top:2px solid #8e2439!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(4):checked ~ .tabbed-content{ background:#faf0dc!important; border:1px solid #c17817!important; border-top:2px solid #c17817!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(5):checked ~ .tabbed-content{ background:#f9e6e1!important; border:1px solid #a13d2e!important; border-top:2px solid #a13d2e!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(6):checked ~ .tabbed-content{ background:#f7e7e7!important; border:1px solid #9c4f4f!important; border-top:2px solid #9c4f4f!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+
+/* Fondo + borde completo redondeado del panel de contenido según la pestaña activa (sin alternate_style) */
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(1):checked + label + .tabbed-content{ background:#fdece4!important; border:1px solid #e2622d!important; border-top:2px solid #e2622d!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(2):checked + label + .tabbed-content{ background:#faebe6!important; border:1px solid #b5533c!important; border-top:2px solid #b5533c!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(3):checked + label + .tabbed-content{ background:#f8e6ea!important; border:1px solid #8e2439!important; border-top:2px solid #8e2439!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(4):checked + label + .tabbed-content{ background:#faf0dc!important; border:1px solid #c17817!important; border-top:2px solid #c17817!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(5):checked + label + .tabbed-content{ background:#f9e6e1!important; border:1px solid #a13d2e!important; border-top:2px solid #a13d2e!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+.md-typeset .tabs-colored .tabbed-set > input:nth-of-type(6):checked + label + .tabbed-content{ background:#f7e7e7!important; border:1px solid #9c4f4f!important; border-top:2px solid #9c4f4f!important; border-radius:0 0 .5rem .5rem!important; padding:1rem 1.2rem!important; }
+
+/* Oculta ambos por defecto */
+.only-light, .only-dark {
+  display: none;
+}
+
+/* Muestra la imagen en modo claro */
+[data-md-color-scheme="default"] .only-light {
+  display: block;
+}
+
+/* Muestra la imagen en modo oscuro */
+[data-md-color-scheme="slate"] .only-dark {
+  display: block;
+}
+
+
+:root{
+  --shot-accent: #c62828;   /* rojo */
+  --shot-ring: 1px;         /* grosor del anillo (puedes 0.75px si quieres aún más fino) */
+  --shot-radius: 12px;      /* redondeo sutil */
+}
+
+/* Aplica en el contenido (Material for MkDocs) */
+.md-typeset img:not(.no-ring){
+  display:block;
+  margin:12px auto;
+  max-width:100%;
+  border-radius: var(--shot-radius);
+  box-shadow:
+    0 0 0 var(--shot-ring) var(--shot-accent),   /* anillo rojo */
+    0 8px 20px rgba(0,0,0,.06);                  /* sombra suave */
+}
+
+/* Opcional: ajusta sombra en modo oscuro */
+[data-md-color-scheme="slate"] .md-typeset img:not(.no-ring){
+  box-shadow:
+    0 0 0 var(--shot-ring) var(--shot-accent),
+    0 8px 20px rgba(0,0,0,.24);
+}
+
+/* ── DARK MODE — tabs-colored ──────────────────────────────────────────────
+   En modo oscuro reemplazamos los fondos claros de etiquetas y paneles
+   por versiones oscuras de los mismos colores.                            */
+
+/* Etiquetas inactivas */
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(1),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(1){ background:#3a1c10!important; color:#f3b294!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(2),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(2){ background:#3d1d14!important; color:#e8a896!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(3),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(3){ background:#2e0f1a!important; color:#e2a0b3!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(4),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(4){ background:#2e2004!important; color:#e8c97a!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(5),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(5){ background:#2e130d!important; color:#eeae9c!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set .tabbed-labels > label:nth-of-type(6),
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > label:nth-of-type(6){ background:#2a1616!important; color:#d9a3a3!important; }
+
+/* Paneles de contenido activos (alternate_style) */
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(1):checked ~ .tabbed-content{ background:#2a150c!important; border-color:#e2622d!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(2):checked ~ .tabbed-content{ background:#2e140d!important; border-color:#b5533c!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(3):checked ~ .tabbed-content{ background:#26101a!important; border-color:#8e2439!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(4):checked ~ .tabbed-content{ background:#241b04!important; border-color:#c17817!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(5):checked ~ .tabbed-content{ background:#260f0a!important; border-color:#a13d2e!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set.tabbed-alternate > input:nth-of-type(6):checked ~ .tabbed-content{ background:#241313!important; border-color:#9c4f4f!important; }
+
+/* Paneles de contenido activos (sin alternate_style) */
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(1):checked + label + .tabbed-content{ background:#2a150c!important; border-color:#e2622d!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(2):checked + label + .tabbed-content{ background:#2e140d!important; border-color:#b5533c!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(3):checked + label + .tabbed-content{ background:#26101a!important; border-color:#8e2439!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(4):checked + label + .tabbed-content{ background:#241b04!important; border-color:#c17817!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(5):checked + label + .tabbed-content{ background:#260f0a!important; border-color:#a13d2e!important; }
+body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(6):checked + label + .tabbed-content{ background:#241313!important; border-color:#9c4f4f!important; }

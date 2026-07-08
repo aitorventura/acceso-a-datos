@@ -1,0 +1,1735 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ramas/">
+      
+      
+        <link rel="next" href="../github/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Actividad 0.2 - Ramas en Git - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#actividad-02-ramas-en-git-trabajo-paralelo-y-fusiones" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Actividad 0.2 - Ramas en Git
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#norma-de-la-actividad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Norma de la actividad
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-historial-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Historial inicial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Historial inicial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-construir-el-historial-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Construir el historial base
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-ramas-y-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Ramas y HEAD
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte B — Ramas y HEAD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crear-y-explorar-ramas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Crear y explorar ramas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-commit-en-la-rama-y-volver-a-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Commit en la rama y volver a main
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-c-fusion-fast-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte C — Fusión Fast-forward
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte C — Fusión Fast-forward">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-fusionar-y-limpiar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Fusionar y limpiar
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-d-ramas-divergentes-3-way-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte D — Ramas divergentes (3-way merge)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte D — Ramas divergentes (3-way merge)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-trabajar-en-paralelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Trabajar en paralelo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-6-3-way-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — 3-way merge
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-e-conflictos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte E — Conflictos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte E — Conflictos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-7-provocar-y-resolver-un-conflicto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — Provocar y resolver un conflicto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-f-borrar-ramas-d-vs-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte F — Borrar ramas: -d vs -D
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte F — Borrar ramas: -d vs -D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-8-la-diferencia-entre-d-y-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 8 — La diferencia entre -d y -D
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-9-tabla-de-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 9 — Tabla de decisión
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solución
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#norma-de-la-actividad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Norma de la actividad
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-historial-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Historial inicial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Historial inicial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-construir-el-historial-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Construir el historial base
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-ramas-y-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Ramas y HEAD
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte B — Ramas y HEAD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-crear-y-explorar-ramas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Crear y explorar ramas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-commit-en-la-rama-y-volver-a-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Commit en la rama y volver a main
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-c-fusion-fast-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte C — Fusión Fast-forward
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte C — Fusión Fast-forward">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-fusionar-y-limpiar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Fusionar y limpiar
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-d-ramas-divergentes-3-way-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte D — Ramas divergentes (3-way merge)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte D — Ramas divergentes (3-way merge)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-trabajar-en-paralelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Trabajar en paralelo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-6-3-way-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — 3-way merge
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-e-conflictos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte E — Conflictos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte E — Conflictos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-7-provocar-y-resolver-un-conflicto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — Provocar y resolver un conflicto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-f-borrar-ramas-d-vs-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte F — Borrar ramas: -d vs -D
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte F — Borrar ramas: -d vs -D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-8-la-diferencia-entre-d-y-d" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 8 — La diferencia entre -d y -D
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-9-tabla-de-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 9 — Tabla de decisión
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solución
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="actividad-02-ramas-en-git-trabajo-paralelo-y-fusiones">Actividad 0.2: Ramas en Git — Trabajo paralelo y fusiones<a class="headerlink" href="#actividad-02-ramas-en-git-trabajo-paralelo-y-fusiones" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_0_2_Plantilla.docx" rel="noopener" target="_blank">Plantilla 0.2 — Ramas en Git: trabajo paralelo y fusiones</a></p>
+</div>
+<h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
+<p>En esta actividad crearás un repositorio desde cero y lo desarrollarás usando ramas. El objetivo es entender cómo Git organiza el trabajo paralelo y qué pasa cuando dos líneas de desarrollo se unen.</p>
+<p>Aspectos que cubre la actividad:</p>
+<ul>
+<li>Configurar el alias <code>git lga</code> y leer el grafo de ramas.</li>
+<li>Crear ramas con <code>git branch</code> y moverte con <code>git switch</code>.</li>
+<li>Entender dónde apunta <code>HEAD</code> en cada momento.</li>
+<li>Crear una rama y cambiarte en un solo paso con <code>git switch -c</code>.</li>
+<li>Hacer una fusión Fast-forward.</li>
+<li>Hacer una fusión 3-way merge cuando las dos ramas han avanzado.</li>
+<li>Resolver un conflicto a mano.</li>
+<li>Borrar ramas con <code>-d</code> y <code>-D</code>.</li>
+</ul>
+<hr>
+<h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
+<p>Configura el alias que usarás durante toda la actividad:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.lga<span class="w"> </span><span class="s2">"log --graph --oneline --all --decorate"</span>
+</code></pre></div></td></tr></table></div>
+<p>Comprueba que Git tiene tu nombre y correo:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Tu Nombre"</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"tuemail@ejemplo.com"</span>
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="norma-de-la-actividad">Norma de la actividad<a class="headerlink" href="#norma-de-la-actividad" title="Permanent link">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Obligatorio en cada paso</p>
+<p>Antes de ejecutar cualquier comando que cambie el repositorio, escribe <strong>qué esperas que pase</strong> y dónde crees que quedará HEAD. Es lo que se valorará.</p>
+</div>
+<hr>
+<h2 id="preparacion">Preparación<a class="headerlink" href="#preparacion" title="Permanent link">¶</a></h2>
+<p>Crea una carpeta <code>actividad0_2</code> fuera de OneDrive / iCloud / Google Drive e inicializa el repositorio:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>init
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="parte-a-historial-inicial">Parte A — Historial inicial<a class="headerlink" href="#parte-a-historial-inicial" title="Permanent link">¶</a></h2>
+<h3 id="paso-1-construir-el-historial-base">Paso 1 — Construir el historial base<a class="headerlink" href="#paso-1-construir-el-historial-base" title="Permanent link">¶</a></h3>
+<p>Crea <code>tareas.txt</code> con tres líneas de contenido (elige tú cuáles). Haz tres commits seguidos:</p>
+<ul>
+<li>Commit 1: el archivo con las tres tareas iniciales.</li>
+<li>Commit 2: añade dos tareas más al final.</li>
+<li>Commit 3: crea <code>notas.txt</code> con tres líneas de texto libre y haz commit de ese archivo.</li>
+</ul>
+<p>Después de cada commit ejecuta <code>git lga</code> y fíjate en dónde se mueve la etiqueta <code>main</code> y el puntero <code>HEAD</code>.</p>
+<p><strong>Predice antes del tercer commit</strong>: ¿cambiarán de sitio las etiquetas de los commits anteriores?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Cuántos commits hay en el historial? ¿En qué orden aparecen?</li>
+<li>¿Dónde apunta HEAD después del tercer commit?</li>
+</ol>
+<hr>
+<h2 id="parte-b-ramas-y-head">Parte B — Ramas y HEAD<a class="headerlink" href="#parte-b-ramas-y-head" title="Permanent link">¶</a></h2>
+<h3 id="paso-2-crear-y-explorar-ramas">Paso 2 — Crear y explorar ramas<a class="headerlink" href="#paso-2-crear-y-explorar-ramas" title="Permanent link">¶</a></h3>
+<p><strong>Predice</strong>: si ejecutas <code>git branch ideas</code>, ¿dónde quedará HEAD?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>git<span class="w"> </span>branch<span class="w"> </span>ideas
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>git<span class="w"> </span>lga
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>git<span class="w"> </span>branch
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿apuntan <code>main</code> e <code>ideas</code> al mismo commit o a distintos? ¿Por qué?</p>
+<p>Ahora muévete a <code>ideas</code>:</p>
+<p><strong>Predice</strong>: después de <code>git switch ideas</code>, ¿qué mostrará <code>HEAD</code> en <code>git lga</code>?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>git<span class="w"> </span>switch<span class="w"> </span>ideas
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿ha cambiado el historial de commits al cambiar de rama? Explica qué diferencia hay entre <code>HEAD -&gt; ideas</code> y <code>HEAD -&gt; main</code>.</p>
+<h3 id="paso-3-commit-en-la-rama-y-volver-a-main">Paso 3 — Commit en la rama y volver a main<a class="headerlink" href="#paso-3-commit-en-la-rama-y-volver-a-main" title="Permanent link">¶</a></h3>
+<p>Sigue en <code>ideas</code>. Añade una línea al final de <code>tareas.txt</code>:</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>Explorar proyectos de otros compañeros
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice</strong>: ¿cómo quedará el grafo después de este commit? ¿Se moverá <code>main</code>?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>tareas.txt
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade idea de exploración"</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p>Vuelve a <code>main</code> y abre <code>tareas.txt</code>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>git<span class="w"> </span>switch<span class="w"> </span>main
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>cat<span class="w"> </span>tareas.txt
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿por qué <code>tareas.txt</code> no tiene la línea que acabas de escribir? Explícalo con tus palabras.</p>
+<hr>
+<h2 id="parte-c-fusion-fast-forward">Parte C — Fusión Fast-forward<a class="headerlink" href="#parte-c-fusion-fast-forward" title="Permanent link">¶</a></h2>
+<h3 id="paso-4-fusionar-y-limpiar">Paso 4 — Fusionar y limpiar<a class="headerlink" href="#paso-4-fusionar-y-limpiar" title="Permanent link">¶</a></h3>
+<p>Estás en <code>main</code>. La rama <code>ideas</code> tiene un commit que <code>main</code> no tiene, pero <code>main</code> no ha avanzado.</p>
+<p><strong>Predice</strong>: ¿qué tipo de fusión hará Git? ¿Creará un commit nuevo?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>git<span class="w"> </span>merge<span class="w"> </span>ideas
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Qué mensaje ha mostrado Git? ¿Ha creado un commit nuevo o ha movido el puntero?</li>
+<li>¿Por qué se llama Fast-forward?</li>
+</ol>
+<p>Borra la rama fusionada:</p>
+<p><strong>Predice</strong>: ¿funcionará <code>-d</code> o dará error?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>ideas
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="parte-d-ramas-divergentes-3-way-merge">Parte D — Ramas divergentes (3-way merge)<a class="headerlink" href="#parte-d-ramas-divergentes-3-way-merge" title="Permanent link">¶</a></h2>
+<h3 id="paso-5-trabajar-en-paralelo">Paso 5 — Trabajar en paralelo<a class="headerlink" href="#paso-5-trabajar-en-paralelo" title="Permanent link">¶</a></h3>
+<p>Crea la rama <code>mejoras</code> y muévete en un solo paso:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>mejoras
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿qué hace <code>git switch -c</code> que no hace <code>git switch</code> sin <code>-c</code>?</p>
+<p>Añade una línea al final de <code>notas.txt</code> (por ejemplo: <code>Nota desde la rama mejoras</code>) y haz commit:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>git<span class="w"> </span>add<span class="w"> </span>notas.txt
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade nota desde mejoras"</span>
+</code></pre></div></td></tr></table></div>
+<p>Vuelve a <code>main</code> y también haz un commit ahí — añade una línea distinta al final de <code>tareas.txt</code>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span>
+<span class="normal"><a href="#__codelineno-13-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>git<span class="w"> </span>switch<span class="w"> </span>main
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="c1"># edita tareas.txt → añade: Tarea añadida desde main</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a>git<span class="w"> </span>add<span class="w"> </span>tareas.txt
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade tarea desde main"</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿cómo se ve en el grafo que las dos ramas han divergido?</p>
+<h3 id="paso-6-3-way-merge">Paso 6 — 3-way merge<a class="headerlink" href="#paso-6-3-way-merge" title="Permanent link">¶</a></h3>
+<p><strong>Predice</strong>: ¿creará Git un commit de fusión? ¿Por qué sí o por qué no?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>git<span class="w"> </span>merge<span class="w"> </span>mejoras
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="c1"># Vim: Esc :wq Enter  |  Nano: Ctrl+O Enter Ctrl+X</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿En qué se diferencia visualmente este grafo del del Paso 4?</li>
+<li>¿Por qué ha sido necesario un merge commit aquí pero no antes?</li>
+</ol>
+<hr>
+<h2 id="parte-e-conflictos">Parte E — Conflictos<a class="headerlink" href="#parte-e-conflictos" title="Permanent link">¶</a></h2>
+<h3 id="paso-7-provocar-y-resolver-un-conflicto">Paso 7 — Provocar y resolver un conflicto<a class="headerlink" href="#paso-7-provocar-y-resolver-un-conflicto" title="Permanent link">¶</a></h3>
+<p>Crea la rama <code>version-a</code> y cambia la <strong>primera línea</strong> de <code>tareas.txt</code> a: <code>Estudiar con detenimiento los apuntes de Git</code></p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>version-a
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="c1"># edita tareas.txt → cambia la primera línea</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a>git<span class="w"> </span>add<span class="w"> </span>tareas.txt
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Reescribe primera tarea en version-a"</span>
+</code></pre></div></td></tr></table></div>
+<p>Vuelve a <code>main</code> y cambia <strong>esa misma primera línea</strong> a algo diferente: <code>Repasar los apuntes de Git antes del examen</code></p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span>
+<span class="normal"><a href="#__codelineno-16-3">3</a></span>
+<span class="normal"><a href="#__codelineno-16-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>git<span class="w"> </span>switch<span class="w"> </span>main
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="c1"># edita tareas.txt → cambia la primera línea a algo distinto</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a>git<span class="w"> </span>add<span class="w"> </span>tareas.txt
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Reescribe primera tarea en main"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice</strong>: ¿qué va a pasar al intentar fusionar?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>git<span class="w"> </span>merge<span class="w"> </span>version-a
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p>Abre <code>tareas.txt</code>. Verás las marcas del conflicto:</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
+<span class="normal"><a href="#__codelineno-18-2">2</a></span>
+<span class="normal"><a href="#__codelineno-18-3">3</a></span>
+<span class="normal"><a href="#__codelineno-18-4">4</a></span>
+<span class="normal"><a href="#__codelineno-18-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a>Repasar los apuntes de Git antes del examen
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a>=======
+<a id="__codelineno-18-4" name="__codelineno-18-4"></a>Estudiar con detenimiento los apuntes de Git
+<a id="__codelineno-18-5" name="__codelineno-18-5"></a>&gt;&gt;&gt;&gt;&gt;&gt;&gt; version-a
+</code></pre></div></td></tr></table></div>
+<p>Decide qué versión conservar (o escribe una que combine ambas), borra las marcas y cierra el merge:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span>
+<span class="normal"><a href="#__codelineno-19-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>git<span class="w"> </span>add<span class="w"> </span>tareas.txt
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Resuelve conflicto en tareas.txt"</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Qué significan las tres marcas del conflicto?</li>
+<li>¿Qué versión has conservado y por qué?</li>
+</ol>
+<hr>
+<h2 id="parte-f-borrar-ramas-d-vs-d">Parte F — Borrar ramas: -d vs -D<a class="headerlink" href="#parte-f-borrar-ramas-d-vs-d" title="Permanent link">¶</a></h2>
+<h3 id="paso-8-la-diferencia-entre-d-y-d">Paso 8 — La diferencia entre -d y -D<a class="headerlink" href="#paso-8-la-diferencia-entre-d-y-d" title="Permanent link">¶</a></h3>
+<p>Crea la rama <code>experimento</code>, haz un commit en ella y vuelve a <code>main</code> sin fusionarla:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
+<span class="normal"><a href="#__codelineno-20-2">2</a></span>
+<span class="normal"><a href="#__codelineno-20-3">3</a></span>
+<span class="normal"><a href="#__codelineno-20-4">4</a></span>
+<span class="normal"><a href="#__codelineno-20-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>experimento
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"Experimento descartado"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>notas.txt
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a>git<span class="w"> </span>add<span class="w"> </span>notas.txt
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Cambio experimental"</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a>git<span class="w"> </span>switch<span class="w"> </span>main
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice</strong>: ¿funcionará <code>git branch -d experimento</code>?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>experimento
+</code></pre></div></td></tr></table></div>
+<p>Git da error — fíjate en el mensaje exacto.</p>
+<p><strong>Pregunta</strong>: ¿por qué Git se niega a borrar la rama? ¿Qué pasa con los commits si usas <code>-D</code>?</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span>
+<span class="normal"><a href="#__codelineno-22-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>experimento
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a>git<span class="w"> </span>lga
+</code></pre></div></td></tr></table></div>
+<h3 id="paso-9-tabla-de-decision">Paso 9 — Tabla de decisión<a class="headerlink" href="#paso-9-tabla-de-decision" title="Permanent link">¶</a></h3>
+<p>Rellena esta tabla sin ejecutar nada:</p>
+<table>
+<thead>
+<tr>
+<th>Situación</th>
+<th>Comando que usarías</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crear una rama y moverte en un solo paso</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Borrar una rama ya fusionada</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Borrar una rama con trabajo sin fusionar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Ver el grafo de todas las ramas</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Fusionar cuando main y tu rama han avanzado</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="solucion">Solución<a class="headerlink" href="#solucion" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Descarga la solución</p>
+<p>📄 <a href="../plantillas/Actividad_0_2_Solucion.docx" rel="noopener" target="_blank">Solución 0.2 — Ramas en Git: trabajo paralelo y fusiones</a></p>
+<p>Esta actividad es de repaso/introducción y no se entrega: practica los pasos por tu cuenta y usa la solución para autoevaluarte al terminar (o si te atascas en algún paso).</p>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../ramas/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Ramas en Git">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Ramas en Git
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../github/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: GitHub y repositorios remotos">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                GitHub y repositorios remotos
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

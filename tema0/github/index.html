@@ -1,0 +1,1937 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../actividad_0_2/">
+      
+      
+        <link rel="next" href="../actividad_0_3/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>GitHub y repositorios remotos - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3-introduccion-a-github-y-repositorios-remotos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GitHub y repositorios remotos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-repositorio-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ☁️ ¿Qué es un Repositorio Remoto?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registro-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Registro en GitHub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autenticacion-y-conexion-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Autenticación y Conexión en GitHub
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Autenticación y Conexión en GitHub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generando-un-token-de-acceso-personal-pat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generando un Token de Acceso Personal (PAT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configurando-la-autenticacion-por-ssh-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurando la Autenticación por SSH (Recomendado)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurando la Autenticación por SSH (Recomendado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-generar-la-clave-ssh-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Generar la clave SSH local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-copiar-la-clave-publica" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Copiar la clave pública
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-anadir-la-clave-a-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Añadir la clave a GitHub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-subiendo-tu-proyecto-a-la-nube" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Paso a Paso: Subiendo tu proyecto a la nube
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Paso a Paso: Subiendo tu proyecto a la nube">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-creando-el-repositorio-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Creando el repositorio en GitHub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-enlazando-el-local-con-el-remoto-git-remote-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Enlazando el local con el remoto (git remote add)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-el-primer-push-git-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. El primer push (git push)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-visualizando-el-resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Visualizando el resultado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descargando-y-sincronizando-el-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Descargando y sincronizando el código
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Descargando y sincronizando el código">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clonar-un-repositorio-desde-cero-git-clone" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clonar un repositorio desde cero (git clone)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobar-si-hay-cambios-sin-descargarlos-git-fetch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobar si hay cambios sin descargarlos (git fetch)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descargar-e-integrar-actualizaciones-git-pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descargar e integrar actualizaciones (git pull)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#las-ramas-en-el-repositorio-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌳 Las ramas en el repositorio remoto
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌳 Las ramas en el repositorio remoto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#borrar-ramas-en-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Borrar ramas en remoto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-requests-proponer-cambios-para-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      📬 Pull Requests: proponer cambios para revisión
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-trabajo-habitual" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Flujo de trabajo habitual
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracion-de-git-y-github-en-intellij-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      💻 Integración de Git y GitHub en IntelliJ IDEA
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 Integración de Git y GitHub en IntelliJ IDEA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enlazando-tu-cuenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enlazando tu cuenta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-menu-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      El menú Git
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gestion-de-ramas-en-intellij" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gestión de ramas en IntelliJ
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave-muy-resumidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave (muy resumidas)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-repositorio-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ☁️ ¿Qué es un Repositorio Remoto?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registro-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Registro en GitHub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autenticacion-y-conexion-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Autenticación y Conexión en GitHub
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Autenticación y Conexión en GitHub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generando-un-token-de-acceso-personal-pat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generando un Token de Acceso Personal (PAT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configurando-la-autenticacion-por-ssh-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurando la Autenticación por SSH (Recomendado)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurando la Autenticación por SSH (Recomendado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-generar-la-clave-ssh-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Generar la clave SSH local
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-copiar-la-clave-publica" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Copiar la clave pública
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-anadir-la-clave-a-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Añadir la clave a GitHub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-subiendo-tu-proyecto-a-la-nube" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Paso a Paso: Subiendo tu proyecto a la nube
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Paso a Paso: Subiendo tu proyecto a la nube">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-creando-el-repositorio-en-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Creando el repositorio en GitHub
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-enlazando-el-local-con-el-remoto-git-remote-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Enlazando el local con el remoto (git remote add)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-el-primer-push-git-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. El primer push (git push)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-visualizando-el-resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Visualizando el resultado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descargando-y-sincronizando-el-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Descargando y sincronizando el código
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Descargando y sincronizando el código">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clonar-un-repositorio-desde-cero-git-clone" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clonar un repositorio desde cero (git clone)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobar-si-hay-cambios-sin-descargarlos-git-fetch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobar si hay cambios sin descargarlos (git fetch)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#descargar-e-integrar-actualizaciones-git-pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descargar e integrar actualizaciones (git pull)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#las-ramas-en-el-repositorio-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌳 Las ramas en el repositorio remoto
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌳 Las ramas en el repositorio remoto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#borrar-ramas-en-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Borrar ramas en remoto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-requests-proponer-cambios-para-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      📬 Pull Requests: proponer cambios para revisión
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-trabajo-habitual" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Flujo de trabajo habitual
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracion-de-git-y-github-en-intellij-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      💻 Integración de Git y GitHub en IntelliJ IDEA
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💻 Integración de Git y GitHub en IntelliJ IDEA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enlazando-tu-cuenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enlazando tu cuenta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-menu-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      El menú Git
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gestion-de-ramas-en-intellij" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gestión de ramas en IntelliJ
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave-muy-resumidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave (muy resumidas)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="3-introduccion-a-github-y-repositorios-remotos">🌐 3. Introducción a GitHub y Repositorios Remotos<a class="headerlink" href="#3-introduccion-a-github-y-repositorios-remotos" title="Permanent link">¶</a></h1>
+<p><embed alt="Introducción a GitHub" src="../diapositivas/github.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/github.pdf" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
+<hr>
+<p>En esta sección nos centraremos en los <strong>repositorios remotos</strong>: repositorios alojados en un servidor externo que permiten a otros usuarios acceder al proyecto y colaborar en él. Utilizaremos <strong>GitHub</strong> como servidor principal durante el curso.</p>
+<hr>
+<h2 id="que-es-un-repositorio-remoto">☁️ ¿Qué es un Repositorio Remoto?<a class="headerlink" href="#que-es-un-repositorio-remoto" title="Permanent link">¶</a></h2>
+<p>Un repositorio remoto es una copia de tu repositorio de Git alojada en un servidor de internet. Contiene una réplica completa de la historia del proyecto: commits, ramas y etiquetas. Sus principales utilidades son:</p>
+<ul>
+<li><strong>Colaboración</strong>: varios desarrolladores pueden trabajar sobre el mismo proyecto y compartir sus cambios.</li>
+<li><strong>Copia de seguridad</strong>: si tu ordenador falla, el código sigue estando en la nube.</li>
+<li><strong>Distribución</strong>: puedes mostrar tu trabajo como portafolio o conectarlo a servidores de despliegue.</li>
+</ul>
+<p>El diagrama siguiente muestra cómo se relacionan tu máquina local y el servidor remoto, y qué comando actúa en cada paso:</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph LOCAL["🖥️ Tu ordenador"]
+        A[Área de trabajo] --&gt;|git add| B[Staging / índice]
+        B --&gt;|git commit| C[Repositorio local]
+    end
+    subgraph REMOTO["☁️ GitHub"]
+        D[Repositorio remoto]
+    end
+    C --&gt;|git push| D
+    D --&gt;|git pull| C
+    D -.-&gt;|git fetch\n solo descarga info | C</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Alternativas a GitHub</p>
+<p>Además de <a href="https://github.com/">GitHub</a>, existen otros servicios para alojar repositorios remotos:</p>
+<ul>
+<li><strong><a href="https://gitlab.com/">GitLab</a></strong>: plataforma open source muy usada en entornos empresariales y DevOps.</li>
+<li><strong><a href="https://bitbucket.org/">Bitbucket</a></strong>: propiedad de Atlassian, se integra bien con Jira y Trello.</li>
+</ul>
+</div>
+<hr>
+<h2 id="registro-en-github">📝 Registro en GitHub<a class="headerlink" href="#registro-en-github" title="Permanent link">¶</a></h2>
+<p>Antes de crear repositorios remotos o colaborar en proyectos, necesitas una cuenta. El proceso es gratuito:</p>
+<ol>
+<li>Visita <a href="https://github.com/">https://github.com/</a>.</li>
+<li>Haz clic en <strong>"Sign up"</strong> (arriba a la derecha).</li>
+<li>Introduce tu correo electrónico, elige una contraseña y un nombre de usuario.</li>
+<li>Resuelve el puzzle de verificación.</li>
+<li>GitHub te enviará un código numérico al correo. Introdúcelo en la pantalla de confirmación.</li>
+<li>Ya tienes acceso a tu panel de control (<em>dashboard</em>) desde donde puedes crear y explorar repositorios.</li>
+</ol>
+<p><img alt="Captura de la página de registro o portada de GitHub" src="../img/github/0_registro_github.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> la página inicial de GitHub donde se introduce el nombre de usuario, contraseña y correo para crear una cuenta nueva.</p>
+<p><img alt="Captura de la página principal (dashboard) de GitHub con la sesión iniciada" src="../img/github/0b_dashboard_github.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el panel de control de GitHub una vez iniciada sesión. A la izquierda verás el listado de repositorios (vacío si acabas de registrarte) y el botón verde "New" para crear uno nuevo.</p>
+<hr>
+<h2 id="autenticacion-y-conexion-en-github">🔐 Autenticación y Conexión en GitHub<a class="headerlink" href="#autenticacion-y-conexion-en-github" title="Permanent link">¶</a></h2>
+<p>Para subir código o modificar proyectos privados, GitHub necesita verificar tu identidad. Antiguamente se usaba la contraseña de la cuenta, pero por seguridad ya no está permitido desde la terminal. Hoy existen tres formas:</p>
+<ol>
+<li><strong>Token de acceso personal (PAT)</strong>: generas una "contraseña larga" específica para repositorios, revocable en cualquier momento. Es el método más habitual al empezar.</li>
+<li><strong>Claves SSH</strong>: generas un par de claves criptográficas en tu ordenador. Es el método más profesional y cómodo a largo plazo.</li>
+<li><strong>GitHub CLI (<code>gh</code>)</strong>: herramienta oficial de consola que permite autenticarte a través del navegador.</li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Recomendación: SSH vs PAT</p>
+<p>El PAT es más rápido de configurar al principio. Las claves SSH son más seguras y no requieren pegar ningún token cada vez que haces <code>push</code>. En un entorno profesional, SSH es el estándar.</p>
+</div>
+<h3 id="generando-un-token-de-acceso-personal-pat">Generando un Token de Acceso Personal (PAT)<a class="headerlink" href="#generando-un-token-de-acceso-personal-pat" title="Permanent link">¶</a></h3>
+<ol>
+<li>En GitHub, haz clic en tu foto de perfil (arriba a la derecha) → <strong>Settings</strong>.</li>
+<li>Baja por el menú lateral hasta <strong><code>&lt; &gt;</code> Developer settings</strong>.</li>
+<li>Ve a <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong>.</li>
+<li>Pulsa <strong>Generate new token</strong> → <strong>Generate new token (classic)</strong>.</li>
+</ol>
+<p><img alt="Captura mostrando el formulario de creación de un token PAT en GitHub" src="../img/github/0c_crear_token.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el formulario para configurar un nuevo token clásico. Se ha asignado un nombre descriptivo y se ha marcado la casilla <strong><code>repo</code></strong> para dar permisos de lectura y escritura sobre repositorios.</p>
+<ol>
+<li>
+<p>Baja al final de la página y haz clic en <strong>Generate token</strong>.</p>
+</li>
+<li>
+<p>GitHub te mostrará el token generado (una cadena larga que empieza por <code>ghp_...</code>).</p>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Cópialo ahora</p>
+<p>Esta es la <strong>única vez</strong> que GitHub te lo muestra. Si cierras la pestaña sin copiarlo, tendrás que generar uno nuevo.</p>
+</div>
+<p><img alt="Captura mostrando el cuadro verde de éxito y el token generado" src="../img/github/0d_token_generado.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el mensaje de éxito y el token generado (parte censurada por seguridad). Copia el tuyo completo usando el icono de copiar.</p>
+<p>Cuando Git te pida contraseña al hacer <code>git push</code>, pega este token en lugar de tu contraseña de GitHub.</p>
+<hr>
+<h3 id="configurando-la-autenticacion-por-ssh-recomendado">Configurando la Autenticación por SSH (Recomendado)<a class="headerlink" href="#configurando-la-autenticacion-por-ssh-recomendado" title="Permanent link">¶</a></h3>
+<p>Si no quieres pegar el token cada vez que subes código, configura una clave SSH entre tu equipo y GitHub. El proceso es de una sola vez.</p>
+<h4 id="1-generar-la-clave-ssh-local">1. Generar la clave SSH local<a class="headerlink" href="#1-generar-la-clave-ssh-local" title="Permanent link">¶</a></h4>
+<p>Abre Git Bash y ejecuta el siguiente comando con tu correo de GitHub:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"tu_correo@ejemplo.com"</span>
+</code></pre></div></td></tr></table></div>
+<p>La terminal te preguntará dónde guardar la clave y si quieres añadir una contraseña (<em>passphrase</em>). Puedes pulsar <code>Enter</code> varias veces para aceptar los valores por defecto.</p>
+<p><img alt="Captura de la terminal generando una clave SSH" src="../img/github/0e1_generar_ssh.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> Git Bash ejecutando el comando. Las preguntas de ruta y passphrase se han respondido pulsando Intro. El dibujo ASCII al final confirma que la clave se ha generado correctamente en la carpeta <code>.ssh</code> de tu ordenador.</p>
+<h4 id="2-copiar-la-clave-publica">2. Copiar la clave pública<a class="headerlink" href="#2-copiar-la-clave-publica" title="Permanent link">¶</a></h4>
+<p>El proceso ha generado dos archivos: la clave <strong>privada</strong> (nunca la compartas) y la clave <strong>pública</strong> (la que le damos a GitHub). Copia la pública así:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># Windows (Git Bash)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>clip<span class="w"> </span>&lt;<span class="w"> </span>~/.ssh/id_ed25519.pub
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1"># Mac</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>pbcopy<span class="w"> </span>&lt;<span class="w"> </span>~/.ssh/id_ed25519.pub
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="c1"># O muéstrala en pantalla y cópiala manualmente:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>cat<span class="w"> </span>~/.ssh/id_ed25519.pub
+</code></pre></div></td></tr></table></div>
+<p><img alt="Captura de la terminal mostrando el archivo publico de la llave SSH" src="../img/github/0e2_copiar_ssh.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el contenido de la clave pública mostrado con <code>cat</code>. Siempre empieza por <code>ssh-ed25519</code>.</p>
+<h4 id="3-anadir-la-clave-a-github">3. Añadir la clave a GitHub<a class="headerlink" href="#3-anadir-la-clave-a-github" title="Permanent link">¶</a></h4>
+<ol>
+<li>Ve a GitHub → tu foto de perfil → <strong>Settings</strong> → <strong>SSH and GPG keys</strong>.</li>
+<li>Pulsa <strong>New SSH key</strong>.</li>
+<li>Escribe un título (ej. "Portátil clase") y pega la clave pública en el campo de texto.</li>
+<li>Haz clic en <strong>Add SSH key</strong>.</li>
+</ol>
+<p><img alt="Captura del formulario para agregar clave SSH" src="../img/github/0e_a%C3%B1adir_ssh.png"></p>
+<p><img alt="Captura del menú de SSH indicando que la clave se ha guardado" src="../img/github/0f_a%C3%B1adida_sh.png"></p>
+<p><strong>Qué estás viendo en las capturas:</strong> la primera muestra el formulario para pegar la clave; la segunda confirma que la clave ha quedado vinculada a tu cuenta.</p>
+<p>A partir de ahora, cuando clones un proyecto usa la URL <strong>SSH</strong> (empieza por <code>git@github.com:...</code>) en lugar de HTTPS. Cualquier <code>push</code> o <code>pull</code> funcionará sin pedirte credenciales.</p>
+<hr>
+<h2 id="paso-a-paso-subiendo-tu-proyecto-a-la-nube">🚀 Paso a Paso: Subiendo tu proyecto a la nube<a class="headerlink" href="#paso-a-paso-subiendo-tu-proyecto-a-la-nube" title="Permanent link">¶</a></h2>
+<p>Imagina que has estado trabajando en local con <code>git init</code>, <code>git add</code> y <code>git commit</code>. Ahora quieres subirlo a GitHub.</p>
+<h3 id="1-creando-el-repositorio-en-github">1. Creando el repositorio en GitHub<a class="headerlink" href="#1-creando-el-repositorio-en-github" title="Permanent link">¶</a></h3>
+<p>Entra en tu cuenta de GitHub y pulsa el botón <strong>New</strong> para crear un nuevo repositorio. Dale un nombre y decide si será público o privado.</p>
+<p>Si ya tienes un repositorio local listo, <strong>no marques</strong> las opciones de añadir <code>README</code>, <code>.gitignore</code> ni licencia desde la web — necesitas que GitHub te dé un repositorio completamente vacío.</p>
+<p><img alt="Captura crear un nuevo repositorio en GitHub" src="../img/github/1_crear_repo.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el formulario "Create a new repository" con el nombre <code>mi_proyecto</code>. Las opciones de README y .gitignore se han dejado desmarcadas para obtener un repositorio vacío.</p>
+<h3 id="2-enlazando-el-local-con-el-remoto-git-remote-add">2. Enlazando el local con el remoto (<code>git remote add</code>)<a class="headerlink" href="#2-enlazando-el-local-con-el-remoto-git-remote-add" title="Permanent link">¶</a></h3>
+<p>Una vez creado el repositorio vacío, GitHub te mostrará las instrucciones de subida. El comando que conecta tu repositorio local con el remoto es <code>git remote add</code>.</p>
+<p>El alias <strong><code>origin</code></strong> es simplemente un apodo que le damos a la URL del servidor remoto — podría llamarse de cualquier manera, pero por convención siempre se llama <code>origin</code>. Así no tienes que escribir la URL completa cada vez.</p>
+<p>Dependiendo del protocolo que hayas configurado:</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">HTTPS</label><label for="__tabbed_1_2">SSH</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p></p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/tu-usuario/tu-repositorio.git
+</code></pre></div></td></tr></table></div>
+Git te pedirá el Token PAT la primera vez que subas código (salvo que tu sistema tenga el <em>Git Credential Manager</em> activado, lo habitual en Windows).
+</div>
+<div class="tabbed-block">
+<p></p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:tu-usuario/tu-repositorio.git
+</code></pre></div></td></tr></table></div>
+Si has configurado las claves SSH, no te pedirá ninguna credencial.
+</div>
+</div>
+</div>
+</div>
+<p>Para comprobar que el enlace se ha creado correctamente:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>git<span class="w"> </span>remote<span class="w"> </span>-v
+</code></pre></div></td></tr></table></div>
+<p><img alt="Captura de la terminal mostrando el origin enlazado" src="../img/github/2_enlazar_remoto.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el comando <code>git remote add origin</code> (que no produce salida visible) y a continuación <code>git remote -v</code>, que confirma que <code>origin</code> apunta a la URL correcta tanto para <code>push</code> como para <code>fetch</code>.</p>
+<h3 id="3-el-primer-push-git-push">3. El primer push (<code>git push</code>)<a class="headerlink" href="#3-el-primer-push-git-push" title="Permanent link">¶</a></h3>
+<p>Tu PC y GitHub están enlazados, pero los datos todavía no han viajado. La primera vez añade <code>-u</code> (<code>--set-upstream</code>) para vincular tu rama local con la rama remota: a partir de ahí, Git sabe adónde ir cuando ejecutas <code>git push</code> o <code>git pull</code> a secas, sin tener que escribir <code>origin main</code> cada vez.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div></td></tr></table></div>
+<div class="admonition info">
+<p class="admonition-title">¿Por qué me pide (o no me pide) contraseña?</p>
+<ul>
+<li><strong>Si pide usuario y contraseña:</strong> pega el <strong>Token PAT</strong> como contraseña. Tu contraseña de GitHub no funcionará.</li>
+<li><strong>Si no pide nada:</strong> o tienes SSH configurado, o el <em>Git Credential Manager</em> de Windows ha guardado tus credenciales de una sesión anterior.</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Conflicto al hacer push</p>
+<p>Si Git te avisa de que el remoto tiene cambios que tú no tienes en local, <strong>no uses <code>git push --force</code></strong> salvo que estés seguro de lo que haces. <code>--force</code> sobreescribe el historial del servidor y puede borrar el trabajo de tus compañeros. La solución habitual es hacer primero <code>git pull</code> para integrar los cambios remotos, y luego volver a hacer <code>push</code>.</p>
+<p>La única situación en que <code>--force</code> es aceptable es en una rama propia que nadie más usa.</p>
+</div>
+<p><img alt="Captura del terminal con ls y subida git push exitosa" src="../img/github/3_primer_push.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> primero un <code>ls</code> para ver el contenido local antes del envío, y luego <code>git push -u origin main</code> con las estadísticas de éxito (<code>Writing objects: 100%</code>) y el aviso de que la rama remota queda enlazada.</p>
+<h3 id="4-visualizando-el-resultado">4. Visualizando el resultado<a class="headerlink" href="#4-visualizando-el-resultado" title="Permanent link">¶</a></h3>
+<p>Actualiza la página del repositorio en el navegador. Verás tus archivos con el historial y los mensajes de commit exactos que tenías en local.</p>
+<p><img alt="Captura de la web de GitHub mostrando los archivos subidos" src="../img/github/4_repo_lleno.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el repositorio en GitHub mostrando los archivos locales (<code>primer_doc.txt</code>) junto al mensaje y la fecha de cada commit.</p>
+<hr>
+<h2 id="descargando-y-sincronizando-el-codigo">🔄 Descargando y sincronizando el código<a class="headerlink" href="#descargando-y-sincronizando-el-codigo" title="Permanent link">¶</a></h2>
+<h3 id="clonar-un-repositorio-desde-cero-git-clone">Clonar un repositorio desde cero (<code>git clone</code>)<a class="headerlink" href="#clonar-un-repositorio-desde-cero-git-clone" title="Permanent link">¶</a></h3>
+<p>Llegas a un ordenador donde no tienes nada del proyecto. En lugar de <code>git init</code>, usas <code>git clone</code> con la URL del repositorio:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tu-usuario/tu-repositorio.git
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="c1"># O con SSH si lo tienes configurado:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:tu-usuario/tu-repositorio.git
+</code></pre></div></td></tr></table></div>
+<p>Para obtener la URL, entra en el repositorio de GitHub y haz clic en el botón verde <strong>"&lt;&gt; Code"</strong>.</p>
+<p><img alt="Captura mostrando el botón verde Code para copiar la URL de clonación" src="../img/github/5a_obtener_enlace_clonar.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el menú desplegable del botón "Code" con la URL de clonación en HTTPS y el botón para copiarla al portapapeles.</p>
+<p><code>git clone</code> hace tres cosas de golpe:</p>
+<ol>
+<li>Crea una carpeta con el nombre del repositorio.</li>
+<li>Descarga todos los commits, ramas y archivos.</li>
+<li>Configura <code>origin</code> apuntando al remoto automáticamente.</li>
+</ol>
+<p><img alt="Captura realizando git clone del repositorio y listando su contenido" src="../img/github/5_clone.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> <code>git clone</code> descargando el repositorio, y después <code>cd mi_proyecto</code> + <code>ls</code> confirmando que los archivos ya están en local.</p>
+<h3 id="comprobar-si-hay-cambios-sin-descargarlos-git-fetch">Comprobar si hay cambios sin descargarlos (<code>git fetch</code>)<a class="headerlink" href="#comprobar-si-hay-cambios-sin-descargarlos-git-fetch" title="Permanent link">¶</a></h3>
+<p><code>git fetch</code> se conecta al remoto y trae información sobre los cambios disponibles, pero <strong>no modifica tus archivos locales</strong>. Te permite ver qué hay nuevo antes de decidir si integrarlo.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>git<span class="w"> </span>fetch
+</code></pre></div></td></tr></table></div>
+<h3 id="descargar-e-integrar-actualizaciones-git-pull">Descargar e integrar actualizaciones (<code>git pull</code>)<a class="headerlink" href="#descargar-e-integrar-actualizaciones-git-pull" title="Permanent link">¶</a></h3>
+<p><code>git pull</code> es la combinación de <code>git fetch</code> + merge automático: descarga los cambios del remoto y los aplica en tu rama actual.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>git<span class="w"> </span>pull
+</code></pre></div></td></tr></table></div>
+<p>La diferencia entre los dos comandos en un vistazo:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>git fetch</code></th>
+<th><code>git pull</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conecta al remoto</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Descarga cambios</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Modifica tus archivos</td>
+<td>✗</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Cuándo usarlo</td>
+<td>Cuando quieres revisar antes de integrar</td>
+<td>Cuando quieres actualizar directamente</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Captura actualizando el repositorio local con un git pull" src="../img/github/6_pull.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> <code>git pull</code> integrando un cambio hecho desde la web de GitHub. La salida muestra el fast-forward y las estadísticas del archivo modificado (<code>1 insertion(+)</code>).</p>
+<div class="admonition warning">
+<p class="admonition-title">¿Y si <code>git pull</code> genera un conflicto?</p>
+<p>Si tú has modificado un archivo en local y mientras tanto alguien (o tú mismo desde la web) ha modificado el mismo archivo en el remoto, <code>git pull</code> no puede fusionarlos automáticamente y para con un error de conflicto.</p>
+<p>El proceso para resolverlo es el mismo que viste en la sección de ramas: abre el archivo, edita las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> / <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, guarda, haz <code>git add</code> del archivo resuelto y cierra con <code>git commit</code>.</p>
+</div>
+<hr>
+<h2 id="las-ramas-en-el-repositorio-remoto">🌳 Las ramas en el repositorio remoto<a class="headerlink" href="#las-ramas-en-el-repositorio-remoto" title="Permanent link">¶</a></h2>
+<p>Todo lo que aprendiste sobre ramas funciona igual en el remoto. Cuando creas una rama local y haces commits en ella, esos cambios solo existen en tu ordenador hasta que los subes explícitamente.</p>
+<p>Para publicar una rama en GitHub:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>nueva-funcionalidad<span class="w">   </span><span class="c1"># crea la rama y cambia a ella</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="c1"># ... trabajas, haces commits ...</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>nueva-funcionalidad<span class="w">  </span><span class="c1"># la primera vez</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>git<span class="w"> </span>push<span class="w">                                </span><span class="c1"># las siguientes veces</span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="Captura mostrando el proceso de creación y subida de una rama en la terminal" src="../img/github/7a_subir_rama_terminal.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> creación de la rama con <code>git switch -c</code>, commits locales, y finalmente <code>git push -u origin nueva-funcionalidad</code> con el aviso <code>[new branch]</code> confirmando que ha llegado al servidor.</p>
+<p>En la web de GitHub, el selector de ramas (arriba a la izquierda del código) mostrará todas las ramas subidas. Puedes navegar por ellas para ver su historial o iniciar una Pull Request.</p>
+<p><img alt="Captura mostrando el selector de ramas en GitHub con una nueva rama disponible" src="../img/github/7b_rama_github.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el selector de ramas de GitHub mostrando <code>main</code> y <code>nueva-funcionalidad</code> disponibles.</p>
+<h3 id="borrar-ramas-en-remoto">Borrar ramas en remoto<a class="headerlink" href="#borrar-ramas-en-remoto" title="Permanent link">¶</a></h3>
+<p>Una vez que la rama está fusionada en <code>main</code> y la has borrado en local, es buena práctica borrarla también del servidor:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>nueva-funcionalidad
+</code></pre></div></td></tr></table></div>
+<p>También puedes hacerlo desde la web de GitHub en la sección <em>Branches</em> → icono de papelera.</p>
+<hr>
+<h2 id="pull-requests-proponer-cambios-para-revision">📬 Pull Requests: proponer cambios para revisión<a class="headerlink" href="#pull-requests-proponer-cambios-para-revision" title="Permanent link">¶</a></h2>
+<p>Una <strong>Pull Request</strong> (PR) es una petición que abres en GitHub para que alguien revise tu rama antes de fusionarla en <code>main</code>. Es el mecanismo central del trabajo colaborativo: en lugar de fusionar directamente, propones los cambios y el equipo los discute, comenta y aprueba antes de integrarlos.</p>
+<p>El flujo habitual con PRs es:</p>
+<ol>
+<li>Subes tu rama al remoto con <code>git push -u origin mi-rama</code>.</li>
+<li>En GitHub aparece un aviso automático con el botón <strong>"Compare &amp; pull request"</strong>. Haz clic ahí.</li>
+<li>Escribe un título y una descripción explicando qué has cambiado y por qué.</li>
+<li>Tu compañero (o tú mismo en proyectos personales) revisa los cambios en la pestaña <strong>"Files changed"</strong>, donde se ven las líneas añadidas en verde y las borradas en rojo.</li>
+<li>Si todo está bien, se pulsa <strong>"Merge pull request"</strong> y los cambios pasan a <code>main</code>.</li>
+<li>La rama puede borrarse automáticamente después del merge.</li>
+</ol>
+<pre class="mermaid"><code>flowchart LR
+    A[git push -u origin mi-rama] --&gt; B[Abrir PR en GitHub]
+    B --&gt; C[Revisión del equipo]
+    C --&gt; D{¿Aprobado?}
+    D --&gt;|Sí| E[Merge a main]
+    D --&gt;|No| F[Hacer cambios y push]
+    F --&gt; C</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Recuerda</p>
+<p>Las PRs no son solo para equipos grandes. Usarlas en proyectos propios te da historial de decisiones, revisión antes de integrar y una forma ordenada de trabajar por funcionalidades.</p>
+</div>
+<hr>
+<h2 id="flujo-de-trabajo-habitual">📋 Flujo de trabajo habitual<a class="headerlink" href="#flujo-de-trabajo-habitual" title="Permanent link">¶</a></h2>
+<p>Este es el ciclo típico de un día de trabajo:</p>
+<pre class="mermaid"><code>flowchart TD
+    A[git pull] --&gt; B[git switch -c mi-rama]
+    B --&gt; C[Trabajar y hacer commits]
+    C --&gt; D[git push -u origin mi-rama]
+    D --&gt; E[Abrir Pull Request en GitHub]
+    E --&gt; F[Revisión y merge a main]
+    F --&gt; A</code></pre>
+<ol>
+<li><strong>Actualizarte</strong> antes de empezar:
+   <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>git<span class="w"> </span>pull
+</code></pre></div></td></tr></table></div></li>
+<li><strong>Crear una rama</strong> para el cambio que vas a hacer:
+   <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>mi-rama
+</code></pre></div></td></tr></table></div></li>
+<li><strong>Trabajar y commitear</strong> con frecuencia:
+   <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade pantalla de login"</span>
+</code></pre></div></td></tr></table></div></li>
+<li><strong>Publicar la rama</strong> en GitHub:
+   <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>mi-rama
+</code></pre></div></td></tr></table></div></li>
+<li><strong>Abrir una Pull Request</strong> en GitHub y esperar revisión antes de fusionar en <code>main</code>.</li>
+</ol>
+<hr>
+<h2 id="integracion-de-git-y-github-en-intellij-idea">💻 Integración de Git y GitHub en IntelliJ IDEA<a class="headerlink" href="#integracion-de-git-y-github-en-intellij-idea" title="Permanent link">¶</a></h2>
+<p>IntelliJ IDEA incorpora soporte nativo para Git y GitHub, lo que permite hacer la mayoría de operaciones desde la interfaz sin usar la terminal.</p>
+<h3 id="enlazando-tu-cuenta">Enlazando tu cuenta<a class="headerlink" href="#enlazando-tu-cuenta" title="Permanent link">¶</a></h3>
+<ol>
+<li>Abre <strong>File → Settings</strong> (o <strong>Edit → Preferences</strong> en Mac).</li>
+<li>Ve a <strong>Version Control → GitHub</strong>.</li>
+<li>Pulsa <code>+</code> → <strong>Log in via GitHub</strong> (abre el navegador para autorizar) o introduce tu Token PAT.</li>
+</ol>
+<p><img alt="Captura mostrando la cuenta de GitHub vinculada en IntelliJ IDEA" src="../img/github/8a_intellij_cuenta.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> la pantalla de ajustes con la cuenta de GitHub ya vinculada al IDE.</p>
+<h3 id="el-menu-git">El menú Git<a class="headerlink" href="#el-menu-git" title="Permanent link">¶</a></h3>
+<p>Con un proyecto abierto que tenga <code>git init</code>, verás el menú <strong>Git</strong> en la barra superior. Desde ahí tienes acceso a las operaciones principales:</p>
+<p><strong>A) Commit</strong> — Abre un panel donde puedes marcar los archivos a añadir al staging y escribir el mensaje del commit. A la derecha se muestra el diff visual con las líneas añadidas y borradas.</p>
+<p><img alt="Captura del panel lateral de Commit de IntelliJ IDEA" src="../img/github/8b_intellij_commit.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el panel de Commit con los archivos seleccionados para el staging, el campo del mensaje y el visor de diferencias a la derecha.</p>
+<p><strong>B) Push</strong> (<code>Ctrl+Shift+K</code>) — Muestra los commits pendientes de subir y hacia qué rama de <code>origin</code> van. Confirma antes de enviar.</p>
+<p><img alt="Captura mostrando el diálogo emergente para hacer Push" src="../img/github/8c_intellij_push.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el diálogo de Push indicando la rama origen, la rama destino en <code>origin</code> y los commits que van a enviarse.</p>
+<p><strong>C) Pull / Fetch</strong> — Descarga e integra los cambios del remoto en tu rama actual.</p>
+<h3 id="gestion-de-ramas-en-intellij">Gestión de ramas en IntelliJ<a class="headerlink" href="#gestion-de-ramas-en-intellij" title="Permanent link">¶</a></h3>
+<p>Desde <strong>Git → Branches</strong> puedes ver todas las ramas locales y remotas, crear una nueva rama (<code>New Branch</code>, equivale a <code>git switch -c</code>), y cambiar entre ellas.</p>
+<p><img alt="Captura mostrando el potente selector de ramas de IntelliJ" src="../img/github/8d_intellij_ramas.png"></p>
+<p><strong>Qué estás viendo en la captura:</strong> el panel de ramas con las secciones Local y Remote, y el botón <code>+ New Branch</code> para crear una rama directamente desde el IDE.</p>
+<p>La terminal y el IDE son complementarios: la terminal da control total; el IDE acelera las operaciones del día a día.</p>
+<hr>
+<h2 id="ideas-clave-muy-resumidas">✅ Ideas clave (muy resumidas)<a class="headerlink" href="#ideas-clave-muy-resumidas" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Resumen</p>
+<ul>
+<li><code>git remote add origin &lt;url&gt;</code> — vincula tu repositorio local con el remoto. <code>origin</code> es el alias que le damos a la URL.</li>
+<li><code>git remote -v</code> — comprueba a qué dirección remota apunta tu proyecto.</li>
+<li><code>git push -u origin &lt;rama&gt;</code> — sube la rama por primera vez y la vincula para futuros pushes.</li>
+<li><code>git push</code> — sube los commits de la rama actual al remoto.</li>
+<li><code>git clone &lt;url&gt;</code> — descarga un repositorio completo en una carpeta nueva.</li>
+<li><code>git fetch</code> — descarga el estado del remoto sin modificar tus archivos locales.</li>
+<li><code>git pull</code> — descarga y aplica los cambios del remoto en tu rama actual.</li>
+<li><code>git push origin --delete &lt;rama&gt;</code> — borra una rama del repositorio remoto.</li>
+<li>Una <strong>Pull Request</strong> es una propuesta de fusión que el equipo revisa antes de integrar en <code>main</code>.</li>
+</ul>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../actividad_0_2/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 0.2 - Ramas en Git">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.2 - Ramas en Git
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../actividad_0_3/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 0.3 - Tu portafolio en GitHub">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.3 - Tu portafolio en GitHub
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

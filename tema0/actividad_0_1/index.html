@@ -1,0 +1,1840 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../introduccion-git/">
+      
+      
+        <link rel="next" href="../ramas/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Actividad 0.1 - Git local - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#actividad-01-git-local-construir-historial-y-saber-volver-atras" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Actividad 0.1 - Git local
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#norma-de-la-actividad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Norma de la actividad
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparacion-del-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación del repositorio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-construir-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Construir el historial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Construir el historial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-primer-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Primer commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-segundo-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Segundo commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-tercer-commit-con-dos-archivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Tercer commit con dos archivos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-cuarto-commit-con-un-error-deliberado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Cuarto commit con un error deliberado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-leer-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Leer el historial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte B — Leer el historial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-examinar-un-commit-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Examinar un commit concreto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-c-descartar-cambios-antes-de-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte C — Descartar cambios antes de commit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte C — Descartar cambios antes de commit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-6-descartar-cambios-en-el-area-de-trabajo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — Descartar cambios en el área de trabajo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-7-sacar-un-archivo-del-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — Sacar un archivo del staging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-d-recuperar-una-version-anterior-de-un-archivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte D — Recuperar una versión anterior de un archivo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte D — Recuperar una versión anterior de un archivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-8-recuperar-el-archivo-desde-un-commit-pasado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 8 — Recuperar el archivo desde un commit pasado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-e-deshacer-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte E — Deshacer commits
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte E — Deshacer commits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-9-git-revert-deshacer-sin-borrar-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 9 — git revert: deshacer sin borrar historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-10-git-reset-soft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 10 — git reset --soft
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-11-git-reset-mixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 11 — git reset --mixed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-12-tabla-de-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 12 — Tabla de decisión
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-f-ignorar-archivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte F — Ignorar archivos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte F — Ignorar archivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-13-gitignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 13 — .gitignore
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solución
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#norma-de-la-actividad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Norma de la actividad
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preparacion-del-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación del repositorio
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-a-construir-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte A — Construir el historial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte A — Construir el historial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-primer-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — Primer commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-segundo-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Segundo commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-tercer-commit-con-dos-archivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Tercer commit con dos archivos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-cuarto-commit-con-un-error-deliberado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Cuarto commit con un error deliberado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-b-leer-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte B — Leer el historial
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte B — Leer el historial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-examinar-un-commit-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Examinar un commit concreto
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-c-descartar-cambios-antes-de-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte C — Descartar cambios antes de commit
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte C — Descartar cambios antes de commit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-6-descartar-cambios-en-el-area-de-trabajo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — Descartar cambios en el área de trabajo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-7-sacar-un-archivo-del-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — Sacar un archivo del staging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-d-recuperar-una-version-anterior-de-un-archivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte D — Recuperar una versión anterior de un archivo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte D — Recuperar una versión anterior de un archivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-8-recuperar-el-archivo-desde-un-commit-pasado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 8 — Recuperar el archivo desde un commit pasado
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-e-deshacer-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte E — Deshacer commits
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte E — Deshacer commits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-9-git-revert-deshacer-sin-borrar-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 9 — git revert: deshacer sin borrar historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-10-git-reset-soft" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 10 — git reset --soft
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-11-git-reset-mixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 11 — git reset --mixed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-12-tabla-de-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 12 — Tabla de decisión
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parte-f-ignorar-archivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parte F — Ignorar archivos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parte F — Ignorar archivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-13-gitignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 13 — .gitignore
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solución
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="actividad-01-git-local-construir-historial-y-saber-volver-atras">Actividad 0.1: Git local — construir historial y saber volver atrás<a class="headerlink" href="#actividad-01-git-local-construir-historial-y-saber-volver-atras" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_0_1_Plantilla.docx" rel="noopener" target="_blank">Plantilla 0.1 — Git local: construir historial y saber volver atrás</a></p>
+</div>
+<h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
+<p>En esta actividad crearás un repositorio desde cero, construirás un historial de cambios y practicarás los comandos para volver atrás cuando algo sale mal. No se trata solo de ejecutar comandos: en cada paso tendrás que <strong>predecir</strong> qué va a pasar antes de hacerlo y <strong>razonar</strong> qué opción elegirías en distintas situaciones.</p>
+<p>Aspectos que cubre la actividad:</p>
+<ul>
+<li>Inicializar un repositorio y configurar Git.</li>
+<li>Añadir archivos y hacer commits con mensajes claros.</li>
+<li>Leer el historial con <code>git log</code> y examinar commits concretos con <code>git show</code>.</li>
+<li>Descartar cambios antes de hacer commit con <code>git restore</code>.</li>
+<li>Sacar archivos del staging sin perder los cambios.</li>
+<li>Recuperar una versión anterior de un archivo con <code>git restore --source</code>.</li>
+<li>Deshacer un commit de forma segura con <code>git revert</code>.</li>
+<li>Entender la diferencia entre <code>git reset --soft</code>, <code>--mixed</code> y <code>--hard</code>.</li>
+<li>Ignorar archivos con <code>.gitignore</code>.</li>
+</ul>
+<hr>
+<h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
+<p>Antes de empezar, comprueba que Git está instalado y configurado:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>git<span class="w"> </span>--version
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Tu Nombre"</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"tuemail@ejemplo.com"</span>
+</code></pre></div></td></tr></table></div>
+<p>Si <code>user.name</code> y <code>user.email</code> ya están configurados de sesiones anteriores, no hace falta repetirlo.</p>
+<hr>
+<h2 id="norma-de-la-actividad">Norma de la actividad<a class="headerlink" href="#norma-de-la-actividad" title="Permanent link">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Obligatorio en cada paso</p>
+<p>Antes de ejecutar cualquier comando que modifique el repositorio (add, commit, restore, revert, reset…), escribe <strong>qué esperas que pase</strong>. Después ejecuta y comprueba si has acertado.</p>
+<p>Esto es lo que se va a valorar: que entiendas lo que hace cada comando, no que lo copies sin más.</p>
+</div>
+<hr>
+<h2 id="preparacion-del-repositorio">Preparación del repositorio<a class="headerlink" href="#preparacion-del-repositorio" title="Permanent link">¶</a></h2>
+<p>Crea una carpeta llamada <code>actividad0_1</code> en un lugar de tu disco que <strong>no esté dentro de OneDrive, iCloud ni Google Drive</strong> (esos sistemas de sincronización y Git no se llevan bien).</p>
+<p>Inicializa el repositorio dentro de esa carpeta:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>git<span class="w"> </span>init
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="parte-a-construir-el-historial">Parte A — Construir el historial<a class="headerlink" href="#parte-a-construir-el-historial" title="Permanent link">¶</a></h2>
+<h3 id="paso-1-primer-commit">Paso 1 — Primer commit<a class="headerlink" href="#paso-1-primer-commit" title="Permanent link">¶</a></h3>
+<p>Crea un archivo llamado <code>recetas.txt</code> con exactamente este contenido (puedes cambiar los nombres de platos, pero tiene que haber tres):</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>Tortilla de patatas
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>Gazpacho
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>Paella valenciana
+</code></pre></div></td></tr></table></div>
+<p>Antes de añadir nada: <strong>¿qué estado tiene el archivo según <code>git status</code>?</strong> Escríbelo.</p>
+<p>Después:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>git<span class="w"> </span>add<span class="w"> </span>recetas.txt
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>git<span class="w"> </span>status
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade recetas iniciales"</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="paso-2-segundo-commit">Paso 2 — Segundo commit<a class="headerlink" href="#paso-2-segundo-commit" title="Permanent link">¶</a></h3>
+<p>Añade dos recetas más al final de <code>recetas.txt</code>. Elige las que quieras.</p>
+<p><strong>Predice</strong>: ¿qué mostrará <code>git status</code>? ¿Y <code>git diff</code>? Escríbelo antes de ejecutar.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>git<span class="w"> </span>status
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>git<span class="w"> </span>diff
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>git<span class="w"> </span>add<span class="w"> </span>recetas.txt
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade dos recetas nuevas"</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="paso-3-tercer-commit-con-dos-archivos">Paso 3 — Tercer commit con dos archivos<a class="headerlink" href="#paso-3-tercer-commit-con-dos-archivos" title="Permanent link">¶</a></h3>
+<ul>
+<li>Crea un archivo <code>ingredientes.txt</code> con los ingredientes de una de tus recetas (al menos 5 líneas).</li>
+<li>Crea también un archivo <code>borrador.txt</code> con el texto <code>trabajo en progreso</code>.</li>
+</ul>
+<p>Haz un commit que <strong>solo incluya</strong> <code>ingredientes.txt</code>. El archivo <code>borrador.txt</code> no debe estar en este commit.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>git<span class="w"> </span>add<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade ingredientes de una receta"</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿por qué <code>borrador.txt</code> sigue apareciendo como untracked? ¿Qué tendría que pasar para que desapareciera del todo?</p>
+<h3 id="paso-4-cuarto-commit-con-un-error-deliberado">Paso 4 — Cuarto commit con un error deliberado<a class="headerlink" href="#paso-4-cuarto-commit-con-un-error-deliberado" title="Permanent link">¶</a></h3>
+<p>Edita <code>recetas.txt</code> y <strong>elimina</strong> una de las recetas que añadiste en el Paso 1 (una de las tres originales). Luego haz commit:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>git<span class="w"> </span>add<span class="w"> </span>recetas.txt
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Elimina receta por error"</span>
+</code></pre></div></td></tr></table></div>
+<p>Ahora tienes un historial con cuatro commits. Consúltalo:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<p>Fíjate en el resultado: lo necesitarás para el resto de pasos.</p>
+<hr>
+<h2 id="parte-b-leer-el-historial">Parte B — Leer el historial<a class="headerlink" href="#parte-b-leer-el-historial" title="Permanent link">¶</a></h2>
+<h3 id="paso-5-examinar-un-commit-concreto">Paso 5 — Examinar un commit concreto<a class="headerlink" href="#paso-5-examinar-un-commit-concreto" title="Permanent link">¶</a></h3>
+<p>Usa <code>git show</code> con el hash del <strong>segundo commit</strong> (el que añadió dos recetas nuevas):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>git<span class="w"> </span>show<span class="w"> </span>&lt;hash&gt;
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Qué líneas aparecen en verde (con <code>+</code>)? ¿Qué representan?</li>
+<li>¿Qué líneas aparecen en rojo (con <code>-</code>)? ¿Cuántas hay en este commit?</li>
+<li>¿Para qué sirve <code>git show</code> en tu día a día como desarrollador?</li>
+</ol>
+<hr>
+<h2 id="parte-c-descartar-cambios-antes-de-commit">Parte C — Descartar cambios antes de commit<a class="headerlink" href="#parte-c-descartar-cambios-antes-de-commit" title="Permanent link">¶</a></h2>
+<h3 id="paso-6-descartar-cambios-en-el-area-de-trabajo">Paso 6 — Descartar cambios en el área de trabajo<a class="headerlink" href="#paso-6-descartar-cambios-en-el-area-de-trabajo" title="Permanent link">¶</a></h3>
+<p>Modifica <code>ingredientes.txt</code>: borra todas las líneas y escribe <code>borrador</code>. No hagas commit.</p>
+<p><strong>Predice</strong>: ¿qué mostrará <code>git status</code>? Escríbelo.</p>
+<p>Ahora descarta ese cambio sin borrar el archivo ni usar Ctrl+Z:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>git<span class="w"> </span>restore<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>cat<span class="w"> </span>ingredientes.txt
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: ¿qué ha pasado? ¿El archivo ha recuperado el contenido que tenía en el último commit?</p>
+<h3 id="paso-7-sacar-un-archivo-del-staging">Paso 7 — Sacar un archivo del staging<a class="headerlink" href="#paso-7-sacar-un-archivo-del-staging" title="Permanent link">¶</a></h3>
+<p>Añade <code>ingredientes.txt</code> al staging pero <strong>no hagas commit</strong>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"Aceite de oliva extra virgen"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>git<span class="w"> </span>add<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice</strong>: ¿qué verás en <code>git status</code> en este momento?</p>
+<p>Ahora quieres sacar <code>ingredientes.txt</code> del staging pero <strong>sin perder el cambio</strong> (la línea que has añadido debe seguir en el archivo):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a>git<span class="w"> </span>status
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a>cat<span class="w"> </span>ingredientes.txt
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿El archivo tiene todavía la línea nueva o ha desaparecido?</li>
+<li>¿En qué se diferencia <code>git restore --staged</code> de <code>git restore</code> (sin <code>--staged</code>)?</li>
+</ol>
+<hr>
+<h2 id="parte-d-recuperar-una-version-anterior-de-un-archivo">Parte D — Recuperar una versión anterior de un archivo<a class="headerlink" href="#parte-d-recuperar-una-version-anterior-de-un-archivo" title="Permanent link">¶</a></h2>
+<h3 id="paso-8-recuperar-el-archivo-desde-un-commit-pasado">Paso 8 — Recuperar el archivo desde un commit pasado<a class="headerlink" href="#paso-8-recuperar-el-archivo-desde-un-commit-pasado" title="Permanent link">¶</a></h3>
+<p>En el Paso 4 borraste una receta por error. Ahora quieres recuperar <code>recetas.txt</code> tal como estaba en el <strong>segundo commit</strong> (antes del error).</p>
+<p>Busca el hash del segundo commit con <code>git log --oneline</code> y ejecuta:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>&lt;hash-segundo-commit&gt;<span class="w"> </span>recetas.txt
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>cat<span class="w"> </span>recetas.txt
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Cuántas recetas tiene el archivo ahora?</li>
+<li>¿<code>git status</code> dice que el archivo está modified o staged? ¿Por qué?</li>
+<li>¿Se ha creado un nuevo commit automáticamente? ¿Qué tendrías que hacer para guardar este estado?</li>
+</ol>
+<p>Haz commit de esta recuperación:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>git<span class="w"> </span>add<span class="w"> </span>recetas.txt
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Recupera recetas del segundo commit"</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="parte-e-deshacer-commits">Parte E — Deshacer commits<a class="headerlink" href="#parte-e-deshacer-commits" title="Permanent link">¶</a></h2>
+<h3 id="paso-9-git-revert-deshacer-sin-borrar-historial">Paso 9 — git revert: deshacer sin borrar historial<a class="headerlink" href="#paso-9-git-revert-deshacer-sin-borrar-historial" title="Permanent link">¶</a></h3>
+<p>Antes de practicar <code>git revert</code> necesitas el directorio limpio (sin cambios pendientes). En el Paso 7 dejaste una línea nueva en <code>ingredientes.txt</code> sin commitear. Confírmala ahora:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>git<span class="w"> </span>status
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a>git<span class="w"> </span>add<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade ingrediente nuevo"</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p>Ahora el directorio está limpio. Crea un error deliberado para practicar el revert:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"ESTA LÍNEA ES UN ERROR"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>recetas.txt
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a>git<span class="w"> </span>add<span class="w"> </span>recetas.txt
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añade línea incorrecta por error"</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice</strong>: ¿qué hará <code>git revert HEAD</code>? ¿Borrará ese commit o creará uno nuevo encima?</p>
+<p>Ahora deshaz ese commit <strong>sin borrar el historial</strong> (simula que el proyecto ya lo has subido a un servidor y otra persona podría haberlo descargado):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span>
+<span class="normal"><a href="#__codelineno-16-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>git<span class="w"> </span>revert<span class="w"> </span>HEAD
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a>git<span class="w"> </span>show<span class="w"> </span>HEAD
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">El editor de mensajes</p>
+<p>Al ejecutar <code>git revert</code>, Git abrirá un editor para que confirmes el mensaje del commit de revert. Si se abre Vim, escribe <code>:wq</code> y pulsa Enter para guardar y salir. Si prefieres evitarlo, puedes usar <code>git revert HEAD --no-edit</code>.</p>
+</div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿Cuántos commits hay ahora en el historial?</li>
+<li>¿<code>git revert</code> ha borrado el commit del error o ha creado uno nuevo encima?</li>
+<li>¿En qué situaciones usarías <code>git revert</code> en lugar de <code>git reset</code>?</li>
+</ol>
+<h3 id="paso-10-git-reset-soft">Paso 10 — git reset --soft<a class="headerlink" href="#paso-10-git-reset-soft" title="Permanent link">¶</a></h3>
+<p>Haz un commit de prueba que puedas deshacer. Añade una línea a <code>ingredientes.txt</code> y haz commit:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"Sal al gusto"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a>git<span class="w"> </span>add<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Commit de prueba para reset"</span>
+</code></pre></div></td></tr></table></div>
+<p>Ahora deshaz ese commit con <code>--soft</code>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
+<span class="normal"><a href="#__codelineno-18-2">2</a></span>
+<span class="normal"><a href="#__codelineno-18-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a>git<span class="w"> </span>status
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<p><strong>Predice antes de ejecutar</strong>: ¿dónde van los cambios del commit deshecho — al staging, al área de trabajo o desaparecen?</p>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿El commit ha desaparecido del log?</li>
+<li>¿Los cambios están staged o unstaged?</li>
+<li>¿Qué tendrías que hacer ahora para rehacer el commit con un mensaje diferente?</li>
+</ol>
+<h3 id="paso-11-git-reset-mixed">Paso 11 — git reset --mixed<a class="headerlink" href="#paso-11-git-reset-mixed" title="Permanent link">¶</a></h3>
+<p>Haz otro commit de prueba:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>git<span class="w"> </span>add<span class="w"> </span>ingredientes.txt
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Otro commit de prueba"</span>
+</code></pre></div></td></tr></table></div>
+<p>Deshaz con <code>--mixed</code>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
+<span class="normal"><a href="#__codelineno-20-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--mixed<span class="w"> </span>HEAD~1
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p><strong>Preguntas a responder</strong>:</p>
+<ol>
+<li>¿En qué se diferencia el resultado de <code>--soft</code> respecto a <code>--mixed</code>?</li>
+<li>¿Los cambios siguen en el archivo o han desaparecido?</li>
+<li>¿Cuándo elegirías <code>--mixed</code> en lugar de <code>--soft</code>?</li>
+</ol>
+<h3 id="paso-12-tabla-de-decision">Paso 12 — Tabla de decisión<a class="headerlink" href="#paso-12-tabla-de-decision" title="Permanent link">¶</a></h3>
+<p>Rellena esta tabla sin ejecutar nada — razona a partir de lo que has practicado:</p>
+<table>
+<thead>
+<tr>
+<th>Situación</th>
+<th>Comando que usarías</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hiciste commit con un mensaje mal escrito y quieres corregirlo</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Quieres deshacer los últimos cambios del archivo sin perder el commit</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Borraste accidentalmente un párrafo y todavía no has hecho commit</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Alguien más ya ha descargado tu commit y quieres deshacerlo de forma segura</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Hiciste commit pero olvidaste añadir un archivo</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="parte-f-ignorar-archivos">Parte F — Ignorar archivos<a class="headerlink" href="#parte-f-ignorar-archivos" title="Permanent link">¶</a></h2>
+<h3 id="paso-13-gitignore">Paso 13 — .gitignore<a class="headerlink" href="#paso-13-gitignore" title="Permanent link">¶</a></h3>
+<p>Crea archivos que no deberían estar en el repositorio:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span>
+<span class="normal"><a href="#__codelineno-21-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"log de prueba"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="m">20250101</span>.log
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"otro log"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="m">20250628</span>.log
+</code></pre></div></td></tr></table></div>
+<p>Configura Git para ignorar todos los archivos <code>.log</code> y el archivo <code>borrador.txt</code>:</p>
+<ol>
+<li>Crea el archivo <code>.gitignore</code>.</li>
+<li>Añade las reglas necesarias.</li>
+<li>Comprueba con <code>git status</code> que los archivos ignorados ya no aparecen como untracked.</li>
+<li>Haz commit: <code>"Configura .gitignore"</code>.</li>
+</ol>
+<p><strong>Pregunta</strong>: ¿qué pasa si intentas hacer <code>git add 20250101.log</code> después de haberlo añadido al <code>.gitignore</code>?</p>
+<hr>
+<h2 id="solucion">Solución<a class="headerlink" href="#solucion" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Descarga la solución</p>
+<p>📄 <a href="../plantillas/Actividad_0_1_Solucion.docx" rel="noopener" target="_blank">Solución 0.1 — Git local: construir historial y saber volver atrás</a></p>
+<p>Esta actividad es de repaso/introducción y no se entrega: practica los pasos por tu cuenta y usa la solución para autoevaluarte al terminar (o si te atascas en algún paso).</p>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../introduccion-git/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Introducción a Git">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Introducción a Git
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ramas/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Ramas en Git">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Ramas en Git
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2689 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../actividad_0_1/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Introducción a Git - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-introduccion-a-git-local-control-de-versiones-desde-cero" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introducción a Git
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es Git?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#por-que-necesitamos-control-de-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧯 ¿Por qué necesitamos control de versiones?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-commit-y-por-que-es-tan-importante" class="md-nav__link">
+    <span class="md-ellipsis">
+      🕹️ Qué es un commit (y por qué es tan importante)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🕹️ Qué es un commit (y por qué es tan importante)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metafora-guardar-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metáfora: "guardar partida"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#que-lleva-un-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Qué lleva un commit?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-idea-que-mas-cuesta-staging-la-bandeja" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧺 La idea que más cuesta: staging (la bandeja)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧺 La idea que más cuesta: staging (la bandeja)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-es-exactamente-el-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es exactamente el staging?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metafora-escritorio-bandeja-y-album" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧾 Metáfora: escritorio, bandeja y álbum
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-existe-la-bandeja" class="md-nav__link">
+    <span class="md-ellipsis">
+      🤔 ¿Por qué existe la bandeja?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-practico-commits-limpios-uno-por-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ejemplo práctico: commits limpios (uno por idea)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Ejemplo práctico: commits limpios (uno por idea)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lo-tipico-que-no-interesa" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Lo típico que NO interesa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lo-recomendable-con-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Lo recomendable con staging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-se-que-esta-en-la-bandeja-y-que-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 ¿Cómo sé qué está en la bandeja y qué no?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idea-final-para-que-se-te-quede" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Idea final para que se te quede
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estados-de-un-archivo-lo-que-te-cuenta-git-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Estados de un archivo (lo que te cuenta git status)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-de-git-si-no-lo-tienes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧰 Instalación de Git (si no lo tienes)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧰 Instalación de Git (si no lo tienes)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-comprobar-si-ya-esta-instalado" class="md-nav__link">
+    <span class="md-ellipsis">
+      1) Comprobar si ya está instalado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      🪟 Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      🍎 macOS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux-debianubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐧 Linux (Debian/Ubuntu)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-basica-una-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Configuración básica (una vez)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚙️ Configuración básica (una vez)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-nombre-y-email-global" class="md-nav__link">
+    <span class="md-ellipsis">
+      👤 1) Nombre y email (global)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-rama-por-defecto-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌿 2) Rama por defecto: main
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-editor-por-defecto-opcional-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧾 3) Editor por defecto (opcional, recomendado)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crear-un-repositorio-git-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧱 Crear un repositorio: git init
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧱 Crear un repositorio: git init">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-entra-en-la-carpeta-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Paso 1) Entra en la carpeta del proyecto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-inicializa-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Paso 2) Inicializa Git
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#los-comandos-esenciales" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧭 Los comandos esenciales
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧭 Los comandos esenciales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-git-status-el-que-esta-pasando" class="md-nav__link">
+    <span class="md-ellipsis">
+      1) git status — el "¿qué está pasando?"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-git-diff-el-que-ha-cambiado-exactamente" class="md-nav__link">
+    <span class="md-ellipsis">
+      2) git diff — el "¿qué ha cambiado exactamente?"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-git-add-pongo-esto-en-la-bandeja-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      3) git add — "pongo esto en la bandeja (staging)"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-git-commit-guardo-la-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      4) git commit — "guardo la partida"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-git-log-muestrame-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      5) git log — "muéstrame el historial"
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#me-he-equivocado-descartar-cambios-git-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      ♻️ "Me he equivocado": descartar cambios (git restore)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="♻️ &#34;Me he equivocado&#34;: descartar cambios (git restore)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      A) Descartar cambios de un archivo (volver al último commit)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-quitar-un-archivo-del-staging-sin-borrar-sus-cambios-git-restore-staged" class="md-nav__link">
+    <span class="md-ellipsis">
+      B) Quitar un archivo del staging (sin borrar sus cambios): git restore --staged
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volver-a-una-version-anterior" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⏪ Volver a una versión anterior
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⏪ Volver a una versión anterior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-previo-ver-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso previo: ver el historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-que-cambio-en-un-commit-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ver qué cambió en un commit concreto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-a-recuperar-un-archivo-a-como-estaba-antes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción A — Recuperar un archivo a como estaba antes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-b-deshacer-un-commit-completo-git-revert" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción B — Deshacer un commit completo (git revert)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-c-mover-el-repo-a-un-commit-anterior-git-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción C — Mover el repo a un commit anterior (git reset)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cual-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Cuál uso?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gitignore-cosas-que-no-queremos-guardar-en-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚫 .gitignore: cosas que NO queremos guardar en el historial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave-muy-resumidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave (muy resumidas)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es Git?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#por-que-necesitamos-control-de-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧯 ¿Por qué necesitamos control de versiones?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-commit-y-por-que-es-tan-importante" class="md-nav__link">
+    <span class="md-ellipsis">
+      🕹️ Qué es un commit (y por qué es tan importante)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🕹️ Qué es un commit (y por qué es tan importante)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metafora-guardar-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metáfora: "guardar partida"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#que-lleva-un-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Qué lleva un commit?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-idea-que-mas-cuesta-staging-la-bandeja" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧺 La idea que más cuesta: staging (la bandeja)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧺 La idea que más cuesta: staging (la bandeja)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-es-exactamente-el-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 ¿Qué es exactamente el staging?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metafora-escritorio-bandeja-y-album" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧾 Metáfora: escritorio, bandeja y álbum
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-existe-la-bandeja" class="md-nav__link">
+    <span class="md-ellipsis">
+      🤔 ¿Por qué existe la bandeja?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-practico-commits-limpios-uno-por-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ejemplo práctico: commits limpios (uno por idea)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Ejemplo práctico: commits limpios (uno por idea)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lo-tipico-que-no-interesa" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Lo típico que NO interesa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lo-recomendable-con-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Lo recomendable con staging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-se-que-esta-en-la-bandeja-y-que-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 ¿Cómo sé qué está en la bandeja y qué no?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idea-final-para-que-se-te-quede" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Idea final para que se te quede
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estados-de-un-archivo-lo-que-te-cuenta-git-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Estados de un archivo (lo que te cuenta git status)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-de-git-si-no-lo-tienes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧰 Instalación de Git (si no lo tienes)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧰 Instalación de Git (si no lo tienes)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-comprobar-si-ya-esta-instalado" class="md-nav__link">
+    <span class="md-ellipsis">
+      1) Comprobar si ya está instalado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      🪟 Windows
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    <span class="md-ellipsis">
+      🍎 macOS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux-debianubuntu" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐧 Linux (Debian/Ubuntu)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-basica-una-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Configuración básica (una vez)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚙️ Configuración básica (una vez)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-nombre-y-email-global" class="md-nav__link">
+    <span class="md-ellipsis">
+      👤 1) Nombre y email (global)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-rama-por-defecto-main" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌿 2) Rama por defecto: main
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-editor-por-defecto-opcional-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧾 3) Editor por defecto (opcional, recomendado)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crear-un-repositorio-git-init" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧱 Crear un repositorio: git init
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧱 Crear un repositorio: git init">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-entra-en-la-carpeta-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Paso 1) Entra en la carpeta del proyecto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-inicializa-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Paso 2) Inicializa Git
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#los-comandos-esenciales" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧭 Los comandos esenciales
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧭 Los comandos esenciales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-git-status-el-que-esta-pasando" class="md-nav__link">
+    <span class="md-ellipsis">
+      1) git status — el "¿qué está pasando?"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-git-diff-el-que-ha-cambiado-exactamente" class="md-nav__link">
+    <span class="md-ellipsis">
+      2) git diff — el "¿qué ha cambiado exactamente?"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-git-add-pongo-esto-en-la-bandeja-staging" class="md-nav__link">
+    <span class="md-ellipsis">
+      3) git add — "pongo esto en la bandeja (staging)"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-git-commit-guardo-la-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      4) git commit — "guardo la partida"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-git-log-muestrame-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      5) git log — "muéstrame el historial"
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#me-he-equivocado-descartar-cambios-git-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      ♻️ "Me he equivocado": descartar cambios (git restore)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="♻️ &#34;Me he equivocado&#34;: descartar cambios (git restore)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      A) Descartar cambios de un archivo (volver al último commit)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-quitar-un-archivo-del-staging-sin-borrar-sus-cambios-git-restore-staged" class="md-nav__link">
+    <span class="md-ellipsis">
+      B) Quitar un archivo del staging (sin borrar sus cambios): git restore --staged
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volver-a-una-version-anterior" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⏪ Volver a una versión anterior
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⏪ Volver a una versión anterior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-previo-ver-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso previo: ver el historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-que-cambio-en-un-commit-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ver qué cambió en un commit concreto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-a-recuperar-un-archivo-a-como-estaba-antes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción A — Recuperar un archivo a como estaba antes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-b-deshacer-un-commit-completo-git-revert" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción B — Deshacer un commit completo (git revert)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-c-mover-el-repo-a-un-commit-anterior-git-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Opción C — Mover el repo a un commit anterior (git reset)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cual-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Cuál uso?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gitignore-cosas-que-no-queremos-guardar-en-el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚫 .gitignore: cosas que NO queremos guardar en el historial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave-muy-resumidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave (muy resumidas)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><p><a id="intro-git"></a></p>
+<h1 id="1-introduccion-a-git-local-control-de-versiones-desde-cero">🧩 1. Introducción a Git (local): control de versiones desde cero<a class="headerlink" href="#1-introduccion-a-git-local-control-de-versiones-desde-cero" title="Permanent link">¶</a></h1>
+<p><embed alt="Introducción a Git" src="../diapositivas/introduccion-git.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/introduccion-git.pdf" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
+<hr>
+<h2 id="que-es-git">🧠 ¿Qué es Git?<a class="headerlink" href="#que-es-git" title="Permanent link">¶</a></h2>
+<p><strong>Git</strong> es un <strong>sistema de control de versiones</strong>.</p>
+<p>Eso significa que Git sirve para:</p>
+<ul>
+<li>llevar el <strong>historial</strong> de un proyecto (qué cambios se han hecho),</li>
+<li>saber <strong>cuándo</strong> se hicieron y <strong>quién</strong> los hizo,</li>
+<li>y poder <strong>volver atrás</strong> si algo se rompe.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Metáfora: máquina del tiempo</p>
+<p>Git es como una máquina del tiempo para tu proyecto: puedes guardar "puntos" y viajar a versiones anteriores.</p>
+</div>
+<hr>
+<h2 id="por-que-necesitamos-control-de-versiones">🧯 ¿Por qué necesitamos control de versiones?<a class="headerlink" href="#por-que-necesitamos-control-de-versiones" title="Permanent link">¶</a></h2>
+<p>Sin Git, cuando programamos suele pasar esto:</p>
+<ul>
+<li>"Antes funcionaba… ¿qué he tocado?"</li>
+<li>"Voy a guardar una copia por si acaso" → <code>final.zip</code>, <code>final_final.zip</code>, <code>ahora_si.zip</code></li>
+<li>"He mezclado cambios de varias cosas y ya no sé separar lo que hice"</li>
+<li>"He borrado algo importante sin querer"</li>
+</ul>
+<p>Git resuelve todo eso porque crea un historial <strong>ordenado</strong> y <strong>recuperable</strong>.</p>
+<hr>
+<h2 id="que-es-un-commit-y-por-que-es-tan-importante">🕹️ Qué es un commit (y por qué es tan importante)<a class="headerlink" href="#que-es-un-commit-y-por-que-es-tan-importante" title="Permanent link">¶</a></h2>
+<p>Un <strong>commit</strong> es un <strong>punto de guardado</strong> del proyecto.</p>
+<h3 id="metafora-guardar-partida">Metáfora: "guardar partida"<a class="headerlink" href="#metafora-guardar-partida" title="Permanent link">¶</a></h3>
+<p>Como en un videojuego:</p>
+<ul>
+<li>estás jugando (programando),</li>
+<li>llegas a un punto estable,</li>
+<li>guardas la partida → haces un <strong>commit</strong>,</li>
+<li>si luego la lías, vuelves a esa partida.</li>
+</ul>
+<h3 id="que-lleva-un-commit">¿Qué lleva un commit?<a class="headerlink" href="#que-lleva-un-commit" title="Permanent link">¶</a></h3>
+<ul>
+<li>una "foto" del estado de los archivos,</li>
+<li>el <strong>autor</strong> (tu nombre/email),</li>
+<li>la <strong>fecha</strong>,</li>
+<li>y un <strong>mensaje</strong>.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Mensajes de commit</p>
+<p>Un mensaje debe decir <strong>qué</strong> has hecho y <strong>para qué</strong>.<br>
+Ejemplos buenos:</p>
+<ul>
+<li>"Añade lista inicial de libros"</li>
+<li>"Corrige cálculo del total con descuento"</li>
+<li>"Añade validación de email en registro"</li>
+</ul>
+</div>
+<hr>
+<h2 id="la-idea-que-mas-cuesta-staging-la-bandeja">🧺 La idea que más cuesta: <em>staging</em> (la bandeja)<a class="headerlink" href="#la-idea-que-mas-cuesta-staging-la-bandeja" title="Permanent link">¶</a></h2>
+<p>Cuando trabajas con Git, no guardas cambios "a lo bruto". Git te obliga (para bien) a pasar por un paso intermedio antes del commit: el <strong>staging</strong>.</p>
+<p>Piensa que Git no funciona como un "guardar" de Word. Funciona más como:</p>
+<p>1) <strong>trabajo y ensayo</strong> (cambio cosas),</p>
+<p>2) <strong>selecciono lo que quiero guardar como versión</strong>,</p>
+<p>3) <strong>guardo esa versión</strong> con un mensaje.</p>
+<p>Ese paso 2 es el <em>staging</em>.</p>
+<hr>
+<h3 id="que-es-exactamente-el-staging">🧠 ¿Qué es exactamente el <em>staging</em>?<a class="headerlink" href="#que-es-exactamente-el-staging" title="Permanent link">¶</a></h3>
+<p>El <strong>staging area</strong> (también llamado <strong>index</strong>) es una especie de <strong>lista de cambios seleccionados</strong> que van a entrar en el <strong>próximo commit</strong>.</p>
+<ul>
+<li>Todo lo que está en <em>staging</em> = "esto sí lo voy a guardar ahora".</li>
+<li>Todo lo que NO está en <em>staging</em> = "esto todavía no".</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Recordatorio</p>
+<p>El commit no guarda "lo que tengas en la carpeta", guarda <strong>lo que hayas puesto en staging</strong>.</p>
+</div>
+<hr>
+<h3 id="metafora-escritorio-bandeja-y-album">🧾 Metáfora: escritorio, bandeja y álbum<a class="headerlink" href="#metafora-escritorio-bandeja-y-album" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Escritorio</strong> (<em>working directory</em>): donde editas, pruebas y rompes cosas.</li>
+<li><strong>Bandeja</strong> (<em>staging area</em>): donde colocas lo que ya está listo para quedar "registrado".</li>
+<li><strong>Álbum</strong> (<em>historial</em>): donde quedan guardadas las versiones (commits).</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+  W["Escritorio&lt;br/&gt;(editas archivos)"] --&gt;|git add| S["Bandeja&lt;br/&gt;(staging)"]
+  S --&gt;|git commit| H["Álbum&lt;br/&gt;(historial)"]</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Traducción a comandos</p>
+<ul>
+<li><code>git add</code> = "pon esto en la bandeja"</li>
+<li><code>git commit</code> = "pega lo de la bandeja en el álbum"</li>
+</ul>
+</div>
+<hr>
+<h3 id="por-que-existe-la-bandeja">🤔 ¿Por qué existe la bandeja?<a class="headerlink" href="#por-que-existe-la-bandeja" title="Permanent link">¶</a></h3>
+<p>Porque en la vida real <strong>los cambios se mezclan</strong>.</p>
+<p>Imagina que, mientras arreglas una cosa, también tocas otras:</p>
+<ul>
+<li>arreglas un bug en <code>Pedido.java</code>,</li>
+<li>cambias un texto del <code>README.md</code>,</li>
+<li>retocas un CSS porque lo ves feo.</li>
+</ul>
+<p>Si haces un commit con TODO mezclado, el historial se vuelve difícil de usar:</p>
+<ul>
+<li>no se entiende qué se hizo,</li>
+<li>si un día quieres deshacer "solo el bug", arrastras lo demás,</li>
+<li>y revisar cambios en equipo se vuelve un lío.</li>
+</ul>
+<p>Con staging puedes separar el trabajo en commits con sentido:</p>
+<div class="admonition info">
+<p class="admonition-title">Ejemplo</p>
+<p>"Ahora guardo el bug. Después guardo el README. Después el CSS."</p>
+</div>
+<hr>
+<h3 id="ejemplo-practico-commits-limpios-uno-por-idea">✅ Ejemplo práctico: commits limpios (uno por idea)<a class="headerlink" href="#ejemplo-practico-commits-limpios-uno-por-idea" title="Permanent link">¶</a></h3>
+<p>Supón que has tocado 3 archivos:</p>
+<ul>
+<li><code>Pedido.java</code> (bug)</li>
+<li><code>README.md</code> (texto)</li>
+<li><code>styles.css</code> (estilo)</li>
+</ul>
+<h4 id="lo-tipico-que-no-interesa">❌ Lo típico que NO interesa<a class="headerlink" href="#lo-tipico-que-no-interesa" title="Permanent link">¶</a></h4>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Cambios"</span>
+</code></pre></div></td></tr></table></div>
+<p>Este commit es un "batiburrillo": mezcla cosas y luego cuesta entenderlo o deshacerlo.</p>
+<div class="admonition warning">
+<p class="admonition-title">git add .</p>
+<p><code>git add .</code> añade al área de staging TODOS los documentos nuevos o modificados desde el último commit.</p>
+</div>
+<h4 id="lo-recomendable-con-staging">✅ Lo recomendable con staging<a class="headerlink" href="#lo-recomendable-con-staging" title="Permanent link">¶</a></h4>
+<p><strong>1) Guardas solo el bug</strong>
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>git<span class="w"> </span>add<span class="w"> </span>Pedido.java
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Corrige bug en cálculo de pedido"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>2) Guardas el README</strong>
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>git<span class="w"> </span>add<span class="w"> </span>README.md
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Actualiza instrucciones del proyecto"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>3) Guardas el CSS</strong>
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>git<span class="w"> </span>add<span class="w"> </span>styles.css
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Mejora estilos del layout"</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Qué ganas con esto</p>
+<ul>
+<li>Historial claro (se entiende de un vistazo).</li>
+<li>Más fácil deshacer cambios "por partes".</li>
+<li>Revisiones más rápidas y seguras.</li>
+</ul>
+</div>
+<hr>
+<h3 id="como-se-que-esta-en-la-bandeja-y-que-no">🔍 ¿Cómo sé qué está en la bandeja y qué no?<a class="headerlink" href="#como-se-que-esta-en-la-bandeja-y-que-no" title="Permanent link">¶</a></h3>
+<p>Usa <code>git status</code>.</p>
+<ul>
+<li><strong>Changes to be committed</strong> → está en staging (bandeja).</li>
+<li><strong>Changes not staged for commit</strong> → está modificado, pero fuera de staging (escritorio).</li>
+</ul>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Regla de oro</p>
+<p>Antes de commitear, mira <code>git status</code> para comprobar qué vas a guardar.</p>
+</div>
+<hr>
+<h3 id="idea-final-para-que-se-te-quede">🎯 Idea final para que se te quede<a class="headerlink" href="#idea-final-para-que-se-te-quede" title="Permanent link">¶</a></h3>
+<p><strong>Staging = elegir.</strong></p>
+<p>Git te da un botón mental de:</p>
+<ul>
+<li>"esto sí entra en el próximo commit"</li>
+<li>"esto todavía no"</li>
+</ul>
+<p>Y esa es la razón por la que Git ayuda a trabajar <strong>ordenado</strong> incluso cuando tú vas tocando cosas sobre la marcha.</p>
+<hr>
+<h2 id="estados-de-un-archivo-lo-que-te-cuenta-git-status">🧩 Estados de un archivo (lo que te cuenta <code>git status</code>)<a class="headerlink" href="#estados-de-un-archivo-lo-que-te-cuenta-git-status" title="Permanent link">¶</a></h2>
+<p>Los archivos en Git suelen estar en estos estados:</p>
+<ul>
+<li><strong>Untracked</strong>: Git ve el archivo, pero aún no lo sigue (es nuevo).</li>
+<li><strong>Modified</strong>: lo has cambiado desde el último commit.</li>
+<li><strong>Staged</strong>: lo has puesto en la bandeja para el próximo commit.</li>
+<li><strong>Committed</strong>: ya está guardado en el historial.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+  U[Untracked] --&gt;|git add| S[Staged]
+  M[Modified] --&gt;|git add| S
+  S --&gt;|git commit| C[Committed]
+  C --&gt;|editar| M</code></pre>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo rápido</p>
+<ul>
+<li>Creas <code>hola.txt</code> → <strong>untracked</strong></li>
+<li><code>git add hola.txt</code> → <strong>staged</strong></li>
+<li><code>git commit ...</code> → <strong>committed</strong></li>
+<li>Editas <code>hola.txt</code> → <strong>modified</strong></li>
+</ul>
+</div>
+<hr>
+<h2 id="instalacion-de-git-si-no-lo-tienes">🧰 Instalación de Git (si no lo tienes)<a class="headerlink" href="#instalacion-de-git-si-no-lo-tienes" title="Permanent link">¶</a></h2>
+<p>Antes de hacer nada, necesitamos que el comando <code>git</code> exista en tu ordenador.</p>
+<h3 id="1-comprobar-si-ya-esta-instalado">1) Comprobar si ya está instalado<a class="headerlink" href="#1-comprobar-si-ya-esta-instalado" title="Permanent link">¶</a></h3>
+<p>Abre una terminal y ejecuta:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>git<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>✅ Si te devuelve algo tipo <code>git version 2.4x.x</code>, <strong>ya lo tienes</strong>.</li>
+<li>❌ Si sale un error tipo "command not found", "no se reconoce…", etc., <strong>hay que instalarlo</strong>.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">¿Qué significa la versión?</p>
+<p>No necesitas la última. Si te funciona <code>git --version</code>, para clase te vale.</p>
+</div>
+<hr>
+<h3 id="windows">🪟 Windows<a class="headerlink" href="#windows" title="Permanent link">¶</a></h3>
+<p>La opción más sencilla es <strong>Git for Windows</strong> (incluye <strong>Git Bash</strong>).</p>
+<p>Instala <strong>Git for Windows</strong> desde aquí:<br>
+<a href="https://git-scm.com/install/windows">Git for Windows (instalación oficial)</a></p>
+<p><strong>Qué instalar y qué te aporta</strong></p>
+<ul>
+<li>Instalas Git.</li>
+<li>Te aparece <strong>Git Bash</strong>, una terminal "tipo Linux" que va genial para empezar.</li>
+</ul>
+<p><strong>Después de instalar</strong></p>
+<ol>
+<li>Abre <strong>Git Bash</strong> (mejor que PowerShell al principio).</li>
+<li>Comprueba:</li>
+</ol>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>git<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<p><strong>Si en PowerShell no funciona</strong></p>
+<p>A veces Git está instalado, pero la terminal no lo encuentra por el PATH. La prueba rápida:</p>
+<ul>
+<li>Si en Git Bash funciona y en PowerShell no, para el curso usa Git Bash.</li>
+<li>Si quieres arreglarlo, revisa el instalador y asegúrate de seleccionar que Git se añada al PATH.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Carpetas sincronizadas</p>
+<p>Evita crear repositorios dentro de OneDrive/Google Drive/iCloud: pueden aparecer cambios "fantasma" al cambiar de versión.</p>
+</div>
+<hr>
+<h3 id="macos">🍎 macOS<a class="headerlink" href="#macos" title="Permanent link">¶</a></h3>
+<p>En macOS, a menudo Git viene "a medio instalar".</p>
+<p>Prueba:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>git<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>Si macOS te pide instalar <strong>Command Line Tools</strong>, acepta.  </li>
+<li>Cuando termine, vuelve a ejecutar <code>git --version</code>.</li>
+</ul>
+<hr>
+<h3 id="linux-debianubuntu">🐧 Linux (Debian/Ubuntu)<a class="headerlink" href="#linux-debianubuntu" title="Permanent link">¶</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>git<span class="w"> </span>--version
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="configuracion-basica-una-vez">⚙️ Configuración básica (una vez)<a class="headerlink" href="#configuracion-basica-una-vez" title="Permanent link">¶</a></h2>
+<p>Git guarda en cada commit quién lo hizo. Para eso necesita tu nombre y email.</p>
+<h3 id="1-nombre-y-email-global">👤 1) Nombre y email (global)<a class="headerlink" href="#1-nombre-y-email-global" title="Permanent link">¶</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Tu Nombre"</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"tuemail@ejemplo.com"</span>
+</code></pre></div></td></tr></table></div>
+<p>Comprueba la configuración:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>--list
+</code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Muy típico</p>
+<p>Si Git te dice "Please tell me who you are…", es que falta <code>user.name</code> o <code>user.email</code>.</p>
+</div>
+<hr>
+<h3 id="2-rama-por-defecto-main">🌿 2) Rama por defecto: <code>main</code><a class="headerlink" href="#2-rama-por-defecto-main" title="Permanent link">¶</a></h3>
+<p>Hoy lo más común es usar <code>main</code> como rama principal (en vez de <code>master</code>).</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
+</code></pre></div></td></tr></table></div>
+<p>Esto afecta a repos nuevos que crees a partir de ahora.</p>
+<hr>
+<h3 id="3-editor-por-defecto-opcional-recomendado">🧾 3) Editor por defecto (opcional, recomendado)<a class="headerlink" href="#3-editor-por-defecto-opcional-recomendado" title="Permanent link">¶</a></h3>
+<p>A veces Git necesita que escribas un mensaje (por ejemplo, en operaciones que verás más adelante).<br>
+Para que no se abra un editor raro, puedes fijar uno. Con VS Code:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">"code --wait"</span>
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="crear-un-repositorio-git-init">🧱 Crear un repositorio: <code>git init</code><a class="headerlink" href="#crear-un-repositorio-git-init" title="Permanent link">¶</a></h2>
+<p>Para que Git empiece a guardar el historial de un proyecto, primero necesitas un <strong>repositorio</strong>: una carpeta "con Git activado".</p>
+<h3 id="paso-1-entra-en-la-carpeta-del-proyecto">✅ Paso 1) Entra en la carpeta del proyecto<a class="headerlink" href="#paso-1-entra-en-la-carpeta-del-proyecto" title="Permanent link">¶</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nb">cd</span><span class="w"> </span>~/Documents/pruebas_git
+</code></pre></div></td></tr></table></div>
+<h3 id="paso-2-inicializa-git">✅ Paso 2) Inicializa Git<a class="headerlink" href="#paso-2-inicializa-git" title="Permanent link">¶</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>git<span class="w"> </span>init
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-init.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<ul>
+<li>Git confirma que ha creado un repositorio vacío en la carpeta <code>.git/</code>.</li>
+<li>
+<p>A continuación se ejecuta <code>git status</code> y aparece:</p>
+<ul>
+<li><code>On branch main</code> → estás en la rama <code>main</code>.</li>
+<li><code>No commits yet</code> → todavía no has hecho ningún commit.</li>
+<li><code>nothing to commit (create/copy files and use "git add" to track)</code> → aún no hay archivos preparados para guardar.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">¿Qué es la carpeta .git?</p>
+<p>Es la "memoria" del repositorio: ahí Git guarda historial, ramas y metadatos.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<ul>
+<li>No borres ni edites <code>.git</code> a mano.</li>
+<li>Si eliminas <code>.git</code>, el proyecto pierde el historial (aunque los archivos sigan).</li>
+</ul>
+</div>
+<hr>
+<h2 id="los-comandos-esenciales">🧭 Los comandos esenciales<a class="headerlink" href="#los-comandos-esenciales" title="Permanent link">¶</a></h2>
+<p>La idea no es memorizar, sino <strong>entender</strong> qué hace cada comando y qué deberías ver en pantalla.</p>
+<hr>
+<h3 id="1-git-status-el-que-esta-pasando">1) <code>git status</code> — el "¿qué está pasando?"<a class="headerlink" href="#1-git-status-el-que-esta-pasando" title="Permanent link">¶</a></h3>
+<p><code>git status</code> te dice <strong>en qué situación está tu repo</strong> y <strong>en qué estado están tus archivos</strong>.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>git<span class="w"> </span>status
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-status.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<ul>
+<li>Se ejecuta <code>ls</code> y aparecen 3 archivos: <code>adios.txt</code>, <code>hasta-luego.txt</code>, <code>hola.txt</code>.</li>
+<li>Luego, <code>git status</code> muestra dos bloques importantes:</li>
+</ul>
+<p>1) <strong>Changes to be committed</strong> (en staging / bandeja)  </p>
+<ul>
+<li><code>new file: adios.txt</code> → <code>adios.txt</code> está preparado para el próximo commit.</li>
+</ul>
+<p>2) <strong>Untracked files</strong> (Git los ve, pero todavía NO los sigue)  </p>
+<ul>
+<li><code>hasta-luego.txt</code> aparece como untracked: existe en la carpeta, pero <strong>aún no lo has añadido</strong> con <code>git add</code>.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Regla de oro</p>
+<p>Antes de hacer <code>git add</code> o <code>git commit</code>, mira <code>git status</code> para confirmar <strong>qué vas a guardar</strong>.</p>
+</div>
+<hr>
+<h3 id="2-git-diff-el-que-ha-cambiado-exactamente">2) <code>git diff</code> — el "¿qué ha cambiado exactamente?"<a class="headerlink" href="#2-git-diff-el-que-ha-cambiado-exactamente" title="Permanent link">¶</a></h3>
+<p><code>git diff</code> muestra cambios <strong>línea a línea</strong> respecto al último commit (o respecto al staging, según el caso).</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>git<span class="w"> </span>diff
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-diff.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<ul>
+<li>Git te enseña el archivo que cambió: <code>hola.txt</code>.</li>
+<li>
+<p>La línea que empieza por <code>+</code> es lo nuevo que has añadido, por ejemplo:</p>
+<ul>
+<li><code>+esta linea es nueva, no estaba cuando he hecho el commit antes.</code></li>
+</ul>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">¿Por qué usar diff?</p>
+<ul>
+<li>Para revisar cambios antes de guardarlos.</li>
+<li>Para comprobar que no has tocado algo "sin querer".</li>
+</ul>
+</div>
+<hr>
+<h3 id="3-git-add-pongo-esto-en-la-bandeja-staging">3) <code>git add</code> — "pongo esto en la bandeja (staging)"<a class="headerlink" href="#3-git-add-pongo-esto-en-la-bandeja-staging" title="Permanent link">¶</a></h3>
+<p><code>git add</code> no guarda nada todavía: solo <strong>prepara</strong> archivos para el próximo commit.</p>
+<p>Ejemplo (lo típico en tu caso):
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>git<span class="w"> </span>add<span class="w"> </span>adios.txt<span class="w"> </span>hola.txt
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-add.png"></p>
+<p><strong>Qué estás viendo en la captura (después del add)</strong></p>
+<ul>
+<li>
+<p>En <strong>Changes to be committed</strong> aparecen:</p>
+<ul>
+<li><code>new file: adios.txt</code> → <code>adios.txt</code> está en staging.</li>
+<li><code>modified: hola.txt</code> → los cambios de <code>hola.txt</code> también están en staging.</li>
+</ul>
+</li>
+<li>
+<p>En <strong>Untracked files</strong> sigue apareciendo:</p>
+<ul>
+<li><code>hasta-luego.txt</code> → sigue sin estar "bajo control" porque no lo has añadido.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Cuidado con git add .</p>
+<p><code>git add .</code> mete en staging <strong>todo</strong> lo nuevo/modificado.<br>
+Al principio, es mejor añadir <strong>archivo a archivo</strong> para no llevarte cosas sin querer.</p>
+</div>
+<hr>
+<h3 id="4-git-commit-guardo-la-partida">4) <code>git commit</code> — "guardo la partida"<a class="headerlink" href="#4-git-commit-guardo-la-partida" title="Permanent link">¶</a></h3>
+<p><code>git commit</code> guarda en el historial <strong>lo que esté en staging</strong>.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añado los archivos hola y adios"</span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-commit.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<ul>
+<li>
+<p>Git confirma el commit:</p>
+<ul>
+<li>aparece el id (hash corto) del commit, y el mensaje.</li>
+<li><code>2 files changed...</code> y <code>create mode ... adios.txt</code> → creó <code>adios.txt</code> en el historial.</li>
+</ul>
+</li>
+<li>
+<p>Luego se ejecuta <code>git status</code> y ocurre algo clave:</p>
+<ul>
+<li><code>hasta-luego.txt</code> sigue en <strong>Untracked files</strong> → no se ha guardado porque <strong>no estaba en staging</strong>.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Idea clave</p>
+<p>Un commit guarda <strong>solo</strong> lo que tú has puesto en staging con <code>git add</code>.</p>
+</div>
+<hr>
+<h3 id="5-git-log-muestrame-el-historial">5) <code>git log</code> — "muéstrame el historial"<a class="headerlink" href="#5-git-log-muestrame-el-historial" title="Permanent link">¶</a></h3>
+<p>Para ver los commits que has hecho:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>git<span class="w"> </span>log
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-log.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<ul>
+<li>Los commits aparecen en orden, el más reciente arriba.</li>
+<li><code>HEAD -&gt; main</code> indica que estás en la rama <code>main</code> y que <code>HEAD</code> apunta al último commit.</li>
+</ul>
+<p>Cada commit tiene un identificador único llamado <strong>hash</strong> — una cadena larga de letras y números como <code>a3f8c21d9e4b...</code>. No hace falta usarlo entero; con los 7 primeros caracteres es suficiente.</p>
+<p>La versión más usada en el día a día es con <code>--oneline</code>, que muestra una sola línea por commit:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<p><img alt="Salida de git log --oneline con los commits del repositorio de ejemplo" src="../img/intro/git-log-oneline.png"></p>
+<div class="admonition tip">
+<p class="admonition-title">El hash abreviado</p>
+<p>Los 7 caracteres del inicio de cada línea (<code>1cd8f5a</code>, <code>448751c</code>…) son los que usarás después en comandos como <code>git show</code> o <code>git revert</code>.</p>
+</div>
+<hr>
+<h2 id="me-he-equivocado-descartar-cambios-git-restore">♻️ "Me he equivocado": descartar cambios (<code>git restore</code>)<a class="headerlink" href="#me-he-equivocado-descartar-cambios-git-restore" title="Permanent link">¶</a></h2>
+<h3 id="a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit">A) Descartar cambios de un archivo (volver al último commit)<a class="headerlink" href="#a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit" title="Permanent link">¶</a></h3>
+<p>Si modificas <code>hola.txt</code> y no quieres esos cambios:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>git<span class="w"> </span>restore<span class="w"> </span>hola.txt
+</code></pre></div></td></tr></table></div>
+<p><img alt="" src="../img/intro/git-restore.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<p>1) Primero se ejecuta <code>git diff</code> y se ven varias líneas nuevas (<code>+...</code>) en <code>hola.txt</code>.</p>
+<p>2) Luego se ejecuta <code>git restore hola.txt</code>.</p>
+<p>3) Al volver a ejecutar <code>git diff</code>, <strong>no sale nada</strong> → significa que el archivo ha vuelto al estado del último commit.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p><code>git restore</code> borra cambios <strong>no guardados</strong> en commits.<br>
+Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
+</div>
+<hr>
+<h3 id="b-quitar-un-archivo-del-staging-sin-borrar-sus-cambios-git-restore-staged">B) Quitar un archivo del staging (sin borrar sus cambios): <code>git restore --staged</code><a class="headerlink" href="#b-quitar-un-archivo-del-staging-sin-borrar-sus-cambios-git-restore-staged" title="Permanent link">¶</a></h3>
+<p>Esto sirve cuando has hecho <code>git add</code> por error (lo metiste en staging), pero aún no has hecho commit.</p>
+<p><img alt="" src="../img/intro/git-restore-staged.png"></p>
+<p><strong>Qué estás viendo en la captura</strong></p>
+<p>1) <code>git add hasta-luego.txt</code> → lo mete en staging.  </p>
+<p>2) <code>git status</code> muestra:</p>
+<ul>
+<li><code>new file: hasta-luego.txt</code> en <strong>Changes to be committed</strong>.</li>
+</ul>
+<p>3) <code>git restore --staged hasta-luego.txt</code> → lo saca del staging.</p>
+<p>4) <code>git status</code> vuelve a mostrarlo como <strong>Untracked files</strong>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Truco mental</p>
+<ul>
+<li><code>restore --staged</code> = "saca de la bandeja"</li>
+<li><code>restore</code> (sin <code>--staged</code>) = "deshaz cambios del archivo"</li>
+</ul>
+</div>
+<hr>
+<h2 id="volver-a-una-version-anterior">⏪ Volver a una versión anterior<a class="headerlink" href="#volver-a-una-version-anterior" title="Permanent link">¶</a></h2>
+<p>Esta es una de las razones principales por las que existe Git: poder recuperar el estado del proyecto en cualquier punto del historial. La pregunta clave antes de actuar es: <strong>¿qué quiero exactamente?</strong></p>
+<pre class="mermaid"><code>flowchart TD
+    Q{"¿Qué necesitas?"} --&gt; A["Ver qué cambió un commit"]
+    Q --&gt; B["Recuperar un archivo concreto"]
+    Q --&gt; C["Deshacer un commit entero"]
+
+    A --&gt; A1["git show hash"]
+    B --&gt; B1["git restore --source=hash archivo"]
+    C --&gt; C1{"¿Ya has subido\neste repo a GitHub?"}
+    C1 --&gt;|"Sí"| C2["git revert — seguro,\nno borra historial"]
+    C1 --&gt;|"No, es local"| C3["git reset — potente,\npuede borrar historial"]
+
+    style C2 fill:#e8f5e9,stroke:#388e3c,color:#1b5e20
+    style C3 fill:#fff3e0,stroke:#f57c00,color:#e65100
+    style A1 fill:#e3f2fd,stroke:#1976d2,color:#0d47a1
+    style B1 fill:#e3f2fd,stroke:#1976d2,color:#0d47a1</code></pre>
+<hr>
+<h3 id="paso-previo-ver-el-historial">Paso previo: ver el historial<a class="headerlink" href="#paso-previo-ver-el-historial" title="Permanent link">¶</a></h3>
+<p>Antes de hacer cualquier cosa, necesitas saber <strong>qué commits tienes y cuáles son sus hashes</strong>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+</code></pre></div></td></tr></table></div>
+<p><img alt="Salida de git log --oneline mostrando los commits con sus hashes y mensajes" src="../img/intro/git-log-oneline.png"></p>
+<p>Esos 7 caracteres al inicio de cada línea (<code>1cd8f5a</code>, <code>448751c</code>…) son el <strong>hash abreviado</strong> — el identificador único de cada commit. Los vas a necesitar para todos los comandos que siguen.</p>
+<div class="admonition info">
+<p class="admonition-title">¿Qué es HEAD?</p>
+<p><code>HEAD</code> es una etiqueta que señala el commit en el que estás ahora — normalmente el último. <code>HEAD~1</code> es el anterior, <code>HEAD~2</code> es dos atrás. Es una forma de referirse a commits sin escribir el hash exacto.</p>
+</div>
+<hr>
+<h3 id="ver-que-cambio-en-un-commit-concreto">Ver qué cambió en un commit concreto<a class="headerlink" href="#ver-que-cambio-en-un-commit-concreto" title="Permanent link">¶</a></h3>
+<p>Antes de deshacer nada, conviene ver exactamente qué hizo ese commit:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>git<span class="w"> </span>show<span class="w"> </span>58fbc71
+</code></pre></div></td></tr></table></div>
+<p><img alt="Salida de git show con el hash, autor, fecha y el diff del commit" src="../img/intro/git-show.png"></p>
+<p>Las líneas con <code>+</code> son lo que ese commit añadió. Las líneas con <code>-</code> son lo que eliminó. Mientras solo ejecutas <code>git show</code>, <strong>no cambias nada</strong> en el proyecto.</p>
+<hr>
+<h3 id="opcion-a-recuperar-un-archivo-a-como-estaba-antes">Opción A — Recuperar un archivo a como estaba antes<a class="headerlink" href="#opcion-a-recuperar-un-archivo-a-como-estaba-antes" title="Permanent link">¶</a></h3>
+<p>Esto es útil cuando <strong>un archivo concreto</strong> ha empeorado y quieres recuperarlo a una versión anterior, sin tocar el resto del proyecto.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>58fbc71<span class="w"> </span>llibres.txt
+</code></pre></div></td></tr></table></div>
+<p><img alt="Ejecución de git restore --source y comprobación del contenido recuperado con cat" src="../img/intro/git-restore-source.png"></p>
+<p>El archivo queda exactamente como estaba en el commit <code>58fbc71</code>. Aparece como <strong>modified</strong> en <code>git status</code> — los cambios están en tu carpeta de trabajo, pero el historial no ha cambiado. Puedes revisarlo y hacer un <code>git commit</code> si quieres guardar esa recuperación.</p>
+<div class="admonition warning">
+<p class="admonition-title">Esto no deshace el commit</p>
+<p>Solo trae una versión antigua del archivo a tu carpeta. El historial no cambia. Para guardarlo definitivamente, tienes que hacer <code>git add</code> y <code>git commit</code> después.</p>
+</div>
+<hr>
+<h3 id="opcion-b-deshacer-un-commit-completo-git-revert">Opción B — Deshacer un commit completo (<code>git revert</code>)<a class="headerlink" href="#opcion-b-deshacer-un-commit-completo-git-revert" title="Permanent link">¶</a></h3>
+<p><code>git revert</code> <strong>crea un commit nuevo</strong> que deshace exactamente los cambios de un commit anterior. Es la opción más segura: no borra nada del historial, solo añade un paso nuevo que revierte lo que se hizo.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>git<span class="w"> </span>revert<span class="w"> </span>1cd8f5a
+</code></pre></div></td></tr></table></div>
+<p><img alt="git revert crea un nuevo commit de reversión, y el log muestra cuatro commits" src="../img/intro/git-revert.png"></p>
+<p>Git genera el mensaje del commit de reversión automáticamente. El historial queda así — el commit original sigue ahí, pero neutralizado:</p>
+<pre class="mermaid"><code>gitGraph
+   commit id: "Primer commit"
+   commit id: "Afegeix el quart llibre"
+   commit id: "Elimina un llibre"
+   commit id: "Revert: Elimina un llibre" type: REVERSE</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Cuándo usar revert</p>
+<p>Siempre que hayas subido el repo a GitHub o trabajado con otras personas. Al no reescribir el historial, no crea conflictos con el trabajo de los demás.</p>
+</div>
+<hr>
+<h3 id="opcion-c-mover-el-repo-a-un-commit-anterior-git-reset">Opción C — Mover el repo a un commit anterior (<code>git reset</code>)<a class="headerlink" href="#opcion-c-mover-el-repo-a-un-commit-anterior-git-reset" title="Permanent link">¶</a></h3>
+<p><code>git reset</code> mueve <code>HEAD</code> hacia atrás en el historial. Es más potente que <code>revert</code> porque <strong>borra commits</strong> — como si nunca hubieran existido. Solo se recomienda cuando el repo es estrictamente local y no lo ha visto nadie más.</p>
+<p><strong>Situación de partida</strong> — los tres ejemplos usan un repo con estos 3 commits:</p>
+<p><img alt="Situación de partida: git log --oneline con 3 commits — Corregeix majúscules, Afegeix el quart llibre, Primer commit" src="../img/intro/git-reset-comun.png"></p>
+<p>El commit más reciente ("Corregeix majuscules del titol") es el que va a desaparecer con el reset. Lo que cambia entre variantes es <strong>adónde van sus cambios</strong>.</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">--soft — cambios en staging</label><label for="__tabbed_1_2">--mixed — cambios en el escritorio</label><label for="__tabbed_1_3">--hard — cambios borrados</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>El commit desaparece, pero Git deja los cambios <strong>ya preparados para el siguiente commit</strong> — como si ya hubieras hecho <code>git add</code>. Solo te faltaría escribir <code>git commit</code>.</p>
+<p>Caso típico: has hecho un commit con un mensaje mal escrito. Con <code>--soft</code> deshaces el commit, el archivo queda listo para commit y puedes volver a hacer <code>git commit -m "mensaje correcto"</code> sin tocar nada más.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span>
+<span class="normal"><a href="#__codelineno-26-2">2</a></span>
+<span class="normal"><a href="#__codelineno-26-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1
+<a id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="c1"># A continuación puedes hacer directamente:</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje correcto"</span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="git reset --soft: el log pasa a 2 commits y git status short muestra M dos espacios llibres.txt" src="../img/intro/git-reset-soft.png"></p>
+<p><code>git status --short</code> muestra <code>M  llibres.txt</code> — la M está en la zona de <strong>staging</strong>. No hace falta <code>git add</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>El commit desaparece y los cambios vuelven al archivo, pero Git <strong>no los prepara</strong> para el siguiente commit. Es como si nunca hubieras hecho <code>git add</code>.</p>
+<p>Caso típico: quieres deshacer el commit y revisitar los cambios desde cero — decidiendo qué añadir y qué dejar fuera. Necesitas hacer <code>git add</code> de nuevo antes de poder hacer commit.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
+<span class="normal"><a href="#__codelineno-27-2">2</a></span>
+<span class="normal"><a href="#__codelineno-27-3">3</a></span>
+<span class="normal"><a href="#__codelineno-27-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>git<span class="w"> </span>reset<span class="w"> </span>HEAD~1
+<a id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="c1"># A continuación necesitas:</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3"></a>git<span class="w"> </span>add<span class="w"> </span>llibres.txt
+<a id="__codelineno-27-4" name="__codelineno-27-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje"</span>
+</code></pre></div></td></tr></table></div>
+<p><img alt="git reset mixed: Git avisa Unstaged changes after reset, el log pasa a 2 commits y git status muestra M con espacio delante" src="../img/intro/git-reset-mixed.png"></p>
+<p>Git avisa: <code>Unstaged changes after reset</code>. <code>git status --short</code> muestra <code>M llibres.txt</code> — la M está en la zona de <strong>trabajo</strong> (fuera de staging). Necesitas <code>git add</code> antes de poder hacer commit.</p>
+</div>
+<div class="tabbed-block">
+<p>El commit desaparece <strong>y los cambios se borran definitivamente</strong>. El proyecto vuelve exactamente al estado del commit anterior.</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1
+</code></pre></div></td></tr></table></div>
+<p><img alt="git reset hard: HEAD is now at el commit anterior, log muestra 2 commits, cat muestra el archivo sin la corrección de mayúsculas" src="../img/intro/git-reset-hard.png"></p>
+<p>Git confirma con <code>HEAD is now at ...</code>. El log pasa a 2 commits. <code>cat llibres.txt</code> muestra el archivo <strong>sin la corrección de mayúsculas</strong> — ese cambio ha desaparecido para siempre.</p>
+<div class="admonition danger">
+<p class="admonition-title">Sin vuelta atrás</p>
+<p>Con <code>--hard</code> los cambios del commit eliminado se pierden para siempre. No hay papelera ni deshacer. Úsalo solo si estás completamente seguro.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>La diferencia entre las tres variantes se resume en una sola pregunta: <strong>¿adónde van los cambios del commit eliminado?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variante</th>
+<th>¿Adónde van los cambios?</th>
+<th><code>git status</code> muestra</th>
+<th>¿Recuperable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--soft</code></td>
+<td>Staging</td>
+<td><code>M  archivo</code> (M en zona staging)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td><code>--mixed</code></td>
+<td>Escritorio de trabajo</td>
+<td><code>M archivo</code> (M en zona trabajo)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td><code>--hard</code></td>
+<td>Se borran</td>
+<td><em>(nada)</em></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="cual-uso">¿Cuál uso?<a class="headerlink" href="#cual-uso" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Situación</th>
+<th>Comando recomendado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quiero ver qué cambió en un commit concreto</td>
+<td><code>git show &lt;hash&gt;</code></td>
+</tr>
+<tr>
+<td>Quiero recuperar un archivo a una versión anterior</td>
+<td><code>git restore --source=&lt;hash&gt; &lt;archivo&gt;</code></td>
+</tr>
+<tr>
+<td>Quiero deshacer un commit sin borrar historial</td>
+<td><code>git revert &lt;hash&gt;</code></td>
+</tr>
+<tr>
+<td>Quiero rehacer el último commit (solo local)</td>
+<td><code>git reset --soft HEAD~1</code></td>
+</tr>
+<tr>
+<td>Quiero borrar el último commit y sus cambios (solo local)</td>
+<td><code>git reset --hard HEAD~1</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="gitignore-cosas-que-no-queremos-guardar-en-el-historial">🚫 <code>.gitignore</code>: cosas que NO queremos guardar en el historial<a class="headerlink" href="#gitignore-cosas-que-no-queremos-guardar-en-el-historial" title="Permanent link">¶</a></h2>
+<p>El archivo <code>.gitignore</code> sirve para decirle a Git qué archivos o carpetas debe ignorar — aunque estén en la carpeta del proyecto, Git actuará como si no existieran.</p>
+<p>Esto es útil para no incluir en el historial cosas que no tienen sentido versionar: archivos generados automáticamente, credenciales, binarios compilados o carpetas temporales.</p>
+<p>Para crearlo, simplemente crea un archivo llamado <code>.gitignore</code> en la raíz del repositorio y añade reglas:</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-29-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-29-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-29-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-29-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-29-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-29-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-29-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-29-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-29-10">10</a></span>
+<span class="normal"><a href="#__codelineno-29-11">11</a></span>
+<span class="normal"><a href="#__codelineno-29-12">12</a></span>
+<span class="normal"><a href="#__codelineno-29-13">13</a></span>
+<span class="normal"><a href="#__codelineno-29-14">14</a></span>
+<span class="normal"><a href="#__codelineno-29-15">15</a></span>
+<span class="normal"><a href="#__codelineno-29-16">16</a></span>
+<span class="normal"><a href="#__codelineno-29-17">17</a></span>
+<span class="normal"><a href="#__codelineno-29-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a># Archivos de log
+<a id="__codelineno-29-2" name="__codelineno-29-2"></a>*.log
+<a id="__codelineno-29-3" name="__codelineno-29-3"></a>
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a># Carpeta de archivos temporales
+<a id="__codelineno-29-5" name="__codelineno-29-5"></a>/tmp/
+<a id="__codelineno-29-6" name="__codelineno-29-6"></a>
+<a id="__codelineno-29-7" name="__codelineno-29-7"></a># Carpeta de compilación de Java
+<a id="__codelineno-29-8" name="__codelineno-29-8"></a>/target/
+<a id="__codelineno-29-9" name="__codelineno-29-9"></a>/out/
+<a id="__codelineno-29-10" name="__codelineno-29-10"></a>*.class
+<a id="__codelineno-29-11" name="__codelineno-29-11"></a>
+<a id="__codelineno-29-12" name="__codelineno-29-12"></a># Archivos de configuración del IDE (IntelliJ)
+<a id="__codelineno-29-13" name="__codelineno-29-13"></a>.idea/
+<a id="__codelineno-29-14" name="__codelineno-29-14"></a>*.iml
+<a id="__codelineno-29-15" name="__codelineno-29-15"></a>
+<a id="__codelineno-29-16" name="__codelineno-29-16"></a># Variables de entorno y credenciales — NUNCA deben subirse
+<a id="__codelineno-29-17" name="__codelineno-29-17"></a>.env
+<a id="__codelineno-29-18" name="__codelineno-29-18"></a>secrets.txt
+</code></pre></div></td></tr></table></div>
+<p>Cada línea es un patrón:
+- <code>*.log</code> → ignora cualquier archivo que acabe en <code>.log</code>
+- <code>/tmp/</code> → ignora la carpeta <code>tmp</code> en la raíz del repo
+- <code>.idea/</code> → ignora la carpeta de configuración de IntelliJ</p>
+<div class="admonition warning">
+<p class="admonition-title">Solo afecta a lo que aún no está en el historial</p>
+<p>Si un archivo ya ha sido commiteado, añadirlo al <code>.gitignore</code> no lo elimina del historial. Para eso habría que usar <code>git rm --cached &lt;archivo&gt;</code> — un paso extra que veremos más adelante.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Plantillas listas para usar</p>
+<p>En <a href="https://www.toptal.com/developers/gitignore">gitignore.io</a> puedes generar un <code>.gitignore</code> completo para tu tipo de proyecto (Java, Node, Python…) con un solo clic.</p>
+</div>
+<hr>
+<h2 id="ideas-clave-muy-resumidas">✅ Ideas clave (muy resumidas)<a class="headerlink" href="#ideas-clave-muy-resumidas" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<p><strong>Flujo habitual</strong></p>
+<ul>
+<li><code>git init</code> — crea un repositorio local (aparece <code>.git/</code>).</li>
+<li><code>git status</code> — qué está en staging, qué modificado y qué untracked.</li>
+<li><code>git diff</code> — qué cambió exactamente, línea a línea.</li>
+<li><code>git add &lt;archivo&gt;</code> — mete archivos en staging (bandeja).</li>
+<li><code>git commit -m "mensaje"</code> — guarda solo lo que esté en staging.</li>
+<li><code>git log</code> / <code>git log --oneline</code> — historial de commits.</li>
+</ul>
+<p><strong>Descartar cambios</strong></p>
+<ul>
+<li><code>git restore &lt;archivo&gt;</code> — deshace cambios del escritorio (vuelve al último commit).</li>
+<li><code>git restore --staged &lt;archivo&gt;</code> — saca del staging sin borrar los cambios.</li>
+</ul>
+<p><strong>Volver a una versión anterior</strong></p>
+<ul>
+<li><code>git show &lt;hash&gt;</code> — ver qué cambió en un commit concreto.</li>
+<li><code>git restore --source=&lt;hash&gt; &lt;archivo&gt;</code> — recuperar un archivo a una versión anterior.</li>
+<li><code>git revert &lt;hash&gt;</code> — deshacer un commit creando uno nuevo (seguro, no borra historial).</li>
+<li><code>git reset --soft HEAD~1</code> — deshacer el último commit, cambios en staging.</li>
+<li><code>git reset --hard &lt;hash&gt;</code> — volver a un punto borrando todo lo posterior (⚠ irreversible).</li>
+</ul>
+<p><strong>Ignorar archivos</strong></p>
+<ul>
+<li><code>.gitignore</code> — lista de archivos/carpetas que Git debe ignorar.</li>
+</ul>
+</details></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Tema 0 - Introducción">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Tema 0 - Introducción
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../actividad_0_1/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 0.1 - Git local">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.1 - Git local
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>

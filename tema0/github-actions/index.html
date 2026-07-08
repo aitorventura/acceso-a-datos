@@ -1,0 +1,1838 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../actividad_0_4/">
+      
+      
+        <link rel="next" href="../actividad_0_5/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Integración continua con GitHub Actions - Acceso a Datos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-integracion-continua-con-github-actions" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Acceso a Datos
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integración continua con GitHub Actions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="deep-orange"  aria-label="Modo Claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo Claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Acceso a Datos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 0 - Introducción
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 0 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Git y GitHub
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Git y GitHub
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.1 - Git local
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ramas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.2 - Ramas en Git
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GitHub y repositorios remotos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.3 - Tu portafolio en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colaboracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Colaboración en GitHub
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.4 - Contribuir a un portafolio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integración continua con GitHub Actions
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-que-problema-resuelve-la-integracion-continua" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 ¿Qué problema resuelve la integración continua?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 GitHub Actions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 GitHub Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conceptos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conceptos clave
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-estructura-de-un-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 Estructura de un workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 Estructura de un workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anatomia-de-un-workflow-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anatomía de un workflow YAML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-el-proyecto-calculadora-codigo-y-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.4 El proyecto Calculadora: código y tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 El proyecto Calculadora: código y tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-hace-cada-step-con-la-calculadora" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué hace cada step con la Calculadora
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-el-panel-actions-de-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.5 El panel Actions de GitHub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-cuando-el-workflow-falla" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.6 Cuando el workflow falla
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57-el-marketplace-de-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.7 El Marketplace de Actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58-secretos-credenciales-sin-exponer" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.8 Secretos: credenciales sin exponer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.8 Secretos: credenciales sin exponer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crear-un-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Crear un secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usar-un-secret-en-un-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usar un secret en un workflow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.5 - Pipeline de CI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker y Dev Container
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Docker y Dev Container
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduccion-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción a Docker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.6 - WordPress con Docker Compose
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dev Containers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_0_7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 0.7 - Tu primer Dev Container
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tema 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tema 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tema 1 - Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/ejemplo-apartado/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ejemplo de apartado
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tema1/actividad_1_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-que-problema-resuelve-la-integracion-continua" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 ¿Qué problema resuelve la integración continua?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 GitHub Actions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 GitHub Actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conceptos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conceptos clave
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-estructura-de-un-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 Estructura de un workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 Estructura de un workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anatomia-de-un-workflow-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anatomía de un workflow YAML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-el-proyecto-calculadora-codigo-y-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.4 El proyecto Calculadora: código y tests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4 El proyecto Calculadora: código y tests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-hace-cada-step-con-la-calculadora" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué hace cada step con la Calculadora
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-el-panel-actions-de-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.5 El panel Actions de GitHub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#56-cuando-el-workflow-falla" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.6 Cuando el workflow falla
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#57-el-marketplace-de-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.7 El Marketplace de Actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#58-secretos-credenciales-sin-exponer" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.8 Secretos: credenciales sin exponer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.8 Secretos: credenciales sin exponer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crear-un-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Crear un secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usar-un-secret-en-un-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usar un secret en un workflow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div><h1 id="5-integracion-continua-con-github-actions">⚙️ 5. Integración Continua con GitHub Actions<a class="headerlink" href="#5-integracion-continua-con-github-actions" title="Permanent link">¶</a></h1>
+<p><embed alt="Integración Continua con GitHub Actions" src="../diapositivas/github-actions.pdf" style="width:100%;min-height:80vh" type="application/pdf"></embed></p>
+<div class="admonition info">
+<p class="admonition-title">Descarga de diapositivas</p>
+<p><a href="../diapositivas/github-actions.pdf" rel="noopener" target="_blank">Descarga las diapositivas</a></p>
+</div>
+<hr>
+<h2 id="51-que-problema-resuelve-la-integracion-continua">5.1 ¿Qué problema resuelve la integración continua?<a class="headerlink" href="#51-que-problema-resuelve-la-integracion-continua" title="Permanent link">¶</a></h2>
+<p>Imagina que un equipo de cuatro personas trabaja en el mismo repositorio. Cada una desarrolla su parte en su rama y cuando termina hace merge en <code>main</code>. El problema: en el momento del merge nadie sabe si el código del compañero rompe los tests que otra persona escribió la semana pasada. Descubrirlo tres días después —o peor, en producción— cuesta mucho más que haberlo detectado en el acto.</p>
+<p>La <strong>integración continua</strong> (CI, de <em>Continuous Integration</em>) es la práctica de ejecutar comprobaciones automáticas sobre el código <strong>cada vez que alguien propone un cambio</strong>. Compilar, pasar los tests, revisar el estilo... todo de forma automática y en segundos. Si algo falla, el sistema avisa antes de que el código llegue a <code>main</code>.</p>
+<pre class="mermaid"><code>flowchart LR
+    A[git push / PR] --&gt; B[GitHub Actions]
+    B --&gt; C{¿Pasan los tests?}
+    C --&gt;|Sí ✅| D[Merge permitido]
+    C --&gt;|No ❌| E[Merge bloqueado\nAviso al autor]</code></pre>
+<p>A lo largo de este apartado trabajaremos con un ejemplo real: una clase <code>Calculadora</code> con cinco tests unitarios y un workflow de CI que los ejecuta automáticamente en cada push.</p>
+<p>La ventaja no es solo técnica: <strong>el equipo puede trabajar más rápido</strong> porque confía en que si el pipeline es verde, el código funciona. Sin CI, cada merge es un riesgo; con CI, es una rutina segura.</p>
+<hr>
+<h2 id="52-github-actions">5.2 GitHub Actions<a class="headerlink" href="#52-github-actions" title="Permanent link">¶</a></h2>
+<p><strong>GitHub Actions</strong> es el sistema de automatización integrado en GitHub. Permite definir flujos de trabajo (<em>workflows</em>) que se ejecutan en respuesta a eventos del repositorio, directamente en la nube de GitHub, sin instalar nada en tu máquina.</p>
+<p>Los eventos más habituales que disparan un workflow son:</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Cuándo ocurre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>push</code></td>
+<td>Alguien sube commits a una rama</td>
+</tr>
+<tr>
+<td><code>pull_request</code></td>
+<td>Se abre, actualiza o cierra una PR</td>
+</tr>
+<tr>
+<td><code>schedule</code></td>
+<td>Un temporizador (como un cron job)</td>
+</tr>
+<tr>
+<td><code>workflow_dispatch</code></td>
+<td>El usuario lo activa manualmente desde la web</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>Se publica una nueva versión del proyecto</td>
+</tr>
+</tbody>
+</table>
+<h3 id="conceptos-clave">Conceptos clave<a class="headerlink" href="#conceptos-clave" title="Permanent link">¶</a></h3>
+<p>Antes de ver código, conviene tener claro el vocabulario. GitHub Actions tiene cinco piezas que encajan entre sí:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Qué es</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>El fichero YAML que describe qué hacer y cuándo. Vive en <code>.github/workflows/</code>.</td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td>El disparador que pone en marcha el workflow (<code>push</code>, <code>pull_request</code>...).</td>
+</tr>
+<tr>
+<td><strong>Job</strong></td>
+<td>Un bloque de pasos que se ejecuta en una máquina virtual.</td>
+</tr>
+<tr>
+<td><strong>Step</strong></td>
+<td>Una acción concreta dentro de un job: ejecutar un comando de shell o llamar a una Action.</td>
+</tr>
+<tr>
+<td><strong>Runner</strong></td>
+<td>La máquina virtual donde corre el job. GitHub ofrece Ubuntu, Windows y macOS.</td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td>Una tarea reutilizable publicada en el Marketplace. Se invoca con <code>uses:</code>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart TD
+    E[Event] --&gt; W[Workflow]
+    W --&gt; J[Job]
+    J --&gt; S1[Step 1]
+    J --&gt; S2[Step 2]
+    J --&gt; S3[Step 3]</code></pre>
+<hr>
+<h2 id="53-estructura-de-un-workflow">5.3 Estructura de un workflow<a class="headerlink" href="#53-estructura-de-un-workflow" title="Permanent link">¶</a></h2>
+<p>Los workflows son ficheros YAML que se guardan en la carpeta <code>.github/workflows/</code> de tu repositorio. Puedes tener tantos ficheros como quieras; cada uno define un workflow independiente.</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>mi-proyecto-ci/
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>├── .github/
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>│   └── workflows/
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a>│       └── ci.yml        ← se ejecuta en cada push a main
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>├── src/
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>│   ├── main/java/com/ejemplo/
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>│   │   └── Calculadora.java
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>│   └── test/java/com/ejemplo/
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a>│       └── CalculadoraTest.java
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a>└── pom.xml
+</code></pre></div></td></tr></table></div>
+<h3 id="anatomia-de-un-workflow-yaml">Anatomía de un workflow YAML<a class="headerlink" href="#anatomia-de-un-workflow-yaml" title="Permanent link">¶</a></h3>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span>
+<span class="normal"><a href="#__codelineno-1-33">33</a></span>
+<span class="normal"><a href="#__codelineno-1-34">34</a></span>
+<span class="normal"><a href="#__codelineno-1-35">35</a></span>
+<span class="normal"><a href="#__codelineno-1-36">36</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># .github/workflows/ci.yml</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI — Build y Tests</span><span class="w">               </span><span class="c1"># Nombre que aparece en el panel Actions</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="nt">on</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Eventos que disparan este workflow</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span><span class="w">                   </span><span class="c1"># Solo en push a main</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w">                        </span><span class="c1"># En cualquier PR hacia main</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="nt">jobs</span><span class="p">:</span><span class="w">                                  </span><span class="c1"># Conjunto de jobs del workflow</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">  </span><span class="nt">build</span><span class="p">:</span><span class="w">                               </span><span class="c1"># Nombre del job (lo eliges tú)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span><span class="w">             </span><span class="c1"># Máquina virtual donde corre</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">                             </span><span class="c1"># Pasos del job, en orden</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Descargar el código fuente</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span><span class="w">      </span><span class="c1"># Action oficial: clona el repo en el runner</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Instalar Java 21 (Temurin)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-java@v4</span><span class="w">    </span><span class="c1"># Action oficial: instala el JDK</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">          </span><span class="nt">java-version</span><span class="p">:</span><span class="w"> </span><span class="s">'21'</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="w">          </span><span class="nt">distribution</span><span class="p">:</span><span class="w"> </span><span class="s">'temurin'</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">          </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">'maven'</span><span class="w">               </span><span class="c1"># cachea ~/.m2 entre ejecuciones</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Compilar el proyecto</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mvn compile -B</span><span class="w">            </span><span class="c1"># Comando de shell normal</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ejecutar los tests</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mvn test -B</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Guardar el informe de tests</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span><span class="w">                   </span><span class="c1"># se ejecuta aunque los tests fallen</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v4</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">informe-tests</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">target/surefire-reports/</span>
+</code></pre></div></td></tr></table></div>
+<p>Cada sección tiene su función:</p>
+<ul>
+<li><strong><code>name</code></strong> — el nombre que verás en la interfaz de GitHub. Ponlo descriptivo.</li>
+<li><strong><code>on</code></strong> — define qué eventos activan el workflow. Puedes listar varios.</li>
+<li><strong><code>jobs</code></strong> — aquí defines uno o más jobs. Por defecto se ejecutan en paralelo.</li>
+<li><strong><code>runs-on</code></strong> — el tipo de runner. <code>ubuntu-latest</code> es el más común y el más rápido.</li>
+<li><strong><code>steps</code></strong> — lista de pasos. Se ejecutan en orden, uno tras otro. Si uno falla, el job se detiene.</li>
+<li><strong><code>uses</code></strong> — invoca una Action del Marketplace (código reutilizable de otro repositorio).</li>
+<li><strong><code>run</code></strong> — ejecuta un comando de shell directamente en el runner.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">¿Qué versión de Action usar?</p>
+<p>Fíjate en el <code>@v4</code> de <code>actions/checkout@v4</code>. Indica la versión de la Action. Siempre fija una versión concreta; si escribes <code>@main</code> usarías siempre la última versión y un cambio incompatible podría romper tu workflow sin que hayas tocado nada.</p>
+</div>
+<hr>
+<h2 id="54-el-proyecto-calculadora-codigo-y-tests">5.4 El proyecto Calculadora: código y tests<a class="headerlink" href="#54-el-proyecto-calculadora-codigo-y-tests" title="Permanent link">¶</a></h2>
+<p>Para que el workflow de CI tenga algo que comprobar, el proyecto tiene una clase <code>Calculadora</code> con cuatro operaciones y cinco tests que las verifican.</p>
+<p><strong><code>src/main/java/com/ejemplo/Calculadora.java</code></strong></p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.ejemplo</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Calculadora</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sumar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">restar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">multiplicar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">dividir</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"No se puede dividir por cero"</span><span class="p">);</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong><code>src/test/java/com/ejemplo/CalculadoraTest.java</code></strong></p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span>
+<span class="normal"><a href="#__codelineno-3-27">27</a></span>
+<span class="normal"><a href="#__codelineno-3-28">28</a></span>
+<span class="normal"><a href="#__codelineno-3-29">29</a></span>
+<span class="normal"><a href="#__codelineno-3-30">30</a></span>
+<span class="normal"><a href="#__codelineno-3-31">31</a></span>
+<span class="normal"><a href="#__codelineno-3-32">32</a></span>
+<span class="normal"><a href="#__codelineno-3-33">33</a></span>
+<span class="normal"><a href="#__codelineno-3-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.ejemplo</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Assertions.*</span><span class="p">;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="kd">class</span> <span class="nc">CalculadoraTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Calculadora</span><span class="w"> </span><span class="n">calc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Calculadora</span><span class="p">();</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">sumarDosPositivos</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">        </span><span class="n">assertEquals</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="na">sumar</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">));</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">restarResultadoNegativo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">        </span><span class="n">assertEquals</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="na">restar</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">));</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">multiplicarPorCero</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">        </span><span class="n">assertEquals</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="na">multiplicar</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">dividirNormal</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27"></a><span class="w">        </span><span class="n">assertEquals</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="na">dividir</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">));</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29"></a>
+<a id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">dividirPorCeroLanzaExcepcion</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="w">        </span><span class="n">assertThrows</span><span class="p">(</span><span class="n">IllegalArgumentException</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="na">dividir</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Cuando se hace <code>push</code> de este proyecto a GitHub con el fichero <code>ci.yml</code> en su sitio, GitHub Actions ejecuta automáticamente todos los pasos que hay definidos en el workflow. Veamos qué hace cada uno con este proyecto concreto:</p>
+<h3 id="que-hace-cada-step-con-la-calculadora">Qué hace cada step con la Calculadora<a class="headerlink" href="#que-hace-cada-step-con-la-calculadora" title="Permanent link">¶</a></h3>
+<p><strong>Step 1 — <code>actions/checkout@v4</code></strong></p>
+<p>El runner arranca como una máquina virtual vacía: no tiene ni el código del proyecto. Este step clona el repositorio dentro del runner, igual que harías tú con <code>git clone</code>. Sin él, los pasos siguientes no encontrarían ni el <code>pom.xml</code> ni las clases Java.</p>
+<p><strong>Step 2 — <code>actions/setup-java@v4</code></strong></p>
+<p>Una vez que el código está descargado, el runner necesita Java para poder compilar y ejecutar los tests. Este step instala el JDK 21 de Temurin (la distribución de Adoptium). El parámetro <code>cache: 'maven'</code> guarda la carpeta <code>~/.m2</code> entre ejecuciones para que Maven no tenga que descargar JUnit y el resto de dependencias cada vez desde cero.</p>
+<p><strong>Step 3 — <code>mvn compile -B</code></strong></p>
+<p>Compila todas las clases Java del proyecto: <code>Calculadora.java</code> y <code>CalculadoraTest.java</code>. Si hay un error de sintaxis o un método que no existe, este step falla aquí y el workflow se detiene sin llegar a los tests. El flag <code>-B</code> activa el modo <em>batch</em>: Maven no muestra barras de progreso interactivas, lo que hace que los logs sean más limpios.</p>
+<p><strong>Step 4 — <code>mvn test -B</code></strong></p>
+<p>Ejecuta los cinco tests de <code>CalculadoraTest</code>. Maven lanza JUnit, que a su vez llama a cada método anotado con <code>@Test</code> y comprueba que el resultado es el esperado. Si todos pasan, el step termina en verde. Si alguno falla —por ejemplo porque <code>sumar</code> devuelve el valor equivocado— Maven termina con error y el workflow se marca como fallido.</p>
+<p><strong>Step 5 — <code>actions/upload-artifact@v4</code> con <code>if: always()</code></strong></p>
+<p>Surefire (el plugin de Maven que ejecuta los tests) genera un informe XML en <code>target/surefire-reports/</code> con el detalle de cada test: cuántos han pasado, cuántos han fallado y el tiempo de cada uno. Este step guarda ese informe como un <em>artifact</em> descargable desde el panel de GitHub. El <code>if: always()</code> es importante: sin él, si el step de tests falla, este step no se ejecutaría y perderías el informe justo cuando más lo necesitas.</p>
+<div class="admonition example">
+<p class="admonition-title">Resumen del flujo</p>
+<p>Cada vez que haces <code>push</code> a <code>main</code> o abres una PR, el runner hace exactamente esto en orden:</p>
+<ol>
+<li>Descarga tu código → 2. Instala Java 21 → 3. Compila → 4. Ejecuta los 5 tests de la Calculadora → 5. Guarda el informe</li>
+</ol>
+<p>Si el paso 3 o el 4 fallan, GitHub bloquea el merge de la PR hasta que se corrija.</p>
+</div>
+<p>En la pestaña <strong>Actions</strong> del repositorio verás el workflow aparecer en segundos tras el push.</p>
+<p><img alt="Vista general del panel Actions tras el primer push" src="../img/actions/panel-actions-primer-run.png"></p>
+<hr>
+<h2 id="55-el-panel-actions-de-github">5.5 El panel Actions de GitHub<a class="headerlink" href="#55-el-panel-actions-de-github" title="Permanent link">¶</a></h2>
+<p>Una vez que el workflow se ha ejecutado, toda la información está disponible en la pestaña <strong>Actions</strong> del repositorio.</p>
+<p><strong>Vista general</strong> — lista todos los runs que han ocurrido. El icono de estado indica en qué punto está cada uno:</p>
+<ul>
+<li>🟠 <strong>Naranja (girando)</strong> — el workflow está en ejecución en ese momento.</li>
+<li>✅ <strong>Verde</strong> — todos los steps han pasado correctamente.</li>
+<li>❌ <strong>Rojo</strong> — algún step ha fallado.</li>
+</ul>
+<p>Cada fila corresponde a un push o una PR, e indica el nombre del commit que lo disparó y el tiempo transcurrido.</p>
+<p><img alt="Lista de runs en el panel Actions — se ven runs verdes y uno rojo" src="../img/actions/panel-actions-lista-runs.png"></p>
+<p><strong>Vista de un run</strong> — al hacer clic en una ejecución concreta, ves todos los jobs. En nuestro proyecto hay un solo job llamado <code>build</code>, que agrupa todos los steps.</p>
+<p><img alt="Detalle de un run: el job build con sus steps y duración" src="../img/actions/panel-actions-run-detalle.png"></p>
+<p><strong>Vista de un job</strong> — al hacer clic en el job, se despliegan los steps. Cada step muestra su log completo: los comandos ejecutados y su salida. El step <strong>"Ejecutar los tests"</strong> muestra la salida de Maven con el resultado de los cinco tests de la <code>Calculadora</code>.</p>
+<p><img alt='Step "Ejecutar los tests" expandido — log de Maven con Tests run: 5, Failures: 0' src="../img/actions/panel-actions-step-log.png"></p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>[INFO] Running com.ejemplo.CalculadoraTest
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>[INFO] BUILD SUCCESS
+</code></pre></div></td></tr></table></div>
+<div class="admonition example">
+<p class="admonition-title">Cómo leer un log de error</p>
+<p>Si un step falla, su fondo se vuelve rojo y aparece una <code>✕</code>. El log muestra la salida del comando justo antes del error. Busca la última línea antes de <code>Process completed with exit code 1</code> — ahí está el problema.</p>
+</div>
+<hr>
+<h2 id="56-cuando-el-workflow-falla">5.6 Cuando el workflow falla<a class="headerlink" href="#56-cuando-el-workflow-falla" title="Permanent link">¶</a></h2>
+<p>Los fallos de un workflow tienen dos orígenes distintos, y conviene distinguirlos:</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Error en el código (lo más frecuente)</label><label for="__tabbed_1_2">Error en el workflow</label><label for="__tabbed_1_3">Error de entorno</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>El workflow funciona correctamente, pero los tests detectan un bug. Por ejemplo: si en <code>Calculadora.java</code> se cambia <code>sumar</code> para que devuelva <code>a - b</code> en lugar de <code>a + b</code>, el test <code>sumarDosPositivos</code> fallará.</p>
+<p><img alt="Step fallido con el error de JUnit: expected &lt;5&gt; but was &lt;-1&gt;" src="../img/actions/panel-actions-step-error.png"></p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span>
+<span class="normal"><a href="#__codelineno-5-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>[ERROR] com.ejemplo.CalculadoraTest.sumarDosPositivos
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>org.opentest4j.AssertionFailedError: expected: &lt;5&gt; but was: &lt;-1&gt;
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>        at com.ejemplo.CalculadoraTest.sumarDosPositivos(CalculadoraTest.java:13)
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a>[INFO] BUILD FAILURE
+</code></pre></div></td></tr></table></div>
+<p><strong>Solución:</strong> corrige el código, haz commit y push. El workflow volverá a ejecutarse.</p>
+</div>
+<div class="tabbed-block">
+<p>El fichero YAML tiene un problema de sintaxis o una Action no existe.</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>Error: Unable to resolve action `actions/setup-java@v99`,
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a>the action does not exist or its metadata is invalid
+</code></pre></div></td></tr></table></div>
+<p><strong>Solución:</strong> corrige el fichero <code>.yml</code> y vuelve a hacer push.</p>
+</div>
+<div class="tabbed-block">
+<p>El runner no tiene lo que necesita (una variable de entorno que falta, un servicio caído…).</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>Error: JAVA_HOME is not set and 'java' is not in PATH
+</code></pre></div></td></tr></table></div>
+<p><strong>Solución:</strong> añade el step de instalación que falta antes del step que falla. En nuestro proyecto, el step <code>actions/setup-java@v4</code> se encarga de esto.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">El workflow falla pero el código está bien en tu máquina</p>
+<p>Si los tests pasan en local pero fallan en el runner, la causa más frecuente es una diferencia de entorno: versión de Java distinta, dependencia que no se instala, o un test que depende de un fichero local que no está en el repositorio. El runner parte de cero cada vez.</p>
+</div>
+<hr>
+<h2 id="57-el-marketplace-de-actions">5.7 El Marketplace de Actions<a class="headerlink" href="#57-el-marketplace-de-actions" title="Permanent link">¶</a></h2>
+<p>No tienes que escribir todo desde cero. El <strong>Marketplace de GitHub Actions</strong> contiene miles de Actions reutilizables publicadas por la comunidad y por empresas.</p>
+<p>En el proyecto de la Calculadora ya usamos tres de las más habituales:</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actions/checkout@v4</code></td>
+<td>Clona el repositorio en el runner. Siempre el primer step.</td>
+</tr>
+<tr>
+<td><code>actions/setup-java@v4</code></td>
+<td>Instala un JDK concreto (Temurin, Zulu, Corretto…).</td>
+</tr>
+<tr>
+<td><code>actions/setup-node@v4</code></td>
+<td>Instala Node.js y npm.</td>
+</tr>
+<tr>
+<td><code>actions/cache@v4</code></td>
+<td>Guarda en caché dependencias (Maven, npm…) para acelerar los builds.</td>
+</tr>
+<tr>
+<td><code>actions/upload-artifact@v4</code></td>
+<td>Guarda ficheros del runner (JARs, informes de tests) para descargarlos después.</td>
+</tr>
+</tbody>
+</table>
+<p>Usar una Action es tan sencillo como referenciarla con <code>uses:</code> y pasarle parámetros con <code>with:</code>:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Instalar Java 21</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-java@v4</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="nt">java-version</span><span class="p">:</span><span class="w"> </span><span class="s">'21'</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">    </span><span class="nt">distribution</span><span class="p">:</span><span class="w"> </span><span class="s">'temurin'</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">    </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">'maven'</span><span class="w">          </span><span class="c1"># activa la caché de ~/.m2 automáticamente</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Verifica las Actions de terceros</p>
+<p>Las Actions oficiales de GitHub (<code>actions/...</code>) son de confianza. Las de terceros (<code>empresa/action-name</code>) conviene revisarlas antes de usarlas: ejecutan código en tu runner con acceso a tus secrets. Comprueba que el repositorio de la Action es conocido y tiene buena reputación.</p>
+</div>
+<hr>
+<h2 id="58-secretos-credenciales-sin-exponer">5.8 Secretos: credenciales sin exponer<a class="headerlink" href="#58-secretos-credenciales-sin-exponer" title="Permanent link">¶</a></h2>
+<p>Nunca escribas contraseñas, tokens o claves API directamente en el fichero YAML. Ese fichero vive en el repositorio y cualquiera que lo clone lo verá.</p>
+<p>GitHub ofrece los <strong>Secrets</strong>: variables cifradas que se almacenan en la configuración del repositorio y que el workflow puede usar sin que su valor aparezca en ningún log.</p>
+<h3 id="crear-un-secret">Crear un secret<a class="headerlink" href="#crear-un-secret" title="Permanent link">¶</a></h3>
+<ol>
+<li>En tu repositorio, ve a <strong>Settings → Secrets and variables → Actions</strong>.</li>
+<li>Pulsa <strong>New repository secret</strong>.</li>
+<li>Dale un nombre en mayúsculas (convenio): <code>MAVEN_PASSWORD</code>, <code>DEPLOY_TOKEN</code>...</li>
+<li>Pega el valor. A partir de ese momento GitHub lo cifra y nadie puede leerlo, ni tú.</li>
+</ol>
+<p><img alt="Página de Secrets en Settings — muestra el botón New repository secret" src="../img/actions/secrets-settings.png"></p>
+<h3 id="usar-un-secret-en-un-workflow">Usar un secret en un workflow<a class="headerlink" href="#usar-un-secret-en-un-workflow" title="Permanent link">¶</a></h3>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Publicar en el registro</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mvn deploy</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="nt">MAVEN_USERNAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.MAVEN_USERNAME }}</span><span class="w">   </span><span class="c1"># se sustituye en tiempo de ejecución</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">    </span><span class="nt">MAVEN_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.MAVEN_PASSWORD }}</span><span class="w">   </span><span class="c1"># nunca aparece en el log</span>
+</code></pre></div></td></tr></table></div>
+<p>La sintaxis <code>${{ secrets.NOMBRE }}</code> le indica a GitHub Actions que sustituya ese valor por el secret almacenado. En los logs, ese valor aparece como <code>***</code> aunque alguien intente imprimirlo con <code>echo</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Los secrets no están disponibles en PRs de forks</p>
+<p>Por seguridad, los secrets no se pasan a workflows disparados por PRs que vienen de un fork externo. Esto evita que alguien cree un fork, añada <code>echo ${{ secrets.TOKEN }}</code> al workflow y extraiga tus credenciales. En PRs de tu propio repositorio, sí funcionan.</p>
+</div>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Resumen</p>
+<ul>
+<li><strong>CI</strong>: ejecutar comprobaciones automáticas en cada cambio para detectar errores cuanto antes, antes de que lleguen a <code>main</code>.</li>
+<li><strong>GitHub Actions</strong>: el sistema de CI/CD integrado en GitHub. Se configura con ficheros YAML en <code>.github/workflows/</code>.</li>
+<li>Un <strong>workflow</strong> se activa con un <strong>event</strong> (<code>push</code>, <code>pull_request</code>...), contiene <strong>jobs</strong> que corren en un <strong>runner</strong>, y cada job tiene <strong>steps</strong> que ejecutan comandos o <strong>Actions</strong> del Marketplace.</li>
+<li>Si un workflow falla, el log indica exactamente qué test ha fallado y con qué valores — en nuestro ejemplo, <code>expected: &lt;5&gt; but was: &lt;-1&gt;</code> apuntaba directamente al bug en <code>sumar()</code>.</li>
+<li>Los <strong>secrets</strong> almacenan credenciales de forma segura: nunca escribas contraseñas directamente en el YAML.</li>
+<li><code>if: always()</code> en un step garantiza que se ejecute aunque los anteriores fallen — útil para guardar informes de tests.</li>
+</ul>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../actividad_0_4/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 0.4 - Contribuir a un portafolio">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.4 - Contribuir a un portafolio
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../actividad_0_5/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 0.5 - Pipeline de CI">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Actividad 0.5 - Pipeline de CI
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      
+<p style="margin: 0 auto; text-align: center; font-size: 0.7rem;">
+  © 2026 Alejandro Roig y Aitor Ventura —
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">
+    Licencia CC BY-NC-SA 4.0
+  </a>
+</p>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
