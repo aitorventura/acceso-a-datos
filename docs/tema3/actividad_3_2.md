@@ -1,50 +1,112 @@
 # 🧪 Actividad 3.2: Filtrar por plataforma con `jsonb_exists`
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Añades el filtro por plataforma a tu listado de videojuegos, usando `jsonb_exists` sobre la columna JSONB de la Actividad 3.1.
+
+## Qué vas a practicar
+
+- Invocar una función SQL nativa desde Criteria API con `criteriaBuilder.function(...)`.
+- Combinar un filtro JSONB con los filtros ya existentes.
+- Verificar el comportamiento de modificación de un campo JSONB filtrado.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 3.2 del Tema 3 (RA4 - BD objeto relacionales y orientadas a objetos)
-del módulo Acceso a Datos (0486), semana real 11 del calendario. Sigue el patrón de
-estructura de docs/tema0/actividad_0_6.md y usa la skill
-/actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu columna `detallesPlataforma` de la Actividad 3.1, con videojuegos de distintas plataformas ya creados; tus Specifications de la Actividad 2.2.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-Objetivo (RA4, criterios e, f, g): que el alumnado añada a su GameVault, guiado, la
-Specification `disponibleEnPlataforma` tal y como existe en
-com/aleroig/gamevault/catalogo/VideojuegoSpecifications.java, que usa `jsonb_exists`
-sobre la columna JSONB creada en la Actividad 3.1, y la combine con el resto de filtros
-que ya tiene en su servicio desde la Actividad 2.2.
+## Paso 1 — La Specification, guiada al completo
 
-Estructura sugerida de pasos guiados:
-1. La Specification con `criteriaBuilder.function("jsonb_exists", ...)`, con el código de
-   la referencia mostrado y explicado parte a parte (por qué hace falta `function` en vez
-   de los métodos normales de criteriaBuilder, qué hace el `literal`, por qué el
-   toLowerCase).
-2. Añadir el campo `plataforma` al DTO de filtro y encadenar la nueva Specification con
-   `.and(...)` en el service — mini-reto: es exactamente el mismo patrón que ya
-   repitieron en la Actividad 2.2, así que basta con indicarlo sin dar el código.
-3. Prueba guiada con peticiones dadas: filtrar por una plataforma que existe en los datos
-   de la Actividad 3.1 y por una que no, comprobando ambos resultados.
-4. Experimento guiado (criterio f, modificación de objetos): actualizar un videojuego
-   quitando una plataforma de su Map (petición PUT de ejemplo dada) y comprobar que el
-   filtro deja de devolverlo.
-5. Pregunta de comprensión: ¿qué haría falta para filtrar por "disponible en Steam Y en
-   Switch a la vez"? Orientar hacia `jsonb_exists_all`/`jsonb_exists_any` o dos
-   `jsonb_exists` encadenados con `.and(...)`, pidiendo que expliquen la diferencia
-   entre ambos enfoques (comprensión, no implementación obligatoria).
+En `VideojuegoSpecifications`:
 
-Esta actividad da paso a la Actividad 3.3, que cierra RA4 con pruebas de integración
-sobre todo lo visto en el tema (persistencia + consultas JSONB).
+```java
+public static Specification<Videojuego> disponibleEnPlataforma(String plataforma) {
+    if (plataforma == null || plataforma.isBlank()) {
+        return Specification.unrestricted();
+    }
+
+    return (root, query, criteriaBuilder) ->
+            criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                            "jsonb_exists",
+                            Boolean.class,
+                            root.get("detallesPlataforma"),
+                            criteriaBuilder.literal(plataforma.toLowerCase())
+                    )
+            );
+}
 ```
+
+Por qué cada pieza: `criteriaBuilder.function("jsonb_exists", Boolean.class, ...)` invoca esa función nativa de PostgreSQL, indicando que devuelve un `Boolean`; `root.get("detallesPlataforma")` es la columna sobre la que se aplica; `criteriaBuilder.literal(plataforma.toLowerCase())` es la clave a buscar, pasada como literal (no como columna) — y en minúsculas, para que la búsqueda no dependa de cómo escribió el usuario la plataforma (asumiendo que también guardas las claves del JSON en minúsculas, como en tus datos de la Actividad 3.1). `criteriaBuilder.isTrue(...)` envuelve el resultado booleano de la función para usarlo como condición del `WHERE`.
+
+---
+
+## Paso 2 — Añadir el filtro al DTO y combinarlo — mini-reto
+
+Añade el campo `plataforma` a tu `VideojuegoFiltroDTO`:
+
+```java
+public record VideojuegoFiltroDTO(
+        String titulo,
+        BigDecimal precioMin,
+        BigDecimal precioMax,
+        Long estudioId,
+        String plataforma
+) {}
+```
+
+Ahora, sin más indicaciones, encadena `disponibleEnPlataforma(filtro.plataforma())` con `.and(...)` en `findAllPaginated()` de tu `VideojuegoService` — es exactamente el mismo patrón que ya repetiste varias veces en la Actividad 2.2, así que no necesitas código nuevo mostrado: solo añadir una línea más a la cadena que ya tienes.
+
+---
+
+## Paso 3 — Prueba con peticiones reales
+
+```bash
+# Plataforma que SÍ existe en tus datos de prueba
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=steam"
+
+# Plataforma que NO existe en ningún videojuego
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=xbox"
+```
+
+**Comprueba**: que el primer caso devuelve solo los videojuegos que de verdad tienen la clave `"steam"` en su `detallesPlataforma`, y el segundo devuelve una lista vacía (no un error).
+
+---
+
+## Paso 4 — Modificar y comprobar que el filtro reacciona
+
+Actualiza uno de tus videojuegos que sí aparecía en el filtro por `steam`, quitando esa clave de su `detallesPlataforma`:
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}
+  }'
+```
+
+Repite el filtro por `steam`:
+
+```bash
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=steam"
+```
+
+**Comprueba**: que ese videojuego ya no aparece en el resultado, porque su `detallesPlataforma` ya no contiene la clave `"steam"` (recuerda: el `PUT` reemplaza el objeto completo, como viste en la Actividad 3.1).
+
+---
+
+## Pregunta final
+
+¿Qué haría falta para filtrar por "disponible en Steam **Y** en Switch a la vez"? Piensa en dos enfoques posibles: encadenar dos veces `disponibleEnPlataforma` con `.and(...)` (una vez por cada plataforma) frente a usar una función distinta de PostgreSQL como `jsonb_exists_all` (que comprueba varias claves de golpe). No hace falta que implementes ninguno de los dos — explica con tus palabras qué diferencia habría entre ambos enfoques en cuanto a cómo se construye la consulta SQL final.
+
+---
+
+## ✅ Cierre
+
+Tu listado de videojuegos ya filtra por plataforma dentro de un JSON, combinado de forma transparente con el resto de filtros relacionales. En la próxima actividad haces pruebas de integración reales sobre todo lo construido en este tema: persistencia y consultas JSONB juntas, contra un PostgreSQL de verdad.

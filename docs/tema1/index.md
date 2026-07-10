@@ -39,6 +39,3 @@
 
 !!! info "¿Cómo avanzar por el contenido?"
     Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
-
-!!! note "Nota para el profesorado"
-    Este tema corresponde a las semanas reales 3-6 del calendario (RA2, bloque cerrado). Los apartados de teoría y las actividades están pendientes de redactar: cada `.md` de este tema contiene, en su lugar, el prompt que debe usarse con `/improve-notes` para generarlo, apoyándose en el proyecto GameVault adjunto.

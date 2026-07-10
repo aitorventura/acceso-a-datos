@@ -1,57 +1,120 @@
-# 🧪 Actividad 5.3: Integración final del proyecto — cierre de RA6
+# 🧪 Actividad 5.3: Integración final del proyecto
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo. Es la actividad final del módulo.
+!!! success "Entrega final del módulo"
+    Esta es la última actividad evaluable de Acceso a Datos. No es una tarea más — es el cierre de todo lo que has construido desde el Tema 1: catálogo en PostgreSQL, reseñas en MongoDB, componentes desacoplados, y todas las mejoras que has ido añadiendo por el camino.
+
+## Qué vas a entregar
+
+- Un test de integración de extremo a extremo, con Testcontainers, que recorre tu GameVault completo.
+- Un documento breve que resuma los componentes que has construido.
+- Una autoevaluación personal y razonada.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 5.3 del Tema 5 (RA6) del módulo Acceso a Datos (0486), semana real
-19 del calendario — actividad que CIERRA el RA6 y es la ENTREGA FINAL de todo el módulo
-0486. Sigue el patrón de estructura de docs/tema0/actividad_0_6.md y usa la skill
-/actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos los componentes de este tema.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad o en actividades anteriores.
+---
 
-Objetivo (RA6, criterios h, i — cierre del RA y del módulo): que el alumnado entregue su
-GameVault completo (construido desde el Tema 1: catálogo en PostgreSQL con
-JDBC/JPA/Specifications/JSONB, reviews en MongoDB, componentes desacoplados con
-interfaces propias, más las MEJORAS añadidas: procedimiento almacenado, ranking JPQL,
-borrado en cascada Postgres→Mongo, PUT de reseñas con autoría, ReviewsConsultaService)
-con un test de integración final al estilo de
-src/test/java/com/aleroig/gamevault/integration/GamevaultApiTest.java, que levante con
-Testcontainers TODAS las bases de datos usadas (como mínimo PostgreSQL y MongoDB) y
-verifique un flujo real de extremo a extremo.
+## Paso 1 — El test de integración de flujo completo
 
-Estructura sugerida de pasos guiados:
-1. El test de integración de flujo completo, guiado por tramos: el enunciado da el
-   esqueleto del test y guía el primer tramo (crear un estudio y un videojuego con
-   detallesPlataforma vía la API, con el código mostrado); los tramos siguientes (crear
-   una reseña en MongoDB para ese videojuego, consultar el resumen, y verificar el
-   borrado en cascada de la Actividad 4.2 al eliminar el videojuego) son mini-retos que
-   repiten patrones de test ya escritos en las actividades 3.3 y anteriores — se indica
-   qué verificar en cada tramo, no el código.
-2. Un documento breve de cierre guiado por un guion dado (README del GameVault propio, o
-   sección de memoria si el centro lo pide así): listar los componentes desarrollados y
-   su responsabilidad, 1-2 frases por componente, siguiendo el espíritu de
-   docs/04-decisiones-arquitectura.md de la referencia.
-3. Una autoevaluación razonada del propio alumnado: de los RA trabajados en el módulo
-   (RA2 a RA6; RA1 se ha trabajado en la FCT), ¿en cuál se sienten más flojos y por qué?
-   Respuesta concreta y personal, no genérica, como parte de la entrega.
-4. Verificación guiada de que el CI de su GameVault (configurado desde el Tema 0)
-   ejecuta correctamente estos tests de integración en cada push (qué mirar en la
-   pestaña Actions, indicado en el enunciado), cerrando el círculo con lo aprendido en
-   Git/GitHub Actions al principio del curso.
+### Tramo 1 — guiado al completo
 
-Esta es la última actividad evaluable del módulo: el enunciado debe transmitir que es un
-cierre, no una tarea más, y debe permitir a cada alumno mostrar cómo ha evolucionado su
-GameVault durante el curso.
+```java
+package com.tunombre.gamevault.integration;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.mongodb.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Testcontainers
+class FlujoCompletoIntegrationTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Container
+    @ServiceConnection
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void flujoCompleto_DesdeCrearHastaBorrarConReviews() throws Exception {
+        // Tramo 1: crear un estudio y un videojuego con detallesPlataforma
+        mockMvc.perform(post("/api/v1/estudios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"nombre": "Team Cherry", "pais": "Australia"}
+                                """))
+                .andExpect(status().isCreated());
+
+        String respuestaVideojuego = mockMvc.perform(post("/api/v1/videojuegos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "titulo": "Hollow Knight",
+                                  "precio": 14.99,
+                                  "fechaLanzamiento": "2017-02-24",
+                                  "estudioId": 1,
+                                  "detallesPlataforma": {"steam": {"idApp": 367520}}
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        // extrae el id del videojuego creado (con JsonPath, por ejemplo) para los tramos siguientes
+    }
+}
 ```
+
+Este primer tramo, ya completo, crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente.
+
+### Tramo 2 — mini-reto: la reseña y el resumen
+
+Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña para ese videojuego (necesitarás un token JWT válido — si tu test de seguridad de PSP ya tiene un método `login(...)` reutilizable, cópialo aquí), y comprobar con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya usaste en la Actividad 3.3 (MockMvc completo, `jsonPath` sobre el cuerpo).
+
+### Tramo 3 — mini-reto: el borrado en cascada
+
+Borra el videojuego, y verifica el borrado en cascada de la Actividad 4.2: la reseña que creaste en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un `Thread.sleep` breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).
+
+---
+
+## Paso 2 — Documento de cierre
+
+Escribe un documento breve (README de tu propio GameVault, o una sección de memoria si tu centro lo pide así) que liste los componentes que has desarrollado, con 1-2 frases por componente describiendo su responsabilidad. No es un manual exhaustivo, es un mapa rápido de "qué hace cada pieza".
+
+Como mínimo, incluye: `CatalogoConsultaService`, `ReviewsConsultaService`, el flujo de borrado en cascada, el procedimiento almacenado `ajustar_precio_estudio`, el ranking JPQL de estudios.
+
+---
+
+## Paso 3 — Autoevaluación razonada
+
+De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo, y por qué concretamente? No una respuesta genérica ("necesito practicar más") — señala una pieza técnica exacta con la que todavía no te sientes cómodo, y qué harías para reforzarla.
+
+---
+
+## Paso 4 — Verificar el CI
+
+Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline configurado desde el Tema 0 ejecuta correctamente estos tests de integración. **Captura**: el resultado en verde del workflow.
+
+---
+
+## ✅ Cierre del módulo
+
+Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, semana a semana, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.

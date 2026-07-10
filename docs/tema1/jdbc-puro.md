@@ -2,58 +2,107 @@
 
 # 🧩 4. JDBC puro: conexión manual sin ORM
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Todo lo que has hecho hasta ahora con la base de datos ha pasado por Spring Data JPA: declaras una entidad, extiendes `JpaRepository`, y `save()`/`findAll()` funcionan sin que escribas una sola línea de SQL. Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apoya **todo** lo demás, incluido Hibernate: **JDBC**.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🧱 Las cuatro piezas de JDBC
 
-```text
-Redacta el apartado de teoría "JDBC puro: conexión manual sin ORM" del Tema 1 (RA2 -
-Manejo de conectores) del módulo Acceso a Datos (0486), semana real 5 del calendario.
-Sigue las convenciones de estilo del README.md del repo.
+**JDBC** (*Java Database Connectivity*) es la API estándar de Java (`java.sql`) para hablar con bases de datos relacionales — ya la mencionaste en el apartado 2 como el protocolo que implementa cada driver. Se apoya en cuatro piezas, cada una con un papel concreto:
 
-Criterios de evaluación de RA2 que cubre este apartado (curriculum.md):
-- a) Ventajas e inconvenientes de utilizar conectores (retómalo aquí desde el ángulo
-  contrario al del apartado 1: ahora se ve el coste de NO usar un ORM).
-- c) Uso del conector idóneo en la aplicación.
-- i) Eliminación de los objetos una vez finalizada su función (cierre manual de
-  recursos).
+| Pieza | Papel |
+|---|---|
+| `DriverManager` / `DataSource` | Abre la conexión con el gestor. |
+| `Connection` | Representa esa sesión abierta con la base de datos. |
+| `Statement` / `PreparedStatement` | Transporta el SQL que quieres ejecutar. |
+| `ResultSet` | El cursor sobre las filas que devuelve una consulta. |
 
-ESTRUCTURA — teoría primero: antes de tocar código, presenta JDBC desde cero como lo
-que es: la API estándar de Java para bases de datos (java.sql), la capa sobre la que se
-apoya TODO lo demás (incluido Hibernate, que se verá en el Tema 2); sus cuatro piezas
-con la función de cada una en una frase (DriverManager/DataSource abre conexiones,
-Connection representa la sesión, Statement/PreparedStatement transporta el SQL,
-ResultSet es el cursor sobre los resultados); y qué es un "recurso" y por qué los
-recursos se cierran (mantienen ocupados una conexión de red y memoria del gestor
-mientras viven).
+Cada una de estas piezas es un **recurso**: mientras está abierta, mantiene ocupada una conexión de red y memoria en el gestor de base de datos. Un recurso que se abre y no se cierra no desaparece solo — sigue consumiendo esos recursos hasta que algo lo cierre explícitamente (o, en el peor caso, hasta que el proceso entero termine).
 
-Contenido central: `java.sql.Connection`, `Statement`/`PreparedStatement` y `ResultSet`
-manejados a mano, sin Spring Data JPA ni Hibernate de por medio. Es importante que quede
-claro que esto es una EXCEPCIÓN deliberada dentro del proyecto: todo GameVault usa
-Spring Data JPA (ver com/aleroig/gamevault/catalogo/VideojuegoRepository.java,
-EstudioRepository.java, que son simples interfaces JpaRepository sin una sola línea de
-JDBC), así que aquí no hay un fichero real de GameVault que mostrar como JDBC puro — el
-alumnado va a escribir, en una clase aparte de su GameVault (por ejemplo un
-"modo diagnóstico" o un pequeño demo de consola), una consulta manual usando
-`DriverManager.getConnection(...)` con la misma URL/usuario/contraseña que ya tiene
-configurados en application-dev.yaml para su PostgreSQL de la Actividad 1.1.
+---
 
-Explica el ciclo completo y por qué importa cerrarlo bien:
-1. Abrir la conexión (`DriverManager.getConnection` o, mejor, un `DataSource` con pool).
-2. Preparar la sentencia con `PreparedStatement` (y por qué NUNCA se debe concatenar el
-   SQL con `+` — inyección SQL — usa esto como gancho para explicar los parámetros `?`).
-3. Ejecutar y recorrer el `ResultSet`.
-4. Cerrar `ResultSet`, `Statement` y `Connection` en orden inverso — o, mejor, con
-   try-with-resources — y explica qué pasa si no se cierran (fugas de conexiones,
-   agotamiento del pool).
+## 🔧 El ciclo completo, paso a paso
 
-Contrasta explícitamente con lo visto en operaciones-crud-transacciones.md: ahí Spring
-gestiona conexión, transacción y cierre por ti (`@Transactional`, `JpaRepository`); aquí
-el alumnado ve "la fontanería" que hay debajo, para entender por qué existen los ORM.
-No mezcles esto con Hibernate/Spring Data JPA: esos son el Tema 2 (RA3) completo.
+### 1. Abrir la conexión
+
+```java
+Connection conn = DriverManager.getConnection(
+        "jdbc:postgresql://localhost:5432/gamevault_db",
+        "gamevault_user",
+        "password123"
+);
 ```
+
+`DriverManager.getConnection(...)` recibe la misma URL JDBC, usuario y contraseña que ya conoces de `application-dev.yaml` — solo que aquí los pasas directamente en Java, sin que Spring medie. En un proyecto real, en vez de `DriverManager` se usaría casi siempre un `DataSource` con pooling (como el HikariCP que Spring configura automáticamente por ti) — `DriverManager` abre una conexión nueva cada vez, sin reutilizar nada.
+
+### 2. Preparar la sentencia — y por qué nunca con `+`
+
+```java
+String sql = "SELECT id, titulo, precio FROM videojuego WHERE estudio_id = ?";
+PreparedStatement stmt = conn.prepareStatement(sql);
+stmt.setLong(1, estudioId);
+```
+
+!!! danger "Nunca concatenes el SQL con datos del usuario"
+    Podrías escribir `"SELECT * FROM videojuego WHERE estudio_id = " + estudioId` y funcionaría... hasta que `estudioId` (o cualquier dato que venga de fuera) contenga algo como `1 OR 1=1`. Eso es una **inyección SQL**: el atacante consigue que su texto se interprete como código SQL, no como un simple valor. `PreparedStatement` con parámetros (`?`) evita esto por diseño: el valor se envía por separado del SQL, y el driver lo trata siempre como un dato, nunca como código a ejecutar, sea lo que sea lo que contenga.
+
+### 3. Ejecutar y recorrer el resultado
+
+```java
+ResultSet rs = stmt.executeQuery();
+while (rs.next()) {
+    Long id = rs.getLong("id");
+    String titulo = rs.getString("titulo");
+    BigDecimal precio = rs.getBigDecimal("precio");
+    // mapear a mano a un objeto Java
+}
+```
+
+`ResultSet` es un cursor: `rs.next()` avanza fila a fila (y devuelve `false` cuando ya no quedan más), y `rs.getXxx("columna")` extrae cada valor de la fila actual, con el tipo Java que corresponda.
+
+### 4. Cerrar los recursos — en orden, o con try-with-resources
+
+```java
+try (Connection conn = DriverManager.getConnection(url, user, pass);
+     PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+    stmt.setLong(1, estudioId);
+    try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            // ...
+        }
+    }
+}
+```
+
+`try-with-resources` cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un `finally` con cada `close()` a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el *pool* de conexiones que viste en el apartado 2, y la aplicación deja de poder conectarse a la base de datos.
+
+---
+
+## 🆚 Lo que Spring Data JPA te estaba ahorrando
+
+Compara este ciclo completo con lo que ya conoces de `operaciones-crud-transacciones.md`:
+
+```java
+// Con Spring Data JPA — todo esto está oculto:
+List<Videojuego> videojuegos = videojuegoRepository.findAll();
+```
+
+Una sola línea, sin gestionar conexión, sin escribir SQL, sin mapear filas a mano, sin preocuparte de cerrar nada — Spring Data JPA hace todo eso por ti, usando JDBC exactamente igual por debajo. Ahora que has visto la "fontanería" real, esa línea deja de ser magia: es JDBC con un montón de trabajo repetitivo automatizado.
+
+!!! tip "¿Entonces por qué aprender JDBC puro, si un ORM lo hace todo?"
+    Porque un ORM sigue generando SQL por debajo, y entender qué SQL genera (y por qué a veces conviene evitarlo) te va a ayudar a diagnosticar problemas de rendimiento más adelante en tu carrera. Además, hay situaciones — consultas muy específicas, procedimientos almacenados (que verás en el siguiente apartado) — donde JDBC puro, o herramientas intermedias como `JdbcTemplate`, siguen siendo la opción más directa.
+
+En este punto del curso, esta pieza no tiene equivalente en tu propio GameVault: todo tu proyecto usa Spring Data JPA, sin una sola línea de JDBC manual (revisa tu propio `VideojuegoRepository.java` — es una interfaz vacía que extiende `JpaRepository`). Por eso, en la Actividad 1.3, vas a escribir esta consulta manual en una clase de consola aparte, fuera de tus controladores y servicios, conectándote al mismo PostgreSQL que ya tienes levantado.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - **JDBC** es la API estándar de Java para bases de datos, y la base sobre la que se apoya cualquier ORM, incluido Hibernate.
+    - Sus cuatro piezas: `DriverManager`/`DataSource` (abre conexión), `Connection` (la sesión), `Statement`/`PreparedStatement` (transporta el SQL), `ResultSet` (cursor sobre el resultado).
+    - Un **recurso** abierto y no cerrado sigue consumiendo conexión y memoria — por eso se cierra siempre, idealmente con `try-with-resources`.
+    - `PreparedStatement` con parámetros (`?`) evita la **inyección SQL**; concatenar SQL con datos externos (`+`) es peligroso siempre.
+    - Todo lo que hace `@Transactional`/`JpaRepository` de forma automática (abrir conexión, ejecutar, cerrar, mapear filas a objetos) es exactamente esto, hecho a mano.

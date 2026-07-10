@@ -1,65 +1,116 @@
 # 🧪 Actividad 5.2: Repaso integrador — un componente sobre el módulo documental
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada — mini-reto de mayor peso"
+    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya construiste sobre PostgreSQL en la Actividad 5.1. Es una actividad de repaso integrador: casi todo es aplicar una estructura que ya conoces.
+
+## Qué vas a practicar
+
+- Replicar el patrón interfaz + implementación oculta sobre un motor distinto.
+- Usar un componente nuevo desde otro módulo, sin conocer su implementación.
+- Comparar dos componentes que resuelven el mismo problema sobre motores distintos.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 5.2 del Tema 5 (RA6 - Componentes de acceso a datos) del módulo
-Acceso a Datos (0486), semana real 18 del calendario. Es una actividad de REPASO
-INTEGRADOR: aplica el patrón de componente ya trabajado (Actividad 5.1) sobre las otras
-tecnologías del módulo. Sigue el patrón de estructura de docs/tema0/actividad_0_6.md y
-usa la skill /actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu `CatalogoConsultaService` (Actividades 4.1 y 5.1) como referencia visual constante.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado — y en esta actividad casi todo repite el patrón de la 5.1, así que aquí el
-peso del mini-reto puede ser mayor de lo habitual, siempre con la estructura de
-referencia delante.
+---
 
-Objetivo (RA6, criterios f, g): que el alumnado cree en su GameVault un componente
-`ReviewsConsultaService` sobre el módulo documental (MongoDB), espejo del
-CatalogoConsultaService que ya tiene sobre el módulo relacional — demostrando que el
-mismo patrón de componente (interfaz en paquete `api` + implementación oculta) funciona
-igual sea cual sea el motor de persistencia por debajo. Este componente NO existe en la
-referencia adjunta: es una MEJORA, mencionada como extensión natural en
-docs/arquitectura/modulos-y-desacoplamiento.md.
+## Paso 1 — Planteamiento: el contrato mínimo
 
-Estructura sugerida de pasos guiados:
-1. Planteamiento guiado: ¿qué necesita saber el módulo `catalogo` (u otro futuro) sobre
-   las reseñas sin conocer MongoDB? Definir juntos el contrato mínimo: por ejemplo
-   `long totalReviewsDe(Long videojuegoId)` y `double puntuacionMediaDe(Long
-   videojuegoId)` (la lógica ya existe dentro de ReviewService.getResumenByVideojuegoId
-   — se trata de exponerla como componente, no de reescribirla).
-2. Mini-reto guiado por la estructura de la 5.1: DEJA EXPLÍCITO en el enunciado, no lo
-   des por sobreentendido, que el paquete `reviews.api` NO existe todavía en su
-   GameVault (a diferencia de `catalogo.api`, que sí existe en la referencia) — el
-   primer paso del mini-reto es crear esa carpeta nueva, por analogía exacta con
-   `catalogo/api/`. Después, crear la interfaz en `reviews.api`, la implementación
-   package-private anotada `@Service` que reutilice ReviewRepository, y el test aislado
-   — el enunciado da la estructura de ficheros esperada (incluida la carpeta nueva) y
-   recuerda el patrón, pero el código lo escriben ellos porque es idéntico al de
-   CatalogoConsultaService/CatalogoConsultaServiceImpl que ya tienen delante.
-3. Uso guiado del componente nuevo desde el módulo `catalogo`: por ejemplo, enriquecer
-   VideojuegoResponseDTO (o un endpoint de detalle) con la puntuación media, mostrando
-   el código del cambio — y remarcando que `catalogo` no importa nada de
-   `reviews` salvo la interfaz del paquete `api`.
-4. Verificación guiada: comprobar con una petición real que el dato viaja de MongoDB al
-   endpoint del catálogo a través del componente, y que los tests existentes siguen
-   pasando.
-5. Reflexión de cierre guiada por preguntas concretas: rellenar una tabla comparando sus
-   dos componentes (CatalogoConsultaService sobre JPA/PostgreSQL vs.
-   ReviewsConsultaService sobre MongoDB): ¿en qué se diferencian sus implementaciones?,
-   ¿en qué son idénticas sus interfaces? — la conclusión esperada es que el patrón de
-   componente es independiente del motor (criterios f y g cubiertos con el mismo molde).
+¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define el contrato:
 
-Esta actividad da paso a la Actividad 5.3, que cierra el módulo completo con la
-integración final y las pruebas de todos los componentes juntos.
+```java
+public interface ReviewsConsultaService {
+    long totalReviewsDe(Long videojuegoId);
+    double puntuacionMediaDe(Long videojuegoId);
+}
 ```
+
+La lógica de estos dos métodos **ya existe** dentro de `ReviewService.getResumenByVideojuegoId` — no la vas a reescribir, solo a exponerla como componente.
+
+---
+
+## Mini-reto (con más peso de lo habitual) — el componente completo
+
+!!! warning "El paquete `reviews.api` no existe todavía en tu proyecto"
+    A diferencia de `catalogo.api` (que ya tienes de la Actividad 4.1), aquí no hay ningún precedente — el primer paso es crear la carpeta nueva.
+
+Estructura de ficheros esperada:
+
+```
+reviews/
+├── api/
+│   └── ReviewsConsultaService.java      ← interfaz (nueva)
+├── ReviewsConsultaServiceImpl.java      ← implementación (nueva, package-private)
+├── Review.java
+├── ReviewRepository.java
+└── ReviewService.java
+```
+
+Sin más código dado que la estructura de arriba y el contrato del Paso 1, crea:
+
+1. La interfaz `ReviewsConsultaService` en el paquete nuevo `reviews.api` — por analogía exacta con `catalogo.api.CatalogoConsultaService`.
+2. `ReviewsConsultaServiceImpl` (package-private, anotada `@Service`) en `reviews`, que implemente la interfaz reutilizando `ReviewRepository` — el código es idéntico en estructura al de `CatalogoConsultaServiceImpl` que ya tienes delante, solo cambia la lógica interna (usa `findByVideojuegoId` y calcula total/media como ya hace `getResumenByVideojuegoId`).
+3. Un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (mock del repositorio, `@InjectMocks` sobre la implementación).
+
+---
+
+## Paso 2 — Usarlo desde `catalogo`
+
+Enriquece `VideojuegoResponseDTO` con la puntuación media, usando el componente nuevo desde `catalogo`:
+
+```java
+public record VideojuegoResponseDTO(
+        Long id,
+        String titulo,
+        BigDecimal precio,
+        LocalDate fechaLanzamiento,
+        String nombreEstudio,
+        Double puntuacionMedia // campo nuevo
+) {}
+```
+
+```java
+// En VideojuegoService, inyecta ReviewsConsultaService (la interfaz, no la implementación)
+private VideojuegoResponseDTO mapToDTO(Videojuego v) {
+    Double media = reviewsConsultaService.puntuacionMediaDe(v.getId());
+    return new VideojuegoResponseDTO(
+            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(), v.getEstudio().getNombre(), media
+    );
+}
+```
+
+**Fíjate**: `catalogo` no importa nada de `reviews` salvo la interfaz del paquete `api` — ni conoce `Review`, ni `ReviewRepository`, ni cómo se calcula la media por dentro.
+
+---
+
+## Paso 3 — Verificación
+
+```bash
+curl http://localhost:8080/api/v1/videojuegos/1
+```
+
+**Comprueba**: que la respuesta incluye `puntuacionMedia`, y que el dato coincide con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos. **Ejecuta también** tus tests existentes (`ReviewServiceTest`, `VideojuegoServiceTest`, etc.) y comprueba que siguen pasando.
+
+---
+
+## Reflexión de cierre — tabla comparativa
+
+Rellena esta tabla con tu propia experiencia:
+
+| | `CatalogoConsultaService` (PostgreSQL/JPA) | `ReviewsConsultaService` (MongoDB) |
+|---|---|---|
+| ¿Dónde vive la interfaz? | | |
+| ¿La implementación es `public` o package-private? | | |
+| ¿Qué repositorio inyecta por debajo? | | |
+| ¿El consumidor sabe qué motor hay debajo? | | |
+
+**Conclusión** (2-3 frases propias): ¿en qué se diferencian las implementaciones de ambos componentes? ¿En qué son idénticas sus interfaces vistas desde fuera? La respuesta esperada: el patrón de componente es independiente del motor de persistencia que hay por debajo — se replica con exactamente el mismo molde.
+
+---
+
+## ✅ Cierre
+
+Tienes dos componentes, sobre dos motores completamente distintos, con el mismo patrón de diseño exacto. En la última actividad del módulo integras todo lo construido en un test final de extremo a extremo.

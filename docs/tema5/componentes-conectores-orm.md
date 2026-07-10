@@ -2,75 +2,92 @@
 
 # 🧩 1. Componentes con conectores y ORM
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Último tema del módulo. Todo lo que has construido hasta ahora — repositorios, servicios, controladores — lo vas a mirar ahora bajo una óptica distinta: la de **componente**. No vas a escribir código radicalmente nuevo; vas a entender por qué el código que ya tienes está bien diseñado (o cómo mejorarlo) desde este ángulo.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🧩 Qué es la programación orientada a componentes
 
-```text
-Redacta el apartado de teoría "Componentes con conectores y ORM" del Tema 5 (RA6 -
-Componentes de acceso a datos) del módulo Acceso a Datos (0486), semana real 17 del
-calendario. Sigue las convenciones de estilo del README.md del repo.
+La **programación orientada a componentes** consiste en construir aplicaciones ensamblando piezas autocontenidas y reutilizables — cada una con una responsabilidad clara y un **contrato público** (su interfaz), que oculta cómo resuelve esa responsabilidad por dentro. Quien usa un componente solo necesita conocer su contrato, nunca su implementación.
 
-Criterios de evaluación de RA6 que cubre este apartado (curriculum.md):
-- a) Ventajas e inconvenientes de utilizar programación orientada a componentes.
-- b) Herramientas de desarrollo de componentes.
-- c) Componentes que gestionan información almacenada en ficheros — trátalo solo de
-  pasada: el calendario marca este criterio como "parcial, RA1 se trabaja en la FCT
-  (empresa)", así que no profundices, solo menciona que existe y por qué no se cubre aquí
-  en detalle.
-- d) Componentes con conectores a bases de datos.
-- e) Componentes con ORM.
+El currículo asocia a un componente varias características clásicas:
 
-ESTRUCTURA OBLIGATORIA — teoría primero, proyecto después.
+- **Propiedades**: valores configurables del componente.
+- **Eventos**: acciones que el componente puede disparar, a las que otros pueden reaccionar.
+- **Persistencia/serialización**: la capacidad de guardar y recuperar el estado del componente.
+- **Empaquetado**: la forma de distribuirlo para que otros lo usen sin ver su código fuente.
 
-PARTE 1 — Teoría general, desde cero:
-- Qué es la programación orientada a componentes: construir aplicaciones ensamblando
-  piezas autocontenidas y reutilizables, cada una con una responsabilidad y un contrato
-  público (su interfaz), ocultando el interior. Características que el currículo asocia
-  a un componente: propiedades, eventos, persistencia/serialización, empaquetado — cada
-  una definida en 1-2 frases.
-- El origen histórico que el currículo tiene en mente: los JavaBeans y los componentes
-  visuales que se arrastraban en una paleta del IDE (un botón, una rejilla de datos) y
-  se configuraban por propiedades — cuéntalo brevemente para que las palabras del
-  currículo tengan sentido.
-- La traducción al mundo actual: en un proyecto Spring Boot moderno el equivalente
-  conceptual son los **Spring Beans gestionados por inyección de dependencias**: una
-  clase con una responsabilidad clara, con su interfaz, que se declara una vez y se
-  reutiliza donde haga falta sin que quien la usa conozca los detalles internos.
-- Ventajas e inconvenientes de la POC (criterio a) en general: reutilización,
-  sustituibilidad, pruebas aisladas, división del trabajo — frente al coste de más
-  interfaces y más indirección.
+### El origen histórico: JavaBeans
 
-PARTE 2 — Aterrizaje en GameVault. Sobre "herramientas de desarrollo de componentes"
-(criterio b): explica que en este contexto no aplica una herramienta visual de arrastrar
-y soltar, sino que Spring (vía `@Service`, `@Repository`, `@Component` e inyección con
-`@RequiredArgsConstructor`) ES la "herramienta" que gestiona el ciclo de vida y el
-ensamblado de componentes.
+Estas ideas vienen de los **JavaBeans** y los componentes visuales que, en entornos de desarrollo antiguos, se arrastraban desde una paleta del IDE — un botón, una rejilla de datos — y se configuraban ajustando sus propiedades desde un panel, sin escribir código. De ahí sale el vocabulario del currículo: propiedades, eventos, empaquetado.
 
-Apóyate en el proyecto GameVault (com.aleroig.gamevault) como ejemplo real, mostrando la
-progresión de "componente" de menor a mayor especialización:
-- com/aleroig/gamevault/catalogo/VideojuegoRepository.java y EstudioRepository.java:
-  ejemplo de "componente con conector a base de datos" en su forma más básica — una
-  interfaz `JpaRepository` es, en sí misma, un componente reutilizable (Spring genera la
-  implementación y la inyecta donde se declare `private final VideojuegoRepository ...`).
-- com/aleroig/gamevault/catalogo/api/CatalogoConsultaService.java (la interfaz) y
-  com/aleroig/gamevault/catalogo/CatalogoConsultaServiceImpl.java (la implementación,
-  package-private, anotada `@Service`): este es el ejemplo MÁS CLARO de "componente" bien
-  diseñado en GameVault — expón por qué: separa contrato (interfaz, en el paquete `api`)
-  de implementación concreta (clase, sin modificador `public`, oculta fuera de su
-  paquete), y la usa `ReviewService` (del módulo `reviews`) sin conocer ni el paquete
-  `catalogo` interno ni cómo se implementa `existeVideojuego` — desacoplamiento real entre
-  módulos, documentado en docs/arquitectura/modulos-y-desacoplamiento.md del proyecto.
-- Contrasta esto con inyectar `VideojuegoRepository` directamente desde `reviews`
-  (que SÍ sería posible técnicamente, pero rompería el aislamiento entre módulos): usa
-  esta comparación para el criterio a) (ventajas e inconvenientes de POC) de forma
-  concreta, no abstracta.
+### La traducción al mundo actual
 
-No entres todavía en componentes con JSONB/documentales: eso es el siguiente apartado,
-componentes-bd-objeto-doc.md.
+En un proyecto Spring Boot moderno, el equivalente conceptual de aquellos JavaBeans son los **Spring Beans gestionados por inyección de dependencias** — ya los conoces desde el Tema 1. Una clase con una responsabilidad clara, con su interfaz, que se declara una vez y se reutiliza donde haga falta, sin que quien la usa conozca los detalles internos. La idea de fondo es exactamente la misma: piezas autocontenidas, con un contrato, ensambladas por un contenedor (el IDE antes, Spring ahora).
+
+### Ventajas e inconvenientes
+
+| Ventajas | Inconvenientes |
+|---|---|
+| Reutilización — la misma pieza sirve en varios sitios | Más interfaces que mantener |
+| Sustituibilidad — cambias la implementación sin tocar quien la usa | Más indirección — seguir el flujo de código cuesta un poco más |
+| Pruebas aisladas — pruebas cada pieza por separado | |
+| División del trabajo — cada componente, una responsabilidad | |
+
+---
+
+## 🎮 Aterrizaje en GameVault: la progresión de "componente"
+
+### Herramientas de desarrollo de componentes
+
+Aquí no aplica una herramienta visual de arrastrar y soltar — sería un anacronismo en un proyecto backend. La "herramienta" en este contexto es **Spring** en sí mismo: vía `@Service`, `@Repository`, `@Component` y la inyección con `@RequiredArgsConstructor`, es Spring quien gestiona el ciclo de vida y el ensamblado de los componentes de tu aplicación.
+
+!!! info "Sobre componentes con ficheros"
+    El currículo también menciona "componentes que gestionan información almacenada en ficheros" — ese contenido se trabaja en la FCT, en la empresa, no en este módulo, ya que corresponde a la gestión de ficheros. Lo mencionamos aquí solo para que sepas que existe, sin profundizar.
+
+### Nivel 1: un repositorio, ya es un componente
+
+```java
+public interface VideojuegoRepository extends JpaRepository<Videojuego, Long> {
+}
 ```
+
+En su forma más básica, `VideojuegoRepository` ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (`private final VideojuegoRepository videojuegoRepository;`) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.
+
+### Nivel 2: `CatalogoConsultaService`, el ejemplo mejor diseñado
+
+```java
+// El contrato — en el paquete api, pensado para que otros módulos lo vean
+public interface CatalogoConsultaService {
+    boolean existeVideojuego(Long videojuegoId);
+}
+
+// La implementación — oculta, sin el modificador public
+@Service
+class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
+    private final VideojuegoRepository videojuegoRepository;
+
+    @Override
+    public boolean existeVideojuego(Long videojuegoId) {
+        return videojuegoRepository.existsById(videojuegoId);
+    }
+}
+```
+
+Este es el ejemplo **más claro** de componente bien diseñado en todo GameVault — ya lo construiste en el Tema 4. ¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en el paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). `ReviewService`, en el módulo `reviews`, usa `CatalogoConsultaService.existeVideojuego(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos.
+
+### El contraste que ilustra el desacoplamiento
+
+Técnicamente, `ReviewService` **podría** inyectar `VideojuegoRepository` directamente y llamar a `existsById(...)` él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: `reviews` pasaría a depender de un detalle interno de `catalogo` (su repositorio JPA concreto), y cualquier cambio en cómo `catalogo` gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también `reviews`. Con el componente de por medio, ese cambio quedaría contenido dentro de `catalogo` — `reviews` seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - Un **componente** es una pieza autocontenida y reutilizable, con una responsabilidad y un contrato público que oculta su implementación.
+    - El origen histórico son los JavaBeans; en Spring Boot, el equivalente son los **beans gestionados por inyección de dependencias**.
+    - Ventajas: reutilización, sustituibilidad, pruebas aisladas, división del trabajo. Inconveniente: más interfaces e indirección.
+    - Spring (`@Service`/`@Repository`/`@Component` + inyección) ES la "herramienta de desarrollo de componentes" en este contexto — no hay paleta visual.
+    - Un `JpaRepository` ya es un componente básico; `CatalogoConsultaService`/`CatalogoConsultaServiceImpl` es el ejemplo mejor diseñado: contrato en `api`, implementación oculta, desacoplamiento real entre módulos.

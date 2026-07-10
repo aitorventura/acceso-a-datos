@@ -2,65 +2,92 @@
 
 # 🧩 2. Consultas sobre columnas JSONB
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Ya sabes guardar objetos estructurados en una columna JSONB. El siguiente paso: filtrar por su contenido — algo que una condición `WHERE` normal no sabe hacer, porque ya no compara una columna, sino una **clave dentro de un objeto**.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🔍 El problema: consultar dentro de un JSON
 
-```text
-Redacta el apartado de teoría "Consultas sobre columnas JSONB" del Tema 3 (RA4 - BD
-objeto relacionales y orientadas a objetos) del módulo Acceso a Datos (0486), semana real
-11 del calendario. Sigue las convenciones de estilo del README.md del repo.
+Con una columna normal, un `WHERE` compara el valor completo de esa columna. Con JSONB, lo que quieres comprobar no es la columna entera, sino si existe (o qué vale) una clave concreta dentro del objeto que esa columna contiene. PostgreSQL ofrece operadores y funciones específicas para esto:
 
-Criterios de evaluación de RA4 que cubre este apartado (curriculum.md):
-- e) Aplicaciones que realizan consultas.
-- f) Modificación de los objetos almacenados.
-- g) Gestión de las transacciones.
+```sql
+-- ¿Existe la clave "steam" de primer nivel en el JSON?
+SELECT * FROM videojuego WHERE jsonb_exists(detallesplataforma, 'steam');
+-- equivalente con el operador ?
+SELECT * FROM videojuego WHERE detallesplataforma ? 'steam';
 
-ESTRUCTURA — teoría primero: antes del código del proyecto, explica desde cero cómo se
-consulta el contenido de un JSON almacenado en una base de datos: el problema (la
-condición del WHERE ya no es sobre una columna, sino sobre una CLAVE dentro del objeto)
-y las herramientas que ofrece PostgreSQL en SQL puro — muestra 2-3 ejemplos genéricos en
-SQL directo con los operadores/funciones jsonb más comunes (jsonb_exists o el operador
-`?` para "existe la clave", `->`/`->>` para extraer valores) sobre una tabla de ejemplo,
-de modo que el alumnado entienda la consulta en SQL ANTES de verla envuelta en la
-Criteria API de Java.
-
-Después, aterriza en GameVault (com.aleroig.gamevault):
-- com/aleroig/gamevault/catalogo/VideojuegoSpecifications.java, método
-  `disponibleEnPlataforma(String plataforma)`: analízalo en detalle — usa
-  `criteriaBuilder.function("jsonb_exists", Boolean.class,
-  root.get("detallesPlataforma"), criteriaBuilder.literal(plataforma.toLowerCase()))`
-  para invocar la función nativa `jsonb_exists` de PostgreSQL desde una Specification de
-  Criteria API. Explica qué hace `jsonb_exists(columna, clave)` en PostgreSQL puro
-  (comprobar si una clave de primer nivel existe en el JSON) antes de mostrar cómo se
-  invoca desde Java.
-- Contrasta esto con las Specifications "normales" ya vistas en el Tema 2
-  (`tituloContiene`, `precioMayorOIgualA`) que operan sobre columnas relacionales
-  corrientes con `criteriaBuilder.like`/`greaterThanOrEqualTo` — aquí, en cambio, hace
-  falta una función específica del motor de base de datos porque el contenido vive dentro
-  de un JSON, no en una columna con su propio tipo.
-- com/aleroig/gamevault/catalogo/VideojuegoService.java (findAllPaginated): muestra cómo
-  `disponibleEnPlataforma` se combina con el resto de Specifications igual que cualquier
-  otra, con `.and(...)` — remarca que, desde el punto de vista de quien usa el
-  repositorio, consultar JSONB o una columna normal es transparente gracias a
-  Specification.
-
-Sobre modificación de objetos JSONB (criterio f): retoma `update()` en
-VideojuegoService.java y explica que actualizar `detallesPlataforma` reemplaza el Map
-completo (ya visto en la Actividad 3.1) — aquí profundiza en por qué NO existe, en
-Hibernate/JPA estándar, una forma directa de "hacer un merge parcial" del JSON sin traer
-el objeto completo primero.
-
-Sobre transacciones (criterio g): recuerda que `@Transactional` funciona exactamente
-igual sobre entidades con columnas JSONB que sobre cualquier otra entidad — no hay nada
-especial que gestionar aquí, y merece la pena decirlo explícitamente para no generar
-falsas expectativas de complejidad añadida.
-
-No entres en BD orientadas a objetos puras ni en el cierre de RA4: eso es el siguiente
-apartado, bd-orientadas-a-objetos.md.
+-- Extraer el valor de una clave
+SELECT detallesplataforma -> 'steam' FROM videojuego;       -- como JSON
+SELECT detallesplataforma ->> 'steam' FROM videojuego;      -- como texto
 ```
+
+`jsonb_exists(columna, clave)` (o el operador `?`, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. `->` extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); `->>` lo extrae como texto plano.
+
+Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.
+
+---
+
+## 🎮 Aterrizaje en GameVault: `disponibleEnPlataforma`
+
+### La Specification, con `jsonb_exists` desde Criteria API
+
+```java
+public static Specification<Videojuego> disponibleEnPlataforma(String plataforma) {
+    if (plataforma == null || plataforma.isBlank()) {
+        return Specification.unrestricted();
+    }
+
+    return (root, query, criteriaBuilder) ->
+            criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                            "jsonb_exists",
+                            Boolean.class,
+                            root.get("detallesPlataforma"),
+                            criteriaBuilder.literal(plataforma.toLowerCase())
+                    )
+            );
+}
+```
+
+Compárala con las Specifications "normales" que ya conoces del Tema 2 (`tituloContiene`, `precioMayorOIgualA`), que usan métodos directos de `criteriaBuilder` como `like` o `greaterThanOrEqualTo` — funcionan porque operan sobre una columna con su propio tipo simple. Aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función **específica del motor** (PostgreSQL), no parte del estándar JPA. Por eso hace falta `criteriaBuilder.function("jsonb_exists", ...)`: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (`Boolean.class`), y sus argumentos (la columna, y un literal con la clave a buscar).
+
+### Combinada con el resto, de forma transparente
+
+```java
+Specification<Videojuego> spec = Specification
+        .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
+        .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
+        .and(VideojuegoSpecifications.disponibleEnPlataforma(filtro.plataforma()));
+```
+
+Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una columna relacional corriente es exactamente lo mismo — una Specification más, encadenada con `.and(...)` como cualquier otra. Toda la complejidad de "esto necesita una función nativa" queda encapsulada dentro del método `disponibleEnPlataforma`.
+
+---
+
+## ✏️ Modificar objetos JSONB: reemplazo, no *merge*
+
+Ya lo comprobaste en la Actividad 3.1: `update()` en `VideojuegoService` reemplaza el `Map` completo de `detallesPlataforma`, no combina el nuevo contenido con el anterior.
+
+```java
+v.setDetallesPlataforma(dto.detallesPlataforma()); // sustituye el Map entero
+```
+
+¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, `detallesPlataforma` es un único valor de columna — igual que `titulo` o `precio`. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el `Map` completo como una unidad atómica que se sustituye entera. Si quisieras un *merge* parcial de verdad, tendrías que cargar el objeto, modificar el `Map` en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.
+
+---
+
+## 🔄 Transacciones: nada especial que gestionar
+
+Merece la pena decirlo explícitamente para no generar expectativas de complejidad añadida — `@Transactional` funciona **exactamente igual** sobre una entidad con columnas JSONB que sobre cualquier otra entidad. No hay ningún matiz especial de transacciones que gestionar por tener una columna JSONB; sigue siendo la misma anotación, el mismo comportamiento, que ya conoces desde el Tema 1.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - `jsonb_exists(columna, clave)` (o el operador `?`) comprueba si una clave existe en el JSON; `->`/`->>` extraen valores (como JSON o como texto).
+    - Consultar el contenido de una columna JSONB desde Criteria API requiere `criteriaBuilder.function(...)`, porque son funciones específicas del motor, no parte del estándar JPA.
+    - Combinada con `.and(...)`, una Specification sobre JSONB se usa exactamente igual que una sobre una columna normal — transparente para quien consume el repositorio.
+    - Actualizar un campo JSONB **reemplaza** el objeto completo — JPA no sabe hacer *merge* parcial de un valor de columna; si lo necesitas, lo haces tú en memoria antes de guardar.
+    - `@Transactional` no cambia en nada por tener columnas JSONB de por medio.

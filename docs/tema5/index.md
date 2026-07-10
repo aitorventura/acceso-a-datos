@@ -22,18 +22,15 @@
 
 1. [Componentes con conectores y ORM](componentes-conectores-orm.md)
 2. [Componentes con BD objeto-relacional y documental](componentes-bd-objeto-doc.md)
-3. [Integración y pruebas — cierre de RA6](integracion-y-pruebas.md)
+3. [Integración y pruebas](integracion-y-pruebas.md)
 
 **Actividades:**
 
 - [Actividad 5.1 — `CatalogoConsultaService`: un componente reutilizable](actividad_5_1.md)
 - [Actividad 5.2 — Repaso integrador: un componente sobre el módulo documental](actividad_5_2.md)
-- [Actividad 5.3 — Integración final del proyecto — cierre de RA6](actividad_5_3.md)
+- [Actividad 5.3 — Integración final del proyecto](actividad_5_3.md)
 
 ---
 
 !!! info "¿Cómo avanzar por el contenido?"
     Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
-
-!!! note "Nota para el profesorado"
-    Este tema corresponde a las semanas reales 17-19 del calendario (RA6, bloque cerrado que también cierra el módulo). Los apartados de teoría y las actividades están pendientes de redactar: cada `.md` de este tema contiene, en su lugar, el prompt que debe usarse con `/improve-notes` para generarlo, apoyándose en el proyecto GameVault adjunto. El criterio c) (componentes con ficheros) se marca como "parcial — RA1 se trabaja en la empresa" en el calendario: la teoría debe mencionarlo brevemente sin pretender cubrirlo a fondo, ya que RA1 se trabaja en la FCT.

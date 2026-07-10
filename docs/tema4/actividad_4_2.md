@@ -1,73 +1,136 @@
 # 🧪 Actividad 4.2: Tu propia colección documental
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Construyes el flujo real de borrado en cascada vía eventos RabbitMQ y lo endureces frente a reintentos — esa es la mejora real de hoy.
+
+## Qué vas a practicar
+
+- Entender y replicar un flujo de borrado en cascada entre dos motores distintos, vía eventos.
+- Hacer una operación idempotente frente a mensajes duplicados.
+- Comparar por escrito tu experiencia con PostgreSQL y con MongoDB.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 4.2 del Tema 4 (RA5 - BD documentales) del módulo Acceso a Datos
-(0486), semana real 15 del calendario (11-17 enero). Sigue el patrón de estructura de
-docs/tema0/actividad_0_6.md y usa la skill /actividad-plantilla-acceso-a-datos si
-necesita plantilla/solución en .docx.
+Tu módulo `reviews` de la Actividad 4.1, y RabbitMQ ya explicado en PSP (Tema 3, semana 12) — si todavía no has llegado a ese punto en PSP, repasa antes la idea básica: un broker con colas y exchanges, donde un `@RabbitListener` procesa mensajes en su propio hilo, no en el de quien los publicó.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-CORRECCIÓN IMPORTANTE sobre el estado real de la referencia: el borrado en cascada de
-reseñas al borrar un videojuego YA EXISTE y funciona en el proyecto adjunto, pero de
-forma ASÍNCRONA vía RabbitMQ, no como llamada directa. `VideojuegoService.delete()`
-publica un evento `VIDEOJUEGO_ELIMINADO` a través de `VideojuegoEventPublisher`, y
-`ReviewsVideojuegoEventConsumer` (paquete `reviews.mensajeria`) lo consume y llama a
-`reviewService.deleteByVideojuegoId(...)`. `docs/arquitectura/modulos-y-desacoplamiento.md`
-documenta explícitamente que la llamada síncrona directa entre `catalogo` y `reviews`
-fue el diseño ORIGINAL, descartado a propósito porque acoplaba ambos módulos. NO pidas
-al alumnado reintroducir esa llamada síncrona: sería deshacer una decisión de
-arquitectura que el propio proyecto documenta como consciente. Antes de construir esta
-actividad, confirma que el alumnado ya tiene RabbitMQ explicado como concepto (colas,
-exchanges, publicador/consumidor, `@RabbitListener`) — se introduce en PSP,
-tema3/hilos-en-gamevault.md (semana real 12); si esta actividad de AD cae antes en el
-calendario, remite explícitamente a ese apartado o resume aquí lo mínimo indispensable
-para que el alumnado entienda el flujo antes de tocarlo.
+## Paso 1 — Entender el flujo, antes de tocar nada
 
-Objetivo (RA5, criterios a, d): que el alumnado, sobre su módulo `reviews` (creado en la
-Actividad 4.1), entienda y replique en su propio GameVault el flujo real de borrado en
-cascada vía eventos, y lo endurezca frente al escenario de fallo a mitad de camino
-(idempotencia), que es donde SÍ hay una mejora real que hacer sobre la referencia.
+El borrado en cascada de reseñas sigue un flujo ya definido — no lo vas a inventar, lo vas a construir siguiendo este diseño. El viaje completo de un evento:
 
-Estructura sugerida de pasos guiados:
-1. Lectura guiada del flujo real existente: `VideojuegoService.delete()` →
-   `VideojuegoEventPublisher` (publica en RabbitMQ) → `ReviewsVideojuegoEventConsumer`
-   (`@RabbitListener`) → `ReviewService.deleteByVideojuegoId(...)`. Diagrama del viaje
-   completo del evento, con el énfasis en que el borrado de reseñas ocurre en un hilo
-   distinto al de la petición HTTP que originó el borrado (conexión explícita con lo
-   visto en PSP sobre hilos de listeners de RabbitMQ).
-2. Replicar guiadamente el consumer y el método `deleteByVideojuegoId` en el GameVault
-   propio del alumnado (si no los tiene ya de la Actividad 4.1), con el código mostrado
-   y explicado.
-3. Prueba guiada: crear un videojuego con reseñas, borrarlo desde la API, y comprobar en
-   MongoDB (con `mongosh` o Compass, comandos dados) que las reseñas asociadas
-   desaparecen tras un pequeño instante (no es instantáneo: es asíncrono) — observar en
-   los logs el nombre del hilo del listener frente al hilo de la petición HTTP.
-4. LA MEJORA real de esta actividad (a diferencia de la versión anterior de este
-   enunciado): hacer `deleteByVideojuegoId` idempotente frente a reintentos o mensajes
-   duplicados del broker (por ejemplo, comprobando antes si ya no quedan reseñas, o
-   dejando que el propio método no falle si la colección ya está vacía) — código
-   mostrado y explicado, con la pregunta de comprensión: ¿qué pasaría si RabbitMQ
-   reintenta la entrega del mismo evento dos veces?
-5. Reflexión breve de cierre: comparación por escrito entre su experiencia con
-   PostgreSQL en los temas anteriores y con MongoDB en este tema, y entre borrar de
-   forma síncrona (como haría un JOIN/cascade en un único motor relacional) y de forma
-   asíncrona entre dos motores distintos — qué se gana (desacoplamiento) y qué se pierde
-   (consistencia inmediata).
-
-Esta actividad da paso a la Actividad 4.3, que cierra RA5 con el PUT de reseñas y control
-de autoría.
+```mermaid
+flowchart LR
+    A["DELETE /videojuegos/{id}<br/>(hilo de la petición)"] --> B["VideojuegoService.delete()"]
+    B -->|"publica evento"| C["RabbitMQ<br/>routing key: videojuego.eliminado"]
+    C -.->|"consume<br/>(hilo del listener)"| D["ReviewsVideojuegoEventConsumer"]
+    D --> E["reviewService.deleteByVideojuegoId(id)"]
 ```
+
+`VideojuegoService.delete()` (en el módulo `catalogo`) no llama directamente a nada de `reviews` — publica un evento a través de `VideojuegoEventPublisher`, y sigue su camino sin esperar. En otro hilo, en su propio momento, `ReviewsVideojuegoEventConsumer` lo recibe y actúa:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class ReviewsVideojuegoEventConsumer {
+    private final ReviewService reviewService;
+
+    @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
+    public void recibir(String payload) {
+        VideojuegoEvent event = /* deserializar */;
+        if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
+            reviewService.deleteByVideojuegoId(event.videojuegoId());
+        }
+    }
+}
+```
+
+**Fíjate**: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que analizaste en PSP.
+
+---
+
+## Paso 2 — Replicar el consumer en tu GameVault
+
+```java
+package com.tunombre.gamevault.reviews.mensajeria;
+
+import com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent;
+import com.tunombre.gamevault.config.RabbitMQConfig;
+import com.tunombre.gamevault.reviews.ReviewService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewsVideojuegoEventConsumer {
+    private final ReviewService reviewService;
+
+    @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
+    public void recibir(String payload) {
+        VideojuegoEvent event = /* deserializar con tu JsonMapper */;
+        if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
+            reviewService.deleteByVideojuegoId(event.videojuegoId());
+        }
+    }
+}
+```
+
+Si no lo tenías ya de la Actividad 4.1, añade también `deleteByVideojuegoId` a tu `ReviewRepository` (`long deleteByVideojuegoId(Long videojuegoId);`) y un método correspondiente en `ReviewService` que lo invoque.
+
+---
+
+## Paso 3 — Prueba con datos reales
+
+```bash
+# Crea un videojuego y una reseña
+curl -X POST http://localhost:8080/api/v1/videojuegos -H "Content-Type: application/json" \
+  -d '{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'
+
+curl -X POST http://localhost:8080/api/v1/videojuegos/{id}/reviews \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 7, "comentario": "Prueba"}'
+
+# Borra el videojuego
+curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
+```
+
+Comprueba en MongoDB, **esperando un instante** (no es síncrono):
+
+```bash
+docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
+```
+
+**Anota**: en los logs de tu aplicación, ¿ves dos nombres de hilo distintos — uno para la petición `DELETE`, otro para el consumer? Compáralos.
+
+---
+
+## Paso 4 — La mejora real: idempotencia
+
+Los brokers de mensajería pueden, en ciertas circunstancias (una caída de red, un reintento), entregar el **mismo** mensaje más de una vez. Haz que `deleteByVideojuegoId` sea seguro frente a eso — no debería fallar ni hacer nada extraño si se invoca dos veces seguidas para el mismo `videojuegoId`.
+
+```java
+public long deleteByVideojuegoId(Long videojuegoId) {
+    long eliminadas = reviewRepository.deleteByVideojuegoId(videojuegoId);
+    // deleteByVideojuegoId de Mongo ya es seguro por sí mismo si no quedan documentos:
+    // borrar sobre una colección vacía para ese id simplemente elimina 0 documentos,
+    // no lanza ningún error
+    return eliminadas;
+}
+```
+
+**Pregunta de comprensión**: si RabbitMQ reintentara la entrega del mismo evento `VIDEOJUEGO_ELIMINADO` dos veces, ¿qué pasaría la segunda vez que se invoca `deleteByVideojuegoId` sobre reseñas que ya no existen? ¿Es necesario añadir alguna comprobación extra, o el propio comportamiento de `deleteByVideojuegoId` sobre MongoDB ya es seguro por diseño?
+
+---
+
+## Reflexión de cierre
+
+Compara por escrito (4-5 líneas) tu experiencia con PostgreSQL en los temas anteriores y con MongoDB en este tema. Y compara también borrar de forma **síncrona** (como haría un `cascade`/`orphanRemoval` dentro de un único motor relacional, que ya usaste en el Tema 1 entre `Estudio` y `Videojuego`) frente a borrar de forma **asíncrona** entre dos motores distintos, como acabas de hacer aquí: ¿qué se gana (desacoplamiento entre módulos) y qué se pierde (consistencia inmediata — hay una ventana de tiempo en la que el videojuego ya no existe pero sus reseñas todavía sí)?
+
+---
+
+## ✅ Cierre
+
+Tu GameVault ya limpia reseñas huérfanas automáticamente, de forma robusta frente a reintentos. En la última actividad del tema trabajas el `PUT` de reseñas y control de autoría.

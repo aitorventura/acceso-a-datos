@@ -1,52 +1,122 @@
 # 🧪 Actividad 3.1: La columna `detallesPlataforma` — persistiendo objetos estructurados
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Añades a tu `Videojuego` una columna JSONB real, la expones en tu API, y comprueba con tus propios ojos que PostgreSQL la guarda como JSON de verdad, no como texto plano.
+
+## Qué vas a practicar
+
+- Añadir un campo JSONB a una entidad ya existente.
+- Ampliar DTOs para exponer ese campo en la API.
+- Verificar en la base de datos que el tipo de columna es realmente `jsonb`.
+- Entender el comportamiento de reemplazo total al actualizar.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 3.1 del Tema 3 (RA4 - BD objeto relacionales y orientadas a objetos)
-del módulo Acceso a Datos (0486), semana real 10 del calendario. Sigue el patrón de
-estructura de docs/tema0/actividad_0_6.md y usa la skill
-/actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu entidad `Videojuego` y su CRUD completo (Temas 1-2).
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-Objetivo (RA4, criterios a, c, d): que el alumnado añada a la entidad Videojuego de su
-GameVault la columna JSONB `detallesPlataforma`, tal y como existe en
-com/aleroig/gamevault/catalogo/Videojuego.java, usando exactamente las mismas
-anotaciones (`@JdbcTypeCode(SqlTypes.JSON)`, `@Column(columnDefinition = "jsonb")`, tipo
-`Map<String, Object>`), y la exponga en su API (POST/PUT ya existentes, ampliando
-VideojuegoCreateDTO/VideojuegoResponseDTO de forma análoga a la referencia).
+## Paso 1 — El campo en la entidad, y en los DTOs
 
-Estructura sugerida de pasos guiados:
-1. Añadir el campo a la entidad y ampliar los DTOs, guiado con el código mostrado y cada
-   anotación explicada (incluida la configuración de mapeo JSON que necesite Hibernate,
-   siguiendo config/Jackson3HibernateMapper.java de la referencia si aplica).
-2. Crear guiadamente un videojuego con `detallesPlataforma` de una sola plataforma
-   (objeto simple dentro del JSON), con la petición de ejemplo dada; después, como
-   mini-reto que repite el mismo patrón, crear otro con varias plataformas anidadas
-   (objeto estructurado) eligiendo ellos las claves.
-3. Verificación guiada con una consulta SQL directa (psql/DBeaver): comprobar que
-   PostgreSQL ha guardado realmente el tipo `jsonb` y no un simple `text`, con el
-   comando exacto indicado (`\d videojuego` o equivalente) y pegando el resultado.
-4. Experimento guiado: actualizar `detallesPlataforma` con un PUT (petición de ejemplo
-   dada) y observar que sustituye el objeto completo, no lo combina con el anterior;
-   pregunta de comprensión sobre por qué ocurre (mapeo directo Map→JSONB, sin merge
-   automático).
-5. Pregunta de comprensión final: ¿qué ventaja concreta tiene JSONB frente a una tabla
-   `plataforma_videojuego` con una fila por plataforma, y en qué caso sería mejor la
-   tabla relacional? (para que no quede la idea de que JSONB es "siempre mejor").
+En `Videojuego.java`:
 
-Esta actividad no debe usar `jsonb_exists` ni Specifications sobre el JSONB: eso es la
-Actividad 3.2, siguiente en este mismo tema.
+```java
+@JdbcTypeCode(SqlTypes.JSON)
+@Column(columnDefinition = "jsonb")
+private Map<String, Object> detallesPlataforma;
 ```
+
+En `VideojuegoCreateDTO` y `VideojuegoResponseDTO`, añade el campo correspondiente:
+
+```java
+public record VideojuegoCreateDTO(
+        // ... campos ya existentes ...
+        Map<String, Object> detallesPlataforma
+) {}
+
+public record VideojuegoResponseDTO(
+        // ... campos ya existentes ...
+        Map<String, Object> detallesPlataforma
+) {}
+```
+
+Y en el `mapToDTO`/`create`/`update` de tu `VideojuegoService`, asegúrate de que este campo se propaga igual que los demás (`v.setDetallesPlataforma(dto.detallesPlataforma())`, y en el DTO de respuesta).
+
+Borra la tabla `videojuego` (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.
+
+---
+
+## Paso 2 — Crear un videojuego con una plataforma
+
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"steam": {"idApp": 504230, "logros": 45}}
+  }'
+```
+
+**Comprueba**: que la respuesta incluye `detallesPlataforma` con exactamente esa estructura.
+
+### Mini-reto — varias plataformas anidadas
+
+Sin más indicaciones, crea un segundo videojuego, esta vez con `detallesPlataforma` conteniendo **al menos dos** plataformas distintas, con las claves que tú elijas dentro de cada una (id de la app, número de logros, o lo que consideres relevante). Verifica igual que en el paso anterior.
+
+---
+
+## Paso 3 — Verificación en la base de datos
+
+```bash
+docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db -c "\d videojuego"
+```
+
+**Comprueba** que la columna `detallesplataforma` (Postgres normaliza a minúsculas) aparece con tipo `jsonb`, no `text` ni `character varying`.
+
+Consulta el contenido directamente en SQL:
+
+```bash
+docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db \
+  -c "SELECT titulo, detallesplataforma FROM videojuego;"
+```
+
+**Anota**: ¿el JSON que ves en la consola de PostgreSQL coincide exactamente con el que mandaste por la API?
+
+---
+
+## Paso 4 — Actualizar y observar el reemplazo total
+
+Actualiza el primer videojuego con un `PUT`, cambiando `detallesPlataforma` a una estructura **distinta** (por ejemplo, solo con la clave `"switch"`, sin `"steam"`):
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}
+  }'
+```
+
+**Comprueba**: consultando de nuevo en `psql`, ¿sigue estando `"steam"` en el JSON guardado, o ha desaparecido por completo?
+
+**Pregunta de comprensión**: ¿por qué el `PUT` reemplaza el objeto JSON completo en vez de combinar (*merge*) el nuevo contenido con el anterior? Relaciona tu respuesta con cómo funciona el mapeo `Map` → `jsonb`: ¿en qué punto del proceso Hibernate tendría que decidir "combinar" en vez de "sustituir", y por qué no lo hace por defecto?
+
+---
+
+## Pregunta final
+
+¿Qué ventaja concreta tiene JSONB frente a crear una tabla `plataforma_videojuego` (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?
+
+---
+
+## ✅ Cierre
+
+Tu `Videojuego` ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando `jsonb_exists`.

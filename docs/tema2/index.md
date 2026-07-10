@@ -26,12 +26,9 @@
 
 - [Actividad 2.1 — De JDBC puro a Hibernate: mapeo con anotaciones](actividad_2_1.md)
 - [Actividad 2.2 — Consultas dinámicas con Specifications](actividad_2_2.md)
-- [Actividad 2.3 — Ranking con `@Query` JPQL — cierre de RA3](actividad_2_3.md)
+- [Actividad 2.3 — Ranking con `@Query` JPQL](actividad_2_3.md)
 
 ---
 
 !!! info "¿Cómo avanzar por el contenido?"
     Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.
-
-!!! note "Nota para el profesorado"
-    Este tema corresponde a las semanas reales 7-9 del calendario (RA3, bloque cerrado). Los apartados de teoría y las actividades están pendientes de redactar: cada `.md` de este tema contiene, en su lugar, el prompt que debe usarse con `/improve-notes` para generarlo, apoyándose en el proyecto GameVault adjunto.

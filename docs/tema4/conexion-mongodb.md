@@ -2,83 +2,150 @@
 
 # 🧩 1. Conexión a MongoDB y consultas sobre reseñas
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 3 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🗂️ Qué es NoSQL
 
-```text
-Redacta el apartado de teoría "Conexión a MongoDB y consultas sobre reseñas" del Tema 4
-(RA5 - BD documentales) del módulo Acceso a Datos (0486), semana real 14 del calendario
-(14-20 diciembre). Sigue las convenciones de estilo del README.md del repo.
+**NoSQL** es el nombre que se le da a la familia de bases de datos que abandonan el modelo tabla/fila/SQL en favor de otros modelos de datos. Las principales categorías:
 
-Criterios de evaluación de RA5 que cubre este apartado (curriculum.md):
-- b) Se ha establecido la conexión con la base de datos.
-- c) Se han desarrollado aplicaciones que efectúan consultas sobre el contenido de la
-  base de datos.
+- **Documentales**: documentos autocontenidos, tipo JSON (donde se sitúa este tema).
+- **Clave-valor**: pares simples clave → valor (como Redis, que ya conoces del Tema 3 de PSP).
+- **Columnares**: optimizadas para leer columnas completas de grandes volúmenes de datos.
+- **De grafos**: optimizadas para relaciones muy conectadas (nodos y aristas).
 
-ESTRUCTURA OBLIGATORIA — teoría primero, proyecto después.
+---
 
-PARTE 1 — Teoría general, desde cero:
-- Qué es NoSQL como familia: bases de datos que abandonan el modelo tabla/fila/SQL en
-  favor de otros modelos de datos; menciona en una frase cada tipo principal
-  (documentales, clave-valor, columnares, de grafos) y sitúa este tema en las
-  documentales.
-- Qué es una base de datos documental nativa: sus dos piezas — el DOCUMENTO (un objeto
-  completo tipo JSON, autocontenido, con estructura propia que puede variar de un
-  documento a otro) y la COLECCIÓN (un grupo de documentos, sin esquema fijo impuesto).
-  Contrasta explícitamente con lo relacional: no hay tablas, ni columnas, ni claves
-  foráneas, ni JOINs. Y con el JSONB del Tema 3: allí el JSON era UNA columna dentro de
-  una tabla relacional; aquí TODO es documento.
-- Qué es MongoDB: el gestor documental más usado; documentos BSON (JSON binario), el id
-  como ObjectId alfanumérico, y cómo se organiza (servidor → bases de datos →
-  colecciones → documentos). Muestra un documento de ejemplo genérico y la operación de
-  consulta equivalente a un SELECT sencillo en la sintaxis de mongosh, para que se vea
-  la forma de trabajar antes de que Spring la esconda.
-- Cuándo encaja lo documental y cuándo no (el criterio a se profundiza en el apartado
-  2, pero deja aquí la intuición): datos autocontenidos y de estructura variable sí;
-  relaciones fuertes y transacciones complejas entre entidades, mejor relacional.
+## 📄 Bases de datos documentales nativas: documento y colección
 
-PARTE 2 — Aterrizaje en GameVault (com.aleroig.gamevault, paquete `reviews`), con
-Spring Data MongoDB como la capa que conecta MongoDB con Spring Boot de forma análoga a
-Spring Data JPA con PostgreSQL. Arranca explicando por qué GameVault usa DOS bases de
-datos distintas para dos partes del mismo dominio:
-- com/aleroig/gamevault/reviews/Review.java: `@Document(collection = "review")`, `@Id`
-  de tipo String (a diferencia del Long autogenerado de las entidades JPA — explica por
-  qué en Mongo los IDs son alfanuméricos, tipo ObjectId), y los campos `videojuegoId`,
-  `autor`, `puntuacion`, `comentario` — remarca que `videojuegoId` es una "relación
-  lógica" con el catálogo en PostgreSQL, NO una clave foránea real (no hay integridad
-  referencial automática entre dos motores de base de datos distintos).
-- com/aleroig/gamevault/reviews/ReviewRepository.java: `MongoRepository<Review, String>`
-  con `findByVideojuegoId(Long videojuegoId)` — muestra que Spring Data también genera
-  consultas automáticas por naming de método en MongoDB, igual que hacía con
-  JpaRepository en el Tema 2, sin que el alumnado escriba una query explícita.
-- com/aleroig/gamevault/reviews/ReviewService.java (método findByVideojuegoId): fíjate en
-  el comentario "1. Verificamos que el juego exista en PostgreSQL antes de buscar sus
-  reseñas" — usa `CatalogoConsultaService.existeVideojuego(...)` (del paquete
-  `catalogo.api`) para comprobar en PostgreSQL antes de consultar Mongo. Explica esto como
-  el patrón central de "integridad referencial manual" cuando dos módulos usan motores de
-  BD distintos: ya que Mongo no puede validar una clave foránea hacia una tabla de
-  Postgres, el propio código de la aplicación tiene que hacerlo.
-- com/aleroig/gamevault/reviews/dto/ReviewResumenDTO.java y el método
-  getResumenByVideojuegoId de ReviewService.java: ejemplo de consulta que agrega datos en
-  memoria (total de reseñas, puntuación media) tras traer los documentos de Mongo — no
-  usa el framework de agregación de Mongo (`$group`, `$avg`); coméntalo como una
-  simplificación deliberada y como posible mejora futura del propio alumnado si quiere ir
-  más allá.
+Dos piezas, y ninguna tabla:
 
-Sobre "establecer la conexión" (criterio b): menciona brevemente
-`spring-boot-starter-data-mongodb` en el pom.xml y la propiedad de conexión REAL del
-proyecto — `spring.mongodb.uri` en application-dev.yaml (OJO: en este proyecto
-`mongodb` cuelga directamente de `spring`, NO de `spring.data`; comprueba el YAML real
-antes de redactar para no enseñar una ruta de propiedad que no existe en el fichero que
-el alumnado tiene delante), en paralelo al datasource de PostgreSQL ya visto en el Tema 1.
+- **Documento**: un objeto completo, tipo JSON, autocontenido — con su propia estructura, que puede variar de un documento a otro dentro de la misma colección.
+- **Colección**: un grupo de documentos, sin esquema fijo impuesto por el motor.
 
-No entres todavía en creación/borrado de colecciones ni en el contraste
-relacional/documental en profundidad: eso es el siguiente apartado,
-colecciones-documentales.md.
+Contraste explícito con lo relacional: no hay tablas, ni columnas fijas, ni claves foráneas, ni `JOIN`. Y contraste con el JSONB del Tema 3: allí, el JSON era **una columna** dentro de una tabla relacional normal — aquí, **todo** es documento, no hay ninguna tabla por debajo.
+
+---
+
+## 🍃 Qué es MongoDB
+
+**MongoDB** es el gestor documental más usado. Sus documentos se almacenan en **BSON** (una versión binaria de JSON), y su identificador es un `ObjectId` — alfanumérico, no un número autoincremental como los que has usado hasta ahora en PostgreSQL. Se organiza en niveles: servidor → bases de datos → colecciones → documentos.
+
+Un documento de ejemplo, y su consulta equivalente en `mongosh` (la consola de MongoDB, análoga a `psql`):
+
+```javascript
+// Un documento
+{ "_id": ObjectId("..."), "titulo": "Hades", "puntuacion": 9 }
+
+// El equivalente a un SELECT sencillo
+db.videojuegos.find({ "titulo": "Hades" })
 ```
+
+Vale la pena verlo en esta forma cruda antes de que Spring lo esconda tras un repositorio.
+
+---
+
+## ⚖️ Cuándo encaja lo documental (intuición)
+
+Datos autocontenidos, de estructura variable de un registro a otro: bien. Relaciones fuertes entre entidades y transacciones complejas que las involucren: mejor relacional. Profundizarás en esta comparación en el siguiente apartado — de momento, quédate con la intuición.
+
+---
+
+## 🎮 Aterrizaje en GameVault: el módulo `reviews`
+
+### Por qué dos bases de datos distintas
+
+GameVault usa PostgreSQL para el catálogo (`Videojuego`/`Estudio`: relaciones claras, necesidad de transacciones ACID fuertes) y **MongoDB** para las reseñas (`Review`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar con el tiempo). Es una decisión de arquitectura, no una moda — cada motor se usa donde encaja mejor.
+
+### La entidad `Review`
+
+```java
+@Document(collection = "review")
+public class Review {
+
+    @Id
+    private String id; // alfanumérico, tipo ObjectId — no un Long autogenerado
+
+    private Long videojuegoId; // relación "lógica" con el catálogo en PostgreSQL
+    private String autor;
+    private Integer puntuacion;
+    private String comentario;
+}
+```
+
+`@Document(collection = "review")` es el equivalente Mongo de `@Entity`/`@Table` — declara en qué colección vive. El `@Id` es `String`, no `Long`: en Mongo los identificadores son alfanuméricos por naturaleza (`ObjectId`), a diferencia del autoincremental que has usado siempre en PostgreSQL.
+
+!!! warning "`videojuegoId` no es una clave foránea real"
+    Aunque el campo se llame `videojuegoId` y apunte conceptualmente a un `Videojuego` de PostgreSQL, **no hay ninguna integridad referencial automática** entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.
+
+### El repositorio, con naming de método (igual que en JPA)
+
+```java
+public interface ReviewRepository extends MongoRepository<Review, String> {
+    List<Review> findByVideojuegoId(Long videojuegoId);
+}
+```
+
+Spring Data también genera consultas automáticas por el nombre del método en MongoDB, exactamente igual que hacía `JpaRepository` en el Tema 2 — sin que escribas una sola query explícita.
+
+### El patrón de "integridad referencial manual"
+
+```java
+public List<ReviewResponseDTO> findByVideojuegoId(Long videojuegoId) {
+    // 1. Verificamos que el juego exista en PostgreSQL antes de buscar sus reseñas
+    if (!catalogoConsultaService.existeVideojuego(videojuegoId)) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
+    }
+    // 2. Buscamos en MongoDB y mapeamos
+    return reviewRepository.findByVideojuegoId(videojuegoId).stream().map(this::mapToDTO).toList();
+}
+```
+
+Este es el patrón central de este apartado: como Mongo no puede validar una clave foránea hacia una tabla de PostgreSQL, el propio código de la aplicación tiene que hacerlo — consultando primero `CatalogoConsultaService.existeVideojuego(...)` (el mismo componente del paquete `catalogo.api` que viste en el Tema 2) antes de tocar Mongo.
+
+### Una agregación sencilla, en memoria
+
+```java
+public ReviewResumenDTO getResumenByVideojuegoId(Long videojuegoId) {
+    List<Review> reviews = reviewRepository.findByVideojuegoId(videojuegoId);
+    long totalReviews = reviews.size();
+    double puntuacionMedia = reviews.stream().mapToInt(Review::getPuntuacion).average().orElse(0.0);
+    return new ReviewResumenDTO(videojuegoId, totalReviews, puntuacionMedia);
+}
+```
+
+`getResumenByVideojuegoId` calcula el total y la media de puntuación **en memoria**, con streams de Java, tras traer todos los documentos de Mongo — no usa el framework de agregación nativo de Mongo (`$group`, `$avg`). Es una simplificación deliberada: funciona bien con pocos documentos por videojuego, y queda como posible mejora si algún día hubiera muchísimas reseñas por consultar.
+
+### Establecer la conexión
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+```
+
+```yaml
+spring:
+  mongodb:
+    uri: mongodb://localhost:27017/gamevault_db
+```
+
+!!! warning "La propiedad real es `spring.mongodb.uri`, no `spring.data.mongodb.uri`"
+    Es fácil confundirse con tutoriales antiguos: en este proyecto, `mongodb` cuelga directamente de `spring`, no de `spring.data`. Comprueba siempre el `application-dev.yaml` real antes de dar por buena una propiedad.
+
+En paralelo al `datasource` de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - **NoSQL** abandona tablas/filas/SQL; las bases **documentales** (MongoDB) son una de varias familias (clave-valor, columnares, de grafos).
+    - Un **documento** es un objeto autocontenido; una **colección** los agrupa sin esquema fijo — nada de tablas ni `JOIN`.
+    - MongoDB usa BSON y `ObjectId` (alfanumérico) como identificador — distinto del `Long` autoincremental de JPA.
+    - `videojuegoId` en `Review` es una relación **lógica**, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.
+    - El patrón de **integridad referencial manual**: el código comprueba en PostgreSQL antes de tocar Mongo, porque el motor no puede hacerlo por sí solo.
+    - La propiedad real de conexión es `spring.mongodb.uri` (no `spring.data.mongodb.uri`).

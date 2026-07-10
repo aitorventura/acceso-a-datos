@@ -2,69 +2,75 @@
 
 # 🧩 2. Colecciones documentales: relacional vs. documental
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Ya conectaste con MongoDB y construiste tu primer repositorio documental. Este apartado da un paso atrás para comparar con criterio los dos modelos que has usado en el curso, y cierra el hueco práctico que dejaste abierto: crear y eliminar colecciones explícitamente.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🆚 Relacional vs. documental, concepto a concepto
 
-```text
-Redacta el apartado de teoría "Colecciones documentales: relacional vs. documental" del
-Tema 4 (RA5 - BD documentales) del módulo Acceso a Datos (0486), semana real 15 del
-calendario (11-17 enero, tras las vacaciones de Navidad). Sigue las convenciones de
-estilo del README.md del repo.
+| Relacional (PostgreSQL) | Documental (MongoDB) |
+|---|---|
+| Tabla | Colección |
+| Fila | Documento |
+| Columna | Campo |
+| `JOIN` | Documento embebido, o referencia manual (sin integridad automática) |
 
-Criterios de evaluación de RA5 que cubre este apartado (curriculum.md):
-- a) Ventajas e inconvenientes de utilizar bases de datos documentales nativas.
-- d) Se han añadido y eliminado colecciones de la base de datos.
+Ventajas del modelo documental: **esquema flexible por documento** (dos `Review` no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y **escritura/lectura simple**, sin `JOIN` que resolver.
 
-Contenido central: comparación razonada entre modelo relacional (PostgreSQL, ya
-trabajado en los Temas 1-3) y modelo documental nativo (MongoDB, empezado en el apartado
-anterior), usando GameVault como caso de estudio real de por qué conviven ambos en el
-mismo proyecto.
+Inconvenientes: la **integridad referencial manual** que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que `videojuegoId` apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).
 
-ESTRUCTURA — teoría primero: antes del caso GameVault, cubre la parte general con
-ejemplos genéricos en mongosh (comandos mostrados): cómo se crea una colección
-(implícitamente al insertar el primer documento, o explícitamente con createCollection y
-para qué sirve la forma explícita — validación, colecciones capadas), cómo se elimina
-(dropCollection) y cómo se listan (show collections); y la comparación
-relacional/documental como tabla de conceptos equivalentes (tabla↔colección,
-fila↔documento, columna↔campo, JOIN↔documento embebido o referencia manual) con las
-ventajas e inconvenientes de cada modelo razonados, no como lista memorística.
+---
 
-Apóyate en el proyecto GameVault (com.aleroig.gamevault) como ejemplo real:
-- Explica por qué el catálogo (Videojuego/Estudio, con relaciones claras y necesidad de
-  transacciones ACID fuertes entre entidades) vive en PostgreSQL, mientras que las
-  reseñas (com/aleroig/gamevault/reviews/Review.java: documentos independientes, sin
-  relaciones entre sí, con forma que podría variar con el tiempo) viven en MongoDB — esto
-  es una decisión de arquitectura real documentada en
-  docs/04-decisiones-arquitectura.md del proyecto (sección "Bases de datos
-  dockerizadas"), cítala como ejemplo de decisión consciente, no de "usar NoSQL porque
-  sí".
-- Ventajas del modelo documental: esquema flexible por documento (dos Review no tienen
-  por qué tener exactamente los mismos campos si el esquema evoluciona), escritura/lectura
-  simple sin JOINs.
-- Inconvenientes: la propia "integridad referencial manual" ya vista en el apartado
-  anterior (videojuegoId sin clave foránea real) es el precio a pagar; no hay
-  transacciones multi-documento tan robustas como las de PostgreSQL (aunque MongoDB
-  moderno sí las soporta parcialmente, coméntalo como matiz, no como ausencia total).
-- com/aleroig/gamevault/reviews/ReviewRepository.java, método
-  `deleteByVideojuegoId(Long videojuegoId)`: úsalo como ejemplo de "eliminar documentos
-  de una colección de forma masiva" — explica que esto es lo que en el proyecto real se
-  invocaría si se quisiera limpiar las reseñas huérfanas detectadas en la Actividad 4.1
-  cuando se borra un videojuego (aunque en el GameVault actual ese borrado en cascada NO
-  está conectado automáticamente a la eliminación del videojuego — señálalo como una
-  posible MEJORA que el alumnado podría plantearse, sin implementarla obligatoriamente
-  aquí).
-- Sobre "añadir y eliminar colecciones" en sí: en MongoDB una colección se crea
-  implícitamente al guardar el primer documento (no hace falta una sentencia DDL como
-  `CREATE TABLE`) y se elimina con `dropCollection` — contrástalo con el DDL de
-  PostgreSQL (`ddl-auto` de Hibernate, visto en el Tema 1) para remarcar la diferencia de
-  filosofía.
+## 🛠️ Colecciones: crear, eliminar, listar
 
-No entres todavía en modificación de documentos individuales (PUT) ni en el cierre de
-RA5: eso es el siguiente apartado, modificacion-documentos.md.
+En `mongosh`:
+
+```javascript
+// Se crea implícitamente al insertar el primer documento
+db.review.insertOne({ videojuegoId: 1, autor: "ana", puntuacion: 8 })
+
+// O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)
+db.createCollection("review")
+
+// Eliminar
+db.review.drop()
+
+// Listar
+show collections
 ```
+
+La forma **explícita** (`createCollection`) sirve para cuando necesitas configurar algo desde el principio — por ejemplo, reglas de validación de esquema, o una colección "capada" (de tamaño fijo, que sobrescribe los documentos más antiguos). Para el caso normal, no hace falta: MongoDB crea la colección sola en cuanto guardas el primer documento.
+
+!!! tip "Contraste con el DDL de PostgreSQL"
+    En PostgreSQL, necesitas una sentencia `CREATE TABLE` explícita (o `ddl-auto` de Hibernate haciéndolo por ti, como viste en el Tema 1) antes de poder insertar nada. En MongoDB, la colección aparece sola al primer `insert` — es la misma diferencia de filosofía que ya viste entre esquema fijo y esquema flexible, ahora aplicada a la propia existencia de la colección.
+
+---
+
+## 🎮 Aterrizaje en GameVault: por qué dos motores conviven
+
+GameVault usa PostgreSQL para el catálogo (`Videojuego`/`Estudio`: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB para las reseñas (`Review`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una **decisión de arquitectura deliberada**, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.
+
+### Eliminar documentos de forma masiva
+
+```java
+public interface ReviewRepository extends MongoRepository<Review, String> {
+    long deleteByVideojuegoId(Long videojuegoId);
+}
+```
+
+`deleteByVideojuegoId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 4.1: si se borra un videojuego cuyas reseñas siguen en Mongo, este método las limpia de golpe.
+
+!!! tip "El borrado en cascada ya existe — de forma asíncrona"
+    Este borrado en cascada se resuelve **conectado a través de eventos**: cuando se borra un videojuego, `VideojuegoService` publica un evento por RabbitMQ que un *consumer* del módulo `reviews` recibe y usa para invocar `deleteByVideojuegoId`. No ocurre de forma síncrona dentro de la misma llamada — ocurre poco después, en otro hilo. Verás el flujo completo, con el código guiado paso a paso, en la Actividad 4.2.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - Tabla↔colección, fila↔documento, columna↔campo, `JOIN`↔documento embebido o referencia manual.
+    - El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.
+    - Una colección se crea implícitamente al primer `insert`, o explícitamente con `createCollection` (para validación o colecciones capadas); se elimina con `drop()`.
+    - GameVault usa dos motores por una decisión de arquitectura documentada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.
+    - `deleteByVideojuegoId` elimina documentos en bloque — es la pieza que resuelve las reseñas huérfanas, conectada de forma asíncrona vía RabbitMQ.

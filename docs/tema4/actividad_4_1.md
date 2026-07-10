@@ -1,56 +1,260 @@
 # 🧪 Actividad 4.1: Reseñas de videojuegos en MongoDB
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Levantas MongoDB junto a tu PostgreSQL, y construyes el módulo `reviews` completo: entidad, repositorio, integridad referencial manual y los endpoints de consulta.
+
+## Qué vas a practicar
+
+- Añadir un segundo motor de base de datos al mismo proyecto.
+- Crear una entidad documental con `@Document` y un repositorio `MongoRepository`.
+- Implementar el patrón de integridad referencial manual entre dos motores.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 4.1 del Tema 4 (RA5 - BD documentales) del módulo Acceso a Datos
-(0486), semana real 14 del calendario (14-20 diciembre). Sigue el patrón de estructura de
-docs/tema0/actividad_0_6.md y usa la skill /actividad-plantilla-acceso-a-datos si
-necesita plantilla/solución en .docx.
+Tu PostgreSQL y tu login JWT de PSP (semanas 7-11) ya funcionando — vas a usar `Principal` para identificar al autor de cada reseña.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-Objetivo (RA5, criterios b, c): que el alumnado construya en su GameVault, guiado, el
-módulo `reviews` tal y como existe en com/aleroig/gamevault/reviews/: levantar MongoDB
-con Docker Compose (nuevo servicio junto al PostgreSQL ya existente), crear la entidad
-`Review` (`@Document`, id String, campo de relación lógica videojuegoId) y el
-repositorio `ReviewRepository extends MongoRepository<Review, String>` con
-`findByVideojuegoId` por naming de método, sin escribir consultas explícitas.
+## Paso 1 — MongoDB en tu proyecto
 
-Estructura sugerida de pasos guiados:
-1. Añadir el servicio de MongoDB al docker-compose.yaml (fragmento dado y comentado,
-   imagen oficial `mongo`) y la configuración de conexión en application-dev.yaml, más
-   la dependencia spring-boot-starter-data-mongodb en el pom — todo guiado.
-2. La entidad Review y el ReviewRepository, guiados con el código de la referencia
-   mostrado y explicado (`@Document`, por qué el id es String, qué genera Spring Data a
-   partir del nombre `findByVideojuegoId`).
-3. El patrón de "integridad referencial manual" visto en la teoría, guiado: el
-   ReviewService comprueba vía CatalogoConsultaService que el videojuego existe en
-   PostgreSQL antes de guardar o consultar en Mongo, devolviendo 404 si no — código de
-   la referencia (ReviewService.java) mostrado y explicado. Pregunta de comprensión:
-   ¿por qué esta comprobación no la puede hacer MongoDB por sí solo?
-4. El GET de reseñas por videojuego y el POST, guiados (VideojuegoReviewController de la
-   referencia; si la autenticación con Principal aún no está en su GameVault en este
-   punto, indicar la simplificación temporal de recibir el autor en el DTO).
-5. Mini-reto (mismo patrón que el paso 4): el endpoint de resumen
-   `GET /api/v1/videojuegos/{id}/reviews/resumen` — dar el DTO (ReviewResumenDTO: total
-   y puntuación media, calculados en memoria con streams como en la referencia) y dejar
-   que completen el service y el endpoint solos.
-6. Experimento guiado de cierre: borrar un videojuego de PostgreSQL que tenga reseñas y
-   observar que estas siguen en MongoDB ("reseñas huérfanas") — pasos dados; describir
-   el problema observado como preparación de la Actividad 4.2.
+Añade el servicio a tu `docker-compose.yml`:
 
-Esta actividad no debe entrar todavía en creación/borrado de colecciones completas ni en
-el PUT de reseñas con control de autoría: eso son las actividades 4.2 y 4.3.
+```yaml
+services:
+  # ... tu servicio postgres ya existente ...
+  mongodb:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  mongo_data:
 ```
+
+En tu `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+```
+
+Y en `application-dev.yaml`:
+
+```yaml
+spring:
+  mongodb:
+    uri: mongodb://localhost:27017/gamevault_db
+```
+
+Levanta el servicio nuevo (`docker compose up -d`) y reinicia tu aplicación.
+
+---
+
+## Paso 2 — La entidad `Review` y su repositorio
+
+```java
+package com.tunombre.gamevault.reviews;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "review")
+@Data
+@NoArgsConstructor
+public class Review {
+
+    @Id
+    private String id;
+
+    private Long videojuegoId;
+    private String autor;
+    private Integer puntuacion;
+    private String comentario;
+}
+```
+
+```java
+package com.tunombre.gamevault.reviews;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
+
+public interface ReviewRepository extends MongoRepository<Review, String> {
+    List<Review> findByVideojuegoId(Long videojuegoId);
+}
+```
+
+`@Document(collection = "review")` es el equivalente Mongo de `@Entity`; el `@Id` es `String` porque en Mongo los identificadores son alfanuméricos. `findByVideojuegoId` se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.
+
+---
+
+## Paso 3 — Integridad referencial manual, guiada al completo
+
+Antes de usarlo desde `reviews`, crea el pequeño componente que va a permitir esa comprobación sin que `reviews` conozca nada del paquete `catalogo` por dentro — una interfaz en `catalogo.api` y su implementación oculta en `catalogo`:
+
+```java
+package com.tunombre.gamevault.catalogo.api;
+
+public interface CatalogoConsultaService {
+    boolean existeVideojuego(Long videojuegoId);
+}
+```
+
+```java
+package com.tunombre.gamevault.catalogo;
+
+import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
+
+    private final VideojuegoRepository videojuegoRepository;
+
+    @Override
+    public boolean existeVideojuego(Long videojuegoId) {
+        return videojuegoRepository.existsById(videojuegoId);
+    }
+}
+```
+
+Fíjate en dos detalles deliberados: la interfaz vive en `catalogo.api` (un paquete pensado para lo que otros módulos SÍ pueden ver), mientras que `CatalogoConsultaServiceImpl` no lleva el modificador `public` — es *package-private*, invisible fuera de `catalogo`. El módulo `reviews` va a depender solo de la interfaz, sin saber nada de cómo está implementada por dentro. Vas a profundizar en por qué esto importa en el Tema 5 — de momento, réplicalo tal cual.
+
+Ahora sí, el service de `reviews` que lo usa:
+
+```java
+package com.tunombre.gamevault.reviews;
+
+import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewService {
+    private final ReviewRepository reviewRepository;
+    private final CatalogoConsultaService catalogoConsultaService;
+
+    public List<ReviewResponseDTO> findByVideojuegoId(Long videojuegoId) {
+        if (!catalogoConsultaService.existeVideojuego(videojuegoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
+        }
+        return reviewRepository.findByVideojuegoId(videojuegoId).stream().map(this::mapToDTO).toList();
+    }
+
+    private ReviewResponseDTO mapToDTO(Review r) {
+        return new ReviewResponseDTO(r.getId(), r.getVideojuegoId(), r.getAutor(), r.getPuntuacion(), r.getComentario());
+    }
+}
+```
+
+**Pregunta de comprensión**: ¿por qué esta comprobación (`existeVideojuego`) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?
+
+---
+
+## Paso 4 — El `POST` de reseñas, guiado
+
+```java
+public record ReviewCreateDTO(Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
+public record ReviewRequestDTO(
+        @jakarta.validation.constraints.Min(1) @jakarta.validation.constraints.Max(10) Integer puntuacion,
+        @jakarta.validation.constraints.NotBlank String comentario
+) {}
+public record ReviewResponseDTO(String id, Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
+```
+
+```java
+// En ReviewService
+public ReviewResponseDTO create(ReviewCreateDTO dto) {
+    if (!catalogoConsultaService.existeVideojuego(dto.videojuegoId())) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No puedes reseñar un juego que no existe en el catálogo");
+    }
+    Review review = new Review();
+    review.setVideojuegoId(dto.videojuegoId());
+    review.setAutor(dto.autor());
+    review.setPuntuacion(dto.puntuacion());
+    review.setComentario(dto.comentario());
+    return mapToDTO(reviewRepository.save(review));
+}
+```
+
+```java
+@RestController
+@RequestMapping("/api/v1/videojuegos/{videojuegoId}/reviews")
+@RequiredArgsConstructor
+public class VideojuegoReviewController {
+    private final ReviewService reviewService;
+
+    @GetMapping
+    public ResponseEntity<List<ReviewResponseDTO>> getByVideojuegoId(@PathVariable Long videojuegoId) {
+        return ResponseEntity.ok(reviewService.findByVideojuegoId(videojuegoId));
+    }
+
+    @PostMapping
+    public ResponseEntity<ReviewResponseDTO> create(
+            @PathVariable Long videojuegoId,
+            @Valid @RequestBody ReviewRequestDTO dto,
+            Principal principal
+    ) {
+        ReviewCreateDTO createDTO = new ReviewCreateDTO(videojuegoId, principal.getName(), dto.puntuacion(), dto.comentario());
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.create(createDTO));
+    }
+}
+```
+
+Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya construiste en PSP. Prueba con tu token:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"puntuacion": 9, "comentario": "Excelente banda sonora"}'
+```
+
+---
+
+## Mini-reto — el endpoint de resumen
+
+```java
+public record ReviewResumenDTO(Long videojuegoId, long totalReviews, double puntuacionMedia) {}
+```
+
+Sin más código dado, completa en `ReviewService` un método `getResumenByVideojuegoId(Long videojuegoId)` que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con `findByVideojuegoId`, y calcule con streams (`mapToInt(...).average()`) el total y la puntuación media. Expón el resultado en `GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen`.
+
+---
+
+## Experimento de cierre — reseñas huérfanas
+
+Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal:
+
+```bash
+curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
+```
+
+Consulta MongoDB directamente:
+
+```bash
+docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
+```
+
+**Comprueba**: las reseñas siguen ahí, apuntando a un `videojuegoId` que ya no existe en PostgreSQL — son **reseñas huérfanas**. Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.
+
+---
+
+## ✅ Cierre
+
+Tu GameVault ya habla con dos motores de base de datos distintos, con el patrón de integridad referencial manual resuelto. En la próxima actividad trabajas con colecciones explícitas y conectas el borrado en cascada de reseñas.

@@ -1,52 +1,169 @@
 # 🧪 Actividad 2.2: Consultas dinámicas con Specifications
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Vas a construir el sistema de filtros dinámicos del listado de videojuegos: varias Specifications combinables, un DTO de filtro y paginación real.
+
+## Qué vas a practicar
+
+- Habilitar Specifications en un repositorio.
+- Construir condiciones de consulta combinables, con el patrón `unrestricted()` para filtros ausentes.
+- Combinar varias Specifications y aplicar paginación en el service.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 2.2 del Tema 2 (RA3 - ORM) del módulo Acceso a Datos (0486), semana
-real 8 del calendario. Sigue el patrón de estructura de docs/tema0/actividad_0_6.md y
-usa la skill /actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu CRUD de `Videojuego` del Tema 1, con varios videojuegos de distinto precio y estudio ya creados.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-Objetivo (RA3, criterios d, e): que el alumnado construya en su GameVault, guiado, el
-sistema de filtros dinámicos del listado de videojuegos, tal y como existe en la
-referencia: com/aleroig/gamevault/catalogo/VideojuegoSpecifications.java +
-VideojuegoRepository.java (extendiendo JpaSpecificationExecutor) +
-VideojuegoService.findAllPaginated() + VideojuegoFiltroDTO.
+## Paso 1 — Preparación: `JpaSpecificationExecutor` y la clase de Specifications
 
-Estructura sugerida de pasos guiados:
-1. Preparación guiada: hacer que VideojuegoRepository extienda JpaSpecificationExecutor
-   y crear la clase VideojuegoSpecifications (explicando qué es una Specification y el
-   patrón `Specification.unrestricted()` cuando el filtro es null).
-2. Primera Specification guiada al completo, código mostrado y explicado:
-   `tituloContiene` (con el `criteriaBuilder.like` + `lower`).
-3. Segunda Specification guiada: `precioMayorOIgualA` (nuevo matiz:
-   `greaterThanOrEqualTo` sobre BigDecimal).
-4. Mini-retos (repiten el patrón ya visto dos veces): `precioMenorOIgualA` y
-   `perteneceAlEstudio` — solo se indica qué debe filtrar cada una; la estructura es
-   idéntica a las anteriores. (NO incluyas aquí `disponibleEnPlataforma`: usa jsonb y
-   llega en el Tema 3.)
-5. Combinación guiada en el service con `Specification.where(...).and(...)` +
-   paginación con `Pageable`, y el DTO de filtro VideojuegoFiltroDTO, replicando
-   findAllPaginated() de la referencia con el código mostrado.
-6. Verificación guiada con peticiones reales dadas en el enunciado: con filtros, sin
-   filtros (todos null deben devolver todo), y combinando varios.
-7. Pregunta de comprensión: ¿por qué conviene devolver `Specification.unrestricted()`
-   cuando un filtro es null, en vez de no añadir el `.and(...)` con un if fuera del
-   método?
+Modifica tu `VideojuegoRepository`:
 
-Esta actividad no debe usar `@Query` JPQL (eso es la Actividad 2.3, que cierra el RA3);
-el foco es exclusivamente Specifications dinámicas y paginación con `Pageable`.
+```java
+public interface VideojuegoRepository extends
+        JpaRepository<Videojuego, Long>,
+        JpaSpecificationExecutor<Videojuego> {
+}
 ```
+
+Crea la clase `VideojuegoSpecifications` en el paquete `catalogo`:
+
+```java
+package com.tunombre.gamevault.catalogo;
+
+import org.springframework.data.jpa.domain.Specification;
+import java.math.BigDecimal;
+
+public final class VideojuegoSpecifications {
+
+    private VideojuegoSpecifications() { }
+
+    // los métodos van aquí
+}
+```
+
+El constructor privado y la clase `final` son deliberados: esta clase es una simple colección de métodos estáticos, no tiene sentido instanciarla.
+
+---
+
+## Paso 2 — Primera Specification, guiada al completo
+
+```java
+public static Specification<Videojuego> tituloContiene(String titulo) {
+    if (titulo == null || titulo.isBlank()) {
+        return Specification.unrestricted();
+    }
+
+    return (root, query, criteriaBuilder) ->
+            criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("titulo")),
+                    "%" + titulo.toLowerCase() + "%"
+            );
+}
+```
+
+Primero, el caso "sin filtro": si `titulo` es `null` o está vacío, no queremos añadir ninguna condición — `Specification.unrestricted()` es justo eso. Si hay un valor, devolvemos una función `(root, query, criteriaBuilder) -> ...` que construye la condición: `criteriaBuilder.lower(...)` pasa el campo a minúsculas antes de comparar (para que la búsqueda no distinga mayúsculas), y `like(..., "%valor%")` busca coincidencias parciales, no exactas.
+
+---
+
+## Paso 3 — Segunda Specification: comparación numérica
+
+```java
+public static Specification<Videojuego> precioMayorOIgualA(BigDecimal precioMin) {
+    if (precioMin == null) {
+        return Specification.unrestricted();
+    }
+
+    return (root, query, criteriaBuilder) ->
+            criteriaBuilder.greaterThanOrEqualTo(root.get("precio"), precioMin);
+}
+```
+
+Mismo patrón, nuevo matiz: `greaterThanOrEqualTo` para comparar un `BigDecimal`, en vez de `like` para texto.
+
+---
+
+## Mini-retos — repite el patrón dos veces más
+
+Sin más código dado, escribe tú:
+
+1. `precioMenorOIgualA(BigDecimal precioMax)`: filtra videojuegos con precio menor o igual al indicado. Mismo patrón que `precioMayorOIgualA`, con el operador contrario.
+2. `perteneceAlEstudio(Long estudioId)`: filtra videojuegos que pertenecen a un estudio concreto (compara `root.get("estudio").get("id")` con `estudioId` usando `criteriaBuilder.equal`).
+
+No incluyas todavía ninguna Specification sobre `detallesPlataforma` (JSONB) — eso es contenido del Tema 3.
+
+---
+
+## Paso 4 — Combinar en el service, con paginación
+
+Crea el DTO de filtro:
+
+```java
+public record VideojuegoFiltroDTO(
+        String titulo,
+        BigDecimal precioMin,
+        BigDecimal precioMax,
+        Long estudioId
+) {}
+```
+
+Y en `VideojuegoService`:
+
+```java
+@Transactional(readOnly = true)
+public Page<VideojuegoResponseDTO> findAllPaginated(VideojuegoFiltroDTO filtro, Pageable pageable) {
+    Specification<Videojuego> spec = Specification
+            .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
+            .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
+            .and(VideojuegoSpecifications.precioMenorOIgualA(filtro.precioMax()))
+            .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()));
+
+    return videojuegoRepository.findAll(spec, pageable)
+            .map(this::mapToDTO);
+}
+```
+
+En el controller:
+
+```java
+@GetMapping
+public ResponseEntity<Page<VideojuegoResponseDTO>> getAll(
+        @ModelAttribute VideojuegoFiltroDTO filtro,
+        @PageableDefault(size = 5) Pageable pageable
+) {
+    return ResponseEntity.ok(videojuegoService.findAllPaginated(filtro, pageable));
+}
+```
+
+`@ModelAttribute` mapea automáticamente los parámetros de query string (`?titulo=...&precioMin=...`) a los campos del DTO; `@PageableDefault(size = 5)` fija un tamaño de página por defecto si el cliente no especifica ninguno.
+
+---
+
+## Paso 5 — Verificación con peticiones reales
+
+```bash
+# Sin filtros: debe devolver todo (paginado)
+curl "http://localhost:8080/api/v1/videojuegos"
+
+# Un solo filtro
+curl "http://localhost:8080/api/v1/videojuegos?titulo=hades"
+
+# Varios filtros combinados
+curl "http://localhost:8080/api/v1/videojuegos?precioMin=10&precioMax=30&estudioId=1"
+```
+
+**Comprueba**, para cada caso, que el resultado tiene sentido: la petición sin filtros debe devolver todo el catálogo (paginado, no un error ni una lista vacía); la que combina varios filtros debe devolver solo lo que cumple **todas** las condiciones a la vez.
+
+---
+
+## Pregunta final
+
+¿Por qué conviene que cada método de `VideojuegoSpecifications` devuelva `Specification.unrestricted()` cuando su filtro es `null`, en vez de resolverlo con un `if (filtro != null)` fuera del método, antes de encadenar los `.and(...)` en el service? Piensa en qué pasaría con el código del Paso 4 si tuvieras que añadir ese `if` para cada uno de los cuatro filtros.
+
+---
+
+## ✅ Cierre
+
+Tu listado de videojuegos ya soporta filtros dinámicos y paginación real, con SQL generado automáticamente según qué combinación de filtros llegue. En la próxima actividad trabajas con `@Query` JPQL — para las consultas que ni las Specifications ni los métodos derivados por nombre pueden expresar bien, como una agregación.

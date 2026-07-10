@@ -1,52 +1,106 @@
-# 🧪 Actividad 4.3: PUT de reseñas con control de autoría — cierre de RA5
+# 🧪 Actividad 4.3: PUT de reseñas con control de autoría
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    enunciado definitivo.
+!!! info "Práctica guiada"
+    Hoy añades el `PUT` que falta en tu módulo `reviews`, con control de autoría: solo quien escribió una reseña puede modificarla.
+
+## Qué vas a practicar
+
+- Añadir un endpoint `PUT` que compruebe la identidad del solicitante.
+- Aplicar el patrón cargar → comprobar autoría → modificar → guardar.
+- Verificar con dos usuarios distintos que el control de acceso funciona de verdad.
 
 ---
 
-## Prompt para `/improve-notes`
+## Requisitos previos
 
-```text
-Redacta la Actividad 4.3 del Tema 4 (RA5 - BD documentales) del módulo Acceso a Datos
-(0486), semana real 16 del calendario (18-24 enero) — actividad que CIERRA el RA5. Sigue
-el patrón de estructura de docs/tema0/actividad_0_6.md y usa la skill
-/actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
+Tu módulo `reviews` (Actividades 4.1-4.2) y tu login JWT de PSP ya funcionando — vas a necesitar dos usuarios de prueba distintos.
 
-IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-mostrado en la misma actividad.
+---
 
-Objetivo (RA5, criterio e — cierre del RA): que el alumnado añada, guiado, un `PUT
-/api/v1/videojuegos/{videojuegoId}/reviews/{reviewId}` a su controlador de reseñas
-(VideojuegoReviewController, que en la referencia adjunta solo tiene GET, POST y
-GET .../resumen — este PUT con control de autoría es una MEJORA sobre el proyecto
-adjunto): solo el autor original de la reseña puede modificarla.
+## Paso 1 — El endpoint, guiado al completo
 
-Estructura sugerida de pasos guiados:
-1. El endpoint PUT guiado al completo, código mostrado y explicado: recibe el
-   `Principal` igual que ya hace el POST existente (`principal.getName()`), carga el
-   documento por id desde MongoDB, compara el autor guardado con el usuario autenticado,
-   y devuelve 403 si no coincide o 404 si la reseña no existe.
-2. La actualización real (puntuación y/o comentario) usando `save()` sobre el documento
-   ya cargado y modificado, explicando en el enunciado que `save()` sirve tanto para
-   crear como para actualizar en Spring Data MongoDB (mismo concepto ya visto con JPA).
-3. Prueba guiada con dos usuarios distintos (peticiones de ejemplo dadas): uno modifica
-   su propia reseña (debe funcionar) y otro intenta modificar la reseña ajena (debe
-   recibir 403) — documentar el resultado observado de cada caso.
-4. Nota para quien redacte: en el calendario unificado, PSP ya ha cubierto su RA5 de
-   seguridad (JWT, roles — semanas reales 7-11) antes de esta semana 16, así que el
-   GameVault del alumnado ya tiene autenticación real con Principal funcionando; da por
-   hecho ese estado. Solo si algún alumno va retrasado con PSP, indica como plan B
-   temporal recibir el "autor actual" en el DTO, marcándolo explícitamente como
-   simplificación provisional.
-5. Un cierre de RA5 (5-6 líneas propias del alumnado) que repase las tres actividades del
-   tema: de "conectar y consultar" a "modificar con control de acceso".
+```java
+// En ReviewService
+public ReviewResponseDTO update(String reviewId, ReviewRequestDTO dto, String usuarioActual) {
+    Review review = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reseña no encontrada"));
 
-Esta actividad cierra el Tema 4 y da paso al Tema 5 (RA6, componentes de acceso a datos),
-que retomará CatalogoConsultaService como ejemplo central de componente reutilizable.
+    if (!review.getAutor().equals(usuarioActual)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo el autor puede modificar esta reseña");
+    }
+
+    review.setPuntuacion(dto.puntuacion());
+    review.setComentario(dto.comentario());
+
+    return mapToDTO(reviewRepository.save(review));
+}
 ```
+
+```java
+// En VideojuegoReviewController
+@PutMapping("/{reviewId}")
+public ResponseEntity<ReviewResponseDTO> update(
+        @PathVariable Long videojuegoId,
+        @PathVariable String reviewId,
+        @Valid @RequestBody ReviewRequestDTO dto,
+        Principal principal
+) {
+    return ResponseEntity.ok(reviewService.update(reviewId, dto, principal.getName()));
+}
+```
+
+Igual que ya hace el `POST`, recibes `Principal principal` y le pasas `principal.getName()` al service — la comparación de autoría ocurre dentro de `update()`, no en el controller.
+
+---
+
+## Paso 2 — Probar con dos usuarios: el caso correcto
+
+Crea una reseña con el usuario `user` (o el que uses habitualmente) y anota el `id` que te devuelve MongoDB:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
+  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 7, "comentario": "Buena, pero corta"}'
+```
+
+Modifícala con el **mismo** usuario:
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
+  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'
+```
+
+**Comprueba**: `200 OK`, con los datos actualizados en la respuesta.
+
+---
+
+## Paso 3 — Probar con dos usuarios: el caso denegado
+
+Consigue un token de un **segundo** usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:
+
+```bash
+curl -i -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
+  -H "Authorization: Bearer $TOKEN_OTRO_USUARIO" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'
+```
+
+**Comprueba**: `403 Forbidden`. **Documenta** ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.
+
+---
+
+## Pregunta de comprensión
+
+¿Por qué la comprobación de autoría devuelve `403 Forbidden` y no `404 Not Found`, sabiendo que la reseña sí existe? ¿Cambiaría tu respuesta si, en vez de una reseña, estuvieras protegiendo un recurso donde no quieres ni confirmar que existe a alguien sin permiso? (No hace falta que cambies el código — solo que razones la diferencia).
+
+---
+
+## Resumen del tema
+
+Escribe un resumen propio (5-6 líneas) del recorrido completo de este tema: conectar y consultar MongoDB por primera vez (Actividad 4.1) → entender colecciones y el borrado en cascada vía eventos (Actividad 4.2) → modificar documentos con control de acceso real (esta actividad). ¿Qué diferencia concreta has notado entre trabajar con PostgreSQL (Temas 1-3) y con MongoDB (este tema) — en qué momento has echado en falta las garantías del modelo relacional, y en qué momento has agradecido la flexibilidad del documental?
+
+---
+
+## ✅ Cierre
+
+Con esto termina todo el bloque de bases de datos del módulo. En el Tema 5, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, con `CatalogoConsultaService` (ya usado aquí mismo) como ejemplo central.

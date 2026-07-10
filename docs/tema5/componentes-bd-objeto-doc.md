@@ -2,53 +2,65 @@
 
 # 🧩 2. Componentes con BD objeto-relacional y documental
 
-!!! warning "🚧 Contenido pendiente de desarrollo"
-    Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-    `/improve-notes`, apoyándote en el proyecto **GameVault** adjunto, para generar el
-    contenido definitivo.
+Este apartado no introduce ninguna tecnología nueva — es un repaso integrador. Revisitas JSONB (Tema 3) y MongoDB (Tema 4), esta vez con la óptica de "componente" que acabas de conocer en el apartado anterior.
 
 ---
 
-## Prompt para `/improve-notes`
+## 🐘 JSONB, visto como componente
 
-```text
-Redacta el apartado de teoría "Componentes con BD objeto-relacional y documental" del
-Tema 5 (RA6 - Componentes de acceso a datos) del módulo Acceso a Datos (0486), semana
-real 18 del calendario. Es un apartado de REPASO INTEGRADOR: no introduce tecnología
-nueva, sino que revisita JSONB (Tema 3) y MongoDB (Tema 4) desde la óptica de
-"componente" ya presentada en el apartado anterior. Sigue las convenciones de estilo del
-README.md del repo.
-
-Criterios de evaluación de RA6 que cubre este apartado (curriculum.md):
-- f) Componentes que gestionan información almacenada en bases de datos objeto
-  relacionales y orientadas a objetos.
-- g) Componentes que gestionan información almacenada en una base de datos documental
-  nativa.
-
-Apóyate en el proyecto GameVault (com.aleroig.gamevault) como ejemplo real,
-reencuadrando piezas ya vistas en temas anteriores bajo la óptica de "componente":
-- VideojuegoRepository + VideojuegoSpecifications (Tema 3, JSONB/`jsonb_exists`): ahora
-  preséntalo explícitamente como "un componente que encapsula el acceso a una base de
-  datos objeto-relacional", cuyo consumidor (VideojuegoService, o cualquier otro
-  service) no necesita saber que por debajo hay una función nativa de PostgreSQL como
-  `jsonb_exists` — la complejidad queda dentro del componente.
-- ReviewRepository + ReviewService (Tema 4, MongoDB): igual, ahora bajo la óptica de
-  "componente que gestiona información en una base de datos documental nativa" —
-  ReviewService.getResumenByVideojuegoId es un buen ejemplo de lógica que vive DENTRO del
-  componente (agregación en memoria) y que el controlador no necesita conocer.
-- Retoma el componente CatalogoConsultaService (construido en la Actividad 4.1 y
-  analizado/extendido en la Actividad 5.1): explica cómo ese mismo patrón (interfaz +
-  implementación oculta) puede aplicarse igual de bien para exponer, desde `reviews`
-  hacia otros módulos, un `ReviewsConsultaService` análogo (por ejemplo, "cuántas
-  reseñas tiene un videojuego") — que es exactamente lo que se construirá en la
-  Actividad 5.2 — cerrando el círculo de que el mismo patrón de componente sirve para
-  JPA, JSONB y MongoDB por igual: la interfaz no necesita saber qué motor hay debajo.
-
-Cierra con una idea explícita de síntesis: da igual la tecnología de persistencia
-(relacional, objeto-relacional con JSONB, documental con MongoDB) — el patrón de
-"componente con interfaz clara + implementación oculta" es el mismo en los tres casos, y
-eso es precisamente lo que se pide demostrar en RA6.
-
-No entres en pruebas ni en integración final: eso es el siguiente apartado,
-integracion-y-pruebas.md, que cierra el RA6.
+```java
+public interface VideojuegoRepository extends JpaRepository<Videojuego, Long>, JpaSpecificationExecutor<Videojuego> {
+}
 ```
+
+`VideojuegoRepository`, junto con `VideojuegoSpecifications` (donde vive `disponibleEnPlataforma`, con su `jsonb_exists`), es un **componente que encapsula el acceso a una base de datos objeto-relacional**. Quien lo consume — `VideojuegoService`, o cualquier otro service que pudiera necesitarlo — no tiene ni que saber que, por debajo de una de sus Specifications, hay una función nativa de PostgreSQL como `jsonb_exists`. Esa complejidad queda completamente contenida dentro del componente; fuera de él, es "una Specification más".
+
+---
+
+## 🍃 MongoDB, visto como componente
+
+```java
+public ReviewResumenDTO getResumenByVideojuegoId(Long videojuegoId) {
+    List<Review> reviews = reviewRepository.findByVideojuegoId(videojuegoId);
+    long totalReviews = reviews.size();
+    double puntuacionMedia = reviews.stream().mapToInt(Review::getPuntuacion).average().orElse(0.0);
+    return new ReviewResumenDTO(videojuegoId, totalReviews, puntuacionMedia);
+}
+```
+
+`ReviewRepository` + `ReviewService` es, bajo esta misma óptica, un "componente que gestiona información almacenada en una base de datos documental nativa". `getResumenByVideojuegoId` es un buen ejemplo de lógica que vive **dentro** del componente — la agregación en memoria (contar, calcular la media) — sin que el controlador que lo llama necesite saber cómo se ha calculado ese resumen, ni que por debajo hay documentos de MongoDB en vez de filas de una tabla.
+
+---
+
+## 🪞 Cerrando el círculo: el mismo patrón, tres motores distintos
+
+Ya construiste `CatalogoConsultaService` en el Tema 4 (y lo extendiste en la Actividad 5.1) — interfaz en `catalogo.api`, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde `reviews` hacia otros módulos un componente análogo — por ejemplo, `ReviewsConsultaService`, con algo como "cuántas reseñas tiene un videojuego". Es justo lo que vas a construir en la Actividad 5.2.
+
+```mermaid
+flowchart TB
+    subgraph JPA["🐘 PostgreSQL puro"]
+        A["VideojuegoRepository"]
+    end
+    subgraph JSONB["🐘 PostgreSQL + JSONB"]
+        B["VideojuegoSpecifications<br/>disponibleEnPlataforma"]
+    end
+    subgraph MONGO["🍃 MongoDB"]
+        C["ReviewRepository +<br/>ReviewService"]
+    end
+    A --> D["🧩 Mismo patrón de componente:<br/>interfaz + implementación oculta"]
+    B --> D
+    C --> D
+```
+
+La idea de síntesis de este apartado: **da igual la tecnología de persistencia** — relacional puro, objeto-relacional con JSONB, documental con MongoDB — el patrón de "componente con interfaz clara + implementación oculta" es el mismo en los tres casos. La interfaz nunca necesita saber qué motor hay por debajo. Eso, precisamente, es el objetivo de este tema: no una tecnología concreta, sino una forma de diseñar que funciona igual de bien sobre cualquiera de ellas.
+
+---
+
+## ✅ Ideas clave
+
+??? tip "Abrir resumen"
+
+    - `VideojuegoRepository`/`VideojuegoSpecifications` es un componente que encapsula acceso objeto-relacional (JSONB) — su complejidad interna (`jsonb_exists`) queda oculta a quien lo usa.
+    - `ReviewRepository`/`ReviewService` es un componente que encapsula acceso documental (MongoDB) — su lógica de agregación vive dentro, no en el controlador.
+    - El mismo patrón (interfaz + implementación oculta) de `CatalogoConsultaService` se puede replicar sobre cualquier motor — es lo que vas a hacer con `ReviewsConsultaService`.
+    - La tecnología de persistencia por debajo es irrelevante para el patrón de componente — esa independencia es exactamente la idea clave de este tema.
