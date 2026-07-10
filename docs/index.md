@@ -21,10 +21,12 @@ En este módulo aprendes a que tus programas guarden y recuperen información de
 
 | Tema | Qué cubre | RA |
 |------|-----------|-----|
-| 🔁 [Tema 0 — Introducción](tema0/index.md) | Repaso de Git/GitHub e introducción a Docker | — |
-| 🧩 [Tema 1 — Título](tema1/index.md) | Resumen de una línea | RA1 |
-
-<!-- Añade una fila por cada tema nuevo que crees -->
+| 🔁 [Tema 0 — Introducción](tema0/index.md) | Repaso de Git/GitHub, Docker y Dev Containers | — |
+| 🧩 [Tema 1 — Manejo de conectores](tema1/index.md) | Conectores, JDBC, CRUD, transacciones y procedimientos almacenados | RA2 |
+| 🧩 [Tema 2 — Herramientas ORM](tema2/index.md) | Hibernate, mapeo con anotaciones, Specifications y consultas JPQL | RA3 |
+| 🧩 [Tema 3 — BD objeto relacionales](tema3/index.md) | Persistencia y consultas sobre columnas JSONB en PostgreSQL | RA4 |
+| 🧩 [Tema 4 — BD documentales](tema4/index.md) | MongoDB, colecciones y documentos, control de autoría | RA5 |
+| 🧩 [Tema 5 — Componentes de acceso a datos](tema5/index.md) | Componentes reutilizables, integración y pruebas finales | RA6 |
 
 ---
 
