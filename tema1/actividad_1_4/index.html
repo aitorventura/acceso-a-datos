@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#actividad-14-procedimiento-almacenado-con-jdbctemplate-cierre-de-ra2" class="md-skip">
+        <a href="#actividad-14-procedimiento-almacenado-con-jdbctemplate" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -1033,9 +1033,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-el-procedimiento-almacenado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — El procedimiento almacenado
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-invocacion-desde-el-service-guiada-al-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Invocación desde el service, guiada al completo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mini-reto-una-salvaguarda-contra-precios-negativos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mini-reto — una salvaguarda contra precios negativos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pregunta-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pregunta final
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
     </span>
   </a>
   
@@ -1908,9 +1962,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-el-procedimiento-almacenado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — El procedimiento almacenado
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-invocacion-desde-el-service-guiada-al-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Invocación desde el service, guiada al completo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mini-reto-una-salvaguarda-contra-precios-negativos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mini-reto — una salvaguarda contra precios negativos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pregunta-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pregunta final
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
     </span>
   </a>
   
@@ -1932,97 +2040,120 @@
 
 
 
-<div><h1 id="actividad-14-procedimiento-almacenado-con-jdbctemplate-cierre-de-ra2">🧪 Actividad 1.4: Procedimiento almacenado con <code>JdbcTemplate</code> — cierre de RA2<a class="headerlink" href="#actividad-14-procedimiento-almacenado-con-jdbctemplate-cierre-de-ra2" title="Permanent link">¶</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">🚧 Contenido pendiente de desarrollo</p>
-<p>Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-<code>/improve-notes</code>, apoyándote en el proyecto <strong>GameVault</strong> adjunto, para generar el
-enunciado definitivo.</p>
+<div><h1 id="actividad-14-procedimiento-almacenado-con-jdbctemplate">🧪 Actividad 1.4: Procedimiento almacenado con <code>JdbcTemplate</code><a class="headerlink" href="#actividad-14-procedimiento-almacenado-con-jdbctemplate" title="Permanent link">¶</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Práctica guiada</p>
+<p>Hoy añades a tu GameVault el procedimiento almacenado <code>ajustar_precio_estudio</code>, lo invocas desde Java con <code>JdbcTemplate</code> y lo expones como un endpoint REST nuevo.</p>
 </div>
+<h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
+<ul>
+<li>Crear un procedimiento almacenado en PostgreSQL.</li>
+<li>Invocarlo desde Spring con <code>JdbcTemplate</code>.</li>
+<li>Exponerlo como un endpoint REST siguiendo el estilo ya establecido del proyecto.</li>
+</ul>
 <hr>
-<h2 id="prompt-para-improve-notes">Prompt para <code>/improve-notes</code><a class="headerlink" href="#prompt-para-improve-notes" title="Permanent link">¶</a></h2>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>Redacta la Actividad 1.4 del Tema 1 (RA2 - Manejo de conectores) del módulo Acceso a
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>Datos (0486), semana real 6 del calendario — actividad que CIERRA el RA2. Sigue el patrón
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>de estructura de docs/tema0/actividad_0_6.md y usa la skill
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>/actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a>propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a>mostrado en la misma actividad.
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>Objetivo (RA2, criterio k — cierre del RA): que el alumnado implemente en su GameVault
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>el procedimiento almacenado `ajustar_precio_estudio(estudio_id, porcentaje)` descrito en
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a>el apartado de teoría procedimientos-almacenados.md (una MEJORA que no existe en la
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>referencia adjunta), y lo exponga a través de un endpoint REST nuevo, por ejemplo
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>`POST /api/v1/estudios/{id}/ajustar-precio` (usa solo verbos ya presentes en el
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>proyecto: GET/POST/PUT/DELETE — NO uses PATCH), siguiendo el estilo de
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>EstudioController.java/EstudioService.java ya existentes en GameVault (mismo paquete
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>`catalogo`, mismas convenciones: DTO de entrada con el porcentaje, `ResponseStatusException`
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>para "estudio no encontrado", inyección con `@RequiredArgsConstructor`).
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>Estructura sugerida de pasos guiados:
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>1. El SQL del procedimiento almacenado en PostgreSQL, dado y explicado línea a línea:
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>   actualiza el precio de todos los Videojuego de un Estudio en una sola llamada (no un
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>   bucle de updates individuales desde Java). Indicar también dónde/cómo crearlo (psql,
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>   DBeaver o script de inicialización).
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>2. La invocación desde el service con `JdbcTemplate`, guiada al completo: inyección
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>   junto al resto de repositorios, `jdbcTemplate.update("CALL ...", ...)`, y el endpoint
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>   POST en el controller con su DTO de entrada.
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>3. Comprobación guiada del efecto antes/después (con psql o DBeaver) sobre los datos de
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>   prueba que ya carga `DataInitializer.java`/`datos_iniciales.json`, con las consultas
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>   de verificación dadas en el enunciado.
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>4. Mini-reto (repite el patrón ya visto): añadir al procedimiento una salvaguarda para
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>   que ningún precio quede por debajo de 0 (por ejemplo con `GREATEST`), dando solo la
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>   pista de la función SQL a usar.
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>5. Una pregunta de comprensión de cierre: repasar, en 3-4 frases propias, cómo esta
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>   actividad conecta con las tres anteriores del tema (conector → CRUD/transacciones →
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>   JDBC puro → procedimiento almacenado), como resumen de cierre de todo RA2.
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>No introduzcas ORM/Hibernate en detalle en esta actividad (eso es el Tema 2 completo);
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>el procedimiento se invoca con JdbcTemplate, no con una entidad JPA.
-</code></pre></div></td></tr></table></div></div>
+<h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
+<p>Tu <code>EstudioController</code>/<code>EstudioService</code> de la Actividad 1.2 (con al menos <code>GET</code> y <code>POST</code>) y algún dato de prueba (un estudio con varios videojuegos asociados).</p>
+<hr>
+<h2 id="paso-1-el-procedimiento-almacenado">Paso 1 — El procedimiento almacenado<a class="headerlink" href="#paso-1-el-procedimiento-almacenado" title="Permanent link">¶</a></h2>
+<p>Conéctate a tu PostgreSQL (psql, DBeaver o pgAdmin) y ejecuta:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span>
+<span class="normal"><a href="#__codelineno-0-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ajustar_precio_estudio</span><span class="p">(</span><span class="n">p_estudio_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="n">p_porcentaje</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">BEGIN</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">videojuego</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="n">precio</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p_porcentaje</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">estudio_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_estudio_id</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">END</span><span class="p">;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="err">$$</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<p>Línea a línea: recibe el <code>id</code> de un estudio y un porcentaje; actualiza, de una sola vez, el precio de <strong>todos</strong> los videojuegos de ese estudio (<code>WHERE estudio_id = p_estudio_id</code>), multiplicándolo por <code>(1 + porcentaje/100)</code> y redondeando a 2 decimales con <code>ROUND</code> (recuerda: <code>precio</code> es un <code>BigDecimal</code> con precisión <code>10,2</code> en la base de datos — sin este redondeo explícito, el cálculo podría dejar decimales de más).</p>
+<p><strong>Verificación rápida en SQL</strong>, antes de tocar Java: comprueba los precios actuales de un estudio, invoca el procedimiento a mano, y vuelve a comprobarlos:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">estudio_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="k">CALL</span><span class="w"> </span><span class="n">ajustar_precio_estudio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">-- sube un 10%</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">estudio_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<hr>
+<h2 id="paso-2-invocacion-desde-el-service-guiada-al-completo">Paso 2 — Invocación desde el service, guiada al completo<a class="headerlink" href="#paso-2-invocacion-desde-el-service-guiada-al-completo" title="Permanent link">¶</a></h2>
+<p>Añade <code>JdbcTemplate</code> a <code>EstudioService</code>, junto al repositorio que ya tienes:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Service</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EstudioService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">EstudioRepository</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbcTemplate</span><span class="p">;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="c1">// ... tus métodos ya existentes (findAll, create, update, delete) ...</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ajustarPrecio</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">estudioRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">estudioId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Estudio no encontrado"</span><span class="p">);</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">        </span><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">"CALL ajustar_precio_estudio(?, ?)"</span><span class="p">,</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">);</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>No necesitas registrar <code>JdbcTemplate</code> en ningún sitio: Spring Boot lo configura automáticamente en cuanto detecta un <code>DataSource</code> en el classpath (el mismo que ya usa tu Spring Data JPA desde la Actividad 1.1) — solo tienes que declararlo como dependencia en el constructor, exactamente igual que <code>EstudioRepository</code>.</p>
+<p>Crea un DTO mínimo para el porcentaje:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">AjustePrecioDTO</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@Digits</span><span class="p">(</span><span class="n">integer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">fraction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">porcentaje</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<p>Y el endpoint en <code>EstudioController</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@PostMapping</span><span class="p">(</span><span class="s">"/{id}/ajustar-precio"</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">ajustarPrecio</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">AjustePrecioDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="n">estudioService</span><span class="p">.</span><span class="na">ajustarPrecio</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">porcentaje</span><span class="p">());</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">noContent</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Prueba con <code>curl</code> o Swagger UI:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/estudios/1/ajustar-precio<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"porcentaje": -15}'</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong>: con un <code>GET /api/v1/videojuegos</code> (o consultando directamente en <code>psql</code>), que los precios de los videojuegos de ese estudio han bajado un 15%.</p>
+<hr>
+<h2 id="mini-reto-una-salvaguarda-contra-precios-negativos">Mini-reto — una salvaguarda contra precios negativos<a class="headerlink" href="#mini-reto-una-salvaguarda-contra-precios-negativos" title="Permanent link">¶</a></h2>
+<p>Ahora mismo, si aplicas un porcentaje muy negativo (por ejemplo, <code>-150</code>), el procedimiento dejaría precios en negativo — algo que no tiene sentido de negocio. Modifica el <code>UPDATE</code> del procedimiento para que ningún precio resultante quede por debajo de <code>0</code>.</p>
+<p><strong>Pista</strong>: la función SQL <code>GREATEST(a, b)</code> devuelve el mayor de los dos valores — puedes envolver el cálculo del nuevo precio con ella para que nunca baje de <code>0</code>.</p>
+<p>Vuelve a ejecutar <code>CREATE OR REPLACE PROCEDURE</code> con tu versión corregida (el <code>OR REPLACE</code> te permite redefinirlo sin borrarlo antes) y comprueba con un porcentaje muy negativo que ahora los precios se quedan en <code>0</code>, no en negativo.</p>
+<hr>
+<h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
+<p>Repasa, en 3-4 frases propias, cómo esta actividad conecta con las tres anteriores de este tema: empezaste entendiendo por qué existen los conectores y cómo se define la estructura de la base de datos (Actividad 1.1), construiste un CRUD completo con transacciones gestionadas por Spring (Actividad 1.2), viste la misma fontanería pero a mano con JDBC puro (Actividad 1.3), y hoy has ejecutado código que vive dentro del propio motor de base de datos. ¿Cuál de las cuatro piezas te ha parecido más cercana a "lo que ya sabías de SQL" y cuál más nueva del todo?</p>
+<hr>
+<h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
+<p>En el Tema 2 vuelves a la comodidad de Spring Data JPA, pero esta vez con Hibernate como herramienta ORM completa — vas a instalarla, configurarla y usarla para persistir objetos sin escribir SQL a mano, retomando exactamente el desfase objeto-relacional del que arrancó este tema.</p></div>
 
 
 

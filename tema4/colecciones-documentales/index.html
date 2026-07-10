@@ -1582,9 +1582,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#relacional-vs-documental-concepto-a-concepto" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🆚 Relacional vs. documental, concepto a concepto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#colecciones-crear-eliminar-listar" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ Colecciones: crear, eliminar, listar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: por qué dos motores conviven
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: por qué dos motores conviven">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eliminar-documentos-de-forma-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Eliminar documentos de forma masiva
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1908,9 +1950,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#relacional-vs-documental-concepto-a-concepto" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🆚 Relacional vs. documental, concepto a concepto
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#colecciones-crear-eliminar-listar" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ Colecciones: crear, eliminar, listar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: por qué dos motores conviven
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: por qué dos motores conviven">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eliminar-documentos-de-forma-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Eliminar documentos de forma masiva
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1934,15 +2018,41 @@
 
 <div><p><a id="colecciones-documentales"></a></p>
 <h1 id="2-colecciones-documentales-relacional-vs-documental">🧩 2. Colecciones documentales: relacional vs. documental<a class="headerlink" href="#2-colecciones-documentales-relacional-vs-documental" title="Permanent link">¶</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">🚧 Contenido pendiente de desarrollo</p>
-<p>Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-<code>/improve-notes</code>, apoyándote en el proyecto <strong>GameVault</strong> adjunto, para generar el
-contenido definitivo.</p>
-</div>
+<p>Ya conectaste con MongoDB y construiste tu primer repositorio documental. Este apartado da un paso atrás para comparar con criterio los dos modelos que has usado en el curso, y cierra el hueco práctico que dejaste abierto: crear y eliminar colecciones explícitamente.</p>
 <hr>
-<h2 id="prompt-para-improve-notes">Prompt para <code>/improve-notes</code><a class="headerlink" href="#prompt-para-improve-notes" title="Permanent link">¶</a></h2>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<h2 id="relacional-vs-documental-concepto-a-concepto">🆚 Relacional vs. documental, concepto a concepto<a class="headerlink" href="#relacional-vs-documental-concepto-a-concepto" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Relacional (PostgreSQL)</th>
+<th>Documental (MongoDB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tabla</td>
+<td>Colección</td>
+</tr>
+<tr>
+<td>Fila</td>
+<td>Documento</td>
+</tr>
+<tr>
+<td>Columna</td>
+<td>Campo</td>
+</tr>
+<tr>
+<td><code>JOIN</code></td>
+<td>Documento embebido, o referencia manual (sin integridad automática)</td>
+</tr>
+</tbody>
+</table>
+<p>Ventajas del modelo documental: <strong>esquema flexible por documento</strong> (dos <code>Review</code> no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y <strong>escritura/lectura simple</strong>, sin <code>JOIN</code> que resolver.</p>
+<p>Inconvenientes: la <strong>integridad referencial manual</strong> que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que <code>videojuegoId</code> apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).</p>
+<hr>
+<h2 id="colecciones-crear-eliminar-listar">🛠️ Colecciones: crear, eliminar, listar<a class="headerlink" href="#colecciones-crear-eliminar-listar" title="Permanent link">¶</a></h2>
+<p>En <code>mongosh</code>:</p>
+<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
@@ -1952,106 +2062,50 @@ contenido definitivo.</p>
 <span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>Redacta el apartado de teoría "Colecciones documentales: relacional vs. documental" del
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>Tema 4 (RA5 - BD documentales) del módulo Acceso a Datos (0486), semana real 15 del
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>calendario (11-17 enero, tras las vacaciones de Navidad). Sigue las convenciones de
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>estilo del README.md del repo.
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>Criterios de evaluación de RA5 que cubre este apartado (curriculum.md):
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a>- a) Ventajas e inconvenientes de utilizar bases de datos documentales nativas.
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>- d) Se han añadido y eliminado colecciones de la base de datos.
+<span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// Se crea implícitamente al insertar el primer documento</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">review</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">videojuegoId</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(</span><span class="s2">"review"</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1">// Eliminar</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nx">db</span><span class="p">.</span><span class="nx">review</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a>Contenido central: comparación razonada entre modelo relacional (PostgreSQL, ya
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>trabajado en los Temas 1-3) y modelo documental nativo (MongoDB, empezado en el apartado
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>anterior), usando GameVault como caso de estudio real de por qué conviven ambos en el
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>mismo proyecto.
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>ESTRUCTURA — teoría primero: antes del caso GameVault, cubre la parte general con
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>ejemplos genéricos en mongosh (comandos mostrados): cómo se crea una colección
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>(implícitamente al insertar el primer documento, o explícitamente con createCollection y
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>para qué sirve la forma explícita — validación, colecciones capadas), cómo se elimina
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>(dropCollection) y cómo se listan (show collections); y la comparación
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>relacional/documental como tabla de conceptos equivalentes (tabla↔colección,
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>fila↔documento, columna↔campo, JOIN↔documento embebido o referencia manual) con las
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>ventajas e inconvenientes de cada modelo razonados, no como lista memorística.
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>Apóyate en el proyecto GameVault (com.aleroig.gamevault) como ejemplo real:
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>- Explica por qué el catálogo (Videojuego/Estudio, con relaciones claras y necesidad de
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>  transacciones ACID fuertes entre entidades) vive en PostgreSQL, mientras que las
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>  reseñas (com/aleroig/gamevault/reviews/Review.java: documentos independientes, sin
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>  relaciones entre sí, con forma que podría variar con el tiempo) viven en MongoDB — esto
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>  es una decisión de arquitectura real documentada en
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>  docs/04-decisiones-arquitectura.md del proyecto (sección "Bases de datos
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>  dockerizadas"), cítala como ejemplo de decisión consciente, no de "usar NoSQL porque
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>  sí".
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>- Ventajas del modelo documental: esquema flexible por documento (dos Review no tienen
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>  por qué tener exactamente los mismos campos si el esquema evoluciona), escritura/lectura
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>  simple sin JOINs.
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>- Inconvenientes: la propia "integridad referencial manual" ya vista en el apartado
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>  anterior (videojuegoId sin clave foránea real) es el precio a pagar; no hay
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>  transacciones multi-documento tan robustas como las de PostgreSQL (aunque MongoDB
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>  moderno sí las soporta parcialmente, coméntalo como matiz, no como ausencia total).
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>- com/aleroig/gamevault/reviews/ReviewRepository.java, método
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>  `deleteByVideojuegoId(Long videojuegoId)`: úsalo como ejemplo de "eliminar documentos
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>  de una colección de forma masiva" — explica que esto es lo que en el proyecto real se
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>  invocaría si se quisiera limpiar las reseñas huérfanas detectadas en la Actividad 4.1
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>  cuando se borra un videojuego (aunque en el GameVault actual ese borrado en cascada NO
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>  está conectado automáticamente a la eliminación del videojuego — señálalo como una
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>  posible MEJORA que el alumnado podría plantearse, sin implementarla obligatoriamente
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>  aquí).
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>- Sobre "añadir y eliminar colecciones" en sí: en MongoDB una colección se crea
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>  implícitamente al guardar el primer documento (no hace falta una sentencia DDL como
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>  `CREATE TABLE`) y se elimina con `dropCollection` — contrástalo con el DDL de
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>  PostgreSQL (`ddl-auto` de Hibernate, visto en el Tema 1) para remarcar la diferencia de
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>  filosofía.
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>No entres todavía en modificación de documentos individuales (PUT) ni en el cierre de
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a>RA5: eso es el siguiente apartado, modificacion-documentos.md.
-</code></pre></div></td></tr></table></div></div>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1">// Listar</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nx">show</span><span class="w"> </span><span class="nx">collections</span>
+</code></pre></div></td></tr></table></div>
+<p>La forma <strong>explícita</strong> (<code>createCollection</code>) sirve para cuando necesitas configurar algo desde el principio — por ejemplo, reglas de validación de esquema, o una colección "capada" (de tamaño fijo, que sobrescribe los documentos más antiguos). Para el caso normal, no hace falta: MongoDB crea la colección sola en cuanto guardas el primer documento.</p>
+<div class="admonition tip">
+<p class="admonition-title">Contraste con el DDL de PostgreSQL</p>
+<p>En PostgreSQL, necesitas una sentencia <code>CREATE TABLE</code> explícita (o <code>ddl-auto</code> de Hibernate haciéndolo por ti, como viste en el Tema 1) antes de poder insertar nada. En MongoDB, la colección aparece sola al primer <code>insert</code> — es la misma diferencia de filosofía que ya viste entre esquema fijo y esquema flexible, ahora aplicada a la propia existencia de la colección.</p>
+</div>
+<hr>
+<h2 id="aterrizaje-en-gamevault-por-que-dos-motores-conviven">🎮 Aterrizaje en GameVault: por qué dos motores conviven<a class="headerlink" href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" title="Permanent link">¶</a></h2>
+<p>GameVault usa PostgreSQL para el catálogo (<code>Videojuego</code>/<code>Estudio</code>: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB para las reseñas (<code>Review</code>: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una <strong>decisión de arquitectura deliberada</strong>, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.</p>
+<h3 id="eliminar-documentos-de-forma-masiva">Eliminar documentos de forma masiva<a class="headerlink" href="#eliminar-documentos-de-forma-masiva" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ReviewRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">Review</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>deleteByVideojuegoId</code> es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las <strong>reseñas huérfanas</strong> que detectaste en la Actividad 4.1: si se borra un videojuego cuyas reseñas siguen en Mongo, este método las limpia de golpe.</p>
+<div class="admonition tip">
+<p class="admonition-title">El borrado en cascada ya existe — de forma asíncrona</p>
+<p>Este borrado en cascada se resuelve <strong>conectado a través de eventos</strong>: cuando se borra un videojuego, <code>VideojuegoService</code> publica un evento por RabbitMQ que un <em>consumer</em> del módulo <code>reviews</code> recibe y usa para invocar <code>deleteByVideojuegoId</code>. No ocurre de forma síncrona dentro de la misma llamada — ocurre poco después, en otro hilo. Verás el flujo completo, con el código guiado paso a paso, en la Actividad 4.2.</p>
+</div>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<ul>
+<li>Tabla↔colección, fila↔documento, columna↔campo, <code>JOIN</code>↔documento embebido o referencia manual.</li>
+<li>El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.</li>
+<li>Una colección se crea implícitamente al primer <code>insert</code>, o explícitamente con <code>createCollection</code> (para validación o colecciones capadas); se elimina con <code>drop()</code>.</li>
+<li>GameVault usa dos motores por una decisión de arquitectura documentada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.</li>
+<li><code>deleteByVideojuegoId</code> elimina documentos en bloque — es la pieza que resuelve las reseñas huérfanas, conectada de forma asíncrona vía RabbitMQ.</li>
+</ul>
+</details></div>
 
 
 

@@ -1376,9 +1376,69 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#el-problema-consultar-dentro-de-un-json" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🔍 El problema: consultar dentro de un JSON
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-disponibleenplataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: disponibleEnPlataforma
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: disponibleEnPlataforma">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#la-specification-con-jsonb_exists-desde-criteria-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      La Specification, con jsonb_exists desde Criteria API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combinada-con-el-resto-de-forma-transparente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Combinada con el resto, de forma transparente
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modificar-objetos-jsonb-reemplazo-no-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✏️ Modificar objetos JSONB: reemplazo, no merge
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transacciones-nada-especial-que-gestionar" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Transacciones: nada especial que gestionar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1908,9 +1968,69 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#el-problema-consultar-dentro-de-un-json" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🔍 El problema: consultar dentro de un JSON
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-disponibleenplataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: disponibleEnPlataforma
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: disponibleEnPlataforma">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#la-specification-con-jsonb_exists-desde-criteria-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      La Specification, con jsonb_exists desde Criteria API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combinada-con-el-resto-de-forma-transparente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Combinada con el resto, de forma transparente
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modificar-objetos-jsonb-reemplazo-no-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✏️ Modificar objetos JSONB: reemplazo, no merge
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transacciones-nada-especial-que-gestionar" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Transacciones: nada especial que gestionar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1934,116 +2054,93 @@
 
 <div><p><a id="consultas-jsonb"></a></p>
 <h1 id="2-consultas-sobre-columnas-jsonb">🧩 2. Consultas sobre columnas JSONB<a class="headerlink" href="#2-consultas-sobre-columnas-jsonb" title="Permanent link">¶</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">🚧 Contenido pendiente de desarrollo</p>
-<p>Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-<code>/improve-notes</code>, apoyándote en el proyecto <strong>GameVault</strong> adjunto, para generar el
-contenido definitivo.</p>
-</div>
+<p>Ya sabes guardar objetos estructurados en una columna JSONB. El siguiente paso: filtrar por su contenido — algo que una condición <code>WHERE</code> normal no sabe hacer, porque ya no compara una columna, sino una <strong>clave dentro de un objeto</strong>.</p>
 <hr>
-<h2 id="prompt-para-improve-notes">Prompt para <code>/improve-notes</code><a class="headerlink" href="#prompt-para-improve-notes" title="Permanent link">¶</a></h2>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>Redacta el apartado de teoría "Consultas sobre columnas JSONB" del Tema 3 (RA4 - BD
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>objeto relacionales y orientadas a objetos) del módulo Acceso a Datos (0486), semana real
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>11 del calendario. Sigue las convenciones de estilo del README.md del repo.
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>Criterios de evaluación de RA4 que cubre este apartado (curriculum.md):
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>- e) Aplicaciones que realizan consultas.
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a>- f) Modificación de los objetos almacenados.
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>- g) Gestión de las transacciones.
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a>ESTRUCTURA — teoría primero: antes del código del proyecto, explica desde cero cómo se
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>consulta el contenido de un JSON almacenado en una base de datos: el problema (la
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>condición del WHERE ya no es sobre una columna, sino sobre una CLAVE dentro del objeto)
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>y las herramientas que ofrece PostgreSQL en SQL puro — muestra 2-3 ejemplos genéricos en
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a>SQL directo con los operadores/funciones jsonb más comunes (jsonb_exists o el operador
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>`?` para "existe la clave", `-&gt;`/`-&gt;&gt;` para extraer valores) sobre una tabla de ejemplo,
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>de modo que el alumnado entienda la consulta en SQL ANTES de verla envuelta en la
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>Criteria API de Java.
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>Después, aterriza en GameVault (com.aleroig.gamevault):
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>- com/aleroig/gamevault/catalogo/VideojuegoSpecifications.java, método
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>  `disponibleEnPlataforma(String plataforma)`: analízalo en detalle — usa
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>  `criteriaBuilder.function("jsonb_exists", Boolean.class,
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>  root.get("detallesPlataforma"), criteriaBuilder.literal(plataforma.toLowerCase()))`
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>  para invocar la función nativa `jsonb_exists` de PostgreSQL desde una Specification de
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>  Criteria API. Explica qué hace `jsonb_exists(columna, clave)` en PostgreSQL puro
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>  (comprobar si una clave de primer nivel existe en el JSON) antes de mostrar cómo se
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>  invoca desde Java.
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>- Contrasta esto con las Specifications "normales" ya vistas en el Tema 2
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>  (`tituloContiene`, `precioMayorOIgualA`) que operan sobre columnas relacionales
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>  corrientes con `criteriaBuilder.like`/`greaterThanOrEqualTo` — aquí, en cambio, hace
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>  falta una función específica del motor de base de datos porque el contenido vive dentro
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>  de un JSON, no en una columna con su propio tipo.
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>- com/aleroig/gamevault/catalogo/VideojuegoService.java (findAllPaginated): muestra cómo
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>  `disponibleEnPlataforma` se combina con el resto de Specifications igual que cualquier
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>  otra, con `.and(...)` — remarca que, desde el punto de vista de quien usa el
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>  repositorio, consultar JSONB o una columna normal es transparente gracias a
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>  Specification.
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>Sobre modificación de objetos JSONB (criterio f): retoma `update()` en
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>VideojuegoService.java y explica que actualizar `detallesPlataforma` reemplaza el Map
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>completo (ya visto en la Actividad 3.1) — aquí profundiza en por qué NO existe, en
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>Hibernate/JPA estándar, una forma directa de "hacer un merge parcial" del JSON sin traer
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>el objeto completo primero.
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>Sobre transacciones (criterio g): recuerda que `@Transactional` funciona exactamente
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>igual sobre entidades con columnas JSONB que sobre cualquier otra entidad — no hay nada
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>especial que gestionar aquí, y merece la pena decirlo explícitamente para no generar
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>falsas expectativas de complejidad añadida.
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>No entres en BD orientadas a objetos puras ni en el cierre de RA4: eso es el siguiente
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>apartado, bd-orientadas-a-objetos.md.
-</code></pre></div></td></tr></table></div></div>
+<h2 id="el-problema-consultar-dentro-de-un-json">🔍 El problema: consultar dentro de un JSON<a class="headerlink" href="#el-problema-consultar-dentro-de-un-json" title="Permanent link">¶</a></h2>
+<p>Con una columna normal, un <code>WHERE</code> compara el valor completo de esa columna. Con JSONB, lo que quieres comprobar no es la columna entera, sino si existe (o qué vale) una clave concreta dentro del objeto que esa columna contiene. PostgreSQL ofrece operadores y funciones específicas para esto:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">-- ¿Existe la clave "steam" de primer nivel en el JSON?</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">jsonb_exists</span><span class="p">(</span><span class="n">detallesplataforma</span><span class="p">,</span><span class="w"> </span><span class="s1">'steam'</span><span class="p">);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="c1">-- equivalente con el operador ?</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'steam'</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1">-- Extraer el valor de una clave</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'steam'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'steam'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
+</code></pre></div></td></tr></table></div>
+<p><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. <code>-&gt;</code> extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); <code>-&gt;&gt;</code> lo extrae como texto plano.</p>
+<p>Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.</p>
+<hr>
+<h2 id="aterrizaje-en-gamevault-disponibleenplataforma">🎮 Aterrizaje en GameVault: <code>disponibleEnPlataforma</code><a class="headerlink" href="#aterrizaje-en-gamevault-disponibleenplataforma" title="Permanent link">¶</a></h2>
+<h3 id="la-specification-con-jsonb_exists-desde-criteria-api">La Specification, con <code>jsonb_exists</code> desde Criteria API<a class="headerlink" href="#la-specification-con-jsonb_exists-desde-criteria-api" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">disponibleEnPlataforma</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">plataforma</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">plataforma</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">plataforma</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">isTrue</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">                    </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">function</span><span class="p">(</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">                            </span><span class="s">"jsonb_exists"</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">                            </span><span class="n">Boolean</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">                            </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesPlataforma"</span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">                            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="n">plataforma</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">())</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">                    </span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">            </span><span class="p">);</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Compárala con las Specifications "normales" que ya conoces del Tema 2 (<code>tituloContiene</code>, <code>precioMayorOIgualA</code>), que usan métodos directos de <code>criteriaBuilder</code> como <code>like</code> o <code>greaterThanOrEqualTo</code> — funcionan porque operan sobre una columna con su propio tipo simple. Aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función <strong>específica del motor</strong> (PostgreSQL), no parte del estándar JPA. Por eso hace falta <code>criteriaBuilder.function("jsonb_exists", ...)</code>: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (<code>Boolean.class</code>), y sus argumentos (la columna, y un literal con la clave a buscar).</p>
+<h3 id="combinada-con-el-resto-de-forma-transparente">Combinada con el resto, de forma transparente<a class="headerlink" href="#combinada-con-el-resto-de-forma-transparente" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">disponibleEnPlataforma</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">plataforma</span><span class="p">()));</span>
+</code></pre></div></td></tr></table></div>
+<p>Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una columna relacional corriente es exactamente lo mismo — una Specification más, encadenada con <code>.and(...)</code> como cualquier otra. Toda la complejidad de "esto necesita una función nativa" queda encapsulada dentro del método <code>disponibleEnPlataforma</code>.</p>
+<hr>
+<h2 id="modificar-objetos-jsonb-reemplazo-no-merge">✏️ Modificar objetos JSONB: reemplazo, no <em>merge</em><a class="headerlink" href="#modificar-objetos-jsonb-reemplazo-no-merge" title="Permanent link">¶</a></h2>
+<p>Ya lo comprobaste en la Actividad 3.1: <code>update()</code> en <code>VideojuegoService</code> reemplaza el <code>Map</code> completo de <code>detallesPlataforma</code>, no combina el nuevo contenido con el anterior.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">v</span><span class="p">.</span><span class="na">setDetallesPlataforma</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesPlataforma</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
+</code></pre></div></td></tr></table></div>
+<p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesPlataforma</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.</p>
+<hr>
+<h2 id="transacciones-nada-especial-que-gestionar">🔄 Transacciones: nada especial que gestionar<a class="headerlink" href="#transacciones-nada-especial-que-gestionar" title="Permanent link">¶</a></h2>
+<p>Merece la pena decirlo explícitamente para no generar expectativas de complejidad añadida — <code>@Transactional</code> funciona <strong>exactamente igual</strong> sobre una entidad con columnas JSONB que sobre cualquier otra entidad. No hay ningún matiz especial de transacciones que gestionar por tener una columna JSONB; sigue siendo la misma anotación, el mismo comportamiento, que ya conoces desde el Tema 1.</p>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<ul>
+<li><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>) comprueba si una clave existe en el JSON; <code>-&gt;</code>/<code>-&gt;&gt;</code> extraen valores (como JSON o como texto).</li>
+<li>Consultar el contenido de una columna JSONB desde Criteria API requiere <code>criteriaBuilder.function(...)</code>, porque son funciones específicas del motor, no parte del estándar JPA.</li>
+<li>Combinada con <code>.and(...)</code>, una Specification sobre JSONB se usa exactamente igual que una sobre una columna normal — transparente para quien consume el repositorio.</li>
+<li>Actualizar un campo JSONB <strong>reemplaza</strong> el objeto completo — JPA no sabe hacer <em>merge</em> parcial de un valor de columna; si lo necesitas, lo haces tú en memoria antes de guardar.</li>
+<li><code>@Transactional</code> no cambia en nada por tener columnas JSONB de por medio.</li>
+</ul>
+</details></div>
 
 
 

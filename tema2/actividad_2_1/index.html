@@ -1147,9 +1147,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-generationtypeidentity-por-que-esa-estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — GenerationType.IDENTITY, ¿por qué esa estrategia?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-experimento-con-columnprecision-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Experimento con @Column(precision, scale)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-lazy-vs-eager-mirando-el-sql-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — LAZY vs. EAGER, mirando el SQL real
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-el-experimento-de-cierre-cascade-y-orphanremoval" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — El experimento de cierre: cascade y orphanRemoval
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
     </span>
   </a>
   
@@ -1908,9 +1962,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      Qué vas a practicar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requisitos previos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-1-generationtypeidentity-por-que-esa-estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 — GenerationType.IDENTITY, ¿por qué esa estrategia?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-2-experimento-con-columnprecision-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 — Experimento con @Column(precision, scale)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-lazy-vs-eager-mirando-el-sql-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — LAZY vs. EAGER, mirando el SQL real
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-el-experimento-de-cierre-cascade-y-orphanremoval" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — El experimento de cierre: cascade y orphanRemoval
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cierre" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Cierre
     </span>
   </a>
   
@@ -1933,78 +2041,76 @@
 
 
 <div><h1 id="actividad-21-de-jdbc-puro-a-hibernate-mapeo-con-anotaciones">🧪 Actividad 2.1: De JDBC puro a Hibernate — mapeo con anotaciones<a class="headerlink" href="#actividad-21-de-jdbc-puro-a-hibernate-mapeo-con-anotaciones" title="Permanent link">¶</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">🚧 Contenido pendiente de desarrollo</p>
-<p>Esta actividad todavía no está redactada. Usa el prompt de más abajo con
-<code>/improve-notes</code>, apoyándote en el proyecto <strong>GameVault</strong> adjunto, para generar el
-enunciado definitivo.</p>
+<div class="admonition info">
+<p class="admonition-title">Práctica guiada — experimentos sobre tu propio mapeo</p>
+<p>No vas a escribir entidades nuevas hoy — vas a experimentar sobre las que ya tienes (<code>Videojuego</code>, <code>Estudio</code>), cambiando anotaciones a propósito y observando qué SQL genera Hibernate en cada caso.</p>
 </div>
+<h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
+<ul>
+<li>Entender por qué <code>GenerationType.IDENTITY</code> encaja con PostgreSQL.</li>
+<li>Comprobar experimentalmente el efecto de <code>@Column(precision, scale)</code>.</li>
+<li>Comparar <code>FetchType.LAZY</code> frente a <code>EAGER</code> mirando el SQL real generado.</li>
+<li>Comprobar el efecto de <code>cascade</code>/<code>orphanRemoval</code> al borrar.</li>
+</ul>
 <hr>
-<h2 id="prompt-para-improve-notes">Prompt para <code>/improve-notes</code><a class="headerlink" href="#prompt-para-improve-notes" title="Permanent link">¶</a></h2>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>Redacta la Actividad 2.1 del Tema 2 (RA3 - ORM) del módulo Acceso a Datos (0486), semana
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>real 7 del calendario. Sigue el patrón de estructura de docs/tema0/actividad_0_6.md y
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>usa la skill /actividad-plantilla-acceso-a-datos si necesita plantilla/solución en .docx.
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>IMPORTANTE — enfoque: es una PRÁCTICA GUIADA, no un reto. El alumnado trabaja sobre su
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>propia copia de GameVault (el mismo proyecto adjunto, construido individualmente durante
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a>el curso). El enunciado debe guiar paso a paso, mostrando el código y explicando cada
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>decisión; solo se deja sin guiar, como mini-reto, lo que repita un patrón idéntico ya
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>mostrado en la misma actividad.
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>Objetivo (RA3, criterios a, b, c): que el alumnado, sobre su GameVault (con
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>Videojuego/Estudio ya creados desde el Tema 1), revise y comprenda a fondo el mapeo de
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>sus entidades, guiado con experimentos concretos sobre decisiones reales del proyecto:
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>- com/aleroig/gamevault/catalogo/Videojuego.java: revisar guiadamente
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>  `@GeneratedValue(strategy = GenerationType.IDENTITY)` (explicando en el enunciado la
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>  alternativa `SEQUENCE`/`AUTO` y por qué IDENTITY encaja bien con PostgreSQL).
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>- `@Column(precision = 10, scale = 2)` sobre el precio: experimento guiado — quitar la
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>  anotación, arrancar, mirar el tipo de columna generado, volver a ponerla y comparar
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>  (pasos e instrucciones de verificación dados en el enunciado).
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>- Experimento guiado con `fetch = FetchType.LAZY` en la relación @ManyToOne hacia
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>  Estudio: activar el log de SQL (`spring.jpa.show-sql=true`/`org.hibernate.SQL=DEBUG` —
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>  configuración dada), hacer un `findAll()` con LAZY y con EAGER, pegar el SQL generado
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>  en cada caso y comentarlo — el enunciado indica exactamente qué mirar en el log.
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>- Experimento guiado de cierre: probar qué pasa al borrar un Estudio con Videojuego
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>  asociados, con y sin `cascade = CascadeType.ALL, orphanRemoval = true`, siguiendo los
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>  pasos dados, y describir la diferencia observada + pregunta de comprensión (¿por qué
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>  la cascada va en ese lado de la relación y no al revés?).
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>Esta actividad no debe usar Specifications ni @Query JPQL: eso corresponde a las
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>actividades 2.2 y 2.3. El foco es exclusivamente el mapeo con anotaciones y el ciclo de
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>vida de las entidades.
-</code></pre></div></td></tr></table></div></div>
+<h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
+<p>Tus entidades <code>Videojuego</code> y <code>Estudio</code> del Tema 1, con algunos datos de prueba ya creados.</p>
+<hr>
+<h2 id="paso-1-generationtypeidentity-por-que-esa-estrategia">Paso 1 — <code>GenerationType.IDENTITY</code>, ¿por qué esa estrategia?<a class="headerlink" href="#paso-1-generationtypeidentity-por-que-esa-estrategia" title="Permanent link">¶</a></h2>
+<p>Mira tu anotación actual:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@Id</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<p>Existen otras estrategias (<code>SEQUENCE</code>, <code>AUTO</code>, <code>TABLE</code>) — <code>IDENTITY</code> delega la generación del id directamente en una columna autoincremental de la base de datos (en PostgreSQL, por debajo usa un tipo serial/identity nativo), mientras que <code>SEQUENCE</code> usa un objeto secuencia independiente que Hibernate puede consultar por adelantado (útil para reservar varios ids antes de insertar, algo que <code>IDENTITY</code> no permite).</p>
+<p><strong>Pregunta</strong>: dado que PostgreSQL soporta columnas identity de forma nativa y eficiente, ¿por qué crees que el proyecto ha elegido <code>IDENTITY</code> en vez de <code>SEQUENCE</code>, si ambas son válidas?</p>
+<hr>
+<h2 id="paso-2-experimento-con-columnprecision-scale">Paso 2 — Experimento con <code>@Column(precision, scale)</code><a class="headerlink" href="#paso-2-experimento-con-columnprecision-scale" title="Permanent link">¶</a></h2>
+<p>Con tu aplicación <strong>parada</strong>, quita temporalmente la anotación de <code>precio</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">// Antes</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nd">@Column</span><span class="p">(</span><span class="n">precision</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kd">private</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="c1">// Ahora, para el experimento</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="kd">private</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<p>Borra la tabla <code>videojuego</code> de tu base de datos (o usa una base de datos de prueba nueva) y arranca la aplicación con <code>show-sql: true</code> activo. Mira en la consola el <code>create table</code> generado, y comprueba el tipo de columna con:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"\d videojuego"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Anota</strong> el tipo exacto de la columna <code>precio</code> sin la anotación.</p>
+<p>Ahora vuelve a poner <code>@Column(precision = 10, scale = 2)</code>, borra la tabla de nuevo, reinicia, y repite la comprobación.</p>
+<p><strong>Responde</strong>: ¿qué diferencia exacta hay entre los dos tipos de columna generados? ¿Qué problema práctico podría causar la versión sin precisión definida, en una columna que guarda dinero?</p>
+<hr>
+<h2 id="paso-3-lazy-vs-eager-mirando-el-sql-real">Paso 3 — <code>LAZY</code> vs. <code>EAGER</code>, mirando el SQL real<a class="headerlink" href="#paso-3-lazy-vs-eager-mirando-el-sql-real" title="Permanent link">¶</a></h2>
+<p>Activa el log detallado de Hibernate en <code>application-dev.yaml</code> si no lo tienes ya:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">logging</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">level</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">org.hibernate.SQL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG</span>
+</code></pre></div></td></tr></table></div>
+<p>Con tu relación actual (<code>fetch = FetchType.LAZY</code> en <code>Videojuego.estudio</code>), llama a tu endpoint <code>GET /api/v1/videojuegos</code> y mira los logs. <strong>Anota</strong> cuántas consultas SQL distintas ves.</p>
+<p>Cambia temporalmente a <code>fetch = FetchType.EAGER</code>, reinicia, repite la misma petición, y vuelve a mirar los logs.</p>
+<p><strong>Compara</strong> ambos casos: ¿el número de consultas SQL es el mismo, o cambia? ¿En qué momento (antes o después de necesitar realmente el dato de <code>Estudio</code>) se ejecuta la consulta relacionada en cada caso? Deja tu código con <code>LAZY</code> al terminar — es la configuración correcta del proyecto.</p>
+<hr>
+<h2 id="paso-4-el-experimento-de-cierre-cascade-y-orphanremoval">Paso 4 — El experimento de cierre: cascade y orphanRemoval<a class="headerlink" href="#paso-4-el-experimento-de-cierre-cascade-y-orphanremoval" title="Permanent link">¶</a></h2>
+<p>Con tu configuración actual (<code>cascade = CascadeType.ALL, orphanRemoval = true</code> en <code>Estudio.videojuegos</code>), crea un <code>Estudio</code> con dos o tres <code>Videojuego</code> asociados. Bórralo:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/estudios/<span class="o">{</span>id<span class="o">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong> en la base de datos que los videojuegos asociados también han desaparecido.</p>
+<p>Ahora, quita temporalmente <code>cascade = CascadeType.ALL, orphanRemoval = true</code> de <code>Estudio.videojuegos</code> (déjalo solo como <code>@OneToMany(mappedBy = "estudio")</code>), reinicia, crea otro estudio con videojuegos, e intenta borrarlo de la misma forma.</p>
+<p><strong>Observa</strong> qué pasa esta vez (probablemente un error, por la restricción de clave foránea que sigue apuntando a un estudio que ya no existe).</p>
+<p><strong>Pregunta de comprensión</strong>: ¿por qué la cascada se declara en el lado <code>Estudio → Videojuego</code> de la relación, y no tendría sentido ponerla al revés (<code>Videojuego → Estudio</code>)? Piensa en qué significaría, en ese caso, borrar un solo videojuego. Cuando termines, restaura <code>cascade = CascadeType.ALL, orphanRemoval = true</code> — es la configuración correcta del proyecto.</p>
+<hr>
+<h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
+<p>Has comprobado con SQL real, no solo de memoria, qué hace cada decisión de mapeo que ya tenías en tu código desde el Tema 1. En el siguiente apartado dejas de mirar el mapeo y empiezas a trabajar con consultas dinámicas: Specifications.</p></div>
 
 
 

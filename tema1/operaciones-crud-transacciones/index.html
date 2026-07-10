@@ -918,9 +918,78 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-es-crud" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🔤 Qué es CRUD
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-una-transaccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      💳 Qué es una transacción
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-dto" class="md-nav__link">
+    <span class="md-ellipsis">
+      📦 Qué es un DTO
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-record-de-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧱 Qué es un record de Java
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-el-crud-de-videojuego" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: el CRUD de Videojuego
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: el CRUD de Videojuego">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transacciones-con-transactional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transacciones con @Transactional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#los-dtos-reales" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los DTOs reales
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1908,9 +1977,78 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prompt-para-improve-notes" class="md-nav__link">
+  <a href="#que-es-crud" class="md-nav__link">
     <span class="md-ellipsis">
-      Prompt para /improve-notes
+      🔤 Qué es CRUD
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-una-transaccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      💳 Qué es una transacción
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-dto" class="md-nav__link">
+    <span class="md-ellipsis">
+      📦 Qué es un DTO
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-es-un-record-de-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧱 Qué es un record de Java
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aterrizaje-en-gamevault-el-crud-de-videojuego" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎮 Aterrizaje en GameVault: el CRUD de Videojuego
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: el CRUD de Videojuego">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transacciones-con-transactional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transacciones con @Transactional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#los-dtos-reales" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los DTOs reales
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -1934,138 +2072,198 @@
 
 <div><p><a id="operaciones-crud-transacciones"></a></p>
 <h1 id="3-operaciones-crud-y-gestion-de-transacciones">🧩 3. Operaciones CRUD y gestión de transacciones<a class="headerlink" href="#3-operaciones-crud-y-gestion-de-transacciones" title="Permanent link">¶</a></h1>
+<p>Ya sabes por qué hacen falta conectores y cómo se declara la estructura de una base de datos desde Java. Toca el paso siguiente: cómo se modifican y consultan los datos desde una aplicación real, y qué garantiza que esas modificaciones no dejen la base de datos a medias si algo falla.</p>
+<hr>
+<h2 id="que-es-crud">🔤 Qué es CRUD<a class="headerlink" href="#que-es-crud" title="Permanent link">¶</a></h2>
+<p><strong>CRUD</strong> son las siglas de las cuatro operaciones universales sobre datos: <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete. Ya las conoces en SQL — son la misma idea con otro nombre:</p>
+<table>
+<thead>
+<tr>
+<th>CRUD</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create</td>
+<td><code>INSERT</code></td>
+</tr>
+<tr>
+<td>Read</td>
+<td><code>SELECT</code></td>
+</tr>
+<tr>
+<td>Update</td>
+<td><code>UPDATE</code></td>
+</tr>
+<tr>
+<td>Delete</td>
+<td><code>DELETE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Casi cualquier funcionalidad de una aplicación real, por compleja que parezca, se reduce en el fondo a combinar estas cuatro operaciones sobre distintos datos.</p>
+<hr>
+<h2 id="que-es-una-transaccion">💳 Qué es una transacción<a class="headerlink" href="#que-es-una-transaccion" title="Permanent link">¶</a></h2>
+<p>Imagina una transferencia bancaria: restar 100€ de la cuenta A y sumar 100€ a la cuenta B. Son dos operaciones — pero si el programa falla justo después de restar y antes de sumar, el dinero desaparece. Nadie quiere eso.</p>
+<p>Una <strong>transacción</strong> es una forma de agrupar varias operaciones para que se comporten como una sola unidad: <strong>todo o nada</strong>. Si todas las operaciones de la transacción terminan bien, se confirman de golpe (<strong>commit</strong>); si cualquiera falla a mitad, se deshace todo lo hecho hasta ese punto (<strong>rollback</strong>), como si nunca hubiera pasado nada.</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Empieza transacción"] --&gt; B["Resta 100€ a A"]
+    B --&gt; C["Suma 100€ a B"]
+    C --&gt;|"todo bien"| D["✅ COMMIT&lt;br/&gt;(se confirma)"]
+    B -.-&gt;|"falla algo"| E["↩️ ROLLBACK&lt;br/&gt;(se deshace todo)"]
+    C -.-&gt;|"falla algo"| E</code></pre>
+<p>Las propiedades que debe cumplir una transacción se resumen en el acrónimo <strong>ACID</strong>:</p>
+<ul>
+<li><strong>Atomicidad</strong>: la transacción se ejecuta entera o no se ejecuta nada de ella.</li>
+<li><strong>Consistencia</strong>: la base de datos pasa de un estado válido a otro estado válido, nunca a uno a medias.</li>
+<li><strong>Aislamiento</strong>: dos transacciones que ocurren al mismo tiempo no se interfieren entre sí.</li>
+<li><strong>Durabilidad</strong>: una vez confirmada (commit), la transacción sobrevive aunque el sistema se caiga justo después.</li>
+</ul>
+<hr>
+<h2 id="que-es-un-dto">📦 Qué es un DTO<a class="headerlink" href="#que-es-un-dto" title="Permanent link">¶</a></h2>
+<p>Un <strong>DTO</strong> (<em>Data Transfer Object</em>, objeto de transferencia de datos) es un objeto hecho a medida de lo que entra o sale de tu aplicación — distinto del objeto que usas internamente. En vez de exponer directamente tus clases internas a quien consuma tu API, defines objetos específicos: uno para lo que se recibe al crear algo, otro para lo que se devuelve al consultarlo.</p>
+<p>¿Por qué separar ambos si "básicamente son los mismos datos"? Dos razones concretas: controlas exactamente qué campos se exponen hacia fuera (una entidad interna puede tener columnas que no quieres que nadie vea), y puedes tener formas distintas para crear y para leer (al crear, por ejemplo, no tiene sentido pedir un <code>id</code>, porque todavía no existe).</p>
+<hr>
+<h2 id="que-es-un-record-de-java">🧱 Qué es un <code>record</code> de Java<a class="headerlink" href="#que-es-un-record-de-java" title="Permanent link">¶</a></h2>
+<p>Antes de ver los DTOs reales del proyecto, necesitas conocer una construcción del lenguaje que no has usado hasta ahora: el <strong>record</strong> (desde Java 16). Un record declara, en una sola línea, una clase inmutable pensada exactamente para "llevar datos de un sitio a otro":</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">record</span> <span class="nc">Punto</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<p>Con esa única línea, el compilador genera automáticamente:</p>
+<ul>
+<li>Un <strong>constructor</strong> que recibe <code>x</code> e <code>y</code>.</li>
+<li>Un <strong>getter</strong> por cada campo, sin el prefijo <code>get</code> (<code>punto.x()</code>, no <code>punto.getX()</code>).</li>
+<li><code>equals()</code>, <code>hashCode()</code> y <code>toString()</code> coherentes con los campos.</li>
+</ul>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">Punto</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Punto</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">p</span><span class="p">.</span><span class="na">x</span><span class="p">();</span><span class="w">       </span><span class="c1">// 3</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">p</span><span class="p">.</span><span class="na">toString</span><span class="p">();</span><span class="w"> </span><span class="c1">// "Punto[x=3, y=4]"</span>
+</code></pre></div></td></tr></table></div>
+<p>Todos los campos de un record son <code>final</code> por diseño: una vez creado, no se puede modificar — no hay setters, ni forma de cambiar <code>x</code> o <code>y</code> después de construirlo. Esa <strong>inmutabilidad</strong> es justo lo que encaja con un DTO: un objeto que representa un dato en un momento concreto (lo que se recibió, lo que se va a devolver), no algo que deba cambiar de estado con el tiempo.</p>
 <div class="admonition warning">
-<p class="admonition-title">🚧 Contenido pendiente de desarrollo</p>
-<p>Esta página todavía no tiene la teoría redactada. Usa el prompt de más abajo con
-<code>/improve-notes</code>, apoyándote en el proyecto <strong>GameVault</strong> adjunto, para generar el
-contenido definitivo.</p>
+<p class="admonition-title">Un record NO es lo mismo que una <code>@Entity</code></p>
+<p>Las entidades JPA (<code>Videojuego</code>, <code>Estudio</code>, que ya conoces del apartado anterior) siguen siendo clases normales, con <code>@Getter</code>/<code>@Setter</code> de Lombok: necesitan ser mutables (Hibernate las modifica al cargarlas y guardarlas) y tener un identificador gestionado por el framework. Un record, en cambio, encaja con los DTOs porque nunca necesita cambiar una vez construido. No confundas ambos: si ves <code>record</code> en una clase, es un DTO; si ves <code>@Entity</code>, es una entidad persistente.</p>
 </div>
 <hr>
-<h2 id="prompt-para-improve-notes">Prompt para <code>/improve-notes</code><a class="headerlink" href="#prompt-para-improve-notes" title="Permanent link">¶</a></h2>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span>
-<span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>Redacta el apartado de teoría "Operaciones CRUD y gestión de transacciones" del Tema 1
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>(RA2 - Manejo de conectores) del módulo Acceso a Datos (0486), semana real 4 del
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>calendario. Sigue las convenciones de estilo del README.md del repo y de
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a>docs/tema0/introduccion-docker.md.
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>Criterios de evaluación de RA2 que cubre este apartado (curriculum.md):
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a>- f) Aplicaciones que modifican el contenido de la base de datos.
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>- g) Objetos destinados a almacenar el resultado de las consultas.
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>- h) Aplicaciones que efectúan consultas.
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a>- j) Gestión de las transacciones.
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>ESTRUCTURA OBLIGATORIA — teoría primero, proyecto después.
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a>PARTE 1 — Teoría general, desde cero y sin mencionar GameVault todavía:
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>- Qué significa CRUD (Create, Read, Update, Delete): las cuatro operaciones universales
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>  sobre datos y su correspondencia con el SQL que ya conocen (INSERT, SELECT, UPDATE,
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>  DELETE).
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>- Qué es una transacción, desde cero: unidad de trabajo todo-o-nada, con el ejemplo
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>  clásico de la transferencia bancaria (restar de una cuenta y sumar en otra: si falla a
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a>  mitad, desastre); commit y rollback; las propiedades ACID explicadas en una frase cada
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>  una, sin siglas sueltas.
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>- Qué es un DTO (objeto de transferencia de datos) como concepto general: un objeto
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>  hecho a medida de lo que entra o sale de la aplicación, distinto del objeto interno —
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a>  y por qué separar ambos (control de qué se expone, formas distintas para crear y para
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>  leer).
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>- IMPRESCINDIBLE explicar aquí, antes de mostrar ningún DTO real: qué es un `record` de
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a>  Java (desde Java 16), porque los DTOs de GameVault están implementados como records y
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a>  esta es la PRIMERA vez en todo el curso (AD y PSP) que el alumnado se los encuentra —
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>  ninguna otra página del curso lo explica, así que esta es la referencia. Un ejemplo
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>  mínimo genérico primero (`record Punto(int x, int y) {}`) mostrando qué genera el
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a>  compilador solo con esa línea (constructor, getters sin prefijo `get`, `equals`,
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a>  `hashCode`, `toString`) y por qué encaja tan bien con un DTO: es inmutable (todos sus
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>  campos son `final`, no hay setters) y no necesita una clase tradicional de 20 líneas
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a>  con Lombok para conseguir lo mismo. Aclara que un record NO es lo mismo que una
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a>  `@Entity` (que sí necesita mutabilidad y un id gestionado por Hibernate) — por eso las
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>  entidades JPA siguen siendo clases normales y los DTOs, records.
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>PARTE 2 — Aterrizaje en GameVault (com.aleroig.gamevault):
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a>- com/aleroig/gamevault/catalogo/VideojuegoController.java: expone GET (lista paginada
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a>  con filtros y GET por id), POST, PUT y DELETE sobre /api/v1/videojuegos — un CRUD
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>  completo real que puedes usar tal cual como ejemplo de "aplicaciones que modifican y
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a>  consultan el contenido de la base de datos".
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>- com/aleroig/gamevault/catalogo/VideojuegoService.java: usa `@Transactional` en los
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a>  métodos de escritura y `@Transactional(readOnly = true)` en los de solo lectura —
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>  explica aquí qué es una transacción, por qué el commit/rollback automático de Spring
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>  evita tener que gestionar manualmente `connection.commit()`/`rollback()`, y contrasta
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a>  con lo que se verá "a mano" en el siguiente apartado (jdbc-puro.md).
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>- com/aleroig/gamevault/catalogo/dto/VideojuegoResponseDTO.java,
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>  VideojuegoCreateDTO.java y VideojuegoFiltroDTO.java: son el ejemplo de "objetos
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a>  destinados a almacenar el resultado de las consultas" (DTOs) — explica por qué no se
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>  devuelve la entidad JPA directamente al cliente (acoplamiento, exposición de columnas
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>  internas, problemas de serialización con relaciones lazy).
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>- Contrasta con com/aleroig/gamevault/catalogo/EstudioController.java, que en el estado
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>  actual de GameVault SOLO tiene GET y POST (sin PUT ni DELETE) — coméntalo como ejemplo
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a>  de CRUD incompleto, y aclara que ese PUT y DELETE de Estudio se desarrollarán como
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a>  práctica en el módulo de PSP (0490, semanas reales 5 y 6), no aquí: ambos módulos
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a>  avanzan sobre el mismo GameVault y se reparten el trabajo.
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a>Pide que la explicación conecte con la actividad 1.2, donde el alumnado construirá,
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a>guiado, el CRUD completo de Videojuego en su GameVault aplicando `@Transactional`
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a>correctamente. No entres en JDBC puro ni en procedimientos almacenados: eso va en los
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a>apartados siguientes.
-</code></pre></div></td></tr></table></div></div>
+<h2 id="aterrizaje-en-gamevault-el-crud-de-videojuego">🎮 Aterrizaje en GameVault: el CRUD de <code>Videojuego</code><a class="headerlink" href="#aterrizaje-en-gamevault-el-crud-de-videojuego" title="Permanent link">¶</a></h2>
+<p><code>VideojuegoController</code> (que empezaste a leer en el apartado 1) expone las cuatro operaciones CRUD completas sobre <code>/api/v1/videojuegos</code>: <code>GET</code> (lista y por id), <code>POST</code>, <code>PUT</code> y <code>DELETE</code>.</p>
+<h3 id="transacciones-con-transactional">Transacciones con <code>@Transactional</code><a class="headerlink" href="#transacciones-con-transactional" title="Permanent link">¶</a></h3>
+<p>Toda la lógica vive en <code>VideojuegoService</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Videojuego no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="p">}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="nd">@Transactional</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="kd">public</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">VideojuegoCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span><span class="n">Videojuego</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Videojuego no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="n">Estudio</span><span class="w"> </span><span class="n">estudio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">estudioId</span><span class="p">())</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Estudio no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="na">setEstudio</span><span class="p">(</span><span class="n">estudio</span><span class="p">);</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>@Transactional</code> en un método de escritura (como <code>update</code>) hace que Spring abra una transacción antes de ejecutarlo y haga commit automáticamente si termina bien, o rollback si se lanza cualquier excepción por el camino — sin que escribas <code>connection.commit()</code> ni <code>connection.rollback()</code> en ningún sitio. <code>@Transactional(readOnly = true)</code>, en los métodos de solo lectura, es una pista de optimización: le dice al framework y a la base de datos que esta operación no va a modificar nada.</p>
+<div class="admonition tip">
+<p class="admonition-title">Contraste con lo que viene después</p>
+<p>En el siguiente apartado (JDBC puro) vas a gestionar una conexión y una transacción <strong>a mano</strong>, sin Spring de por medio. Verás entonces, con código explícito, exactamente lo que <code>@Transactional</code> te está ahorrando aquí.</p>
+</div>
+<h3 id="los-dtos-reales">Los DTOs reales<a class="headerlink" href="#los-dtos-reales" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">VideojuegoResponseDTO</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">        </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">        </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaLanzamiento</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">        </span><span class="n">EstudioDTO</span><span class="w"> </span><span class="n">estudio</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">detallesPlataforma</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">VideojuegoCreateDTO</span><span class="p">(</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PositiveOrZero</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PastOrPresent</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaLanzamiento</span><span class="p">,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@Positive</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">detallesPlataforma</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<p>Ahí tienes la aplicación práctica de lo que acabas de ver: dos records distintos para dos propósitos distintos. <code>VideojuegoCreateDTO</code> es lo que se recibe al crear/actualizar (pide <code>estudioId</code>, un identificador simple, no el objeto <code>Estudio</code> completo); <code>VideojuegoResponseDTO</code> es lo que se devuelve al consultar (incluye el <code>EstudioDTO</code> completo embebido, no solo su id). Ninguno de los dos expone directamente la entidad JPA <code>Videojuego</code> — el service se encarga de convertir entre una cosa y otra con un mapeo manual:</p>
+<p>Fíjate en las anotaciones sobre los campos de <code>VideojuegoCreateDTO</code> (<code>@NotBlank</code>, <code>@NotNull</code>, <code>@PositiveOrZero</code>, <code>@PastOrPresent</code>): son anotaciones de <strong>Bean Validation</strong> (<code>jakarta.validation</code>), una librería estándar de Java para declarar restricciones sobre los datos — "este campo no puede estar vacío", "este número no puede ser negativo", "esta fecha no puede ser futura". Spring las comprueba automáticamente en cuanto el parámetro del controller lleva <code>@Valid</code> delante (lo verás en Programación de Servicios y Procesos, que profundiza en cómo se gestiona el error): si algún campo incumple su restricción, la petición se rechaza con un <code>400 Bad Request</code> antes de que tu código llegue a ejecutarse.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Videojuego</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="n">EstudioDTO</span><span class="w"> </span><span class="n">estudioDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EstudioDTO</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="na">getEstudio</span><span class="p">().</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getEstudio</span><span class="p">().</span><span class="na">getNombre</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getEstudio</span><span class="p">().</span><span class="na">getPais</span><span class="p">());</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="p">(</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">            </span><span class="n">v</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getTitulo</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getPrecio</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getFechaLanzamiento</span><span class="p">(),</span><span class="w"> </span><span class="n">estudioDTO</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getDetallesPlataforma</span><span class="p">()</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="p">);</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>¿Por qué no devolver directamente la entidad <code>Videojuego</code>? Tres motivos: acoplas tu API a los detalles internos de tu modelo de datos (si cambias una columna, rompes el contrato de la API); puedes exponer sin querer relaciones internas o columnas sensibles; y las relaciones <code>@ManyToOne</code>/<code>@OneToMany</code> con carga <em>lazy</em> (como viste en el Tema 1, apartado 2) pueden dar problemas al convertirlas directamente a JSON si Hibernate no las ha cargado todavía.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>EstudioController</code> está incompleto — y es a propósito</p>
+<p>Tu propio <code>EstudioController.java</code>, tal como lo vas a construir, solo va a tener <code>GET</code> y <code>POST</code> por ahora, sin <code>PUT</code> ni <code>DELETE</code>. No es un olvido: ese <code>PUT</code>/<code>DELETE</code> de <code>Estudio</code> se construyen como práctica en Programación de Servicios y Procesos — ambos módulos avanzan sobre el mismo GameVault y se reparten qué construye cada uno.</p>
+</div>
+<p>Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, este mismo CRUD completo de <code>Videojuego</code> en tu propio proyecto.</p>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<ul>
+<li><strong>CRUD</strong> = Create/Read/Update/Delete, equivalentes a <code>INSERT</code>/<code>SELECT</code>/<code>UPDATE</code>/<code>DELETE</code> en SQL.</li>
+<li>Una <strong>transacción</strong> agrupa operaciones como una unidad todo-o-nada: <strong>commit</strong> si todo va bien, <strong>rollback</strong> si algo falla. Las propiedades <strong>ACID</strong> (atomicidad, consistencia, aislamiento, durabilidad) las garantizan.</li>
+<li>Un <strong>DTO</strong> es un objeto a medida de lo que entra/sale de la aplicación, distinto del objeto interno — permite controlar qué se expone y tener formas distintas para crear y leer.</li>
+<li>Un <strong><code>record</code></strong> de Java declara en una línea una clase inmutable con constructor, getters, <code>equals</code>/<code>hashCode</code>/<code>toString</code> generados — encaja con los DTOs porque nunca cambian tras crearse. No es lo mismo que una <code>@Entity</code> (mutable, gestionada por Hibernate).</li>
+<li><code>@Transactional</code> gestiona commit/rollback automáticamente; <code>@Transactional(readOnly = true)</code> marca operaciones de solo lectura.</li>
+<li>GameVault nunca devuelve sus entidades JPA directamente: siempre convierte a DTOs con un mapeo manual (<code>mapToDTO</code>), para no acoplar la API al modelo interno.</li>
+</ul>
+</details></div>
 
 
 
