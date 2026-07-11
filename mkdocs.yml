@@ -46,7 +46,7 @@ nav:
           - Actividad 0.7 - Tu primer Dev Container: tema0/actividad_0_7.md
   - Tema 1 - Manejo de conectores:
       - Tema 1 - Introducción: tema1/index.md
-      - Spring Boot y GameVault: tema1/spring-boot-y-gamevault.md
+      - Fundamentos de Spring Boot: tema1/spring-boot-fundamentos.md
       - Conectores y protocolos: tema1/conectores-y-protocolos.md
       - Actividad 1.1 - Docker Compose + PostgreSQL: tema1/actividad_1_1.md
       - CRUD y transacciones: tema1/operaciones-crud-transacciones.md

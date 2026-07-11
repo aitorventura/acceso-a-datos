@@ -36,13 +36,13 @@ Alumno alumno = resultado.orElseThrow(() ->
         new ResponseStatusException(HttpStatus.NOT_FOUND, "Alumno no encontrado"));
 ```
 
-`orElseThrow(...)` extrae el valor si existe, o lanza la excepción que le indiques si el `Optional` está vacío — ya usaste este patrón sin nombrarlo en el Tema 1, en `findById` de `VideojuegoService`.
+`orElseThrow(...)` extrae el valor si existe, o lanza la excepción que le indiques si el `Optional` está vacío — ya usaste este patrón sin nombrarlo en el Tema 1, en el `findById` del service del CRUD.
 
 ---
 
 ## 🔍 Por qué las consultas fijas se quedan cortas
 
-Imagina un buscador con varios filtros opcionales: título, precio mínimo, precio máximo, estudio... Cada usuario rellena unos campos y deja otros vacíos. Si intentas resolver esto con métodos de consulta fijos (uno por cada combinación posible de filtros), el número de métodos que necesitarías crece exponencialmente — con solo 4 filtros opcionales, ya son 16 combinaciones posibles.
+Imagina un buscador con varios filtros opcionales: título, precio mínimo, precio máximo, editorial... Cada usuario rellena unos campos y deja otros vacíos. Si intentas resolver esto con métodos de consulta fijos (uno por cada combinación posible de filtros), el número de métodos que necesitarías crece exponencialmente — con solo 4 filtros opcionales, ya son 16 combinaciones posibles.
 
 Una **Specification** (o consulta dinámica) resuelve esto de otra forma: en vez de escribir una consulta completa por combinación, construyes la consulta como **piezas combinables** en tiempo de ejecución — cada filtro es una pieza independiente, y solo se añaden al conjunto final las piezas que corresponden a los filtros que el usuario ha indicado de verdad.
 
@@ -54,14 +54,16 @@ Ninguna API seria devuelve "todo" en una sola respuesta — si una tabla tiene u
 
 ---
 
-## 🎮 Aterrizaje en GameVault: filtros dinámicos de verdad
+## 🔎 Filtros dinámicos de verdad
+
+Siguiendo con el buscador de la librería: título, precio mínimo, precio máximo y editorial como filtros opcionales.
 
 ### El repositorio, con Specifications habilitadas
 
 ```java
-public interface VideojuegoRepository extends
-        JpaRepository<Videojuego, Long>,
-        JpaSpecificationExecutor<Videojuego> {
+public interface LibroRepository extends
+        JpaRepository<Libro, Long>,
+        JpaSpecificationExecutor<Libro> {
 }
 ```
 
@@ -70,7 +72,7 @@ Con `JpaRepository` ya tienes `save`/`findById`/`findAll` "gratis", sin una sola
 ### Las Specifications, pieza a pieza
 
 ```java
-public static Specification<Videojuego> tituloContiene(String titulo) {
+public static Specification<Libro> tituloContiene(String titulo) {
     if (titulo == null || titulo.isBlank()) {
         return Specification.unrestricted();
     }
@@ -78,7 +80,7 @@ public static Specification<Videojuego> tituloContiene(String titulo) {
             criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), "%" + titulo.toLowerCase() + "%");
 }
 
-public static Specification<Videojuego> precioMayorOIgualA(BigDecimal precioMin) {
+public static Specification<Libro> precioMayorOIgualA(BigDecimal precioMin) {
     if (precioMin == null) {
         return Specification.unrestricted();
     }
@@ -89,26 +91,23 @@ public static Specification<Videojuego> precioMayorOIgualA(BigDecimal precioMin)
 
 El patrón se repite en cada método: si el filtro es `null` (el usuario no lo ha indicado), devuelve `Specification.unrestricted()` — una Specification "vacía" que no añade ninguna condición al `WHERE`; si el filtro tiene valor, devuelve la condición real (`LIKE` para texto, `greaterThanOrEqualTo` para comparaciones numéricas).
 
-!!! tip "`disponibleEnPlataforma` — de pasada, sin profundizar todavía"
-    Verás también una Specification llamada `disponibleEnPlataforma`, que usa una función `jsonb_exists` sobre una columna especial. Ignórala por ahora — trabaja con JSONB, y eso es contenido completo del Tema 3. Aquí solo interesa el patrón general de las demás.
-
 ### Combinarlas en el service
 
 ```java
 @Transactional(readOnly = true)
-public Page<VideojuegoResponseDTO> findAllPaginated(VideojuegoFiltroDTO filtro, Pageable pageable) {
-    Specification<Videojuego> spec = Specification
-            .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
-            .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
-            .and(VideojuegoSpecifications.precioMenorOIgualA(filtro.precioMax()))
-            .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()));
+public Page<LibroResponseDTO> findAllPaginated(LibroFiltroDTO filtro, Pageable pageable) {
+    Specification<Libro> spec = Specification
+            .where(LibroSpecifications.tituloContiene(filtro.titulo()))
+            .and(LibroSpecifications.precioMayorOIgualA(filtro.precioMin()))
+            .and(LibroSpecifications.precioMenorOIgualA(filtro.precioMax()))
+            .and(LibroSpecifications.perteneceAEditorial(filtro.editorialId()));
 
-    return videojuegoRepository.findAll(spec, pageable)
+    return libroRepository.findAll(spec, pageable)
             .map(this::mapToDTO);
 }
 ```
 
-`Specification.where(...).and(...)` encadena todas las piezas en una sola consulta final — las que son `unrestricted()` no añaden nada, así que si `filtro` llega con todos los campos a `null`, el resultado es "sin condiciones", es decir, todo el catálogo (paginado). `videojuegoRepository.findAll(spec, pageable)` ejecuta esa consulta combinada y, de paso, aplica la paginación: el `Pageable` que recibe el método lleva página, tamaño y orden — la clase concreta de Spring que materializa el concepto de paginación que has visto arriba.
+`Specification.where(...).and(...)` encadena todas las piezas en una sola consulta final — las que son `unrestricted()` no añaden nada, así que si `filtro` llega con todos los campos a `null`, el resultado es "sin condiciones", es decir, todo el catálogo (paginado). `libroRepository.findAll(spec, pageable)` ejecuta esa consulta combinada y, de paso, aplica la paginación: el `Pageable` que recibe el método lleva página, tamaño y orden — la clase concreta de Spring que materializa el concepto de paginación que has visto arriba.
 
 ---
 
@@ -116,14 +115,14 @@ public Page<VideojuegoResponseDTO> findAllPaginated(VideojuegoFiltroDTO filtro, 
 
 ```java
 @Transactional
-public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
-    Videojuego v = videojuegoRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
+public LibroResponseDTO update(Long id, LibroCreateDTO dto) {
+    Libro libro = libroRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado"));
 
-    v.setTitulo(dto.titulo());
-    v.setPrecio(dto.precio());
+    libro.setTitulo(dto.titulo());
+    libro.setPrecio(dto.precio());
 
-    return mapToDTO(videojuegoRepository.save(v));
+    return mapToDTO(libroRepository.save(libro));
 }
 ```
 

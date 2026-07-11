@@ -55,7 +55,7 @@ Un **DTO** (*Data Transfer Object*, objeto de transferencia de datos) es un obje
 
 ## 🧱 Qué es un `record` de Java
 
-Antes de ver los DTOs reales del proyecto, necesitas conocer una construcción del lenguaje que no has usado hasta ahora: el **record** (desde Java 16). Un record declara, en una sola línea, una clase inmutable pensada exactamente para "llevar datos de un sitio a otro":
+Antes de ver unos DTOs completos en acción, necesitas conocer una construcción del lenguaje que no has usado hasta ahora: el **record** (desde Java 16). Un record declara, en una sola línea, una clase inmutable pensada exactamente para "llevar datos de un sitio a otro":
 
 ```java
 record Punto(int x, int y) {}
@@ -76,39 +76,39 @@ p.toString(); // "Punto[x=3, y=4]"
 Todos los campos de un record son `final` por diseño: una vez creado, no se puede modificar — no hay setters, ni forma de cambiar `x` o `y` después de construirlo. Esa **inmutabilidad** es justo lo que encaja con un DTO: un objeto que representa un dato en un momento concreto (lo que se recibió, lo que se va a devolver), no algo que deba cambiar de estado con el tiempo.
 
 !!! warning "Un record NO es lo mismo que una `@Entity`"
-    Las entidades JPA (`Videojuego`, `Estudio`, que ya conoces del apartado anterior) siguen siendo clases normales, con `@Getter`/`@Setter` de Lombok: necesitan ser mutables (Hibernate las modifica al cargarlas y guardarlas) y tener un identificador gestionado por el framework. Un record, en cambio, encaja con los DTOs porque nunca necesita cambiar una vez construido. No confundas ambos: si ves `record` en una clase, es un DTO; si ves `@Entity`, es una entidad persistente.
+    Las entidades JPA (`Libro`, `Editorial`, que ya conoces del apartado anterior) siguen siendo clases normales, con `@Getter`/`@Setter` de Lombok: necesitan ser mutables (Hibernate las modifica al cargarlas y guardarlas) y tener un identificador gestionado por el framework. Un record, en cambio, encaja con los DTOs porque nunca necesita cambiar una vez construido. No confundas ambos: si ves `record` en una clase, es un DTO; si ves `@Entity`, es una entidad persistente.
 
 ---
 
-## 🎮 Aterrizaje en GameVault: el CRUD de `Videojuego`
+## 🗄️ Las piezas juntas: el CRUD de `Libro`
 
-`VideojuegoController` (que empezaste a leer en el apartado 1) expone las cuatro operaciones CRUD completas sobre `/api/v1/videojuegos`: `GET` (lista y por id), `POST`, `PUT` y `DELETE`.
+Siguiendo con la aplicación de la librería: un `LibroController` como el del apartado 1 expone las cuatro operaciones CRUD completas sobre `/api/v1/libros`: `GET` (lista y por id), `POST`, `PUT` y `DELETE`.
 
 ### Transacciones con `@Transactional`
 
-Toda la lógica vive en `VideojuegoService`:
+Toda la lógica vive en `LibroService`:
 
 ```java
 @Transactional(readOnly = true)
-public VideojuegoResponseDTO findById(Long id) {
-    return videojuegoRepository.findById(id)
+public LibroResponseDTO findById(Long id) {
+    return libroRepository.findById(id)
             .map(this::mapToDTO)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado"));
 }
 
 @Transactional
-public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
-    Videojuego v = videojuegoRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
+public LibroResponseDTO update(Long id, LibroCreateDTO dto) {
+    Libro libro = libroRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado"));
 
-    Estudio estudio = estudioRepository.findById(dto.estudioId())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
+    Editorial editorial = editorialRepository.findById(dto.editorialId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Editorial no encontrada"));
 
-    v.setTitulo(dto.titulo());
-    v.setPrecio(dto.precio());
-    v.setEstudio(estudio);
+    libro.setTitulo(dto.titulo());
+    libro.setPrecio(dto.precio());
+    libro.setEditorial(editorial);
 
-    return mapToDTO(videojuegoRepository.save(v));
+    return mapToDTO(libroRepository.save(libro));
 }
 ```
 
@@ -117,46 +117,42 @@ public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
 !!! tip "Contraste con lo que viene después"
     En el siguiente apartado (JDBC puro) vas a gestionar una conexión y una transacción **a mano**, sin Spring de por medio. Verás entonces, con código explícito, exactamente lo que `@Transactional` te está ahorrando aquí.
 
-### Los DTOs reales
+### Los DTOs
 
 ```java
-public record VideojuegoResponseDTO(
+public record LibroResponseDTO(
         Long id,
         String titulo,
         BigDecimal precio,
-        LocalDate fechaLanzamiento,
-        EstudioDTO estudio,
-        Map<String, Object> detallesPlataforma
+        LocalDate fechaPublicacion,
+        EditorialDTO editorial
 ) {}
 
-public record VideojuegoCreateDTO(
+public record LibroCreateDTO(
         @NotBlank String titulo,
         @NotNull @PositiveOrZero BigDecimal precio,
-        @NotNull @PastOrPresent LocalDate fechaLanzamiento,
-        @NotNull @Positive Long estudioId,
-        Map<String, Object> detallesPlataforma
+        @NotNull @PastOrPresent LocalDate fechaPublicacion,
+        @NotNull @Positive Long editorialId
 ) {}
 ```
 
-Ahí tienes la aplicación práctica de lo que acabas de ver: dos records distintos para dos propósitos distintos. `VideojuegoCreateDTO` es lo que se recibe al crear/actualizar (pide `estudioId`, un identificador simple, no el objeto `Estudio` completo); `VideojuegoResponseDTO` es lo que se devuelve al consultar (incluye el `EstudioDTO` completo embebido, no solo su id). Ninguno de los dos expone directamente la entidad JPA `Videojuego` — el service se encarga de convertir entre una cosa y otra con un mapeo manual:
+Ahí tienes la aplicación práctica de lo que acabas de ver: dos records distintos para dos propósitos distintos. `LibroCreateDTO` es lo que se recibe al crear/actualizar (pide `editorialId`, un identificador simple, no el objeto `Editorial` completo); `LibroResponseDTO` es lo que se devuelve al consultar (incluye el `EditorialDTO` completo embebido, no solo su id). Ninguno de los dos expone directamente la entidad JPA `Libro` — el service se encarga de convertir entre una cosa y otra con un mapeo manual:
 
-Fíjate en las anotaciones sobre los campos de `VideojuegoCreateDTO` (`@NotBlank`, `@NotNull`, `@PositiveOrZero`, `@PastOrPresent`): son anotaciones de **Bean Validation** (`jakarta.validation`), una librería estándar de Java para declarar restricciones sobre los datos — "este campo no puede estar vacío", "este número no puede ser negativo", "esta fecha no puede ser futura". Spring las comprueba automáticamente en cuanto el parámetro del controller lleva `@Valid` delante (lo verás en Programación de Servicios y Procesos, que profundiza en cómo se gestiona el error): si algún campo incumple su restricción, la petición se rechaza con un `400 Bad Request` antes de que tu código llegue a ejecutarse.
+Fíjate en las anotaciones sobre los campos de `LibroCreateDTO` (`@NotBlank`, `@NotNull`, `@PositiveOrZero`, `@PastOrPresent`): son anotaciones de **Bean Validation** (`jakarta.validation`), una librería estándar de Java para declarar restricciones sobre los datos — "este campo no puede estar vacío", "este número no puede ser negativo", "esta fecha no puede ser futura". Spring las comprueba automáticamente en cuanto el parámetro del controller lleva `@Valid` delante (lo verás en Programación de Servicios y Procesos, que profundiza en cómo se gestiona el error): si algún campo incumple su restricción, la petición se rechaza con un `400 Bad Request` antes de que tu código llegue a ejecutarse.
 
 ```java
-private VideojuegoResponseDTO mapToDTO(Videojuego v) {
-    EstudioDTO estudioDTO = new EstudioDTO(v.getEstudio().getId(), v.getEstudio().getNombre(), v.getEstudio().getPais());
-    return new VideojuegoResponseDTO(
-            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(), estudioDTO, v.getDetallesPlataforma()
+private LibroResponseDTO mapToDTO(Libro libro) {
+    EditorialDTO editorialDTO = new EditorialDTO(
+            libro.getEditorial().getId(), libro.getEditorial().getNombre(), libro.getEditorial().getPais());
+    return new LibroResponseDTO(
+            libro.getId(), libro.getTitulo(), libro.getPrecio(), libro.getFechaPublicacion(), editorialDTO
     );
 }
 ```
 
-¿Por qué no devolver directamente la entidad `Videojuego`? Tres motivos: acoplas tu API a los detalles internos de tu modelo de datos (si cambias una columna, rompes el contrato de la API); puedes exponer sin querer relaciones internas o columnas sensibles; y las relaciones `@ManyToOne`/`@OneToMany` con carga *lazy* (como viste en el Tema 1, apartado 2) pueden dar problemas al convertirlas directamente a JSON si Hibernate no las ha cargado todavía.
+¿Por qué no devolver directamente la entidad `Libro`? Tres motivos: acoplas tu API a los detalles internos de tu modelo de datos (si cambias una columna, rompes el contrato de la API); puedes exponer sin querer relaciones internas o columnas sensibles; y las relaciones `@ManyToOne`/`@OneToMany` con carga *lazy* (como viste en el Tema 1, apartado 2) pueden dar problemas al convertirlas directamente a JSON si Hibernate no las ha cargado todavía.
 
-!!! warning "`EstudioController` está incompleto — y es a propósito"
-    Tu propio `EstudioController.java`, tal como lo vas a construir, solo va a tener `GET` y `POST` por ahora, sin `PUT` ni `DELETE`. No es un olvido: ese `PUT`/`DELETE` de `Estudio` se construyen como práctica en Programación de Servicios y Procesos — ambos módulos avanzan sobre el mismo GameVault y se reparten qué construye cada uno.
-
-Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, este mismo CRUD completo de `Videojuego` en tu propio proyecto.
+Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, un CRUD completo como este en tu propio proyecto.
 
 ---
 
@@ -169,4 +165,4 @@ Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, este mismo 
     - Un **DTO** es un objeto a medida de lo que entra/sale de la aplicación, distinto del objeto interno — permite controlar qué se expone y tener formas distintas para crear y leer.
     - Un **`record`** de Java declara en una línea una clase inmutable con constructor, getters, `equals`/`hashCode`/`toString` generados — encaja con los DTOs porque nunca cambian tras crearse. No es lo mismo que una `@Entity` (mutable, gestionada por Hibernate).
     - `@Transactional` gestiona commit/rollback automáticamente; `@Transactional(readOnly = true)` marca operaciones de solo lectura.
-    - GameVault nunca devuelve sus entidades JPA directamente: siempre convierte a DTOs con un mapeo manual (`mapToDTO`), para no acoplar la API al modelo interno.
+    - Una aplicación bien diseñada nunca devuelve sus entidades JPA directamente: siempre convierte a DTOs con un mapeo manual (`mapToDTO`), para no acoplar la API al modelo interno.

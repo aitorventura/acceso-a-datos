@@ -36,7 +36,7 @@ En un proyecto Spring Boot moderno, el equivalente conceptual de aquellos JavaBe
 
 ---
 
-## 🎮 Aterrizaje en GameVault: la progresión de "componente"
+## 📚 La progresión de "componente", con la librería
 
 ### Herramientas de desarrollo de componentes
 
@@ -48,37 +48,37 @@ Aquí no aplica una herramienta visual de arrastrar y soltar — sería un anacr
 ### Nivel 1: un repositorio, ya es un componente
 
 ```java
-public interface VideojuegoRepository extends JpaRepository<Videojuego, Long> {
+public interface LibroRepository extends JpaRepository<Libro, Long> {
 }
 ```
 
-En su forma más básica, `VideojuegoRepository` ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (`private final VideojuegoRepository videojuegoRepository;`) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.
+En su forma más básica, `LibroRepository` ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (`private final LibroRepository libroRepository;`) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.
 
 ### Nivel 2: `CatalogoConsultaService`, el ejemplo mejor diseñado
 
 ```java
 // El contrato — en el paquete api, pensado para que otros módulos lo vean
 public interface CatalogoConsultaService {
-    boolean existeVideojuego(Long videojuegoId);
+    boolean existeLibro(Long libroId);
 }
 
 // La implementación — oculta, sin el modificador public
 @Service
 class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
-    private final VideojuegoRepository videojuegoRepository;
+    private final LibroRepository libroRepository;
 
     @Override
-    public boolean existeVideojuego(Long videojuegoId) {
-        return videojuegoRepository.existsById(videojuegoId);
+    public boolean existeLibro(Long libroId) {
+        return libroRepository.existsById(libroId);
     }
 }
 ```
 
-Este es el ejemplo **más claro** de componente bien diseñado en todo GameVault — ya lo construiste en el Tema 4. ¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en el paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). `ReviewService`, en el módulo `reviews`, usa `CatalogoConsultaService.existeVideojuego(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos.
+¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en un paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). El módulo de reseñas del Tema 4 usa `CatalogoConsultaService.existeLibro(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos. Es, formalizado, el mismo patrón de integridad referencial manual que ya usaste allí.
 
 ### El contraste que ilustra el desacoplamiento
 
-Técnicamente, `ReviewService` **podría** inyectar `VideojuegoRepository` directamente y llamar a `existsById(...)` él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: `reviews` pasaría a depender de un detalle interno de `catalogo` (su repositorio JPA concreto), y cualquier cambio en cómo `catalogo` gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también `reviews`. Con el componente de por medio, ese cambio quedaría contenido dentro de `catalogo` — `reviews` seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.
+Técnicamente, el servicio de reseñas **podría** inyectar `LibroRepository` directamente y llamar a `existsById(...)` él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: `resenas` pasaría a depender de un detalle interno de `catalogo` (su repositorio JPA concreto), y cualquier cambio en cómo `catalogo` gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también `resenas`. Con el componente de por medio, ese cambio quedaría contenido dentro de `catalogo` — `resenas` seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.
 
 ---
 

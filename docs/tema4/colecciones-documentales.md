@@ -15,9 +15,9 @@ Ya conectaste con MongoDB y construiste tu primer repositorio documental. Este a
 | Columna | Campo |
 | `JOIN` | Documento embebido, o referencia manual (sin integridad automática) |
 
-Ventajas del modelo documental: **esquema flexible por documento** (dos `Review` no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y **escritura/lectura simple**, sin `JOIN` que resolver.
+Ventajas del modelo documental: **esquema flexible por documento** (dos `Resena` no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y **escritura/lectura simple**, sin `JOIN` que resolver.
 
-Inconvenientes: la **integridad referencial manual** que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que `videojuegoId` apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).
+Inconvenientes: la **integridad referencial manual** que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que `libroId` apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).
 
 ---
 
@@ -27,13 +27,13 @@ En `mongosh`:
 
 ```javascript
 // Se crea implícitamente al insertar el primer documento
-db.review.insertOne({ videojuegoId: 1, autor: "ana", puntuacion: 8 })
+db.resena.insertOne({ libroId: 1, autor: "ana", puntuacion: 8 })
 
 // O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)
-db.createCollection("review")
+db.createCollection("resena")
 
 // Eliminar
-db.review.drop()
+db.resena.drop()
 
 // Listar
 show collections
@@ -46,22 +46,19 @@ La forma **explícita** (`createCollection`) sirve para cuando necesitas configu
 
 ---
 
-## 🎮 Aterrizaje en GameVault: por qué dos motores conviven
+## 📚 Por qué dos motores conviven
 
-GameVault usa PostgreSQL para el catálogo (`Videojuego`/`Estudio`: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB para las reseñas (`Review`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una **decisión de arquitectura deliberada**, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.
+En el ejemplo de la librería, PostgreSQL guarda el catálogo (`Libro`/`Editorial`: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB guarda las reseñas (`Resena`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una **decisión de arquitectura deliberada**, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.
 
 ### Eliminar documentos de forma masiva
 
 ```java
-public interface ReviewRepository extends MongoRepository<Review, String> {
-    long deleteByVideojuegoId(Long videojuegoId);
+public interface ResenaRepository extends MongoRepository<Resena, String> {
+    long deleteByLibroId(Long libroId);
 }
 ```
 
-`deleteByVideojuegoId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 4.1: si se borra un videojuego cuyas reseñas siguen en Mongo, este método las limpia de golpe.
-
-!!! tip "El borrado en cascada ya existe — de forma asíncrona"
-    Este borrado en cascada se resuelve **conectado a través de eventos**: cuando se borra un videojuego, `VideojuegoService` publica un evento por RabbitMQ que un *consumer* del módulo `reviews` recibe y usa para invocar `deleteByVideojuegoId`. No ocurre de forma síncrona dentro de la misma llamada — ocurre poco después, en otro hilo. Verás el flujo completo, con el código guiado paso a paso, en la Actividad 4.2.
+`deleteByLibroId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 4.1: si se borra un libro cuyas reseñas siguen en Mongo, este método las limpia de golpe.
 
 ---
 
@@ -72,5 +69,5 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
     - Tabla↔colección, fila↔documento, columna↔campo, `JOIN`↔documento embebido o referencia manual.
     - El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.
     - Una colección se crea implícitamente al primer `insert`, o explícitamente con `createCollection` (para validación o colecciones capadas); se elimina con `drop()`.
-    - GameVault usa dos motores por una decisión de arquitectura documentada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.
-    - `deleteByVideojuegoId` elimina documentos en bloque — es la pieza que resuelve las reseñas huérfanas, conectada de forma asíncrona vía RabbitMQ.
+    - Usar dos motores a la vez es una decisión de arquitectura deliberada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.
+    - `deleteByLibroId` elimina documentos en bloque por naming de método — es la pieza que resuelve las reseñas huérfanas.

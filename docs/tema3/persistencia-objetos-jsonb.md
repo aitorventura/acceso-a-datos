@@ -12,8 +12,8 @@ Ya lo has visto antes, pero conviene no darlo por dominado. **JSON** (*JavaScrip
 
 ```json
 {
-  "steam": { "idApp": 123, "logros": 40 },
-  "switch": { "idApp": "ABCD" }
+  "tapaDura": { "isbn": "978-84-376-0494-7", "paginas": 496 },
+  "ebook": { "formato": "epub" }
 }
 ```
 
@@ -24,7 +24,7 @@ Se ha convertido en el formato universal de intercambio de datos porque es legib
 ## 🧱 Objeto simple vs. objeto estructurado
 
 - **Objeto simple**: un valor escalar — un texto, un número, una fecha. Es lo que has persistido siempre (`titulo`, `precio`).
-- **Objeto estructurado**: un objeto con campos anidados, posiblemente con colecciones dentro — como el ejemplo JSON de arriba, con dos plataformas, cada una con sus propios campos internos.
+- **Objeto estructurado**: un objeto con campos anidados, posiblemente con colecciones dentro — como el ejemplo JSON de arriba, con dos formatos de edición, cada uno con sus propios campos internos.
 
 ---
 
@@ -37,52 +37,54 @@ PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que pe
 
 ---
 
-## 🎮 Aterrizaje en GameVault: `detallesPlataforma`
+## 📚 Un ejemplo completo: `detallesEdicion`
+
+Siguiendo con la librería: cada libro puede existir en varios formatos (tapa dura, bolsillo, ebook), cada uno con sus propios datos internos. Ese es un objeto estructurado dentro de la entidad `Libro`.
 
 ### El campo, con sus anotaciones
 
 ```java
 @Entity
-@Table(name = "videojuego")
-public class Videojuego {
+@Table(name = "libro")
+public class Libro {
 
-    // ... id, titulo, precio, fechaLanzamiento (objetos simples, ya conocidos) ...
+    // ... id, titulo, precio, fechaPublicacion (objetos simples, ya conocidos) ...
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> detallesPlataforma;
+    private Map<String, Object> detallesEdicion;
 }
 ```
 
 `@Column(columnDefinition = "jsonb")` le dice a Hibernate qué tipo de columna PostgreSQL usar; `@JdbcTypeCode(SqlTypes.JSON)` le dice **cómo** tratar ese campo — como JSON, no como un texto plano cualquiera. El tipo Java es un simple `Map<String, Object>`: no necesitas una clase Java específica para cada estructura posible, el mapa acepta cualquier forma de JSON.
 
-### `titulo`/`precio` (objeto simple) vs. `detallesPlataforma` (objeto estructurado)
+### `titulo`/`precio` (objeto simple) vs. `detallesEdicion` (objeto estructurado)
 
-`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 2 — un valor escalar por columna. `detallesPlataforma`, en cambio, es un objeto estructurado real: puede contener claves anidadas como
+`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 2 — un valor escalar por columna. `detallesEdicion`, en cambio, es un objeto estructurado real: puede contener claves anidadas como
 
 ```json
-{"steam": {"idApp": 123, "logros": 40}, "switch": {"idApp": "ABCD"}}
+{"tapaDura": {"isbn": "978-84-376-0494-7", "paginas": 496}, "ebook": {"formato": "epub"}}
 ```
 
-todo dentro de una única columna, sin que hayas tenido que crear una tabla nueva por cada plataforma que el juego soporte.
+todo dentro de una única columna, sin que hayas tenido que crear una tabla nueva por cada formato en que se publique el libro.
 
 ### Cómo Hibernate serializa el `Map` a JSON
 
-`com/aleroig/gamevault/config/Jackson3HibernateMapper.java` es la pieza de configuración que permite que Hibernate sepa convertir ese `Map<String, Object>` Java a JSON (y de vuelta) usando Jackson, la librería estándar de JSON en el ecosistema Spring — no necesitas entender el detalle exacto de esa clase, solo saber que existe porque Hibernate necesita esa ayuda extra para mapear un tipo que no es directo como un `String` o un `BigDecimal`.
+Hibernate no sabe por sí solo convertir un `Map<String, Object>` Java a JSON (y de vuelta): necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring, y esa ayuda se declara en una pequeña clase de configuración — el caso de "mapeo no directo" que se anticipó en el Tema 2. No necesitas el detalle exacto todavía; lo montarás paso a paso en las actividades de este tema.
 
 ---
 
 ## ⚖️ Por qué JSONB y no una tabla nueva
 
-Con lo que ya sabes del Tema 2, podrías haber modelado esto como una tabla `detalle_plataforma` con una relación `@OneToMany` desde `Videojuego` — una fila por plataforma, con sus propias columnas. ¿Por qué el proyecto eligió JSONB en su lugar?
+Con lo que ya sabes del Tema 2, podrías haber modelado esto como una tabla `detalle_edicion` con una relación `@OneToMany` desde `Libro` — una fila por formato, con sus propias columnas. ¿Por qué elegir JSONB en su lugar?
 
 | | Tabla relacional nueva | Columna JSONB |
 |---|---|---|
-| **Añadir una plataforma nueva** | Requiere migración de esquema (nueva tabla o columnas) | No requiere ningún cambio de esquema |
+| **Añadir un formato nuevo** | Requiere migración de esquema (nueva tabla o columnas) | No requiere ningún cambio de esquema |
 | **Integridad referencial** | Garantizada por el motor (claves foráneas) | Ninguna — el contenido del JSON no se valida contra nada |
 | **Tipado estricto** | Cada columna tiene su tipo fijo | Sin tipado — cualquier estructura es válida |
 
-El trade-off es real: JSONB gana en flexibilidad (añadir Xbox o una plataforma nueva mañana no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 3.1.
+El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo mañana — audiolibro, por ejemplo — no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 3.1.
 
 ---
 

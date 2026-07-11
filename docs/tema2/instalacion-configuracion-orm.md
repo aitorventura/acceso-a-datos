@@ -36,7 +36,7 @@ Tres nombres que aparecen siempre juntos y no significan lo mismo:
 ```mermaid
 flowchart TB
     A["🌉 ORM<br/>(el concepto)"] --> B["📜 JPA<br/>(la especificación estándar de Java)"]
-    B --> C["⚙️ Hibernate<br/>(la implementación que usa GameVault)"]
+    B --> C["⚙️ Hibernate<br/>(la implementación más usada)"]
     C --> D["🧰 Spring Data JPA<br/>(capa de comodidad: los repositorios)"]
 ```
 
@@ -49,7 +49,7 @@ Spring Data JPA, que ya usaste en el Tema 1 (`JpaRepository`), no es un ORM dist
 Una **clase persistente** (o entidad) es una clase Java cuyos objetos el ORM sabe guardar y recuperar de la base de datos. Existen dos formas históricas de declarar el mapeo entre una clase y una tabla:
 
 - **Fichero XML de mapeo**: un documento aparte que describe la correspondencia — el enfoque más antiguo, hoy considerado legado.
-- **Anotaciones**: el mapeo se declara directamente sobre la propia clase (`@Entity`, `@Column`...) — el enfoque que se usa hoy en día, y el que verás en GameVault.
+- **Anotaciones**: el mapeo se declara directamente sobre la propia clase (`@Entity`, `@Column`...) — el enfoque que se usa hoy en día, y el que vas a usar durante todo el curso.
 
 ---
 
@@ -72,7 +72,7 @@ flowchart LR
 
 ---
 
-## 🎮 Aterrizaje en GameVault
+## 🗄️ Hibernate en un proyecto Spring Boot
 
 ### "Instalar" Hibernate no es un paso manual
 
@@ -89,12 +89,12 @@ A diferencia de lo que sugiere la palabra "instalar", en un proyecto Spring Boot
 
 ### El mapeo con anotaciones, entidad por entidad
 
-Ya conoces `Videojuego` y `Estudio` del Tema 1 — ahora las lees con la óptica de "mapeo ORM" en vez de "estructura de base de datos":
+Ya conoces `Libro` y `Editorial` del Tema 1 — ahora las lees con la óptica de "mapeo ORM" en vez de "estructura de base de datos":
 
 ```java
 @Entity
-@Table(name = "videojuego")
-public class Videojuego {
+@Table(name = "libro")
+public class Libro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,8 +104,8 @@ public class Videojuego {
     private BigDecimal precio;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estudio_id")
-    private Estudio estudio;
+    @JoinColumn(name = "editorial_id")
+    private Editorial editorial;
 }
 ```
 
@@ -114,14 +114,14 @@ public class Videojuego {
 | `@Entity` + `@Table(name = "...")` | La clase corresponde a esa tabla concreta. |
 | `@Id` + `@GeneratedValue(strategy = GenerationType.IDENTITY)` | El identificador, generado por la propia base de datos (columna autoincremental). |
 | `@Column(precision = 10, scale = 2)` | El tipo de columna exacto — aquí, un `numeric(10,2)`, con precisión suficiente para precios sin perder céntimos. |
-| `@ManyToOne(fetch = FetchType.LAZY)` + `@JoinColumn` | La relación y la columna real de clave foránea; `LAZY` significa que `Estudio` no se carga hasta que de verdad lo pidas. |
-| `@OneToMany(mappedBy = "estudio", cascade = CascadeType.ALL, orphanRemoval = true)` (en `Estudio`) | El lado inverso de la relación; `mappedBy` indica que la clave foránea real vive en `Videojuego`, no aquí. |
+| `@ManyToOne(fetch = FetchType.LAZY)` + `@JoinColumn` | La relación y la columna real de clave foránea; `LAZY` significa que `Editorial` no se carga hasta que de verdad lo pidas. |
+| `@OneToMany(mappedBy = "editorial", cascade = CascadeType.ALL, orphanRemoval = true)` (en `Editorial`) | El lado inverso de la relación; `mappedBy` indica que la clave foránea real vive en `Libro`, no aquí. |
 
 Cada una de estas anotaciones sustituye código que en el Tema 1, con JDBC puro, habrías tenido que escribir a mano: el `CREATE TABLE`, el `JOIN` en cada consulta, la conversión de tipos entre columna y campo Java.
 
-### Configuración avanzada: `PersistenceConfig` y `Jackson3HibernateMapper`
+### Configuración avanzada: cuando el mapeo no es directo
 
-GameVault tiene además configuración específica de Hibernate en el paquete `config`. No necesitas entender el detalle exacto todavía — basta con saber que existe porque Hibernate necesita, a veces, ayuda extra para mapear tipos que no son directos (como el JSON que verás en el Tema 3): esa ayuda se declara en clases de configuración como estas.
+Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 3). Esa ayuda se declara en clases de configuración (`@Configuration`, que ya conoces del Tema 1) — no necesitas el detalle todavía; basta con saber que, cuando el mapeo automático no llega, ahí es donde se completa.
 
 ### `ddl-auto`: configuración del ORM, no del conector
 
@@ -129,9 +129,9 @@ Ya usaste `spring.jpa.hibernate.ddl-auto: update` en el Tema 1, pero desde el á
 
 ---
 
-## 🔁 Los estados, ahora con `Videojuego`
+## 🔁 Los estados, ahora con `Libro`
 
-Retoma el ciclo de estados de la PARTE 1 con un ejemplo concreto: un `new Videojuego()` recién creado en Java es **transient** — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a **managed**: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a **detached** — sigue teniendo sus datos, pero ya no se sincroniza solo.
+Retoma el ciclo de estados de la PARTE 1 con un ejemplo concreto: un `new Libro()` recién creado en Java es **transient** — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a **managed**: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a **detached** — sigue teniendo sus datos, pero ya no se sincroniza solo.
 
 ---
 
@@ -140,7 +140,7 @@ Retoma el ciclo de estados de la PARTE 1 con un ejemplo concreto: un `new Videoj
 ??? tip "Abrir resumen"
 
     - Un **ORM** traduce automáticamente entre objetos y filas, siguiendo unas reglas de mapeo declaradas una vez.
-    - **ORM** es el concepto, **JPA** la especificación estándar de Java, **Hibernate** la implementación que usa GameVault; **Spring Data JPA** añade los repositorios como capa de comodidad por encima.
+    - **ORM** es el concepto, **JPA** la especificación estándar de Java, **Hibernate** la implementación más usada; **Spring Data JPA** añade los repositorios como capa de comodidad por encima.
     - El mapeo se declara con **anotaciones** sobre la propia entidad (el XML de mapeo es el enfoque legado).
     - Los estados de un objeto en el ORM: **transient** (sin relación con la BD) → **managed** (gestionado, se sincroniza solo) → **detached** (ya no se sincroniza) / **removed** (marcado para borrar).
     - "Instalar" Hibernate en Spring Boot es, en la práctica, añadir `spring-boot-starter-data-jpa`.

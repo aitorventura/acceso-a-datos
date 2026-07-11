@@ -78,19 +78,19 @@ El **pooling de conexiones** resuelve esto manteniendo un conjunto de conexiones
 
 ---
 
-## 🎮 Aterrizaje en GameVault
+## 🗄️ Las piezas en un proyecto Spring Boot
 
 ### El gestor: PostgreSQL independiente, vía Docker
 
-El `docker-compose.yaml` del proyecto levanta PostgreSQL como gestor independiente:
+Un `docker-compose.yaml` como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:
 
 ```yaml
 services:
   postgres:
     image: postgres:18-alpine
     environment:
-      POSTGRES_DB: gamevault_db
-      POSTGRES_USER: gamevault_user
+      POSTGRES_DB: libreria_db
+      POSTGRES_USER: libreria_user
       POSTGRES_PASSWORD: password123
     ports:
       - "5432:5432"
@@ -99,31 +99,31 @@ services:
 Es exactamente el caso de la tabla de más arriba: un proceso separado, en su propio contenedor, al que la aplicación se conecta por red (`localhost:5432` desde tu máquina).
 
 !!! tip "Una mejora posible: H2 embebido para tests"
-    El proyecto usa PostgreSQL en todos los entornos, incluidos los tests unitarios (los de integración sí usan Testcontainers, que verás en el Tema 3). Una mejora habitual en proyectos reales es añadir H2 (embebido) en un perfil `test` para los tests unitarios más simples, que así no dependen de tener Docker levantado — no es lo que hace GameVault hoy, pero es algo que podrías plantearte incorporar a tu propio proyecto.
+    Una práctica habitual en proyectos reales es añadir H2 (embebido) en un perfil `test` para los tests unitarios más simples, que así no dependen de tener Docker levantado — el gestor embebido arranca y muere con los propios tests.
 
 !!! warning "Dos versiones de Postgres en el mismo proyecto — y no es un error"
-    Si más adelante (Tema 3, Actividad 3.3) ves que el test de integración usa `postgres:16-alpine` en vez del `postgres:18-alpine` de este `docker-compose.yaml`, no es una inconsistencia que arreglar: la versión del gestor de desarrollo y la usada en tests no tienen por qué coincidir exactamente, siempre que ambas sean compatibles con el SQL y las características (como JSONB) que usa el proyecto.
+    Si más adelante (Tema 3, Actividad 3.3) ves que un test de integración usa `postgres:16-alpine` en vez del `postgres:18-alpine` del `docker-compose.yaml` de desarrollo, no es una inconsistencia que arreglar: la versión del gestor de desarrollo y la usada en tests no tienen por qué coincidir exactamente, siempre que ambas sean compatibles con el SQL y las características (como JSONB) que usa tu aplicación.
 
 ### La conexión: `application-dev.yaml`
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gamevault_db
-    username: gamevault_user
+    url: jdbc:postgresql://localhost:5432/libreria_db
+    username: libreria_user
     password: password123
 ```
 
 `spring.datasource.*` es toda la información que Spring Boot necesita para conectar: la URL JDBC (fíjate en el prefijo `jdbc:postgresql://`, el protocolo que has visto arriba, seguido de host, puerto y nombre de la base de datos), usuario y contraseña. El pooling no lo configuras tú a mano: Spring Boot trae por defecto **HikariCP**, un pool de conexiones que se activa solo con tener el driver de PostgreSQL en el `pom.xml` — no hace falta ni una línea de configuración adicional para tenerlo funcionando.
 
-### La estructura: entidades `Videojuego` y `Estudio`
+### La estructura: entidades `Libro` y `Editorial`
 
 La "definición de la estructura de la base de datos" en un proyecto Spring Data JPA no se escribe como `CREATE TABLE` a mano — se declara sobre las propias clases Java, con anotaciones:
 
 ```java
 @Entity
-@Table(name = "estudio")
-public class Estudio {
+@Table(name = "editorial")
+public class Editorial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -131,18 +131,18 @@ public class Estudio {
 
     private String nombre;
 
-    @OneToMany(mappedBy = "estudio", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Videojuego> videojuegos;
+    @OneToMany(mappedBy = "editorial", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libros;
 }
 ```
 
-- `@Entity` + `@Table(name = "estudio")`: esta clase se mapea contra la tabla `estudio`.
+- `@Entity` + `@Table(name = "editorial")`: esta clase se mapea contra la tabla `editorial`.
 - `@Id` + `@GeneratedValue`: el identificador y cómo se genera (aquí, autoincremental, delegado en la propia base de datos).
-- `@OneToMany`/`@ManyToOne`: la relación entre `Estudio` y `Videojuego` — el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.
+- `@OneToMany`/`@ManyToOne`: la relación entre `Editorial` y `Libro` — el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.
 
 Y en `application-dev.yaml`, la propiedad `spring.jpa.hibernate.ddl-auto: update` es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el `CREATE TABLE`. Existen otros valores (`validate`, que solo comprueba que las tablas coincidan sin tocarlas, o `none`, que no hace nada): en un proyecto real, en producción, casi nunca se usa `update` ni mucho menos `create-drop` (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.
 
-Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y replicar estas mismas entidades en tu proyecto.
+Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y definir las primeras entidades de tu proyecto.
 
 ---
 
@@ -154,5 +154,5 @@ Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreS
     - **JDBC** es la API estándar de Java para hablar con bases de datos; un **driver/conector** la implementa para un gestor concreto.
     - Un gestor **embebido** (H2, SQLite) corre dentro de tu proceso; uno **independiente** (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.
     - El **pooling de conexiones** reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.
-    - GameVault usa PostgreSQL independiente vía Docker; la conexión se configura en `application-dev.yaml` (`spring.datasource.*`).
+    - En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en `application-dev.yaml` (`spring.datasource.*`).
     - La estructura de la base de datos se declara con anotaciones JPA (`@Entity`, `@Id`, `@OneToMany`/`@ManyToOne`) sobre las propias clases Java; `ddl-auto` controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).

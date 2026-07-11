@@ -36,10 +36,10 @@ Un documento de ejemplo, y su consulta equivalente en `mongosh` (la consola de M
 
 ```javascript
 // Un documento
-{ "_id": ObjectId("..."), "titulo": "Hades", "puntuacion": 9 }
+{ "_id": ObjectId("..."), "titulo": "El nombre del viento", "puntuacion": 9 }
 
 // El equivalente a un SELECT sencillo
-db.videojuegos.find({ "titulo": "Hades" })
+db.resenas.find({ "titulo": "El nombre del viento" })
 ```
 
 Vale la pena verlo en esta forma cruda antes de que Spring lo esconda tras un repositorio.
@@ -52,38 +52,38 @@ Datos autocontenidos, de estructura variable de un registro a otro: bien. Relaci
 
 ---
 
-## 🎮 Aterrizaje en GameVault: el módulo `reviews`
+## 📚 Un ejemplo completo: las reseñas de la librería
 
 ### Por qué dos bases de datos distintas
 
-GameVault usa PostgreSQL para el catálogo (`Videojuego`/`Estudio`: relaciones claras, necesidad de transacciones ACID fuertes) y **MongoDB** para las reseñas (`Review`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar con el tiempo). Es una decisión de arquitectura, no una moda — cada motor se usa donde encaja mejor.
+Siguiendo con la librería: el catálogo (`Libro`/`Editorial`) vive en PostgreSQL — relaciones claras, necesidad de transacciones ACID fuertes. Pero imagina que ahora los lectores pueden dejar **reseñas** de los libros: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar con el tiempo. Eso encaja mejor en **MongoDB**. Usar dos motores a la vez es una decisión de arquitectura habitual, no una moda — cada uno se usa donde encaja mejor.
 
-### La entidad `Review`
+### La entidad `Resena`
 
 ```java
-@Document(collection = "review")
-public class Review {
+@Document(collection = "resena")
+public class Resena {
 
     @Id
     private String id; // alfanumérico, tipo ObjectId — no un Long autogenerado
 
-    private Long videojuegoId; // relación "lógica" con el catálogo en PostgreSQL
+    private Long libroId; // relación "lógica" con el catálogo en PostgreSQL
     private String autor;
     private Integer puntuacion;
     private String comentario;
 }
 ```
 
-`@Document(collection = "review")` es el equivalente Mongo de `@Entity`/`@Table` — declara en qué colección vive. El `@Id` es `String`, no `Long`: en Mongo los identificadores son alfanuméricos por naturaleza (`ObjectId`), a diferencia del autoincremental que has usado siempre en PostgreSQL.
+`@Document(collection = "resena")` es el equivalente Mongo de `@Entity`/`@Table` — declara en qué colección vive. El `@Id` es `String`, no `Long`: en Mongo los identificadores son alfanuméricos por naturaleza (`ObjectId`), a diferencia del autoincremental que has usado siempre en PostgreSQL.
 
-!!! warning "`videojuegoId` no es una clave foránea real"
-    Aunque el campo se llame `videojuegoId` y apunte conceptualmente a un `Videojuego` de PostgreSQL, **no hay ninguna integridad referencial automática** entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.
+!!! warning "`libroId` no es una clave foránea real"
+    Aunque el campo se llame `libroId` y apunte conceptualmente a un `Libro` de PostgreSQL, **no hay ninguna integridad referencial automática** entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.
 
 ### El repositorio, con naming de método (igual que en JPA)
 
 ```java
-public interface ReviewRepository extends MongoRepository<Review, String> {
-    List<Review> findByVideojuegoId(Long videojuegoId);
+public interface ResenaRepository extends MongoRepository<Resena, String> {
+    List<Resena> findByLibroId(Long libroId);
 }
 ```
 
@@ -92,30 +92,30 @@ Spring Data también genera consultas automáticas por el nombre del método en 
 ### El patrón de "integridad referencial manual"
 
 ```java
-public List<ReviewResponseDTO> findByVideojuegoId(Long videojuegoId) {
-    // 1. Verificamos que el juego exista en PostgreSQL antes de buscar sus reseñas
-    if (!catalogoConsultaService.existeVideojuego(videojuegoId)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
+public List<ResenaResponseDTO> findByLibroId(Long libroId) {
+    // 1. Verificamos que el libro exista en PostgreSQL antes de buscar sus reseñas
+    if (!libroRepository.existsById(libroId)) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado en el catálogo");
     }
     // 2. Buscamos en MongoDB y mapeamos
-    return reviewRepository.findByVideojuegoId(videojuegoId).stream().map(this::mapToDTO).toList();
+    return resenaRepository.findByLibroId(libroId).stream().map(this::mapToDTO).toList();
 }
 ```
 
-Este es el patrón central de este apartado: como Mongo no puede validar una clave foránea hacia una tabla de PostgreSQL, el propio código de la aplicación tiene que hacerlo — consultando primero `CatalogoConsultaService.existeVideojuego(...)` (el mismo componente del paquete `catalogo.api` que viste en el Tema 2) antes de tocar Mongo.
+Este es el patrón central de este apartado: como Mongo no puede validar una clave foránea hacia una tabla de PostgreSQL, el propio código de la aplicación tiene que hacerlo — comprobando primero contra PostgreSQL (`existsById`, Spring Data JPA) antes de tocar Mongo.
 
 ### Una agregación sencilla, en memoria
 
 ```java
-public ReviewResumenDTO getResumenByVideojuegoId(Long videojuegoId) {
-    List<Review> reviews = reviewRepository.findByVideojuegoId(videojuegoId);
-    long totalReviews = reviews.size();
-    double puntuacionMedia = reviews.stream().mapToInt(Review::getPuntuacion).average().orElse(0.0);
-    return new ReviewResumenDTO(videojuegoId, totalReviews, puntuacionMedia);
+public ResenaResumenDTO getResumenByLibroId(Long libroId) {
+    List<Resena> resenas = resenaRepository.findByLibroId(libroId);
+    long totalResenas = resenas.size();
+    double puntuacionMedia = resenas.stream().mapToInt(Resena::getPuntuacion).average().orElse(0.0);
+    return new ResenaResumenDTO(libroId, totalResenas, puntuacionMedia);
 }
 ```
 
-`getResumenByVideojuegoId` calcula el total y la media de puntuación **en memoria**, con streams de Java, tras traer todos los documentos de Mongo — no usa el framework de agregación nativo de Mongo (`$group`, `$avg`). Es una simplificación deliberada: funciona bien con pocos documentos por videojuego, y queda como posible mejora si algún día hubiera muchísimas reseñas por consultar.
+`getResumenByLibroId` calcula el total y la media de puntuación **en memoria**, con streams de Java, tras traer todos los documentos de Mongo — no usa el framework de agregación nativo de Mongo (`$group`, `$avg`). Es una simplificación deliberada: funciona bien con pocos documentos por libro, y queda como posible mejora si algún día hubiera muchísimas reseñas por consultar.
 
 ### Establecer la conexión
 
@@ -129,11 +129,11 @@ public ReviewResumenDTO getResumenByVideojuegoId(Long videojuegoId) {
 ```yaml
 spring:
   mongodb:
-    uri: mongodb://localhost:27017/gamevault_db
+    uri: mongodb://localhost:27017/libreria_db
 ```
 
 !!! warning "La propiedad real es `spring.mongodb.uri`, no `spring.data.mongodb.uri`"
-    Es fácil confundirse con tutoriales antiguos: en este proyecto, `mongodb` cuelga directamente de `spring`, no de `spring.data`. Comprueba siempre el `application-dev.yaml` real antes de dar por buena una propiedad.
+    Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, `mongodb` cuelga directamente de `spring`, no de `spring.data`. Comprueba siempre tu `application-dev.yaml` antes de dar por buena una propiedad.
 
 En paralelo al `datasource` de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB.
 
@@ -146,6 +146,6 @@ En paralelo al `datasource` de PostgreSQL que ya conoces del Tema 1, esta es tod
     - **NoSQL** abandona tablas/filas/SQL; las bases **documentales** (MongoDB) son una de varias familias (clave-valor, columnares, de grafos).
     - Un **documento** es un objeto autocontenido; una **colección** los agrupa sin esquema fijo — nada de tablas ni `JOIN`.
     - MongoDB usa BSON y `ObjectId` (alfanumérico) como identificador — distinto del `Long` autoincremental de JPA.
-    - `videojuegoId` en `Review` es una relación **lógica**, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.
+    - `libroId` en `Resena` es una relación **lógica**, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.
     - El patrón de **integridad referencial manual**: el código comprueba en PostgreSQL antes de tocar Mongo, porque el motor no puede hacerlo por sí solo.
     - La propiedad real de conexión es `spring.mongodb.uri` (no `spring.data.mongodb.uri`).

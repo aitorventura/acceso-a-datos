@@ -32,7 +32,7 @@
 
 ## 📘 Índice de contenidos
 
-1. [Spring Boot: el chasis de GameVault](spring-boot-y-gamevault.md)
+1. [Fundamentos de Spring Boot](spring-boot-fundamentos.md)
 2. [Conectores y protocolos de acceso a bases de datos](conectores-y-protocolos.md)
 3. [Operaciones CRUD y gestión de transacciones](operaciones-crud-transacciones.md)
 4. [JDBC puro: conexión manual sin ORM](jdbc-puro.md)

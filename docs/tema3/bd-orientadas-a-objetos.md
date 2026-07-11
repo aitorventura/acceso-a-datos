@@ -2,14 +2,11 @@
 
 # 🧩 3. Bases de datos orientadas a objetos, pruebas y documentación
 
-Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico sobre una categoría de bases de datos que GameVault no usa (así que, por primera vez en el tema, no hay código del proyecto que mostrar), y después las pruebas que dan por buenas todas las piezas construidas hasta ahora.
+Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico sobre una categoría de bases de datos que no vas a usar en las prácticas (contenido puramente conceptual, exigido por el currículo), y después las pruebas que dan por buenas todas las piezas construidas hasta ahora.
 
 ---
 
 ## 🧊 Bases de datos orientadas a objetos puras
-
-!!! info "Sin código de GameVault en esta parte"
-    GameVault no usa ningún gestor de este tipo — a diferencia del resto del tema, aquí no hay ningún fichero del proyecto que analizar. Es contenido puramente teórico, exigido por el currículo.
 
 Una **base de datos orientada a objetos pura** va un paso más allá que lo objeto-relacional que has trabajado con JSONB: los objetos se persisten **tal cual**, con su identidad y sus referencias intactas, sin traducirlos a filas y columnas ni siquiera parcialmente. Recuerda la diferencia con JSONB: allí, una columna de una tabla relacional normal contenía un objeto JSON — seguía siendo, en el fondo, una tabla con filas. En una BD orientada a objetos pura no hay tablas en absoluto: el propio motor entiende y almacena objetos directamente.
 
@@ -23,18 +20,18 @@ Algunos gestores históricos/conceptuales de esta categoría: **db4o**, **Object
 
 ## 🧪 Pruebas y documentación
 
-De vuelta al proyecto real: cómo se prueba y documenta lo construido en este tema.
+De vuelta al código: cómo se prueba y documenta lo construido en este tema.
 
-### Test de capa (`VideojuegoServiceTest`, `VideojuegoControllerTest`)
+### Test de capa (service y controller)
 
-Ya conoces la distinción del Tema 1 de PSP (aunque aquí es Acceso a Datos, la idea es la misma): un test de **service** aísla la lógica de negocio, mockeando el repositorio; un test de **controller** (con MockMvc) prueba la capa HTTP, mockeando el service. Ambos existen en el proyecto sobre el catálogo, JSONB incluido — cada uno prueba una capa distinta, con distintos colaboradores mockeados.
+Ya conoces la distinción del Tema 1 de PSP (aunque aquí es Acceso a Datos, la idea es la misma): un test de **service** aísla la lógica de negocio, mockeando el repositorio; un test de **controller** (con MockMvc) prueba la capa HTTP, mockeando el service. Cada uno prueba una capa distinta, con distintos colaboradores mockeados — y ambos aplican igual cuando la entidad lleva una columna JSONB.
 
-### Test de integración real (`GamevaultApiTest`)
+### Test de integración real (con Testcontainers)
 
 ```java
 @Testcontainers
 @AutoConfigureMockMvc
-class GamevaultApiTest {
+class LibreriaApiTest {
 
     @Container
     @ServiceConnection
@@ -53,7 +50,7 @@ class GamevaultApiTest {
 
 ### Documentar, en el sentido de este RA
 
-"Documentar" aquí no significa escribir un documento externo aparte — significa que el propio código de test, con nombres de método descriptivos (`crearVideojuego_DebeGuardarDetallesPlataforma_CuandoEsValido`, por ejemplo) y comentarios donde haga falta, deja claro **qué** comportamiento se está verificando y **por qué**. El test bien escrito es, en sí mismo, la documentación de qué se espera que haga el sistema.
+"Documentar" aquí no significa escribir un documento externo aparte — significa que el propio código de test, con nombres de método descriptivos (`crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido`, por ejemplo) y comentarios donde haga falta, deja claro **qué** comportamiento se está verificando y **por qué**. El test bien escrito es, en sí mismo, la documentación de qué se espera que haga el sistema.
 
 ---
 

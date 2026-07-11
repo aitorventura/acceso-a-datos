@@ -35,61 +35,61 @@ El inconveniente: la lógica queda repartida en dos sitios (tu código Java y la
 
 ## ☎️ Cómo se invocan desde Java
 
-La vía estándar de JDBC es `CallableStatement` (el primo de `PreparedStatement`, pensado específicamente para invocar procedimientos) — lo mencionas para que sepas que existe, pero GameVault usa una vía más cómoda: **`JdbcTemplate`**.
+La vía estándar de JDBC es `CallableStatement` (el primo de `PreparedStatement`, pensado específicamente para invocar procedimientos) — se menciona para que sepas que existe, pero en este curso vas a usar una vía más cómoda: **`JdbcTemplate`**.
 
 `JdbcTemplate` es el ayudante que trae Spring sobre JDBC puro: te evita exactamente la fontanería que viste el apartado anterior (abrir conexión, cerrar recursos, gestionar excepciones a mano) sin llegar a ser un ORM completo como el que verás en el Tema 2.
 
 ```java
-jdbcTemplate.update("CALL ajustar_precio_estudio(?, ?)", estudioId, porcentaje);
+jdbcTemplate.update("CALL ajustar_precio_editorial(?, ?)", editorialId, porcentaje);
 ```
 
 Una sola línea: `JdbcTemplate` abre la conexión, prepara la sentencia con parámetros (igual de seguros frente a inyección SQL que el `PreparedStatement` que ya conoces), la ejecuta y cierra todo por ti.
 
 ---
 
-## 🎮 Aterrizaje en GameVault: `ajustar_precio_estudio`
+## 📚 Un ejemplo completo: `ajustar_precio_editorial`
 
-Esta es una pieza que todavía no existe en tu proyecto: ahora mismo tu `EstudioRepository.java` es un `JpaRepository` plano, sin ningún procedimiento almacenado ni uso de `JdbcTemplate`. Vas a añadirla tú, siguiendo el mismo estilo del resto de servicios del paquete `catalogo`.
+Siguiendo con la aplicación de la librería: imagina que una editorial sube (o baja) el precio de todo su catálogo en un porcentaje. Es el caso perfecto para un procedimiento almacenado — una operación masiva, atómica, cerca de los datos.
 
 ### 1. El procedimiento en PostgreSQL
 
 ```sql
-CREATE OR REPLACE PROCEDURE ajustar_precio_estudio(p_estudio_id BIGINT, p_porcentaje NUMERIC)
+CREATE OR REPLACE PROCEDURE ajustar_precio_editorial(p_editorial_id BIGINT, p_porcentaje NUMERIC)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    UPDATE videojuego
+    UPDATE libro
     SET precio = ROUND(precio * (1 + p_porcentaje / 100.0), 2)
-    WHERE estudio_id = p_estudio_id;
+    WHERE editorial_id = p_editorial_id;
 END;
 $$;
 ```
 
-Sube o baja, de una sola vez, el precio de **todos** los videojuegos de un estudio en el porcentaje indicado. `ROUND(..., 2)` importa: `Videojuego.precio` es un `BigDecimal` con precisión `10,2` en la base de datos — sin redondear explícitamente a dos decimales, el cálculo (`precio * (1 + porcentaje/100)`) podría dejar más decimales de los que la columna admite con precisión limpia.
+Sube o baja, de una sola vez, el precio de **todos** los libros de una editorial en el porcentaje indicado. `ROUND(..., 2)` importa: `precio` es una columna con precisión `10,2` en la base de datos — sin redondear explícitamente a dos decimales, el cálculo (`precio * (1 + porcentaje/100)`) podría dejar más decimales de los que la columna admite con precisión limpia.
 
 ### 2. La invocación desde el service
 
 ```java
 @Service
 @RequiredArgsConstructor
-public class EstudioService {
-    private final EstudioRepository estudioRepository;
+public class EditorialService {
+    private final EditorialRepository editorialRepository;
     private final JdbcTemplate jdbcTemplate;
 
-    public void ajustarPrecio(Long estudioId, BigDecimal porcentaje) {
-        if (!estudioRepository.existsById(estudioId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado");
+    public void ajustarPrecio(Long editorialId, BigDecimal porcentaje) {
+        if (!editorialRepository.existsById(editorialId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Editorial no encontrada");
         }
-        jdbcTemplate.update("CALL ajustar_precio_estudio(?, ?)", estudioId, porcentaje);
+        jdbcTemplate.update("CALL ajustar_precio_editorial(?, ?)", editorialId, porcentaje);
     }
 }
 ```
 
-`JdbcTemplate` se inyecta exactamente igual que cualquier otro bean — junto al `EstudioRepository`, con `@RequiredArgsConstructor`, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un `DataSource` en el classpath, que ya tienes desde el Tema 1). La comprobación de "estudio no encontrado" la sigues haciendo con Spring Data JPA (`existsById`) antes de invocar el procedimiento — no hace falta que todo pase por `JdbcTemplate`, solo la parte que de verdad conviene ejecutar cerca de los datos.
+`JdbcTemplate` se inyecta exactamente igual que cualquier otro bean — junto al `EditorialRepository`, con `@RequiredArgsConstructor`, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un `DataSource` en el classpath, que ya tienes desde el Tema 1). La comprobación de "editorial no encontrada" la sigues haciendo con Spring Data JPA (`existsById`) antes de invocar el procedimiento — no hace falta que todo pase por `JdbcTemplate`, solo la parte que de verdad conviene ejecutar cerca de los datos.
 
 ### 3. Por qué procedimiento y no un bucle en Java
 
-Podrías haber escrito esto en Java: cargar todos los videojuegos del estudio, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en **una sola operación atómica** dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada videojuego. Para una actualización masiva como esta, es la opción más directa.
+Podrías haber escrito esto en Java: cargar todos los libros de la editorial, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en **una sola operación atómica** dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada libro. Para una actualización masiva como esta, es la opción más directa. En la Actividad 1.4 construirás un procedimiento como este en tu propio proyecto.
 
 ---
 

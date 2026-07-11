@@ -14,15 +14,15 @@ Ya construiste este tipo de test en el Tema 5 (Actividad 5.1):
 @ExtendWith(MockitoExtension.class)
 class CatalogoConsultaServiceImplTest {
     @Mock
-    private VideojuegoRepository videojuegoRepository;
+    private LibroRepository libroRepository;
 
     @InjectMocks
     private CatalogoConsultaServiceImpl catalogoConsultaService;
 
     @Test
-    void existeVideojuego_DebeDevolverTrue_CuandoExiste() {
-        when(videojuegoRepository.existsById(1L)).thenReturn(true);
-        assertTrue(catalogoConsultaService.existeVideojuego(1L));
+    void existeLibro_DebeDevolverTrue_CuandoExiste() {
+        when(libroRepository.existsById(1L)).thenReturn(true);
+        assertTrue(catalogoConsultaService.existeLibro(1L));
     }
 }
 ```
@@ -33,11 +33,11 @@ Un test aislado con mocks prueba la **lógica interna** de un componente, sin ni
 
 ## 🔗 Probar la integración de todo junto
 
-El test más completo del proyecto, `GamevaultApiTest`, no mockea nada — levanta **todos** los motores reales que usa GameVault, simultáneamente, en contenedores Docker, solo para la duración del test:
+El test de integración más completo no mockea nada — levanta **todos** los motores reales que usa la aplicación, simultáneamente, en contenedores Docker, solo para la duración del test. En el caso de la librería, sus dos motores:
 
 ```java
 @Testcontainers
-class GamevaultApiTest {
+class LibreriaApiTest {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
@@ -45,18 +45,11 @@ class GamevaultApiTest {
     @Container
     static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
 
-    @Container
-    static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4-management");
-
-    @Container
-    static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
-            .withExposedPorts(6379);
-
     // ...
 }
 ```
 
-PostgreSQL, MongoDB, RabbitMQ y un contenedor genérico para Redis — los cuatro servicios reales de tu `docker-compose.yaml`, arrancados solo para este test. Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que los componentes desarrollados por separado (el catálogo en PostgreSQL, las reseñas en MongoDB, la mensajería con RabbitMQ) funcionen correctamente cuando se integran juntos, en la aplicación completa.
+PostgreSQL y MongoDB — los servicios reales del `docker-compose.yaml`, arrancados solo para este test (si la aplicación usara más servicios, como una cola de mensajes o una caché, se añadirían aquí exactamente igual, un `@Container` por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que los componentes desarrollados por separado (el catálogo en PostgreSQL, las reseñas en MongoDB) funcionen correctamente cuando se integran juntos, en la aplicación completa.
 
 ### Cuándo conviene cada tipo de test
 
@@ -72,7 +65,7 @@ Ninguno sustituye al otro — un proyecto real necesita ambos niveles.
 
 ## 📝 "Documentar" un componente
 
-Documentar un componente no es sobre todo escribir un documento externo aparte — es que el propio test, con nombres descriptivos (`existeVideojuego_DebeDevolverTrue_CuandoExiste`) y una estructura clara, deje constancia de qué comportamiento se espera y en qué condiciones. El test bien escrito **es** la documentación viva del componente — se actualiza sola cuando el comportamiento cambia (si no, el test falla y te avisa).
+Documentar un componente no es sobre todo escribir un documento externo aparte — es que el propio test, con nombres descriptivos (`existeLibro_DebeDevolverTrue_CuandoExiste`) y una estructura clara, deje constancia de qué comportamiento se espera y en qué condiciones. El test bien escrito **es** la documentación viva del componente — se actualiza sola cuando el comportamiento cambia (si no, el test falla y te avisa).
 
 ---
 
@@ -93,7 +86,7 @@ Con esto se completa el recorrido entero de Acceso a Datos: conectores (JDBC, CR
 ??? tip "Abrir resumen"
 
     - Un test **aislado** (mocks) prueba la lógica interna de un componente; un test de **integración** (Testcontainers) prueba que varios componentes reales funcionan bien juntos.
-    - `GamevaultApiTest` levanta los cuatro motores reales del proyecto (PostgreSQL, MongoDB, RabbitMQ, Redis) simultáneamente en Docker, solo para el test.
+    - Un test de integración completo levanta todos los motores reales de la aplicación (PostgreSQL, MongoDB...) simultáneamente en Docker, solo para el test.
     - Ninguno de los dos niveles de test sustituye al otro — un proyecto real necesita ambos.
     - "Documentar" un componente es, sobre todo, que el propio test (nombre + estructura) deje claro qué se espera de él.
     - El CI configurado en el Tema 0 ejecuta estos tests automáticamente en cada cambio — cerrando el círculo entre el principio y el final del módulo.

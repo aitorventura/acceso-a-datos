@@ -27,8 +27,8 @@ Cada una de estas piezas es un **recurso**: mientras está abierta, mantiene ocu
 
 ```java
 Connection conn = DriverManager.getConnection(
-        "jdbc:postgresql://localhost:5432/gamevault_db",
-        "gamevault_user",
+        "jdbc:postgresql://localhost:5432/libreria_db",
+        "libreria_user",
         "password123"
 );
 ```
@@ -38,13 +38,13 @@ Connection conn = DriverManager.getConnection(
 ### 2. Preparar la sentencia — y por qué nunca con `+`
 
 ```java
-String sql = "SELECT id, titulo, precio FROM videojuego WHERE estudio_id = ?";
+String sql = "SELECT id, titulo, precio FROM libro WHERE editorial_id = ?";
 PreparedStatement stmt = conn.prepareStatement(sql);
-stmt.setLong(1, estudioId);
+stmt.setLong(1, editorialId);
 ```
 
 !!! danger "Nunca concatenes el SQL con datos del usuario"
-    Podrías escribir `"SELECT * FROM videojuego WHERE estudio_id = " + estudioId` y funcionaría... hasta que `estudioId` (o cualquier dato que venga de fuera) contenga algo como `1 OR 1=1`. Eso es una **inyección SQL**: el atacante consigue que su texto se interprete como código SQL, no como un simple valor. `PreparedStatement` con parámetros (`?`) evita esto por diseño: el valor se envía por separado del SQL, y el driver lo trata siempre como un dato, nunca como código a ejecutar, sea lo que sea lo que contenga.
+    Podrías escribir `"SELECT * FROM libro WHERE editorial_id = " + editorialId` y funcionaría... hasta que `editorialId` (o cualquier dato que venga de fuera) contenga algo como `1 OR 1=1`. Eso es una **inyección SQL**: el atacante consigue que su texto se interprete como código SQL, no como un simple valor. `PreparedStatement` con parámetros (`?`) evita esto por diseño: el valor se envía por separado del SQL, y el driver lo trata siempre como un dato, nunca como código a ejecutar, sea lo que sea lo que contenga.
 
 ### 3. Ejecutar y recorrer el resultado
 
@@ -66,7 +66,7 @@ while (rs.next()) {
 try (Connection conn = DriverManager.getConnection(url, user, pass);
      PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    stmt.setLong(1, estudioId);
+    stmt.setLong(1, editorialId);
     try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
             // ...
@@ -85,7 +85,7 @@ Compara este ciclo completo con lo que ya conoces de `operaciones-crud-transacci
 
 ```java
 // Con Spring Data JPA — todo esto está oculto:
-List<Videojuego> videojuegos = videojuegoRepository.findAll();
+List<Libro> libros = libroRepository.findAll();
 ```
 
 Una sola línea, sin gestionar conexión, sin escribir SQL, sin mapear filas a mano, sin preocuparte de cerrar nada — Spring Data JPA hace todo eso por ti, usando JDBC exactamente igual por debajo. Ahora que has visto la "fontanería" real, esa línea deja de ser magia: es JDBC con un montón de trabajo repetitivo automatizado.
@@ -93,7 +93,7 @@ Una sola línea, sin gestionar conexión, sin escribir SQL, sin mapear filas a m
 !!! tip "¿Entonces por qué aprender JDBC puro, si un ORM lo hace todo?"
     Porque un ORM sigue generando SQL por debajo, y entender qué SQL genera (y por qué a veces conviene evitarlo) te va a ayudar a diagnosticar problemas de rendimiento más adelante en tu carrera. Además, hay situaciones — consultas muy específicas, procedimientos almacenados (que verás en el siguiente apartado) — donde JDBC puro, o herramientas intermedias como `JdbcTemplate`, siguen siendo la opción más directa.
 
-En este punto del curso, esta pieza no tiene equivalente en tu propio GameVault: todo tu proyecto usa Spring Data JPA, sin una sola línea de JDBC manual (revisa tu propio `VideojuegoRepository.java` — es una interfaz vacía que extiende `JpaRepository`). Por eso, en la Actividad 1.3, vas a escribir esta consulta manual en una clase de consola aparte, fuera de tus controladores y servicios, conectándote al mismo PostgreSQL que ya tienes levantado.
+En este punto del curso, tu propio proyecto usa Spring Data JPA en todas partes, sin una sola línea de JDBC manual (tus repositorios son interfaces vacías que extienden `JpaRepository`). Por eso, en la Actividad 1.3, vas a escribir esta consulta manual en una clase de consola aparte, fuera de tus controladores y servicios, conectándote al mismo PostgreSQL que ya tienes levantado.
 
 ---
 

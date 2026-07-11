@@ -12,19 +12,19 @@ Añades la tercera y última vía de consulta de Spring Data: para lo que ni un 
 
 ```sql
 -- SQL: tablas y columnas
-SELECT e.* FROM estudio e
-JOIN videojuego v ON v.estudio_id = e.id
+SELECT e.* FROM editorial e
+JOIN libro l ON l.editorial_id = e.id
 GROUP BY e.id;
 ```
 
 ```
 -- JPQL: entidades y propiedades
-SELECT e FROM Estudio e
-JOIN e.videojuegos v
+SELECT e FROM Editorial e
+JOIN e.libros l
 GROUP BY e
 ```
 
-Fíjate en las diferencias: `Estudio` con mayúscula inicial (es la clase Java, no la tabla `estudio`); `e.videojuegos` navega la relación con un punto, tal como la declaraste en la entidad, en vez de un `JOIN ... ON` explícito sobre claves foráneas; no hay ninguna columna nombrada literalmente, solo propiedades del objeto.
+Fíjate en las diferencias: `Editorial` con mayúscula inicial (es la clase Java, no la tabla `editorial`); `e.libros` navega la relación con un punto, tal como la declaraste en la entidad, en vez de un `JOIN ... ON` explícito sobre claves foráneas; no hay ninguna columna nombrada literalmente, solo propiedades del objeto.
 
 ---
 
@@ -34,7 +34,7 @@ Ya conoces dos; hoy llega la tercera:
 
 | Vía | Cuándo usarla |
 |---|---|
-| **Naming de método** (`findByTitulo`, `findByEstudioId`) | Consultas simples, fijas, sin lógica adicional. |
+| **Naming de método** (`findByTitulo`, `findByEditorialId`) | Consultas simples, fijas, sin lógica adicional. |
 | **Specifications** (Tema 2, apartado 2) | Filtros dinámicos, combinables en tiempo de ejecución. |
 | **`@Query` con JPQL** | Consultas complejas y fijas — típicamente, agregaciones. |
 
@@ -42,17 +42,17 @@ Una **agregación** (por si el repaso de SQL lo necesita) es una operación que 
 
 ---
 
-## 🎮 Aterrizaje en GameVault: un ranking que no existe todavía
+## 📊 Un ejemplo completo: el ranking de editoriales
 
-Ahora mismo, tu propio `EstudioRepository.java` es un `JpaRepository` plano, sin un solo método propio. No hay ningún ranking de estudios implementado — es la mejora que vas a construir tú, siguiendo el estilo del resto del proyecto (mismo paquete `catalogo`, mismas convenciones con Lombok/`@RequiredArgsConstructor`).
+Siguiendo con la librería: imagina que quieres un ranking de editoriales ordenado por cuántos libros tiene cada una en el catálogo. Es una consulta fija (siempre la misma), pero con `JOIN`, agregación y ordenación por el resultado de esa agregación — el caso típico de `@Query`.
 
 ### La consulta con `@Query`
 
 ```java
-public interface EstudioRepository extends JpaRepository<Estudio, Long> {
+public interface EditorialRepository extends JpaRepository<Editorial, Long> {
 
-    @Query("SELECT e FROM Estudio e JOIN e.videojuegos v GROUP BY e ORDER BY COUNT(v) DESC")
-    List<Estudio> rankingPorNumeroDeVideojuegos();
+    @Query("SELECT e FROM Editorial e JOIN e.libros l GROUP BY e ORDER BY COUNT(l) DESC")
+    List<Editorial> rankingPorNumeroDeLibros();
 }
 ```
 
@@ -64,21 +64,21 @@ Ya conoces `@Transactional` desde el Tema 1. Aquí lo retomas centrado en las co
 
 ```java
 @Transactional(readOnly = true)
-public List<EstudioRankingDTO> obtenerRanking() {
-    return estudioRepository.rankingPorNumeroDeVideojuegos()
+public List<EditorialRankingDTO> obtenerRanking() {
+    return editorialRepository.rankingPorNumeroDeLibros()
             .stream()
-            .map(e -> new EstudioRankingDTO(e.getNombre(), e.getVideojuegos().size()))
+            .map(e -> new EditorialRankingDTO(e.getNombre(), e.getLibros().size()))
             .toList();
 }
 ```
 
-`@Transactional(readOnly = true)` en operaciones de solo lectura no es solo un matiz estilístico: es una optimización real — le indica al framework y al gestor de base de datos que esta operación no va a modificar nada, lo que permite evitar bloqueos (*locks*) innecesarios que sí harían falta en una escritura. En operaciones de escritura, sigues usando `@Transactional` a secas, exactamente como en `VideojuegoService.create()`/`update()` del Tema 1.
+`@Transactional(readOnly = true)` en operaciones de solo lectura no es solo un matiz estilístico: es una optimización real — le indica al framework y al gestor de base de datos que esta operación no va a modificar nada, lo que permite evitar bloqueos (*locks*) innecesarios que sí harían falta en una escritura. En operaciones de escritura, sigues usando `@Transactional` a secas, exactamente como en el `create()`/`update()` del Tema 1.
 
 ---
 
 ## 🧭 Recapitulación del tema
 
-Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en `spring-boot-starter-data-jpa`) → mapeo con anotaciones (`@Entity`, `@Column`, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. El Tema 3 retoma exactamente donde este tema deja una pista suelta: `VideojuegoSpecifications.disponibleEnPlataforma`, mencionada de pasada en el apartado anterior, que trabaja sobre una columna JSONB — el tema completo de bases de datos objeto-relacionales.
+Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en `spring-boot-starter-data-jpa`) → mapeo con anotaciones (`@Entity`, `@Column`, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. En el Tema 3 aparece un tipo de columna que todavía no has visto — JSONB, capaz de guardar objetos completos dentro de una celda — y con él, las bases de datos objeto-relacionales.
 
 ---
 
