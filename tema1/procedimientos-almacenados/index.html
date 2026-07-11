@@ -799,12 +799,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1043,13 +1043,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-ajustar_precio_estudio" class="md-nav__link">
+  <a href="#un-ejemplo-completo-ajustar_precio_editorial" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: ajustar_precio_estudio
+      📚 Un ejemplo completo: ajustar_precio_editorial
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: ajustar_precio_estudio">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: ajustar_precio_editorial">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2025,13 +2025,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-ajustar_precio_estudio" class="md-nav__link">
+  <a href="#un-ejemplo-completo-ajustar_precio_editorial" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: ajustar_precio_estudio
+      📚 Un ejemplo completo: ajustar_precio_editorial
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: ajustar_precio_estudio">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: ajustar_precio_editorial">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2130,14 +2130,14 @@
 <p>El inconveniente: la lógica queda repartida en dos sitios (tu código Java y la base de datos), lo que la hace más difícil de versionar junto con el resto del proyecto y de probar con las mismas herramientas que usas para el resto de tu código.</p>
 <hr>
 <h2 id="como-se-invocan-desde-java">☎️ Cómo se invocan desde Java<a class="headerlink" href="#como-se-invocan-desde-java" title="Permanent link">¶</a></h2>
-<p>La vía estándar de JDBC es <code>CallableStatement</code> (el primo de <code>PreparedStatement</code>, pensado específicamente para invocar procedimientos) — lo mencionas para que sepas que existe, pero GameVault usa una vía más cómoda: <strong><code>JdbcTemplate</code></strong>.</p>
+<p>La vía estándar de JDBC es <code>CallableStatement</code> (el primo de <code>PreparedStatement</code>, pensado específicamente para invocar procedimientos) — se menciona para que sepas que existe, pero en este curso vas a usar una vía más cómoda: <strong><code>JdbcTemplate</code></strong>.</p>
 <p><code>JdbcTemplate</code> es el ayudante que trae Spring sobre JDBC puro: te evita exactamente la fontanería que viste el apartado anterior (abrir conexión, cerrar recursos, gestionar excepciones a mano) sin llegar a ser un ORM completo como el que verás en el Tema 2.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">"CALL ajustar_precio_estudio(?, ?)"</span><span class="p">,</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">);</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">"CALL ajustar_precio_editorial(?, ?)"</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">,</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <p>Una sola línea: <code>JdbcTemplate</code> abre la conexión, prepara la sentencia con parámetros (igual de seguros frente a inyección SQL que el <code>PreparedStatement</code> que ya conoces), la ejecuta y cierra todo por ti.</p>
 <hr>
-<h2 id="aterrizaje-en-gamevault-ajustar_precio_estudio">🎮 Aterrizaje en GameVault: <code>ajustar_precio_estudio</code><a class="headerlink" href="#aterrizaje-en-gamevault-ajustar_precio_estudio" title="Permanent link">¶</a></h2>
-<p>Esta es una pieza que todavía no existe en tu proyecto: ahora mismo tu <code>EstudioRepository.java</code> es un <code>JpaRepository</code> plano, sin ningún procedimiento almacenado ni uso de <code>JdbcTemplate</code>. Vas a añadirla tú, siguiendo el mismo estilo del resto de servicios del paquete <code>catalogo</code>.</p>
+<h2 id="un-ejemplo-completo-ajustar_precio_editorial">📚 Un ejemplo completo: <code>ajustar_precio_editorial</code><a class="headerlink" href="#un-ejemplo-completo-ajustar_precio_editorial" title="Permanent link">¶</a></h2>
+<p>Siguiendo con la aplicación de la librería: imagina que una editorial sube (o baja) el precio de todo su catálogo en un porcentaje. Es el caso perfecto para un procedimiento almacenado — una operación masiva, atómica, cerca de los datos.</p>
 <h3 id="1-el-procedimiento-en-postgresql">1. El procedimiento en PostgreSQL<a class="headerlink" href="#1-el-procedimiento-en-postgresql" title="Permanent link">¶</a></h3>
 <div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
@@ -2147,17 +2147,17 @@
 <span class="normal"><a href="#__codelineno-2-6">6</a></span>
 <span class="normal"><a href="#__codelineno-2-7">7</a></span>
 <span class="normal"><a href="#__codelineno-2-8">8</a></span>
-<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ajustar_precio_estudio</span><span class="p">(</span><span class="n">p_estudio_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="n">p_porcentaje</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span>
+<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ajustar_precio_editorial</span><span class="p">(</span><span class="n">p_editorial_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="p">,</span><span class="w"> </span><span class="n">p_porcentaje</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="k">BEGIN</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">videojuego</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">libro</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="n">precio</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p_porcentaje</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">estudio_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_estudio_id</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">editorial_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_editorial_id</span><span class="p">;</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="k">END</span><span class="p">;</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="err">$$</span><span class="p">;</span>
 </code></pre></div></td></tr></table></div>
-<p>Sube o baja, de una sola vez, el precio de <strong>todos</strong> los videojuegos de un estudio en el porcentaje indicado. <code>ROUND(..., 2)</code> importa: <code>Videojuego.precio</code> es un <code>BigDecimal</code> con precisión <code>10,2</code> en la base de datos — sin redondear explícitamente a dos decimales, el cálculo (<code>precio * (1 + porcentaje/100)</code>) podría dejar más decimales de los que la columna admite con precisión limpia.</p>
+<p>Sube o baja, de una sola vez, el precio de <strong>todos</strong> los libros de una editorial en el porcentaje indicado. <code>ROUND(..., 2)</code> importa: <code>precio</code> es una columna con precisión <code>10,2</code> en la base de datos — sin redondear explícitamente a dos decimales, el cálculo (<code>precio * (1 + porcentaje/100)</code>) podría dejar más decimales de los que la columna admite con precisión limpia.</p>
 <h3 id="2-la-invocacion-desde-el-service">2. La invocación desde el service<a class="headerlink" href="#2-la-invocacion-desde-el-service" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
@@ -2173,21 +2173,21 @@
 <span class="normal"><a href="#__codelineno-3-12">12</a></span>
 <span class="normal"><a href="#__codelineno-3-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@Service</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EstudioService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">EstudioRepository</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EditorialService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">EditorialRepository</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">;</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbcTemplate</span><span class="p">;</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ajustarPrecio</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">estudioRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">estudioId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Estudio no encontrado"</span><span class="p">);</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ajustarPrecio</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">editorialId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Editorial no encontrada"</span><span class="p">);</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">"CALL ajustar_precio_estudio(?, ?)"</span><span class="p">,</span><span class="w"> </span><span class="n">estudioId</span><span class="p">,</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">);</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="n">jdbcTemplate</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">"CALL ajustar_precio_editorial(?, ?)"</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">,</span><span class="w"> </span><span class="n">porcentaje</span><span class="p">);</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>JdbcTemplate</code> se inyecta exactamente igual que cualquier otro bean — junto al <code>EstudioRepository</code>, con <code>@RequiredArgsConstructor</code>, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un <code>DataSource</code> en el classpath, que ya tienes desde el Tema 1). La comprobación de "estudio no encontrado" la sigues haciendo con Spring Data JPA (<code>existsById</code>) antes de invocar el procedimiento — no hace falta que todo pase por <code>JdbcTemplate</code>, solo la parte que de verdad conviene ejecutar cerca de los datos.</p>
+<p><code>JdbcTemplate</code> se inyecta exactamente igual que cualquier otro bean — junto al <code>EditorialRepository</code>, con <code>@RequiredArgsConstructor</code>, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un <code>DataSource</code> en el classpath, que ya tienes desde el Tema 1). La comprobación de "editorial no encontrada" la sigues haciendo con Spring Data JPA (<code>existsById</code>) antes de invocar el procedimiento — no hace falta que todo pase por <code>JdbcTemplate</code>, solo la parte que de verdad conviene ejecutar cerca de los datos.</p>
 <h3 id="3-por-que-procedimiento-y-no-un-bucle-en-java">3. Por qué procedimiento y no un bucle en Java<a class="headerlink" href="#3-por-que-procedimiento-y-no-un-bucle-en-java" title="Permanent link">¶</a></h3>
-<p>Podrías haber escrito esto en Java: cargar todos los videojuegos del estudio, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en <strong>una sola operación atómica</strong> dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada videojuego. Para una actualización masiva como esta, es la opción más directa.</p>
+<p>Podrías haber escrito esto en Java: cargar todos los libros de la editorial, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en <strong>una sola operación atómica</strong> dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada libro. Para una actualización masiva como esta, es la opción más directa. En la Actividad 1.4 construirás un procedimiento como este en tu propio proyecto.</p>
 <hr>
 <h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
 <p>Con esto se completa el recorrido: por qué existen los conectores y cómo se define la estructura de la base de datos (apartado 2) → CRUD completo y transacciones gestionadas por Spring (apartado 3) → la misma fontanería, pero a mano, con JDBC puro (apartado 4) → código que vive dentro del propio motor, invocado desde Java (este apartado). El Tema 2 retoma exactamente donde empezó todo: el desfase objeto-relacional, ahora resuelto con una herramienta ORM completa (Hibernate) en vez de conectores manuales.</p>

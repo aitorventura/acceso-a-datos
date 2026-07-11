@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1160,13 +1160,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault" class="md-nav__link">
+  <a href="#hibernate-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault
+      🗄️ Hibernate en un proyecto Spring Boot
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault">
+    <nav class="md-nav" aria-label="🗄️ Hibernate en un proyecto Spring Boot">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1188,9 +1188,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#configuracion-avanzada-persistenceconfig-y-jackson3hibernatemapper" class="md-nav__link">
+  <a href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuración avanzada: PersistenceConfig y Jackson3HibernateMapper
+      Configuración avanzada: cuando el mapeo no es directo
     </span>
   </a>
   
@@ -1211,9 +1211,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#los-estados-ahora-con-videojuego" class="md-nav__link">
+  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
     <span class="md-ellipsis">
-      🔁 Los estados, ahora con Videojuego
+      🔁 Los estados, ahora con Libro
     </span>
   </a>
   
@@ -2040,13 +2040,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault" class="md-nav__link">
+  <a href="#hibernate-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault
+      🗄️ Hibernate en un proyecto Spring Boot
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault">
+    <nav class="md-nav" aria-label="🗄️ Hibernate en un proyecto Spring Boot">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2068,9 +2068,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#configuracion-avanzada-persistenceconfig-y-jackson3hibernatemapper" class="md-nav__link">
+  <a href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuración avanzada: PersistenceConfig y Jackson3HibernateMapper
+      Configuración avanzada: cuando el mapeo no es directo
     </span>
   </a>
   
@@ -2091,9 +2091,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#los-estados-ahora-con-videojuego" class="md-nav__link">
+  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
     <span class="md-ellipsis">
-      🔁 Los estados, ahora con Videojuego
+      🔁 Los estados, ahora con Libro
     </span>
   </a>
   
@@ -2170,7 +2170,7 @@
 </table>
 <pre class="mermaid"><code>flowchart TB
     A["🌉 ORM&lt;br/&gt;(el concepto)"] --&gt; B["📜 JPA&lt;br/&gt;(la especificación estándar de Java)"]
-    B --&gt; C["⚙️ Hibernate&lt;br/&gt;(la implementación que usa GameVault)"]
+    B --&gt; C["⚙️ Hibernate&lt;br/&gt;(la implementación más usada)"]
     C --&gt; D["🧰 Spring Data JPA&lt;br/&gt;(capa de comodidad: los repositorios)"]</code></pre>
 <p>Spring Data JPA, que ya usaste en el Tema 1 (<code>JpaRepository</code>), no es un ORM distinto — es una capa adicional de comodidad <strong>por encima</strong> de JPA/Hibernate: te genera automáticamente implementaciones de repositorios (<code>save</code>, <code>findById</code>, <code>findAll</code>...) para que ni siquiera tengas que escribir el código que usa directamente las anotaciones JPA.</p>
 <hr>
@@ -2178,7 +2178,7 @@
 <p>Una <strong>clase persistente</strong> (o entidad) es una clase Java cuyos objetos el ORM sabe guardar y recuperar de la base de datos. Existen dos formas históricas de declarar el mapeo entre una clase y una tabla:</p>
 <ul>
 <li><strong>Fichero XML de mapeo</strong>: un documento aparte que describe la correspondencia — el enfoque más antiguo, hoy considerado legado.</li>
-<li><strong>Anotaciones</strong>: el mapeo se declara directamente sobre la propia clase (<code>@Entity</code>, <code>@Column</code>...) — el enfoque que se usa hoy en día, y el que verás en GameVault.</li>
+<li><strong>Anotaciones</strong>: el mapeo se declara directamente sobre la propia clase (<code>@Entity</code>, <code>@Column</code>...) — el enfoque que se usa hoy en día, y el que vas a usar durante todo el curso.</li>
 </ul>
 <hr>
 <h2 id="los-estados-de-un-objeto-en-el-orm">🔄 Los estados de un objeto en el ORM<a class="headerlink" href="#los-estados-de-un-objeto-en-el-orm" title="Permanent link">¶</a></h2>
@@ -2195,7 +2195,7 @@
 <li><strong>Removed</strong>: marcado para eliminarse de la base de datos.</li>
 </ul>
 <hr>
-<h2 id="aterrizaje-en-gamevault">🎮 Aterrizaje en GameVault<a class="headerlink" href="#aterrizaje-en-gamevault" title="Permanent link">¶</a></h2>
+<h2 id="hibernate-en-un-proyecto-spring-boot">🗄️ Hibernate en un proyecto Spring Boot<a class="headerlink" href="#hibernate-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
 <h3 id="instalar-hibernate-no-es-un-paso-manual">"Instalar" Hibernate no es un paso manual<a class="headerlink" href="#instalar-hibernate-no-es-un-paso-manual" title="Permanent link">¶</a></h3>
 <p>A diferencia de lo que sugiere la palabra "instalar", en un proyecto Spring Boot no descargas ni configuras Hibernate por separado: viene incluido en la dependencia que ya conoces del Tema 1.</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
@@ -2208,7 +2208,7 @@
 </code></pre></div></td></tr></table></div>
 <p><code>spring-boot-starter-data-jpa</code> trae Hibernate como implementación de JPA por defecto, además de Spring Data JPA. Con solo esa dependencia (que ya tienes en tu <code>pom.xml</code> desde la Actividad 1.1), Hibernate está "instalado y configurado" en lo esencial.</p>
 <h3 id="el-mapeo-con-anotaciones-entidad-por-entidad">El mapeo con anotaciones, entidad por entidad<a class="headerlink" href="#el-mapeo-con-anotaciones-entidad-por-entidad" title="Permanent link">¶</a></h3>
-<p>Ya conoces <code>Videojuego</code> y <code>Estudio</code> del Tema 1 — ahora las lees con la óptica de "mapeo ORM" en vez de "estructura de base de datos":</p>
+<p>Ya conoces <code>Libro</code> y <code>Editorial</code> del Tema 1 — ahora las lees con la óptica de "mapeo ORM" en vez de "estructura de base de datos":</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
@@ -2224,8 +2224,8 @@
 <span class="normal"><a href="#__codelineno-2-13">13</a></span>
 <span class="normal"><a href="#__codelineno-2-14">14</a></span>
 <span class="normal"><a href="#__codelineno-2-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Entity</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"videojuego"</span><span class="p">)</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Videojuego</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"libro"</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Libro</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="nd">@Id</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
@@ -2235,8 +2235,8 @@
 <a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">;</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11"></a>
 <a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span><span class="nd">@ManyToOne</span><span class="p">(</span><span class="n">fetch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FetchType</span><span class="p">.</span><span class="na">LAZY</span><span class="p">)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio_id"</span><span class="p">)</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Estudio</span><span class="w"> </span><span class="n">estudio</span><span class="p">;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial_id"</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Editorial</span><span class="w"> </span><span class="n">editorial</span><span class="p">;</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <table>
@@ -2261,29 +2261,29 @@
 </tr>
 <tr>
 <td><code>@ManyToOne(fetch = FetchType.LAZY)</code> + <code>@JoinColumn</code></td>
-<td>La relación y la columna real de clave foránea; <code>LAZY</code> significa que <code>Estudio</code> no se carga hasta que de verdad lo pidas.</td>
+<td>La relación y la columna real de clave foránea; <code>LAZY</code> significa que <code>Editorial</code> no se carga hasta que de verdad lo pidas.</td>
 </tr>
 <tr>
-<td><code>@OneToMany(mappedBy = "estudio", cascade = CascadeType.ALL, orphanRemoval = true)</code> (en <code>Estudio</code>)</td>
-<td>El lado inverso de la relación; <code>mappedBy</code> indica que la clave foránea real vive en <code>Videojuego</code>, no aquí.</td>
+<td><code>@OneToMany(mappedBy = "editorial", cascade = CascadeType.ALL, orphanRemoval = true)</code> (en <code>Editorial</code>)</td>
+<td>El lado inverso de la relación; <code>mappedBy</code> indica que la clave foránea real vive en <code>Libro</code>, no aquí.</td>
 </tr>
 </tbody>
 </table>
 <p>Cada una de estas anotaciones sustituye código que en el Tema 1, con JDBC puro, habrías tenido que escribir a mano: el <code>CREATE TABLE</code>, el <code>JOIN</code> en cada consulta, la conversión de tipos entre columna y campo Java.</p>
-<h3 id="configuracion-avanzada-persistenceconfig-y-jackson3hibernatemapper">Configuración avanzada: <code>PersistenceConfig</code> y <code>Jackson3HibernateMapper</code><a class="headerlink" href="#configuracion-avanzada-persistenceconfig-y-jackson3hibernatemapper" title="Permanent link">¶</a></h3>
-<p>GameVault tiene además configuración específica de Hibernate en el paquete <code>config</code>. No necesitas entender el detalle exacto todavía — basta con saber que existe porque Hibernate necesita, a veces, ayuda extra para mapear tipos que no son directos (como el JSON que verás en el Tema 3): esa ayuda se declara en clases de configuración como estas.</p>
+<h3 id="configuracion-avanzada-cuando-el-mapeo-no-es-directo">Configuración avanzada: cuando el mapeo no es directo<a class="headerlink" href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" title="Permanent link">¶</a></h3>
+<p>Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 3). Esa ayuda se declara en clases de configuración (<code>@Configuration</code>, que ya conoces del Tema 1) — no necesitas el detalle todavía; basta con saber que, cuando el mapeo automático no llega, ahí es donde se completa.</p>
 <h3 id="ddl-auto-configuracion-del-orm-no-del-conector"><code>ddl-auto</code>: configuración del ORM, no del conector<a class="headerlink" href="#ddl-auto-configuracion-del-orm-no-del-conector" title="Permanent link">¶</a></h3>
 <p>Ya usaste <code>spring.jpa.hibernate.ddl-auto: update</code> en el Tema 1, pero desde el ángulo de "cómo se crea la tabla". Ahora, con la distinción clara entre conector y ORM que has visto hoy, es el momento de precisarlo: la conexión (usuario, contraseña, URL) es configuración del <strong>conector</strong> (Tema 1); qué hace Hibernate con las entidades que declaras (crear tablas, validarlas, no tocar nada) es configuración del <strong>ORM</strong> — y vive en esa misma propiedad, <code>ddl-auto</code>.</p>
 <hr>
-<h2 id="los-estados-ahora-con-videojuego">🔁 Los estados, ahora con <code>Videojuego</code><a class="headerlink" href="#los-estados-ahora-con-videojuego" title="Permanent link">¶</a></h2>
-<p>Retoma el ciclo de estados de la PARTE 1 con un ejemplo concreto: un <code>new Videojuego()</code> recién creado en Java es <strong>transient</strong> — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a <strong>managed</strong>: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a <strong>detached</strong> — sigue teniendo sus datos, pero ya no se sincroniza solo.</p>
+<h2 id="los-estados-ahora-con-libro">🔁 Los estados, ahora con <code>Libro</code><a class="headerlink" href="#los-estados-ahora-con-libro" title="Permanent link">¶</a></h2>
+<p>Retoma el ciclo de estados de la PARTE 1 con un ejemplo concreto: un <code>new Libro()</code> recién creado en Java es <strong>transient</strong> — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a <strong>managed</strong>: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a <strong>detached</strong> — sigue teniendo sus datos, pero ya no se sincroniza solo.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
 <li>Un <strong>ORM</strong> traduce automáticamente entre objetos y filas, siguiendo unas reglas de mapeo declaradas una vez.</li>
-<li><strong>ORM</strong> es el concepto, <strong>JPA</strong> la especificación estándar de Java, <strong>Hibernate</strong> la implementación que usa GameVault; <strong>Spring Data JPA</strong> añade los repositorios como capa de comodidad por encima.</li>
+<li><strong>ORM</strong> es el concepto, <strong>JPA</strong> la especificación estándar de Java, <strong>Hibernate</strong> la implementación más usada; <strong>Spring Data JPA</strong> añade los repositorios como capa de comodidad por encima.</li>
 <li>El mapeo se declara con <strong>anotaciones</strong> sobre la propia entidad (el XML de mapeo es el enfoque legado).</li>
 <li>Los estados de un objeto en el ORM: <strong>transient</strong> (sin relación con la BD) → <strong>managed</strong> (gestionado, se sincroniza solo) → <strong>detached</strong> (ya no se sincroniza) / <strong>removed</strong> (marcado para borrar).</li>
 <li>"Instalar" Hibernate en Spring Boot es, en la práctica, añadir <code>spring-boot-starter-data-jpa</code>.</li>

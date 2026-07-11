@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1784,13 +1784,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-la-progresion-de-componente" class="md-nav__link">
+  <a href="#la-progresion-de-componente-con-la-libreria" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: la progresión de "componente"
+      📚 La progresión de "componente", con la librería
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: la progresión de &#34;componente&#34;">
+    <nav class="md-nav" aria-label="📚 La progresión de &#34;componente&#34;, con la librería">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2043,13 +2043,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-la-progresion-de-componente" class="md-nav__link">
+  <a href="#la-progresion-de-componente-con-la-libreria" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: la progresión de "componente"
+      📚 La progresión de "componente", con la librería
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: la progresión de &#34;componente&#34;">
+    <nav class="md-nav" aria-label="📚 La progresión de &#34;componente&#34;, con la librería">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2163,7 +2163,7 @@
 </tbody>
 </table>
 <hr>
-<h2 id="aterrizaje-en-gamevault-la-progresion-de-componente">🎮 Aterrizaje en GameVault: la progresión de "componente"<a class="headerlink" href="#aterrizaje-en-gamevault-la-progresion-de-componente" title="Permanent link">¶</a></h2>
+<h2 id="la-progresion-de-componente-con-la-libreria">📚 La progresión de "componente", con la librería<a class="headerlink" href="#la-progresion-de-componente-con-la-libreria" title="Permanent link">¶</a></h2>
 <h3 id="herramientas-de-desarrollo-de-componentes">Herramientas de desarrollo de componentes<a class="headerlink" href="#herramientas-de-desarrollo-de-componentes" title="Permanent link">¶</a></h3>
 <p>Aquí no aplica una herramienta visual de arrastrar y soltar — sería un anacronismo en un proyecto backend. La "herramienta" en este contexto es <strong>Spring</strong> en sí mismo: vía <code>@Service</code>, <code>@Repository</code>, <code>@Component</code> y la inyección con <code>@RequiredArgsConstructor</code>, es Spring quien gestiona el ciclo de vida y el ensamblado de los componentes de tu aplicación.</p>
 <div class="admonition info">
@@ -2172,10 +2172,10 @@
 </div>
 <h3 id="nivel-1-un-repositorio-ya-es-un-componente">Nivel 1: un repositorio, ya es un componente<a class="headerlink" href="#nivel-1-un-repositorio-ya-es-un-componente" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">VideojuegoRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>En su forma más básica, <code>VideojuegoRepository</code> ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (<code>private final VideojuegoRepository videojuegoRepository;</code>) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.</p>
+<p>En su forma más básica, <code>LibroRepository</code> ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (<code>private final LibroRepository libroRepository;</code>) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.</p>
 <h3 id="nivel-2-catalogoconsultaservice-el-ejemplo-mejor-disenado">Nivel 2: <code>CatalogoConsultaService</code>, el ejemplo mejor diseñado<a class="headerlink" href="#nivel-2-catalogoconsultaservice-el-ejemplo-mejor-disenado" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
@@ -2193,23 +2193,23 @@
 <span class="normal"><a href="#__codelineno-1-14">14</a></span>
 <span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">// El contrato — en el paquete api, pensado para que otros módulos lo vean</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">CatalogoConsultaService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeVideojuego</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeLibro</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">}</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5"></a>
 <a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="c1">// La implementación — oculta, sin el modificador public</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="nd">@Service</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">CatalogoConsultaService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10"></a>
 <a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nd">@Override</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeVideojuego</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">);</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeLibro</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">libroId</span><span class="p">);</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Este es el ejemplo <strong>más claro</strong> de componente bien diseñado en todo GameVault — ya lo construiste en el Tema 4. ¿Por qué es tan buen ejemplo? Porque separa con precisión el <strong>contrato</strong> (la interfaz, en el paquete <code>api</code>, visible para quien la necesite) de la <strong>implementación concreta</strong> (la clase, sin modificador <code>public</code>, invisible fuera de su propio paquete). <code>ReviewService</code>, en el módulo <code>reviews</code>, usa <code>CatalogoConsultaService.existeVideojuego(...)</code> sin conocer ni el paquete <code>catalogo</code> internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos.</p>
+<p>¿Por qué es tan buen ejemplo? Porque separa con precisión el <strong>contrato</strong> (la interfaz, en un paquete <code>api</code>, visible para quien la necesite) de la <strong>implementación concreta</strong> (la clase, sin modificador <code>public</code>, invisible fuera de su propio paquete). El módulo de reseñas del Tema 4 usa <code>CatalogoConsultaService.existeLibro(...)</code> sin conocer ni el paquete <code>catalogo</code> internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos. Es, formalizado, el mismo patrón de integridad referencial manual que ya usaste allí.</p>
 <h3 id="el-contraste-que-ilustra-el-desacoplamiento">El contraste que ilustra el desacoplamiento<a class="headerlink" href="#el-contraste-que-ilustra-el-desacoplamiento" title="Permanent link">¶</a></h3>
-<p>Técnicamente, <code>ReviewService</code> <strong>podría</strong> inyectar <code>VideojuegoRepository</code> directamente y llamar a <code>existsById(...)</code> él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: <code>reviews</code> pasaría a depender de un detalle interno de <code>catalogo</code> (su repositorio JPA concreto), y cualquier cambio en cómo <code>catalogo</code> gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también <code>reviews</code>. Con el componente de por medio, ese cambio quedaría contenido dentro de <code>catalogo</code> — <code>reviews</code> seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.</p>
+<p>Técnicamente, el servicio de reseñas <strong>podría</strong> inyectar <code>LibroRepository</code> directamente y llamar a <code>existsById(...)</code> él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: <code>resenas</code> pasaría a depender de un detalle interno de <code>catalogo</code> (su repositorio JPA concreto), y cualquier cambio en cómo <code>catalogo</code> gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también <code>resenas</code>. Con el componente de por medio, ese cambio quedaría contenido dentro de <code>catalogo</code> — <code>resenas</code> seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">

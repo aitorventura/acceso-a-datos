@@ -20,7 +20,7 @@
     
     
       
-        <title>Spring Boot y GameVault - Acceso a Datos</title>
+        <title>Fundamentos de Spring Boot - Acceso a Datos</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-spring-boot-el-chasis-de-gamevault" class="md-skip">
+        <a href="#1-fundamentos-de-spring-boot" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Spring Boot y GameVault
+              Fundamentos de Spring Boot
             
           </span>
         </div>
@@ -813,7 +813,7 @@
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -826,7 +826,7 @@
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -876,6 +876,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#la-arquitectura-en-capas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗂️ La arquitectura en capas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inyeccion-de-dependencias" class="md-nav__link">
     <span class="md-ellipsis">
       💉 Inyección de dependencias
@@ -885,36 +894,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#el-punto-de-arranque-de-gamevault" class="md-nav__link">
+  <a href="#el-punto-de-arranque-de-la-aplicacion" class="md-nav__link">
     <span class="md-ellipsis">
-      🚀 El punto de arranque de GameVault
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#el-pomxml-real-de-gamevault" class="md-nav__link">
-    <span class="md-ellipsis">
-      📄 El pom.xml real de GameVault
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#la-estructura-de-paquetes-y-la-arquitectura-en-capas" class="md-nav__link">
-    <span class="md-ellipsis">
-      🗂️ La estructura de paquetes y la arquitectura en capas
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚙️ Configuración: application.yaml y perfiles
+      🚀 El punto de arranque de la aplicación
     </span>
   </a>
   
@@ -924,6 +906,15 @@
   <a href="#el-requiredargsconstructor-de-lombok" class="md-nav__link">
     <span class="md-ellipsis">
       🧩 El @RequiredArgsConstructor de Lombok
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Configuración: application.yaml y perfiles
     </span>
   </a>
   
@@ -2025,6 +2016,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#la-arquitectura-en-capas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗂️ La arquitectura en capas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inyeccion-de-dependencias" class="md-nav__link">
     <span class="md-ellipsis">
       💉 Inyección de dependencias
@@ -2034,36 +2034,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#el-punto-de-arranque-de-gamevault" class="md-nav__link">
+  <a href="#el-punto-de-arranque-de-la-aplicacion" class="md-nav__link">
     <span class="md-ellipsis">
-      🚀 El punto de arranque de GameVault
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#el-pomxml-real-de-gamevault" class="md-nav__link">
-    <span class="md-ellipsis">
-      📄 El pom.xml real de GameVault
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#la-estructura-de-paquetes-y-la-arquitectura-en-capas" class="md-nav__link">
-    <span class="md-ellipsis">
-      🗂️ La estructura de paquetes y la arquitectura en capas
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
-    <span class="md-ellipsis">
-      ⚙️ Configuración: application.yaml y perfiles
+      🚀 El punto de arranque de la aplicación
     </span>
   </a>
   
@@ -2073,6 +2046,15 @@
   <a href="#el-requiredargsconstructor-de-lombok" class="md-nav__link">
     <span class="md-ellipsis">
       🧩 El @RequiredArgsConstructor de Lombok
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Configuración: application.yaml y perfiles
     </span>
   </a>
   
@@ -2112,32 +2094,38 @@
 
 
 
-<div><p><a id="spring-boot-y-gamevault"></a></p>
-<h1 id="1-spring-boot-el-chasis-de-gamevault">🧩 1. Spring Boot: el chasis de GameVault<a class="headerlink" href="#1-spring-boot-el-chasis-de-gamevault" title="Permanent link">¶</a></h1>
-<p>Hasta ahora todo lo que has programado en Java ha sido consola: el programa arranca, hace algo, y termina. A partir de aquí vas a construir un tipo de programa distinto — uno que arranca y se queda <strong>esperando</strong>, sin que tú le digas nada más, hasta que otro programa le hace una pregunta. Este apartado es la base sin la que no vas a entender nada de lo que viene, ni en este módulo ni en Programación de Servicios y Procesos (PSP), que trabaja sobre el mismo proyecto desde el otro lado.</p>
+<div><p><a id="spring-boot-fundamentos"></a></p>
+<h1 id="1-fundamentos-de-spring-boot">🧩 1. Fundamentos de Spring Boot<a class="headerlink" href="#1-fundamentos-de-spring-boot" title="Permanent link">¶</a></h1>
+<p>Hasta ahora todo lo que has programado en Java ha sido consola: el programa arranca, hace algo, y termina. A partir de aquí vas a construir un tipo de programa distinto — uno que arranca y se queda <strong>esperando</strong>, sin que tú le digas nada más, hasta que otro programa le hace una pregunta. Este apartado es la base sin la que no vas a entender nada de lo que viene, ni en este módulo ni en Programación de Servicios y Procesos (PSP).</p>
 <hr>
 <h2 id="de-la-consola-al-servidor">🖥️ De la consola al servidor<a class="headerlink" href="#de-la-consola-al-servidor" title="Permanent link">¶</a></h2>
-<p>Un programa de consola tiene un ciclo de vida corto: arranca, hace su trabajo (leer, calcular, escribir), y termina. Una <strong>aplicación de servidor</strong> (o <em>backend</em>) es distinta en un punto clave: arranca, abre una puerta de red, y se queda ahí, viva, esperando. No tiene ventanas ni pide datos por teclado — su "usuario" es otro programa (un navegador, una app móvil, otro servidor) que le habla a través de la red.</p>
+<p>Un programa de consola tiene un ciclo de vida corto: arranca, hace su trabajo (leer, calcular, escribir), y termina. Una <strong>aplicación de servidor</strong> (o <em>backend</em>) es distinta en un punto clave: arranca, se pone a escuchar en un puerto, y se queda ahí, viva, esperando. No tiene ventanas ni pide datos por teclado — su "usuario" es otro programa (un navegador, una app móvil, otro servidor) que le habla a través de la red.</p>
+<p>Para que ese mensaje llegue al programa correcto hacen falta dos datos, no uno: la <strong>dirección IP</strong> identifica la máquina dentro de la red (qué ordenador es), y el <strong>puerto</strong> identifica, dentro de esa máquina, a qué programa concreto va dirigido el mensaje. Un mismo ordenador puede tener varios programas escuchando a la vez — tu aplicación, una base de datos, otro servidor web — y cada uno necesita su propio número de puerto para no mezclarse.</p>
+<div class="admonition example">
+<p class="admonition-title">Analogía: el bloque de pisos</p>
+<p>La dirección IP es como la dirección de un bloque de pisos: identifica el edificio dentro de la ciudad. El puerto es como el número de piso: dentro del mismo edificio, distingue a qué vivienda va dirigida una carta. Sin el número de piso, el cartero llegaría al portal correcto pero no sabría dónde dejarla. Cuando decimos que un servidor "escucha en el puerto 8080", significa que se ha quedado a la espera de mensajes dirigidos precisamente a ese número, en esa máquina.</p>
+</div>
+<p>Cliente y servidor, además, necesitan hablar el mismo idioma para entenderse: un formato de mensaje acordado de antemano, llamado <strong>protocolo</strong>. El que vas a usar durante todo el curso es <strong>HTTP</strong> — define cómo se formula una petición y cómo se responde a ella, y es el mismo protocolo que usa tu navegador cada vez que visitas una página web.</p>
 <pre class="mermaid"><code>flowchart LR
-    A["📱 Cliente&lt;br/&gt;(navegador, app...)"] -- "petición" --&gt; B["🖥️ Servidor&lt;br/&gt;(tu aplicación)"]
-    B -- "respuesta" --&gt; A</code></pre>
+    A["📱 Cliente&lt;br/&gt;(navegador, app...)"] -- "petición HTTP" --&gt; B["🖥️ Servidor&lt;br/&gt;(tu aplicación, puerto 8080)"]
+    B -- "respuesta HTTP" --&gt; A</code></pre>
 <div class="admonition tip">
 <p class="admonition-title">El servidor no decide cuándo actuar, el cliente sí</p>
 <p>En un programa de consola, tú controlas el ritmo: lees una línea, procesas, escribes. Un servidor no elige cuándo trabajar — se queda a la espera, y reacciona cada vez que llega una petición. Puede pasar un minuto sin que ocurra nada, o puede llegar una petición cada milisegundo.</p>
 </div>
-<p>GameVault, el proyecto que vas a construir durante el curso, es exactamente eso: un programa Java que no tiene <code>Scanner</code> ni <code>System.out.println</code> esperando que pulses Intro — arranca, se pone a escuchar en un puerto de red, y responde peticiones hasta que alguien lo detiene.</p>
+<p>La aplicación que vas a ir construyendo en las actividades de este curso es exactamente eso: un programa Java que no tiene <code>Scanner</code> ni <code>System.out.println</code> esperando que pulses Intro — arranca, se pone a escuchar en un puerto, y responde peticiones HTTP hasta que alguien lo detiene.</p>
 <hr>
 <h2 id="que-es-un-framework">🧱 Qué es un framework<a class="headerlink" href="#que-es-un-framework" title="Permanent link">¶</a></h2>
 <p>Hasta ahora, en tus programas, el flujo de control lo llevas tú: tu <code>main()</code> llama a tus clases, tus clases llaman a librerías (una <code>ArrayList</code>, un <code>Scanner</code>...) cuando las necesitan. Tú decides qué se ejecuta y cuándo.</p>
 <p>Un <strong>framework</strong> invierte esa relación. En vez de que tu código llame a la librería, es la librería (el framework) la que llama a tu código, en los momentos que él decide: cuando arranca la aplicación, cuando llega una petición HTTP, cuando se necesita guardar un objeto en la base de datos. A esta idea se la llama <strong>inversión de control</strong>: el control del "cuándo se ejecuta qué" pasa de tus manos a las del framework.</p>
 <div class="admonition example">
 <p class="admonition-title">Analogía: el restaurante</p>
-<p>Cuando cocinas en casa (tu programa de consola), tú decides cuándo picas la cebolla, cuándo enciendes el fuego, en qué orden. Trabajar con un framework es más parecido a ser cocinero en un restaurante: el maître (el framework) te avisa "mesa 4, primer plato" y tú solo escribes la parte que sabes hacer — la receta. Cuándo se sirve, en qué orden llegan los pedidos y cómo se reparte el trabajo entre la cocina lo decide el maître, no tú.</p>
+<p>Cuando cocinas en casa (tu programa de consola), tú decides cuándo picas la cebolla, cuándo enciendes el fuego, en qué orden. Trabajar con un framework es más parecido a ser cocinero en un restaurante: el camarero (el framework) te avisa "mesa 4, primer plato" y tú solo escribes la parte que sabes hacer — la receta. Cuándo se sirve, en qué orden llegan los pedidos y cómo se reparte el trabajo entre la cocina lo decide el camarero, no tú.</p>
 </div>
 <p><strong>Spring</strong> es el framework de Java más usado para construir este tipo de aplicaciones. <strong>Spring Boot</strong> es una capa sobre Spring que elimina casi toda la configuración manual que antes hacía falta: trae un servidor web ya integrado (no hay que instalar ni configurar uno aparte), configura automáticamente piezas típicas a partir de lo que detecta en tu proyecto, y organiza las dependencias en paquetes llamados <em>starters</em> — añades uno y llegan ya preparadas todas las librerías que necesitas para esa funcionalidad, sin ir buscándolas una a una.</p>
 <hr>
 <h2 id="maven-y-el-pomxml">📦 Maven y el <code>pom.xml</code><a class="headerlink" href="#maven-y-el-pomxml" title="Permanent link">¶</a></h2>
-<p>Un proyecto Java real no se escribe solo con las clases que tú creas: depende de librerías externas (el propio Spring, el driver de PostgreSQL, Lombok...). <strong>Maven</strong> es la herramienta que gestiona esas dependencias por ti: en vez de descargar manualmente cada <code>.jar</code> y añadirlo al proyecto, declaras qué necesitas en un fichero — el <code>pom.xml</code> — y Maven se encarga de descargarlo, con la versión correcta, y de resolver las dependencias que esas librerías necesitan a su vez.</p>
+<p>Un proyecto Java real no se escribe solo con las clases que tú creas: depende de librerías externas (el propio Spring, el driver de PostgreSQL, Lombok...). <strong>Maven</strong> es la herramienta que gestiona esas dependencias por ti: en vez de descargar manualmente cada <code>.jar</code> —un fichero que empaqueta código Java ya compilado, listo para usarse como librería— y añadirlo al proyecto, declaras qué necesitas en un fichero — el <code>pom.xml</code> — y Maven se encarga de descargarlo, con la versión correcta, y de resolver las dependencias que esas librerías necesitan a su vez.</p>
 <p>Una dependencia en el <code>pom.xml</code> tiene esta forma:</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
@@ -2148,33 +2136,83 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
 <p><code>groupId</code> identifica quién publica la librería (aquí, el propio equipo de Spring Boot) y <code>artifactId</code> identifica cuál de sus paquetes quieres. Con esa entrada, Maven descarga ese <em>starter</em> y todo lo que necesita para funcionar.</p>
+<p>En este curso vas a trabajar, entre otras, con estas dos dependencias clave:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-webmvc<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">El nombre del starter web ha cambiado</p>
+<p>Si buscas tutoriales antiguos de Spring Boot verás <code>spring-boot-starter-web</code>. En este curso usas Spring Boot 4, que separó ese starter en dos variantes según el modelo de programación: <code>spring-boot-starter-webmvc</code> (el modelo clásico, el que vas a usar) y <code>spring-boot-starter-webflux</code> (el modelo reactivo, que no vas a usar en este curso). Es el mismo starter que vas a elegir al generar tu propio proyecto en la Actividad 1.1 — si buscas <code>spring-boot-starter-web</code> a secas en tu <code>pom.xml</code>, no lo vas a encontrar.</p>
+</div>
+<p><code>spring-boot-starter-webmvc</code> trae todo lo necesario para exponer una API HTTP (servidor embebido incluido); <code>spring-boot-starter-data-jpa</code> trae Hibernate y Spring Data JPA, que usarás en el Tema 2 para hablar con la base de datos sin escribir SQL a mano. Con solo declarar estas dos líneas, Maven descarga decenas de librerías relacionadas — esa es la ventaja de los <em>starters</em>: no las buscas una a una.</p>
+<hr>
+<h2 id="la-arquitectura-en-capas">🗂️ La arquitectura en capas<a class="headerlink" href="#la-arquitectura-en-capas" title="Permanent link">¶</a></h2>
+<p>Una aplicación backend no mete todo el código en una sola clase gigante: lo reparte en <strong>capas</strong>, cada una con una responsabilidad clara. El patrón más extendido — y el que vas a usar durante todo el curso — tiene tres:</p>
+<pre class="mermaid"><code>flowchart LR
+    C["🌐 Controller&lt;br/&gt;recibe la petición HTTP"] --&gt; S["⚙️ Service&lt;br/&gt;lógica de negocio"]
+    S --&gt; R["🗄️ Repository&lt;br/&gt;acceso a datos"]</code></pre>
+<p>Imagina una aplicación que gestiona el catálogo de una librería:</p>
+<ul>
+<li>El <strong>controller</strong> (<code>LibroController</code>) recibe la petición HTTP y la traduce a una llamada Java — no contiene lógica de negocio, solo enruta.</li>
+<li>El <strong>service</strong> (<code>LibroService</code>) contiene la lógica: qué hay que comprobar, qué hay que calcular, en qué orden se hacen las cosas.</li>
+<li>El <strong>repository</strong> (<code>LibroRepository</code>) es quien habla con la base de datos.</li>
+</ul>
+<p>¿Por qué separar así? Porque cada capa se puede entender, probar y cambiar sin tocar las demás: si mañana cambias de base de datos, solo tocas el repository; si cambia una regla de negocio, solo el service. La regla es que cada capa habla solo con la siguiente, sin saltarse ninguna: el controller nunca accede directamente a la base de datos.</p>
+<p>Cada capa depende de la siguiente — el controller necesita un service, el service necesita un repository — pero ninguna crea directamente lo que necesita. Eso es justo lo que resuelve la inyección de dependencias, que ves a continuación.</p>
 <hr>
 <h2 id="inyeccion-de-dependencias">💉 Inyección de dependencias<a class="headerlink" href="#inyeccion-de-dependencias" title="Permanent link">¶</a></h2>
-<p>Imagina una clase que necesita usar otra para hacer su trabajo — por ejemplo, un servicio que necesita un repositorio para consultar datos. Sin framework, la forma más directa es crearla tú mismo dentro de la clase que la usa:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="p">();</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>El problema: <code>VideojuegoService</code> queda atado a esa implementación concreta de <code>VideojuegoRepository</code>. Si quisieras sustituirla (por ejemplo, por una versión de pruebas), tendrías que tocar el código de <code>VideojuegoService</code>.</p>
-<p>Con <strong>inyección de dependencias</strong>, la clase no crea lo que necesita — lo declara, y es el framework quien se lo entrega ya construido:</p>
+<p>Mira otra vez el diagrama de capas: el controller necesita un service, y el service necesita un repository. En algún punto del código, alguien tiene que crear esos objetos y encajarlos unos dentro de otros. La pregunta de esta sección es quién hace ese trabajo — ¿tu código, o el framework?</p>
+<p>Imagina una clase que necesita usar otra para hacer su trabajo — por ejemplo, un servicio que necesita un repositorio para consultar datos. La forma más directa, la que ya conoces, es crearla tú mismo dentro de la clase que la usa:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span>
-<span class="normal"><a href="#__codelineno-2-6">6</a></span>
-<span class="normal"><a href="#__codelineno-2-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="p">;</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">VideojuegoService</span><span class="p">(</span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">repositorio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repositorio</span><span class="p">;</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LibroRepository</span><span class="p">();</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Spring ve que <code>VideojuegoService</code> necesita un <code>VideojuegoRepository</code> en su constructor, ya tiene uno gestionado (un <strong>bean</strong>), y se lo pasa automáticamente al crear el servicio. Tú nunca escribes <code>new VideojuegoService(...)</code> en ningún sitio — Spring construye el objeto por ti y resuelve toda la cadena de dependencias.</p>
-<p>Para que Spring sepa qué clases debe gestionar como beans, se marcan con anotaciones. Las que vas a ver constantemente en GameVault:</p>
+<p>Funciona, pero tiene un coste que se nota en cuanto el proyecto crece. <code>LibroService</code> queda <strong>atado</strong> a esa implementación concreta de <code>LibroRepository</code>: si mañana quisieras probar <code>LibroService</code> sin conectarte a una base de datos real (con un repositorio "de mentira" que devuelva datos fijos para el test), no podrías — el <code>new LibroRepository()</code> está escrito dentro de <code>LibroService</code>, así que siempre construye la versión real. Cambiar esa dependencia obliga a tocar el código de la clase que la usa.</p>
+<p>Con <strong>inyección de dependencias</strong> (o <em>dependency injection</em>, DI), la clase deja de crear lo que necesita: se limita a <strong>declararlo</strong> — normalmente como parámetro del constructor — y es otro quien se lo entrega ya construido:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span>
+<span class="normal"><a href="#__codelineno-3-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">LibroService</span><span class="p">(</span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">repositorio</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">repositorio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repositorio</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>La diferencia parece pequeña en el código, pero cambia quién manda: <code>LibroService</code> ya no sabe (ni le importa) de dónde sale su <code>LibroRepository</code> — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de <strong>inversión de control</strong> del apartado anterior, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.</p>
+<div class="admonition example">
+<p class="admonition-title">La misma analogía del restaurante, un paso más</p>
+<p>Cuando cocinas en el restaurante (recuerda la analogía de antes), no vas tú al almacén a buscar los ingredientes — te los traen a la mesa de trabajo, ya listos, cuando los necesitas. La inyección de dependencias es justo eso, pero con objetos: <code>LibroService</code> no va a buscar su <code>LibroRepository</code>; se lo entregan.</p>
+</div>
+<p>Aquí falta la pieza que hace que esto funcione de verdad: ¿quién construye ese <code>LibroRepository</code> y decide dárselo a <code>LibroService</code>? La respuesta es Spring. Al arrancar, Spring crea y guarda en un contenedor interno (el llamado <strong>contexto de la aplicación</strong>) una instancia de cada clase que le has dicho que gestione — esas instancias gestionadas son los <strong>beans</strong>. Cuando Spring necesita construir un <code>LibroService</code>, mira su constructor, ve que pide un <code>LibroRepository</code>, busca en ese contenedor si ya tiene uno, y si lo tiene, se lo pasa automáticamente. Tú nunca escribes <code>new LibroService(...)</code> en ningún sitio — Spring construye el objeto por ti y resuelve toda la cadena de dependencias, capa por capa.</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph manual["Sin inyección de dependencias"]
+        A["LibroService"] -- "new LibroRepository()" --&gt; B["LibroRepository"]
+    end
+    subgraph di["Con inyección de dependencias"]
+        C["🧰 Spring&lt;br/&gt;(contexto de la aplicación)"] -- "ya tiene el bean, lo entrega" --&gt; D["LibroService"]
+        C -- "gestiona" --&gt; E["LibroRepository"]
+    end</code></pre>
+<p>Para que Spring sepa qué clases debe gestionar como beans, se marcan con anotaciones. Las que vas a ver constantemente:</p>
 <table>
 <thead>
 <tr>
@@ -2202,99 +2240,57 @@
 </tbody>
 </table>
 <p>Las cuatro tienen algo en común: todas le dicen a Spring "esto es un bean, gestióname el ciclo de vida y pásame lo que necesite por inyección".</p>
-<hr>
-<h2 id="el-punto-de-arranque-de-gamevault">🚀 El punto de arranque de GameVault<a class="headerlink" href="#el-punto-de-arranque-de-gamevault" title="Permanent link">¶</a></h2>
-<p>Toda aplicación Spring Boot tiene una clase con un <code>main()</code> que la arranca. En GameVault es <code>GamevaultApplication.java</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span>
-<span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span>
-<span class="normal"><a href="#__codelineno-3-8">8</a></span>
-<span class="normal"><a href="#__codelineno-3-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@SpringBootApplication</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nd">@EnableCaching</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nd">@EnableAsync</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">GamevaultApplication</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">GamevaultApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="p">}</span>
+<p>Este mecanismo no se para en una sola capa — se repite hacia arriba. Así se ve la cadena completa en el controller de la librería, que declara <code>private final LibroService libroService;</code>, recibe el service por constructor exactamente igual que el service recibía el repository, y delega en él cada método:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@RestController</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">LibroController</span><span class="p">(</span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">libroService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@SpringBootApplication</code> es la anotación que activa todo lo visto hasta ahora: le dice a Spring Boot "escanea este paquete y los que cuelgan de él en busca de beans (<code>@Service</code>, <code>@Repository</code>...), y configúrate automáticamente según lo que encuentres en el classpath". <code>SpringApplication.run(...)</code> es lo que realmente arranca el servidor embebido y deja la aplicación escuchando.</p>
-<p>Verás también <code>@EnableCaching</code> y <code>@EnableAsync</code> — activan capacidades adicionales (caché y ejecución en segundo plano) que no vas a usar todavía; están ahí porque otras partes del curso (en PSP) las necesitarán más adelante.</p>
+<p>No hace falta que entiendas todavía <code>@GetMapping</code>, <code>@PathVariable</code> ni <code>ResponseEntity</code> — esas anotaciones son de HTTP/REST, y las vas a ver en detalle en PSP. Aquí solo interesa la forma: controller → service → repository, cada uno con una responsabilidad y sin saltarse capas.</p>
 <hr>
-<h2 id="el-pomxml-real-de-gamevault">📄 El <code>pom.xml</code> real de GameVault<a class="headerlink" href="#el-pomxml-real-de-gamevault" title="Permanent link">¶</a></h2>
-<p>Un <code>pom.xml</code> de GameVault incluye, entre otras, estas dos dependencias clave:</p>
-<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span>
-<span class="normal"><a href="#__codelineno-4-6">6</a></span>
-<span class="normal"><a href="#__codelineno-4-7">7</a></span>
-<span class="normal"><a href="#__codelineno-4-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-webmvc<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">&lt;/dependency&gt;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="nt">&lt;/dependency&gt;</span>
+<h2 id="el-punto-de-arranque-de-la-aplicacion">🚀 El punto de arranque de la aplicación<a class="headerlink" href="#el-punto-de-arranque-de-la-aplicacion" title="Permanent link">¶</a></h2>
+<p>Toda aplicación Spring Boot tiene una clase con un <code>main()</code> que la arranca:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span>
+<span class="normal"><a href="#__codelineno-5-6">6</a></span>
+<span class="normal"><a href="#__codelineno-5-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@SpringBootApplication</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibreriaApplication</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">LibreriaApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<div class="admonition warning">
-<p class="admonition-title">El nombre del starter web ha cambiado</p>
-<p>Si buscas tutoriales antiguos de Spring Boot verás <code>spring-boot-starter-web</code>. GameVault usa Spring Boot 4, que separó ese starter en dos variantes según el modelo de programación: <code>spring-boot-starter-webmvc</code> (el modelo clásico, el que usa este proyecto) y <code>spring-boot-starter-webflux</code> (el modelo reactivo, que no vas a usar en este curso). Es el mismo starter que ya elegiste al generar tu propio proyecto en la Actividad 1.1 — si buscas <code>spring-boot-starter-web</code> a secas en tu <code>pom.xml</code>, no lo vas a encontrar.</p>
-</div>
-<p><code>spring-boot-starter-webmvc</code> trae todo lo necesario para exponer una API HTTP (servidor embebido incluido); <code>spring-boot-starter-data-jpa</code> trae Hibernate y Spring Data JPA, que usarás en el Tema 2 para hablar con la base de datos sin escribir SQL a mano. Con solo declarar estas dos líneas, Maven descarga decenas de librerías relacionadas — esa es la ventaja de los <em>starters</em>: no las buscas una a una.</p>
-<hr>
-<h2 id="la-estructura-de-paquetes-y-la-arquitectura-en-capas">🗂️ La estructura de paquetes y la arquitectura en capas<a class="headerlink" href="#la-estructura-de-paquetes-y-la-arquitectura-en-capas" title="Permanent link">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Esto es una vista previa, no tu proyecto todavía</p>
-<p>Lo que ves en este apartado es la forma que tendrá tu GameVault más adelante — no lo que tienes ahora mismo. Tu propio proyecto, en este punto, solo tiene lo que has creado en la Actividad 1.1: el esqueleto generado con Spring Initializr y, como mucho, las entidades <code>Videojuego</code>/<code>Estudio</code>. Tu propio <code>VideojuegoController</code>/<code>VideojuegoService</code>/<code>VideojuegoRepository</code> con el CRUD completo lo vas a construir la semana que viene, en la Actividad 1.2 — no debería sorprenderte no tenerlo todavía.</p>
-</div>
-<p>GameVault organiza su código en paquetes por dominio: <code>catalogo</code> (videojuegos y estudios), <code>reviews</code> (reseñas), <code>actividad</code> (registro de eventos), <code>seguridad</code>, <code>config</code> y <code>exception</code>. Dentro de cada paquete de dominio se repite el mismo patrón de tres capas:</p>
-<pre class="mermaid"><code>flowchart LR
-    C["🌐 Controller&lt;br/&gt;recibe la petición HTTP"] --&gt; S["⚙️ Service&lt;br/&gt;lógica de negocio"]
-    S --&gt; R["🗄️ Repository&lt;br/&gt;acceso a datos"]</code></pre>
-<ul>
-<li>El <strong>controller</strong> (<code>VideojuegoController</code>) recibe la petición HTTP y la traduce a una llamada Java — no contiene lógica de negocio, solo enruta.</li>
-<li>El <strong>service</strong> (<code>VideojuegoService</code>) contiene la lógica: qué hay que comprobar, qué hay que calcular, en qué orden se hacen las cosas.</li>
-<li>El <strong>repository</strong> (<code>VideojuegoRepository</code>) es quien habla con la base de datos.</li>
-</ul>
-<p>Puedes ver esta cadena en <code>VideojuegoController</code>, que declara <code>private final VideojuegoService videojuegoService;</code> e inyecta el servicio por constructor (gracias a <code>@RequiredArgsConstructor</code>, que verás en el siguiente apartado), y delega en él cada método:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@RestController</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoController</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoService</span><span class="w"> </span><span class="n">videojuegoService</span><span class="p">;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">VideojuegoResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">videojuegoService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>No hace falta que entiendas todavía <code>@GetMapping</code>, <code>@PathVariable</code> ni <code>ResponseEntity</code> — esas anotaciones son de HTTP/REST, y las vas a ver en detalle en PSP, que esta misma semana empieza a leer este mismo controlador desde ese ángulo. Aquí solo interesa la forma: controller → service → repository, cada uno con una responsabilidad y sin saltarse capas.</p>
-<hr>
-<h2 id="configuracion-applicationyaml-y-perfiles">⚙️ Configuración: <code>application.yaml</code> y perfiles<a class="headerlink" href="#configuracion-applicationyaml-y-perfiles" title="Permanent link">¶</a></h2>
-<p>Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en <code>src/main/resources</code>. GameVault tiene dos: <code>application.yaml</code>, con la configuración común, y <code>application-dev.yaml</code>, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).</p>
-<p>Ese <code>-dev</code> en el nombre es un <strong>perfil</strong>: un conjunto de configuración que solo se activa si le dices a Spring Boot que use ese perfil al arrancar. Así, el mismo código puede arrancar con configuración distinta según si estás desarrollando en tu máquina, ejecutando tests, o (en un proyecto real) desplegando en producción, sin tocar una sola línea de Java.</p>
+<p><code>@SpringBootApplication</code> es la anotación que activa todo lo visto hasta ahora: le dice a Spring Boot "escanea este paquete y los que cuelgan de él en busca de beans (<code>@Service</code>, <code>@Repository</code>...), y configúrate automáticamente según lo que encuentres en el classpath" —el conjunto de sitios donde Java busca el código que necesita para ejecutar el programa: tus clases compiladas y las librerías que ha traído Maven—. <code>SpringApplication.run(...)</code> es lo que realmente arranca el servidor embebido y deja la aplicación escuchando.</p>
 <hr>
 <h2 id="el-requiredargsconstructor-de-lombok">🧩 El <code>@RequiredArgsConstructor</code> de Lombok<a class="headerlink" href="#el-requiredargsconstructor-de-lombok" title="Permanent link">¶</a></h2>
-<p>Vas a ver esta anotación en casi todas las clases del proyecto (ya ha aparecido dos veces en este mismo apartado). <strong>Lombok</strong> es una librería que genera código repetitivo por ti a partir de anotaciones, y <code>@RequiredArgsConstructor</code> genera automáticamente un constructor con un parámetro por cada campo <code>final</code> de la clase:</p>
+<p>Escribir a mano el constructor de inyección de cada clase se vuelve repetitivo enseguida. <strong>Lombok</strong> es una librería que genera código repetitivo por ti a partir de anotaciones, y <code>@RequiredArgsConstructor</code> genera automáticamente un constructor con un parámetro por cada campo <code>final</code> de la clase:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
 <span class="normal"><a href="#__codelineno-6-2">2</a></span>
 <span class="normal"><a href="#__codelineno-6-3">3</a></span>
@@ -2305,9 +2301,9 @@
 <span class="normal"><a href="#__codelineno-6-8">8</a></span>
 <span class="normal"><a href="#__codelineno-6-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Service</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">EstudioRepository</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">EditorialRepository</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">;</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">    </span><span class="c1">// Lombok genera aquí, en tiempo de compilación, un constructor</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">    </span><span class="c1">// que recibe ambos repositorios — no lo ves escrito en el .java,</span>
 <a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">    </span><span class="c1">// pero existe y es el que Spring usa para la inyección.</span>
@@ -2315,20 +2311,23 @@
 </code></pre></div></td></tr></table></div>
 <p>Sin Lombok tendrías que escribir ese constructor a mano cada vez que añadieras un campo <code>final</code>. Con la anotación, Spring sigue pudiendo inyectar las dependencias exactamente igual (por constructor), pero tú no mantienes ese código repetitivo.</p>
 <hr>
+<h2 id="configuracion-applicationyaml-y-perfiles">⚙️ Configuración: <code>application.yaml</code> y perfiles<a class="headerlink" href="#configuracion-applicationyaml-y-perfiles" title="Permanent link">¶</a></h2>
+<p>Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en <code>src/main/resources</code>. Lo habitual es tener al menos dos: <code>application.yaml</code>, con la configuración común, y <code>application-dev.yaml</code>, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).</p>
+<p>Ese <code>-dev</code> en el nombre es un <strong>perfil</strong>: un conjunto de configuración que solo se activa si le dices a Spring Boot que use ese perfil al arrancar. Así, el mismo código puede arrancar con configuración distinta según si estás desarrollando en tu máquina, ejecutando tests, o (en un proyecto real) desplegando en producción, sin tocar una sola línea de Java.</p>
+<hr>
 <h2 id="donde-estas-y-hacia-donde-vas">🧭 Dónde estás y hacia dónde vas<a class="headerlink" href="#donde-estas-y-hacia-donde-vas" title="Permanent link">¶</a></h2>
-<p>Este chasis —el proyecto, sus capas, su configuración— lo vais a ir rellenando durante todo el curso desde dos módulos a la vez: en <strong>Acceso a Datos</strong> trabajarás la persistencia, todo lo que hay del service hacia abajo (JDBC, JPA, JSONB, MongoDB); en <strong>Programación de Servicios y Procesos</strong> trabajarás la parte de servicios en red y seguridad, del controller hacia fuera (REST, JWT, hilos, sockets). Es el mismo proyecto, visto y construido desde dos ángulos distintos.</p>
+<p>Estas piezas —el proyecto Maven, las capas, la inyección de dependencias, la configuración— las vas a trabajar durante todo el curso desde dos módulos a la vez: en <strong>Acceso a Datos</strong> te centrarás en la persistencia, todo lo que hay del service hacia abajo (JDBC, JPA, JSONB, MongoDB); en <strong>Programación de Servicios y Procesos</strong> te centrarás en los servicios en red y la seguridad, del controller hacia fuera (REST, JWT, hilos, sockets). En las actividades de ambos módulos irás construyendo, pieza a pieza, tu propia aplicación con esta misma estructura.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Una aplicación de servidor arranca y se queda escuchando peticiones de red; no tiene el mismo ciclo de vida que un programa de consola.</li>
+<li>Una aplicación de servidor arranca y se queda escuchando peticiones en un <strong>puerto</strong>; no tiene el mismo ciclo de vida que un programa de consola. La <strong>IP</strong> identifica la máquina, el <strong>puerto</strong> identifica el programa dentro de ella, y <strong>HTTP</strong> es el protocolo que cliente y servidor usan para entenderse.</li>
 <li>Un <strong>framework</strong> invierte el control: en vez de que tu código llame a la librería, el framework llama al tuyo (inversión de control).</li>
 <li><strong>Spring</strong> es el framework; <strong>Spring Boot</strong> añade configuración automática, servidor embebido y <em>starters</em> que agrupan dependencias relacionadas.</li>
-<li><strong>Maven</strong> gestiona las dependencias del proyecto a través del <code>pom.xml</code>.</li>
-<li>La <strong>inyección de dependencias</strong> hace que una clase declare lo que necesita (por constructor) en vez de crearlo ella misma; Spring se lo entrega ya construido. <code>@Service</code>, <code>@Repository</code>, <code>@RestController</code> y <code>@Configuration</code> marcan qué clases gestiona Spring como beans.</li>
-<li>GameVault usa <code>spring-boot-starter-webmvc</code> (no <code>-web</code>, nombre antiguo) y <code>spring-boot-starter-data-jpa</code>.</li>
-<li>La arquitectura en capas del proyecto es controller (HTTP) → service (lógica) → repository (datos); lo visto en este apartado es una <strong>vista previa</strong> del proyecto terminado, no el tuyo, que en este punto solo tiene lo creado en la Actividad 1.1.</li>
+<li><strong>Maven</strong> gestiona las dependencias del proyecto a través del <code>pom.xml</code>; en este curso usarás <code>spring-boot-starter-webmvc</code> (no <code>-web</code>, nombre antiguo) y <code>spring-boot-starter-data-jpa</code>.</li>
+<li>La arquitectura en capas es controller (HTTP) → service (lógica) → repository (datos): cada capa habla solo con la siguiente.</li>
+<li>La <strong>inyección de dependencias</strong> hace que una clase declare lo que necesita (por constructor) en vez de crearlo ella misma; Spring guarda una instancia de cada clase gestionada (un <strong>bean</strong>) en su contexto de la aplicación, y se la entrega ya construida a quien la pida. <code>@Service</code>, <code>@Repository</code>, <code>@RestController</code> y <code>@Configuration</code> marcan qué clases gestiona Spring como beans.</li>
 <li><code>application.yaml</code>/<code>application-dev.yaml</code> centralizan la configuración; un <strong>perfil</strong> (<code>dev</code>) permite tener configuración distinta según el entorno sin tocar código.</li>
 <li><code>@RequiredArgsConstructor</code> de Lombok genera el constructor con los campos <code>final</code>, que es lo que Spring usa para inyectar dependencias.</li>
 </ul>

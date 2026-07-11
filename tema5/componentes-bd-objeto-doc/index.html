@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1992,10 +1992,10 @@
 <hr>
 <h2 id="jsonb-visto-como-componente">🐘 JSONB, visto como componente<a class="headerlink" href="#jsonb-visto-como-componente" title="Permanent link">¶</a></h2>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">VideojuegoRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>VideojuegoRepository</code>, junto con <code>VideojuegoSpecifications</code> (donde vive <code>disponibleEnPlataforma</code>, con su <code>jsonb_exists</code>), es un <strong>componente que encapsula el acceso a una base de datos objeto-relacional</strong>. Quien lo consume — <code>VideojuegoService</code>, o cualquier otro service que pudiera necesitarlo — no tiene ni que saber que, por debajo de una de sus Specifications, hay una función nativa de PostgreSQL como <code>jsonb_exists</code>. Esa complejidad queda completamente contenida dentro del componente; fuera de él, es "una Specification más".</p>
+<p><code>LibroRepository</code>, junto con <code>LibroSpecifications</code> (donde vive <code>disponibleEnFormato</code>, con su <code>jsonb_exists</code>), es un <strong>componente que encapsula el acceso a una base de datos objeto-relacional</strong>. Quien lo consume — <code>LibroService</code>, o cualquier otro service que pudiera necesitarlo — no tiene ni que saber que, por debajo de una de sus Specifications, hay una función nativa de PostgreSQL como <code>jsonb_exists</code>. Esa complejidad queda completamente contenida dentro del componente; fuera de él, es "una Specification más".</p>
 <hr>
 <h2 id="mongodb-visto-como-componente">🍃 MongoDB, visto como componente<a class="headerlink" href="#mongodb-visto-como-componente" title="Permanent link">¶</a></h2>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
@@ -2003,26 +2003,26 @@
 <span class="normal"><a href="#__codelineno-1-3">3</a></span>
 <span class="normal"><a href="#__codelineno-1-4">4</a></span>
 <span class="normal"><a href="#__codelineno-1-5">5</a></span>
-<span class="normal"><a href="#__codelineno-1-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">ReviewResumenDTO</span><span class="w"> </span><span class="nf">getResumenByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Review</span><span class="o">&gt;</span><span class="w"> </span><span class="n">reviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">findByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">);</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">totalReviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviews</span><span class="p">.</span><span class="na">size</span><span class="p">();</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviews</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">Review</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">).</span><span class="na">average</span><span class="p">().</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ReviewResumenDTO</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">totalReviews</span><span class="p">,</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">);</span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResenaResumenDTO</span><span class="w"> </span><span class="nf">getResumenByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Resena</span><span class="o">&gt;</span><span class="w"> </span><span class="n">resenas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">);</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">totalResenas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenas</span><span class="p">.</span><span class="na">size</span><span class="p">();</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenas</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">Resena</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">).</span><span class="na">average</span><span class="p">().</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResenaResumenDTO</span><span class="p">(</span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">totalResenas</span><span class="p">,</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">);</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>ReviewRepository</code> + <code>ReviewService</code> es, bajo esta misma óptica, un "componente que gestiona información almacenada en una base de datos documental nativa". <code>getResumenByVideojuegoId</code> es un buen ejemplo de lógica que vive <strong>dentro</strong> del componente — la agregación en memoria (contar, calcular la media) — sin que el controlador que lo llama necesite saber cómo se ha calculado ese resumen, ni que por debajo hay documentos de MongoDB en vez de filas de una tabla.</p>
+<p><code>ResenaRepository</code> + <code>ResenaService</code> es, bajo esta misma óptica, un "componente que gestiona información almacenada en una base de datos documental nativa". <code>getResumenByLibroId</code> es un buen ejemplo de lógica que vive <strong>dentro</strong> del componente — la agregación en memoria (contar, calcular la media) — sin que el controlador que lo llama necesite saber cómo se ha calculado ese resumen, ni que por debajo hay documentos de MongoDB en vez de filas de una tabla.</p>
 <hr>
 <h2 id="cerrando-el-circulo-el-mismo-patron-tres-motores-distintos">🪞 Cerrando el círculo: el mismo patrón, tres motores distintos<a class="headerlink" href="#cerrando-el-circulo-el-mismo-patron-tres-motores-distintos" title="Permanent link">¶</a></h2>
-<p>Ya construiste <code>CatalogoConsultaService</code> en el Tema 4 (y lo extendiste en la Actividad 5.1) — interfaz en <code>catalogo.api</code>, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde <code>reviews</code> hacia otros módulos un componente análogo — por ejemplo, <code>ReviewsConsultaService</code>, con algo como "cuántas reseñas tiene un videojuego". Es justo lo que vas a construir en la Actividad 5.2.</p>
+<p>Ya conoces <code>CatalogoConsultaService</code> del apartado anterior (y lo construirás en la Actividad 5.1) — interfaz en un paquete <code>api</code>, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde el módulo de reseñas hacia otros módulos un componente análogo — por ejemplo, <code>ResenasConsultaService</code>, con algo como "cuántas reseñas tiene un libro". Es justo lo que vas a construir en la Actividad 5.2.</p>
 <pre class="mermaid"><code>flowchart TB
     subgraph JPA["🐘 PostgreSQL puro"]
-        A["VideojuegoRepository"]
+        A["LibroRepository"]
     end
     subgraph JSONB["🐘 PostgreSQL + JSONB"]
-        B["VideojuegoSpecifications&lt;br/&gt;disponibleEnPlataforma"]
+        B["LibroSpecifications&lt;br/&gt;disponibleEnFormato"]
     end
     subgraph MONGO["🍃 MongoDB"]
-        C["ReviewRepository +&lt;br/&gt;ReviewService"]
+        C["ResenaRepository +&lt;br/&gt;ResenaService"]
     end
     A --&gt; D["🧩 Mismo patrón de componente:&lt;br/&gt;interfaz + implementación oculta"]
     B --&gt; D
@@ -2033,9 +2033,9 @@
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li><code>VideojuegoRepository</code>/<code>VideojuegoSpecifications</code> es un componente que encapsula acceso objeto-relacional (JSONB) — su complejidad interna (<code>jsonb_exists</code>) queda oculta a quien lo usa.</li>
-<li><code>ReviewRepository</code>/<code>ReviewService</code> es un componente que encapsula acceso documental (MongoDB) — su lógica de agregación vive dentro, no en el controlador.</li>
-<li>El mismo patrón (interfaz + implementación oculta) de <code>CatalogoConsultaService</code> se puede replicar sobre cualquier motor — es lo que vas a hacer con <code>ReviewsConsultaService</code>.</li>
+<li><code>LibroRepository</code>/<code>LibroSpecifications</code> es un componente que encapsula acceso objeto-relacional (JSONB) — su complejidad interna (<code>jsonb_exists</code>) queda oculta a quien lo usa.</li>
+<li><code>ResenaRepository</code>/<code>ResenaService</code> es un componente que encapsula acceso documental (MongoDB) — su lógica de agregación vive dentro, no en el controlador.</li>
+<li>El mismo patrón (interfaz + implementación oculta) de <code>CatalogoConsultaService</code> se puede replicar sobre cualquier motor — es lo que vas a hacer con <code>ResenasConsultaService</code>.</li>
 <li>La tecnología de persistencia por debajo es irrelevante para el patrón de componente — esa independencia es exactamente la idea clave de este tema.</li>
 </ul>
 </details></div>

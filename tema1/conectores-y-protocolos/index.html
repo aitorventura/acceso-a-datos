@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../spring-boot-y-gamevault/">
+        <link rel="prev" href="../spring-boot-fundamentos/">
       
       
         <link rel="next" href="../actividad_1_1/">
@@ -799,12 +799,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -908,13 +908,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault" class="md-nav__link">
+  <a href="#las-piezas-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault
+      🗄️ Las piezas en un proyecto Spring Boot
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault">
+    <nav class="md-nav" aria-label="🗄️ Las piezas en un proyecto Spring Boot">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -936,9 +936,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-estructura-entidades-videojuego-y-estudio" class="md-nav__link">
+  <a href="#la-estructura-entidades-libro-y-editorial" class="md-nav__link">
     <span class="md-ellipsis">
-      La estructura: entidades Videojuego y Estudio
+      La estructura: entidades Libro y Editorial
     </span>
   </a>
   
@@ -2022,13 +2022,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault" class="md-nav__link">
+  <a href="#las-piezas-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault
+      🗄️ Las piezas en un proyecto Spring Boot
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault">
+    <nav class="md-nav" aria-label="🗄️ Las piezas en un proyecto Spring Boot">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2050,9 +2050,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-estructura-entidades-videojuego-y-estudio" class="md-nav__link">
+  <a href="#la-estructura-entidades-libro-y-editorial" class="md-nav__link">
     <span class="md-ellipsis">
-      La estructura: entidades Videojuego y Estudio
+      La estructura: entidades Libro y Editorial
     </span>
   </a>
   
@@ -2165,9 +2165,9 @@
 <p>Forzar una cerradura nueva cada vez que necesitas guardar algo es lento. Un pool de conexiones es como un conjunto de taquillas que ya están abiertas de antemano: coges una libre, la usas, y la dejas lista para el siguiente — nadie tiene que forzar una cerradura nueva cada vez.</p>
 </div>
 <hr>
-<h2 id="aterrizaje-en-gamevault">🎮 Aterrizaje en GameVault<a class="headerlink" href="#aterrizaje-en-gamevault" title="Permanent link">¶</a></h2>
+<h2 id="las-piezas-en-un-proyecto-spring-boot">🗄️ Las piezas en un proyecto Spring Boot<a class="headerlink" href="#las-piezas-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
 <h3 id="el-gestor-postgresql-independiente-via-docker">El gestor: PostgreSQL independiente, vía Docker<a class="headerlink" href="#el-gestor-postgresql-independiente-via-docker" title="Permanent link">¶</a></h3>
-<p>El <code>docker-compose.yaml</code> del proyecto levanta PostgreSQL como gestor independiente:</p>
+<p>Un <code>docker-compose.yaml</code> como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
@@ -2180,8 +2180,8 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_db</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_db</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
@@ -2189,11 +2189,11 @@
 <p>Es exactamente el caso de la tabla de más arriba: un proceso separado, en su propio contenedor, al que la aplicación se conecta por red (<code>localhost:5432</code> desde tu máquina).</p>
 <div class="admonition tip">
 <p class="admonition-title">Una mejora posible: H2 embebido para tests</p>
-<p>El proyecto usa PostgreSQL en todos los entornos, incluidos los tests unitarios (los de integración sí usan Testcontainers, que verás en el Tema 3). Una mejora habitual en proyectos reales es añadir H2 (embebido) en un perfil <code>test</code> para los tests unitarios más simples, que así no dependen de tener Docker levantado — no es lo que hace GameVault hoy, pero es algo que podrías plantearte incorporar a tu propio proyecto.</p>
+<p>Una práctica habitual en proyectos reales es añadir H2 (embebido) en un perfil <code>test</code> para los tests unitarios más simples, que así no dependen de tener Docker levantado — el gestor embebido arranca y muere con los propios tests.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Dos versiones de Postgres en el mismo proyecto — y no es un error</p>
-<p>Si más adelante (Tema 3, Actividad 3.3) ves que el test de integración usa <code>postgres:16-alpine</code> en vez del <code>postgres:18-alpine</code> de este <code>docker-compose.yaml</code>, no es una inconsistencia que arreglar: la versión del gestor de desarrollo y la usada en tests no tienen por qué coincidir exactamente, siempre que ambas sean compatibles con el SQL y las características (como JSONB) que usa el proyecto.</p>
+<p>Si más adelante (Tema 3, Actividad 3.3) ves que un test de integración usa <code>postgres:16-alpine</code> en vez del <code>postgres:18-alpine</code> del <code>docker-compose.yaml</code> de desarrollo, no es una inconsistencia que arreglar: la versión del gestor de desarrollo y la usada en tests no tienen por qué coincidir exactamente, siempre que ambas sean compatibles con el SQL y las características (como JSONB) que usa tu aplicación.</p>
 </div>
 <h3 id="la-conexion-application-devyaml">La conexión: <code>application-dev.yaml</code><a class="headerlink" href="#la-conexion-application-devyaml" title="Permanent link">¶</a></h3>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
@@ -2202,12 +2202,12 @@
 <span class="normal"><a href="#__codelineno-3-4">4</a></span>
 <span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">spring</span><span class="p">:</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://localhost:5432/gamevault_db</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://localhost:5432/libreria_db</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
 </code></pre></div></td></tr></table></div>
 <p><code>spring.datasource.*</code> es toda la información que Spring Boot necesita para conectar: la URL JDBC (fíjate en el prefijo <code>jdbc:postgresql://</code>, el protocolo que has visto arriba, seguido de host, puerto y nombre de la base de datos), usuario y contraseña. El pooling no lo configuras tú a mano: Spring Boot trae por defecto <strong>HikariCP</strong>, un pool de conexiones que se activa solo con tener el driver de PostgreSQL en el <code>pom.xml</code> — no hace falta ni una línea de configuración adicional para tenerlo funcionando.</p>
-<h3 id="la-estructura-entidades-videojuego-y-estudio">La estructura: entidades <code>Videojuego</code> y <code>Estudio</code><a class="headerlink" href="#la-estructura-entidades-videojuego-y-estudio" title="Permanent link">¶</a></h3>
+<h3 id="la-estructura-entidades-libro-y-editorial">La estructura: entidades <code>Libro</code> y <code>Editorial</code><a class="headerlink" href="#la-estructura-entidades-libro-y-editorial" title="Permanent link">¶</a></h3>
 <p>La "definición de la estructura de la base de datos" en un proyecto Spring Data JPA no se escribe como <code>CREATE TABLE</code> a mano — se declara sobre las propias clases Java, con anotaciones:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
@@ -2222,8 +2222,8 @@
 <span class="normal"><a href="#__codelineno-4-11">11</a></span>
 <span class="normal"><a href="#__codelineno-4-12">12</a></span>
 <span class="normal"><a href="#__codelineno-4-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Entity</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">)</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Estudio</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Editorial</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a>
 <a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="nd">@Id</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
@@ -2231,17 +2231,17 @@
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a>
 <a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10"></a>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">videojuegos</span><span class="p">;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <ul>
-<li><code>@Entity</code> + <code>@Table(name = "estudio")</code>: esta clase se mapea contra la tabla <code>estudio</code>.</li>
+<li><code>@Entity</code> + <code>@Table(name = "editorial")</code>: esta clase se mapea contra la tabla <code>editorial</code>.</li>
 <li><code>@Id</code> + <code>@GeneratedValue</code>: el identificador y cómo se genera (aquí, autoincremental, delegado en la propia base de datos).</li>
-<li><code>@OneToMany</code>/<code>@ManyToOne</code>: la relación entre <code>Estudio</code> y <code>Videojuego</code> — el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.</li>
+<li><code>@OneToMany</code>/<code>@ManyToOne</code>: la relación entre <code>Editorial</code> y <code>Libro</code> — el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.</li>
 </ul>
 <p>Y en <code>application-dev.yaml</code>, la propiedad <code>spring.jpa.hibernate.ddl-auto: update</code> es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el <code>CREATE TABLE</code>. Existen otros valores (<code>validate</code>, que solo comprueba que las tablas coincidan sin tocarlas, o <code>none</code>, que no hace nada): en un proyecto real, en producción, casi nunca se usa <code>update</code> ni mucho menos <code>create-drop</code> (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.</p>
-<p>Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y replicar estas mismas entidades en tu proyecto.</p>
+<p>Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y definir las primeras entidades de tu proyecto.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -2251,7 +2251,7 @@
 <li><strong>JDBC</strong> es la API estándar de Java para hablar con bases de datos; un <strong>driver/conector</strong> la implementa para un gestor concreto.</li>
 <li>Un gestor <strong>embebido</strong> (H2, SQLite) corre dentro de tu proceso; uno <strong>independiente</strong> (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.</li>
 <li>El <strong>pooling de conexiones</strong> reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.</li>
-<li>GameVault usa PostgreSQL independiente vía Docker; la conexión se configura en <code>application-dev.yaml</code> (<code>spring.datasource.*</code>).</li>
+<li>En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en <code>application-dev.yaml</code> (<code>spring.datasource.*</code>).</li>
 <li>La estructura de la base de datos se declara con anotaciones JPA (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>/<code>@ManyToOne</code>) sobre las propias clases Java; <code>ddl-auto</code> controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).</li>
 </ul>
 </details></div>
@@ -2290,7 +2290,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Pie" >
         
           
-          <a href="../spring-boot-y-gamevault/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Spring Boot y GameVault">
+          <a href="../spring-boot-fundamentos/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Fundamentos de Spring Boot">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2300,7 +2300,7 @@
                 Anterior
               </span>
               <div class="md-ellipsis">
-                Spring Boot y GameVault
+                Fundamentos de Spring Boot
               </div>
             </div>
           </a>

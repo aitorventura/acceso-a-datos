@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1234,13 +1234,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-un-ranking-que-no-existe-todavia" class="md-nav__link">
+  <a href="#un-ejemplo-completo-el-ranking-de-editoriales" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: un ranking que no existe todavía
+      📊 Un ejemplo completo: el ranking de editoriales
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: un ranking que no existe todavía">
+    <nav class="md-nav" aria-label="📊 Un ejemplo completo: el ranking de editoriales">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1986,13 +1986,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-un-ranking-que-no-existe-todavia" class="md-nav__link">
+  <a href="#un-ejemplo-completo-el-ranking-de-editoriales" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: un ranking que no existe todavía
+      📊 Un ejemplo completo: el ranking de editoriales
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: un ranking que no existe todavía">
+    <nav class="md-nav" aria-label="📊 Un ejemplo completo: el ranking de editoriales">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2062,19 +2062,19 @@
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
 <span class="normal"><a href="#__codelineno-0-3">3</a></span>
 <span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">-- SQL: tablas y columnas</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">estudio</span><span class="w"> </span><span class="n">e</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="k">JOIN</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">estudio_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="n">e</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="k">JOIN</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">editorial_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
 </code></pre></div></td></tr></table></div>
 <div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
 <span class="normal"><a href="#__codelineno-1-3">3</a></span>
 <span class="normal"><a href="#__codelineno-1-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>-- JPQL: entidades y propiedades
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>SELECT e FROM Estudio e
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a>JOIN e.videojuegos v
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>SELECT e FROM Editorial e
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>JOIN e.libros l
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a>GROUP BY e
 </code></pre></div></td></tr></table></div>
-<p>Fíjate en las diferencias: <code>Estudio</code> con mayúscula inicial (es la clase Java, no la tabla <code>estudio</code>); <code>e.videojuegos</code> navega la relación con un punto, tal como la declaraste en la entidad, en vez de un <code>JOIN ... ON</code> explícito sobre claves foráneas; no hay ninguna columna nombrada literalmente, solo propiedades del objeto.</p>
+<p>Fíjate en las diferencias: <code>Editorial</code> con mayúscula inicial (es la clase Java, no la tabla <code>editorial</code>); <code>e.libros</code> navega la relación con un punto, tal como la declaraste en la entidad, en vez de un <code>JOIN ... ON</code> explícito sobre claves foráneas; no hay ninguna columna nombrada literalmente, solo propiedades del objeto.</p>
 <hr>
 <h2 id="las-tres-vias-de-consulta-de-spring-data">🛤️ Las tres vías de consulta de Spring Data<a class="headerlink" href="#las-tres-vias-de-consulta-de-spring-data" title="Permanent link">¶</a></h2>
 <p>Ya conoces dos; hoy llega la tercera:</p>
@@ -2087,7 +2087,7 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>Naming de método</strong> (<code>findByTitulo</code>, <code>findByEstudioId</code>)</td>
+<td><strong>Naming de método</strong> (<code>findByTitulo</code>, <code>findByEditorialId</code>)</td>
 <td>Consultas simples, fijas, sin lógica adicional.</td>
 </tr>
 <tr>
@@ -2102,17 +2102,17 @@
 </table>
 <p>Una <strong>agregación</strong> (por si el repaso de SQL lo necesita) es una operación que resume varias filas en un único resultado: <code>COUNT</code> (cuántas), <code>SUM</code> (suma), <code>AVG</code> (media)... normalmente combinada con <code>GROUP BY</code>, que agrupa las filas antes de aplicar la agregación a cada grupo por separado.</p>
 <hr>
-<h2 id="aterrizaje-en-gamevault-un-ranking-que-no-existe-todavia">🎮 Aterrizaje en GameVault: un ranking que no existe todavía<a class="headerlink" href="#aterrizaje-en-gamevault-un-ranking-que-no-existe-todavia" title="Permanent link">¶</a></h2>
-<p>Ahora mismo, tu propio <code>EstudioRepository.java</code> es un <code>JpaRepository</code> plano, sin un solo método propio. No hay ningún ranking de estudios implementado — es la mejora que vas a construir tú, siguiendo el estilo del resto del proyecto (mismo paquete <code>catalogo</code>, mismas convenciones con Lombok/<code>@RequiredArgsConstructor</code>).</p>
+<h2 id="un-ejemplo-completo-el-ranking-de-editoriales">📊 Un ejemplo completo: el ranking de editoriales<a class="headerlink" href="#un-ejemplo-completo-el-ranking-de-editoriales" title="Permanent link">¶</a></h2>
+<p>Siguiendo con la librería: imagina que quieres un ranking de editoriales ordenado por cuántos libros tiene cada una en el catálogo. Es una consulta fija (siempre la misma), pero con <code>JOIN</code>, agregación y ordenación por el resultado de esa agregación — el caso típico de <code>@Query</code>.</p>
 <h3 id="la-consulta-con-query">La consulta con <code>@Query</code><a class="headerlink" href="#la-consulta-con-query" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
 <span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EstudioRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Estudio</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EditorialRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Editorial</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nd">@Query</span><span class="p">(</span><span class="s">"SELECT e FROM Estudio e JOIN e.videojuegos v GROUP BY e ORDER BY COUNT(v) DESC"</span><span class="p">)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Estudio</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">rankingPorNumeroDeVideojuegos</span><span class="p">();</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nd">@Query</span><span class="p">(</span><span class="s">"SELECT e FROM Editorial e JOIN e.libros l GROUP BY e ORDER BY COUNT(l) DESC"</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Editorial</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">rankingPorNumeroDeLibros</span><span class="p">();</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@Query</code> sobre un método de repositorio te permite escribir tú mismo el JPQL cuando el naming de método o las Specifications se quedan cortos — aquí, porque necesitas un <code>JOIN</code> con agregación y ordenación por el resultado de esa agregación, algo que ninguna de las otras dos vías expresa con naturalidad.</p>
@@ -2125,17 +2125,17 @@
 <span class="normal"><a href="#__codelineno-3-5">5</a></span>
 <span class="normal"><a href="#__codelineno-3-6">6</a></span>
 <span class="normal"><a href="#__codelineno-3-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EstudioRankingDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">obtenerRanking</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">.</span><span class="na">rankingPorNumeroDeVideojuegos</span><span class="p">()</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EditorialRankingDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">obtenerRanking</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">rankingPorNumeroDeLibros</span><span class="p">()</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">            </span><span class="p">.</span><span class="na">stream</span><span class="p">()</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EstudioRankingDTO</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getNombre</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getVideojuegos</span><span class="p">().</span><span class="na">size</span><span class="p">()))</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EditorialRankingDTO</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getNombre</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getLibros</span><span class="p">().</span><span class="na">size</span><span class="p">()))</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">            </span><span class="p">.</span><span class="na">toList</span><span class="p">();</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@Transactional(readOnly = true)</code> en operaciones de solo lectura no es solo un matiz estilístico: es una optimización real — le indica al framework y al gestor de base de datos que esta operación no va a modificar nada, lo que permite evitar bloqueos (<em>locks</em>) innecesarios que sí harían falta en una escritura. En operaciones de escritura, sigues usando <code>@Transactional</code> a secas, exactamente como en <code>VideojuegoService.create()</code>/<code>update()</code> del Tema 1.</p>
+<p><code>@Transactional(readOnly = true)</code> en operaciones de solo lectura no es solo un matiz estilístico: es una optimización real — le indica al framework y al gestor de base de datos que esta operación no va a modificar nada, lo que permite evitar bloqueos (<em>locks</em>) innecesarios que sí harían falta en una escritura. En operaciones de escritura, sigues usando <code>@Transactional</code> a secas, exactamente como en el <code>create()</code>/<code>update()</code> del Tema 1.</p>
 <hr>
 <h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
-<p>Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en <code>spring-boot-starter-data-jpa</code>) → mapeo con anotaciones (<code>@Entity</code>, <code>@Column</code>, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. El Tema 3 retoma exactamente donde este tema deja una pista suelta: <code>VideojuegoSpecifications.disponibleEnPlataforma</code>, mencionada de pasada en el apartado anterior, que trabaja sobre una columna JSONB — el tema completo de bases de datos objeto-relacionales.</p>
+<p>Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en <code>spring-boot-starter-data-jpa</code>) → mapeo con anotaciones (<code>@Entity</code>, <code>@Column</code>, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. En el Tema 3 aparece un tipo de columna que todavía no has visto — JSONB, capaz de guardar objetos completos dentro de una celda — y con él, las bases de datos objeto-relacionales.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">

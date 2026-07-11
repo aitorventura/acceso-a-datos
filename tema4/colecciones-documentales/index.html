@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1600,13 +1600,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" class="md-nav__link">
+  <a href="#por-que-dos-motores-conviven" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: por qué dos motores conviven
+      📚 Por qué dos motores conviven
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: por qué dos motores conviven">
+    <nav class="md-nav" aria-label="📚 Por qué dos motores conviven">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1968,13 +1968,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" class="md-nav__link">
+  <a href="#por-que-dos-motores-conviven" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: por qué dos motores conviven
+      📚 Por qué dos motores conviven
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: por qué dos motores conviven">
+    <nav class="md-nav" aria-label="📚 Por qué dos motores conviven">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2047,8 +2047,8 @@
 </tr>
 </tbody>
 </table>
-<p>Ventajas del modelo documental: <strong>esquema flexible por documento</strong> (dos <code>Review</code> no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y <strong>escritura/lectura simple</strong>, sin <code>JOIN</code> que resolver.</p>
-<p>Inconvenientes: la <strong>integridad referencial manual</strong> que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que <code>videojuegoId</code> apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).</p>
+<p>Ventajas del modelo documental: <strong>esquema flexible por documento</strong> (dos <code>Resena</code> no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y <strong>escritura/lectura simple</strong>, sin <code>JOIN</code> que resolver.</p>
+<p>Inconvenientes: la <strong>integridad referencial manual</strong> que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que <code>libroId</code> apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).</p>
 <hr>
 <h2 id="colecciones-crear-eliminar-listar">🛠️ Colecciones: crear, eliminar, listar<a class="headerlink" href="#colecciones-crear-eliminar-listar" title="Permanent link">¶</a></h2>
 <p>En <code>mongosh</code>:</p>
@@ -2063,13 +2063,13 @@
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// Se crea implícitamente al insertar el primer documento</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">review</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">videojuegoId</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">resena</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">libroId</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">})</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(</span><span class="s2">"review"</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(</span><span class="s2">"resena"</span><span class="p">)</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1">// Eliminar</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nx">db</span><span class="p">.</span><span class="nx">review</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nx">db</span><span class="p">.</span><span class="nx">resena</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a>
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1">// Listar</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nx">show</span><span class="w"> </span><span class="nx">collections</span>
@@ -2080,20 +2080,16 @@
 <p>En PostgreSQL, necesitas una sentencia <code>CREATE TABLE</code> explícita (o <code>ddl-auto</code> de Hibernate haciéndolo por ti, como viste en el Tema 1) antes de poder insertar nada. En MongoDB, la colección aparece sola al primer <code>insert</code> — es la misma diferencia de filosofía que ya viste entre esquema fijo y esquema flexible, ahora aplicada a la propia existencia de la colección.</p>
 </div>
 <hr>
-<h2 id="aterrizaje-en-gamevault-por-que-dos-motores-conviven">🎮 Aterrizaje en GameVault: por qué dos motores conviven<a class="headerlink" href="#aterrizaje-en-gamevault-por-que-dos-motores-conviven" title="Permanent link">¶</a></h2>
-<p>GameVault usa PostgreSQL para el catálogo (<code>Videojuego</code>/<code>Estudio</code>: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB para las reseñas (<code>Review</code>: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una <strong>decisión de arquitectura deliberada</strong>, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.</p>
+<h2 id="por-que-dos-motores-conviven">📚 Por qué dos motores conviven<a class="headerlink" href="#por-que-dos-motores-conviven" title="Permanent link">¶</a></h2>
+<p>En el ejemplo de la librería, PostgreSQL guarda el catálogo (<code>Libro</code>/<code>Editorial</code>: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB guarda las reseñas (<code>Resena</code>: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una <strong>decisión de arquitectura deliberada</strong>, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.</p>
 <h3 id="eliminar-documentos-de-forma-masiva">Eliminar documentos de forma masiva<a class="headerlink" href="#eliminar-documentos-de-forma-masiva" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ReviewRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">Review</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">);</span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ResenaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">Resena</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>deleteByVideojuegoId</code> es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las <strong>reseñas huérfanas</strong> que detectaste en la Actividad 4.1: si se borra un videojuego cuyas reseñas siguen en Mongo, este método las limpia de golpe.</p>
-<div class="admonition tip">
-<p class="admonition-title">El borrado en cascada ya existe — de forma asíncrona</p>
-<p>Este borrado en cascada se resuelve <strong>conectado a través de eventos</strong>: cuando se borra un videojuego, <code>VideojuegoService</code> publica un evento por RabbitMQ que un <em>consumer</em> del módulo <code>reviews</code> recibe y usa para invocar <code>deleteByVideojuegoId</code>. No ocurre de forma síncrona dentro de la misma llamada — ocurre poco después, en otro hilo. Verás el flujo completo, con el código guiado paso a paso, en la Actividad 4.2.</p>
-</div>
+<p><code>deleteByLibroId</code> es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las <strong>reseñas huérfanas</strong> que detectaste en la Actividad 4.1: si se borra un libro cuyas reseñas siguen en Mongo, este método las limpia de golpe.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -2102,8 +2098,8 @@
 <li>Tabla↔colección, fila↔documento, columna↔campo, <code>JOIN</code>↔documento embebido o referencia manual.</li>
 <li>El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.</li>
 <li>Una colección se crea implícitamente al primer <code>insert</code>, o explícitamente con <code>createCollection</code> (para validación o colecciones capadas); se elimina con <code>drop()</code>.</li>
-<li>GameVault usa dos motores por una decisión de arquitectura documentada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.</li>
-<li><code>deleteByVideojuegoId</code> elimina documentos en bloque — es la pieza que resuelve las reseñas huérfanas, conectada de forma asíncrona vía RabbitMQ.</li>
+<li>Usar dos motores a la vez es una decisión de arquitectura deliberada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.</li>
+<li><code>deleteByLibroId</code> elimina documentos en bloque por naming de método — es la pieza que resuelve las reseñas huérfanas.</li>
 </ul>
 </details></div>
 

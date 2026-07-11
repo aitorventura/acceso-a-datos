@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1385,13 +1385,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-disponibleenplataforma" class="md-nav__link">
+  <a href="#un-ejemplo-completo-disponibleenformato" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: disponibleEnPlataforma
+      📚 Un ejemplo completo: disponibleEnFormato
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: disponibleEnPlataforma">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: disponibleEnFormato">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1977,13 +1977,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-disponibleenplataforma" class="md-nav__link">
+  <a href="#un-ejemplo-completo-disponibleenformato" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: disponibleEnPlataforma
+      📚 Un ejemplo completo: disponibleEnFormato
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: disponibleEnPlataforma">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: disponibleEnFormato">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2065,19 +2065,20 @@
 <span class="normal"><a href="#__codelineno-0-5">5</a></span>
 <span class="normal"><a href="#__codelineno-0-6">6</a></span>
 <span class="normal"><a href="#__codelineno-0-7">7</a></span>
-<span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">-- ¿Existe la clave "steam" de primer nivel en el JSON?</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">jsonb_exists</span><span class="p">(</span><span class="n">detallesplataforma</span><span class="p">,</span><span class="w"> </span><span class="s1">'steam'</span><span class="p">);</span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">-- ¿Existe la clave "ebook" de primer nivel en el JSON?</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">jsonb_exists</span><span class="p">(</span><span class="n">detallesedicion</span><span class="p">,</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">);</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="c1">-- equivalente con el operador ?</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'steam'</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1">-- Extraer el valor de una clave</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'steam'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesplataforma</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'steam'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">videojuego</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
 </code></pre></div></td></tr></table></div>
 <p><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. <code>-&gt;</code> extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); <code>-&gt;&gt;</code> lo extrae como texto plano.</p>
 <p>Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.</p>
 <hr>
-<h2 id="aterrizaje-en-gamevault-disponibleenplataforma">🎮 Aterrizaje en GameVault: <code>disponibleEnPlataforma</code><a class="headerlink" href="#aterrizaje-en-gamevault-disponibleenplataforma" title="Permanent link">¶</a></h2>
+<h2 id="un-ejemplo-completo-disponibleenformato">📚 Un ejemplo completo: <code>disponibleEnFormato</code><a class="headerlink" href="#un-ejemplo-completo-disponibleenformato" title="Permanent link">¶</a></h2>
+<p>Siguiendo con la librería: un filtro opcional más en el buscador — "solo libros disponibles en ebook" (o en tapa dura, o en bolsillo). El dato vive dentro de la columna JSONB <code>detallesEdicion</code>, así que la Specification necesita algo más que un <code>like</code>.</p>
 <h3 id="la-specification-con-jsonb_exists-desde-criteria-api">La Specification, con <code>jsonb_exists</code> desde Criteria API<a class="headerlink" href="#la-specification-con-jsonb_exists-desde-criteria-api" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
@@ -2093,8 +2094,8 @@
 <span class="normal"><a href="#__codelineno-1-12">12</a></span>
 <span class="normal"><a href="#__codelineno-1-13">13</a></span>
 <span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">disponibleEnPlataforma</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">plataforma</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">plataforma</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">plataforma</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">disponibleEnFormato</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">formato</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">formato</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5"></a>
@@ -2103,8 +2104,8 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">                    </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">function</span><span class="p">(</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">                            </span><span class="s">"jsonb_exists"</span><span class="p">,</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">                            </span><span class="n">Boolean</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">                            </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesPlataforma"</span><span class="p">),</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">                            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="n">plataforma</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">())</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">                            </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesEdicion"</span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">                            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="n">formato</span><span class="p">)</span>
 <a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">                    </span><span class="p">)</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">            </span><span class="p">);</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
@@ -2114,18 +2115,18 @@
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">disponibleEnPlataforma</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">plataforma</span><span class="p">()));</span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">disponibleEnFormato</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">formato</span><span class="p">()));</span>
 </code></pre></div></td></tr></table></div>
-<p>Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una columna relacional corriente es exactamente lo mismo — una Specification más, encadenada con <code>.and(...)</code> como cualquier otra. Toda la complejidad de "esto necesita una función nativa" queda encapsulada dentro del método <code>disponibleEnPlataforma</code>.</p>
+<p>Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una columna relacional corriente es exactamente lo mismo — una Specification más, encadenada con <code>.and(...)</code> como cualquier otra. Toda la complejidad de "esto necesita una función nativa" queda encapsulada dentro del método <code>disponibleEnFormato</code>.</p>
 <hr>
 <h2 id="modificar-objetos-jsonb-reemplazo-no-merge">✏️ Modificar objetos JSONB: reemplazo, no <em>merge</em><a class="headerlink" href="#modificar-objetos-jsonb-reemplazo-no-merge" title="Permanent link">¶</a></h2>
-<p>Ya lo comprobaste en la Actividad 3.1: <code>update()</code> en <code>VideojuegoService</code> reemplaza el <code>Map</code> completo de <code>detallesPlataforma</code>, no combina el nuevo contenido con el anterior.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">v</span><span class="p">.</span><span class="na">setDetallesPlataforma</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesPlataforma</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
+<p>Un <code>update()</code> que recibe un <code>Map</code> nuevo reemplaza el contenido completo de <code>detallesEdicion</code>, no combina el nuevo contenido con el anterior — lo comprobarás tú mismo en la Actividad 3.1.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">libro</span><span class="p">.</span><span class="na">setDetallesEdicion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesEdicion</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
 </code></pre></div></td></tr></table></div>
-<p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesPlataforma</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.</p>
+<p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesEdicion</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.</p>
 <hr>
 <h2 id="transacciones-nada-especial-que-gestionar">🔄 Transacciones: nada especial que gestionar<a class="headerlink" href="#transacciones-nada-especial-que-gestionar" title="Permanent link">¶</a></h2>
 <p>Merece la pena decirlo explícitamente para no generar expectativas de complejidad añadida — <code>@Transactional</code> funciona <strong>exactamente igual</strong> sobre una entidad con columnas JSONB que sobre cualquier otra entidad. No hay ningún matiz especial de transacciones que gestionar por tener una columna JSONB; sigue siendo la misma anotación, el mismo comportamiento, que ya conoces desde el Tema 1.</p>

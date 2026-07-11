@@ -797,12 +797,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/spring-boot-y-gamevault/" class="md-nav__link">
+      <a href="../../tema1/spring-boot-fundamentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Spring Boot y GameVault
+    Fundamentos de Spring Boot
     
   </span>
   
@@ -1206,13 +1206,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-filtros-dinamicos-de-verdad" class="md-nav__link">
+  <a href="#filtros-dinamicos-de-verdad" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: filtros dinámicos de verdad
+      🔎 Filtros dinámicos de verdad
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: filtros dinámicos de verdad">
+    <nav class="md-nav" aria-label="🔎 Filtros dinámicos de verdad">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2031,13 +2031,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aterrizaje-en-gamevault-filtros-dinamicos-de-verdad" class="md-nav__link">
+  <a href="#filtros-dinamicos-de-verdad" class="md-nav__link">
     <span class="md-ellipsis">
-      🎮 Aterrizaje en GameVault: filtros dinámicos de verdad
+      🔎 Filtros dinámicos de verdad
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🎮 Aterrizaje en GameVault: filtros dinámicos de verdad">
+    <nav class="md-nav" aria-label="🔎 Filtros dinámicos de verdad">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2155,23 +2155,24 @@
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">Alumno</span><span class="w"> </span><span class="n">alumno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resultado</span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Alumno no encontrado"</span><span class="p">));</span>
 </code></pre></div></td></tr></table></div>
-<p><code>orElseThrow(...)</code> extrae el valor si existe, o lanza la excepción que le indiques si el <code>Optional</code> está vacío — ya usaste este patrón sin nombrarlo en el Tema 1, en <code>findById</code> de <code>VideojuegoService</code>.</p>
+<p><code>orElseThrow(...)</code> extrae el valor si existe, o lanza la excepción que le indiques si el <code>Optional</code> está vacío — ya usaste este patrón sin nombrarlo en el Tema 1, en el <code>findById</code> del service del CRUD.</p>
 <hr>
 <h2 id="por-que-las-consultas-fijas-se-quedan-cortas">🔍 Por qué las consultas fijas se quedan cortas<a class="headerlink" href="#por-que-las-consultas-fijas-se-quedan-cortas" title="Permanent link">¶</a></h2>
-<p>Imagina un buscador con varios filtros opcionales: título, precio mínimo, precio máximo, estudio... Cada usuario rellena unos campos y deja otros vacíos. Si intentas resolver esto con métodos de consulta fijos (uno por cada combinación posible de filtros), el número de métodos que necesitarías crece exponencialmente — con solo 4 filtros opcionales, ya son 16 combinaciones posibles.</p>
+<p>Imagina un buscador con varios filtros opcionales: título, precio mínimo, precio máximo, editorial... Cada usuario rellena unos campos y deja otros vacíos. Si intentas resolver esto con métodos de consulta fijos (uno por cada combinación posible de filtros), el número de métodos que necesitarías crece exponencialmente — con solo 4 filtros opcionales, ya son 16 combinaciones posibles.</p>
 <p>Una <strong>Specification</strong> (o consulta dinámica) resuelve esto de otra forma: en vez de escribir una consulta completa por combinación, construyes la consulta como <strong>piezas combinables</strong> en tiempo de ejecución — cada filtro es una pieza independiente, y solo se añaden al conjunto final las piezas que corresponden a los filtros que el usuario ha indicado de verdad.</p>
 <hr>
 <h2 id="que-es-la-paginacion">📄 Qué es la paginación<a class="headerlink" href="#que-es-la-paginacion" title="Permanent link">¶</a></h2>
 <p>Ninguna API seria devuelve "todo" en una sola respuesta — si una tabla tiene un millón de filas, no tiene sentido (ni es viable) mandarlas todas de golpe. La <strong>paginación</strong> trocea el resultado en páginas: pides una página concreta, de un tamaño concreto, con un orden concreto, y el servidor te devuelve solo esa porción.</p>
 <hr>
-<h2 id="aterrizaje-en-gamevault-filtros-dinamicos-de-verdad">🎮 Aterrizaje en GameVault: filtros dinámicos de verdad<a class="headerlink" href="#aterrizaje-en-gamevault-filtros-dinamicos-de-verdad" title="Permanent link">¶</a></h2>
+<h2 id="filtros-dinamicos-de-verdad">🔎 Filtros dinámicos de verdad<a class="headerlink" href="#filtros-dinamicos-de-verdad" title="Permanent link">¶</a></h2>
+<p>Siguiendo con el buscador de la librería: título, precio mínimo, precio máximo y editorial como filtros opcionales.</p>
 <h3 id="el-repositorio-con-specifications-habilitadas">El repositorio, con Specifications habilitadas<a class="headerlink" href="#el-repositorio-con-specifications-habilitadas" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">VideojuegoRepository</span><span class="w"> </span><span class="kd">extends</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Con <code>JpaRepository</code> ya tienes <code>save</code>/<code>findById</code>/<code>findAll</code> "gratis", sin una sola línea de SQL ni de JDBC — el contraste directo con todo lo que escribiste a mano en el Tema 1. <code>JpaSpecificationExecutor</code> añade la capacidad de ejecutar Specifications sobre este repositorio.</p>
@@ -2190,7 +2191,7 @@
 <span class="normal"><a href="#__codelineno-3-12">12</a></span>
 <span class="normal"><a href="#__codelineno-3-13">13</a></span>
 <span class="normal"><a href="#__codelineno-3-14">14</a></span>
-<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">tituloContiene</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">tituloContiene</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">titulo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="p">}</span>
@@ -2198,7 +2199,7 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">like</span><span class="p">(</span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">lower</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">)),</span><span class="w"> </span><span class="s">"%"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"%"</span><span class="p">);</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">precioMayorOIgualA</span><span class="p">(</span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">precioMayorOIgualA</span><span class="p">(</span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">precioMin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
@@ -2207,10 +2208,6 @@
 <a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>El patrón se repite en cada método: si el filtro es <code>null</code> (el usuario no lo ha indicado), devuelve <code>Specification.unrestricted()</code> — una Specification "vacía" que no añade ninguna condición al <code>WHERE</code>; si el filtro tiene valor, devuelve la condición real (<code>LIKE</code> para texto, <code>greaterThanOrEqualTo</code> para comparaciones numéricas).</p>
-<div class="admonition tip">
-<p class="admonition-title"><code>disponibleEnPlataforma</code> — de pasada, sin profundizar todavía</p>
-<p>Verás también una Specification llamada <code>disponibleEnPlataforma</code>, que usa una función <code>jsonb_exists</code> sobre una columna especial. Ignórala por ahora — trabaja con JSONB, y eso es contenido completo del Tema 3. Aquí solo interesa el patrón general de las demás.</p>
-</div>
 <h3 id="combinarlas-en-el-service">Combinarlas en el service<a class="headerlink" href="#combinarlas-en-el-service" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
@@ -2223,18 +2220,18 @@
 <span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-4-10">10</a></span>
 <span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">VideojuegoResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">VideojuegoFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">precioMenorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMax</span><span class="p">()))</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">VideojuegoSpecifications</span><span class="p">.</span><span class="na">perteneceAlEstudio</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">estudioId</span><span class="p">()));</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMenorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMax</span><span class="p">()))</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">perteneceAEditorial</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">editorialId</span><span class="p">()));</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">);</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>Specification.where(...).and(...)</code> encadena todas las piezas en una sola consulta final — las que son <code>unrestricted()</code> no añaden nada, así que si <code>filtro</code> llega con todos los campos a <code>null</code>, el resultado es "sin condiciones", es decir, todo el catálogo (paginado). <code>videojuegoRepository.findAll(spec, pageable)</code> ejecuta esa consulta combinada y, de paso, aplica la paginación: el <code>Pageable</code> que recibe el método lleva página, tamaño y orden — la clase concreta de Spring que materializa el concepto de paginación que has visto arriba.</p>
+<p><code>Specification.where(...).and(...)</code> encadena todas las piezas en una sola consulta final — las que son <code>unrestricted()</code> no añaden nada, así que si <code>filtro</code> llega con todos los campos a <code>null</code>, el resultado es "sin condiciones", es decir, todo el catálogo (paginado). <code>libroRepository.findAll(spec, pageable)</code> ejecuta esa consulta combinada y, de paso, aplica la paginación: el <code>Pageable</code> que recibe el método lleva página, tamaño y orden — la clase concreta de Spring que materializa el concepto de paginación que has visto arriba.</p>
 <hr>
 <h2 id="modificar-y-recuperar-objetos-persistentes">✏️ Modificar y recuperar objetos persistentes<a class="headerlink" href="#modificar-y-recuperar-objetos-persistentes" title="Permanent link">¶</a></h2>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
@@ -2247,14 +2244,14 @@
 <span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-5-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@Transactional</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">VideojuegoCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="n">Videojuego</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Videojuego no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8"></a>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
 <a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Este <code>update</code> (que ya conoces del Tema 1) es el ejemplo perfecto de "modificar y recuperar objetos persistentes": localizas el objeto con <code>findById</code> (pasa a estado <em>managed</em>, como viste en el apartado anterior), modificas sus campos directamente sobre el objeto Java, y vuelves a llamar a <code>save()</code>. Compáralo con lo que habrías escrito a mano en el Tema 1 con JDBC puro: un <code>UPDATE ... SET ... WHERE id = ?</code> completo, con cada columna nombrada explícitamente. Aquí, Hibernate genera ese <code>UPDATE</code> por ti a partir de qué campos han cambiado realmente en el objeto.</p>
