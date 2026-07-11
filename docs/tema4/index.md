@@ -7,9 +7,13 @@
 ## 🎯 Criterios de evaluación
 
 ✅ Se han valorado las ventajas e inconvenientes de utilizar bases de datos documentales nativas.
+
 ✅ Se ha establecido la conexión con la base de datos.
+
 ✅ Se han desarrollado aplicaciones que efectúan consultas sobre el contenido de la base de datos.
+
 ✅ Se han añadido y eliminado colecciones de la base de datos.
+
 ✅ Se han desarrollado aplicaciones para añadir, modificar y eliminar documentos de la base de datos.
 
 ---

@@ -7,13 +7,21 @@
 ## 🎯 Criterios de evaluación
 
 ✅ Se han valorado las ventajas e inconvenientes de utilizar programación orientada a componentes.
+
 ✅ Se han identificado herramientas de desarrollo de componentes.
+
 ✅ Se han programado componentes que gestionan información almacenada en ficheros.
+
 ✅ Se han programado componentes que gestionan mediante conectores información almacenada en bases de datos.
+
 ✅ Se han programado componentes que gestionan información usando mapeo objeto relacional.
+
 ✅ Se han programado componentes que gestionan información almacenada en bases de datos objeto relacionales y orientadas a objetos.
+
 ✅ Se han programado componentes que gestionan información almacenada en una base de datos documental nativa.
+
 ✅ Se han probado y documentado los componentes desarrollados.
+
 ✅ Se han integrado los componentes desarrollados en aplicaciones.
 
 ---

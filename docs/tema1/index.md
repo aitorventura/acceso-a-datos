@@ -7,15 +7,25 @@
 ## 🎯 Criterios de evaluación
 
 ✅ Se han valorado las ventajas e inconvenientes de utilizar conectores.
+
 ✅ Se han utilizado gestores de bases de datos embebidos e independientes.
+
 ✅ Se ha utilizado el conector idóneo en la aplicación.
+
 ✅ Se ha establecido la conexión.
+
 ✅ Se ha definido la estructura de la base de datos.
+
 ✅ Se han desarrollado aplicaciones que modifican el contenido de la base de datos.
+
 ✅ Se han definido los objetos destinados a almacenar el resultado de las consultas.
+
 ✅ Se han desarrollado aplicaciones que efectúan consultas.
+
 ✅ Se han eliminado los objetos una vez finalizada su función.
+
 ✅ Se han gestionado las transacciones.
+
 ✅ Se han ejecutado procedimientos almacenados en la base de datos.
 
 ---

@@ -7,11 +7,17 @@
 ## 🎯 Criterios de evaluación
 
 ✅ Se ha instalado la herramienta ORM.
+
 ✅ Se ha configurado la herramienta ORM.
+
 ✅ Se han definido configuraciones de mapeo.
+
 ✅ Se han aplicado mecanismos de persistencia a los objetos.
+
 ✅ Se han desarrollado aplicaciones que modifican y recuperan objetos persistentes.
+
 ✅ Se han desarrollado aplicaciones que realizan consultas usando el lenguaje SQL.
+
 ✅ Se han gestionado las transacciones.
 
 ---

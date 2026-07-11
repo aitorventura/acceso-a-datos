@@ -7,12 +7,19 @@
 ## 🎯 Criterios de evaluación
 
 ✅ Se han identificado las ventajas e inconvenientes de las bases de datos que almacenan objetos.
+
 ✅ Se han establecido y cerrado conexiones.
+
 ✅ Se ha gestionado la persistencia de objetos simples.
+
 ✅ Se ha gestionado la persistencia de objetos estructurados.
+
 ✅ Se han desarrollado aplicaciones que realizan consultas.
+
 ✅ Se han modificado los objetos almacenados.
+
 ✅ Se han gestionado las transacciones.
+
 ✅ Se han probado y documentado las aplicaciones desarrolladas.
 
 ---
