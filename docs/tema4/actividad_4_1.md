@@ -55,7 +55,7 @@ spring:
 
 Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
 
-Levanta el servicio nuevo (`docker compose -f .devcontainer/docker-compose.yml up -d mongodb`, desde la terminal integrada — el `docker-outside-of-docker` de la Actividad 1.1 hace que esto funcione igual que si estuvieras fuera del contenedor) y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
+Levanta el servicio nuevo (`docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer up -d mongodb`, desde la terminal integrada — el `-p` es el nombre de proyecto que usa la extensión de Dev Containers, el mismo que ya usaste en la Actividad 1.1) y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
 
 ---
 
@@ -250,7 +250,7 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
 Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1):
 
 ```bash
-docker compose -f .devcontainer/docker-compose.yml ps
+docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer ps
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
 ```
 

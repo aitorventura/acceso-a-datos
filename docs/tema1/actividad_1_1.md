@@ -1,5 +1,8 @@
 # 🧪 Actividad 1.1: Docker Compose + PostgreSQL — arranque de las entidades del catálogo
 
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 1.1 — Docker Compose + PostgreSQL: arranque de las entidades del catálogo](plantillas/Actividad_1_1_AD_Plantilla.docx){target="_blank" rel="noopener"}
+
 ## Qué es GameVault
 
 **GameVault** es la aplicación que vas a construir, pieza a pieza, durante todo el curso — a la vez desde Acceso a Datos y desde Programación de Servicios y Procesos. Es una API REST que gestiona el catálogo de una tienda de videojuegos: qué juegos hay, qué estudio ha desarrollado cada uno, qué reseñas han dejado los usuarios, y quién puede hacer qué sobre esos datos.
@@ -50,6 +53,8 @@ Ve a [start.spring.io](https://start.spring.io) y genera un proyecto con:
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: la versión estable más reciente de la rama 4.x que te ofrezca el asistente
+- **Packaging**: Jar (no War — no vas a desplegar esto en un servidor de aplicaciones externo, el propio `.jar` ya trae el servidor embebido)
+- **Java**: 21 — tiene que coincidir con el Java del Dev Container que montas en el Paso 1
 - **Group/Artifact**: los que quieras (por ejemplo `com.tunombre` / `gamevault`)
 - **Dependencies**: añade solo estas cuatro — ni una más:
     - **Spring Web** (el starter real se llama `spring-boot-starter-webmvc` en esta versión de Spring Boot, no `-web`)
@@ -77,7 +82,7 @@ En la raíz de tu proyecto, crea la carpeta `.devcontainer` y, dentro, `docker-c
 ```yaml
 services:
   app:
-    image: mcr.microsoft.com/devcontainers/java:1-21-bookworm
+    image: mcr.microsoft.com/devcontainers/base:bookworm
     volumes:
       - ..:/workspace:cached
       - /var/run/docker.sock:/var/run/docker.sock
@@ -92,13 +97,16 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
 
 volumes:
   postgres_data:
 ```
 
-`app` usa una imagen que ya trae **Java 21, Maven y Git instalados** — nada que instalar a mano, ni en tu portátil ni en un equipo del aula. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo `volumes` de `app`, `/var/run/docker.sock:/var/run/docker.sock`, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.
+!!! warning "Con Postgres 18, el volumen va en `/var/lib/postgresql`, no en `/var/lib/postgresql/data`"
+    Desde la versión 18, la imagen organiza los datos en subcarpetas por versión mayor dentro de `/var/lib/postgresql` — si montas el volumen directamente en `/var/lib/postgresql/data` (la ruta que usaban las versiones anteriores), el contenedor se niega a arrancar y sale con error nada más crearse. Si ya te ha pasado esto, sigue las instrucciones de abajo para limpiar el volumen roto antes de continuar.
+
+`app` parte esta vez de la imagen **base** genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo `volumes` de `app`, `/var/run/docker.sock:/var/run/docker.sock`, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.
 
 Y, junto a él, `devcontainer.json`:
 
@@ -110,6 +118,10 @@ Y, junto a él, `devcontainer.json`:
   "workspaceFolder": "/workspace",
   "forwardPorts": [8080, 5432],
   "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": "true"
+    },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
   "customizations": {
@@ -120,9 +132,17 @@ Y, junto a él, `devcontainer.json`:
 }
 ```
 
+Java ya no viene incluido en la imagen — lo añades como *feature*, igual que `docker-outside-of-docker`: son piezas que se instalan por encima de la imagen base, sin que tengas que elegir una imagen distinta por cada lenguaje o herramienta que necesites. `ghcr.io/devcontainers/features/java:1` instala el JDK, en la versión que le indiques en `"version"`; `"installMaven": "true"` le pide **además** Maven — no lo des por hecho ni lo dejes al valor por defecto de la *feature*: indícalo explícitamente, como aquí, o `mvn` no va a existir dentro del contenedor.
+
+!!! tip "Por qué esta imagen y no una con Java ya incluido"
+    Existen imágenes que ya traen el JDK preinstalado (como `mcr.microsoft.com/devcontainers/java`), y en principio ahorran un paso. El problema es que esas imágenes "completas" también traen preinstaladas otras herramientas que no vas a usar (Node.js, Yarn...) — y si el repositorio de alguna de ellas deja de estar disponible o su clave de firma caduca, el contenedor entero puede fallar al construirse por algo que no tiene nada que ver con tu proyecto. Partir de la imagen base y añadir solo las *features* que necesitas (Java, Docker) es más código, pero es más robusto: solo dependes de lo que realmente usas.
+
 `service: "app"` le dice a la extensión Dev Containers a cuál de los dos servicios del `docker-compose.yml` debe conectar tu editor — al otro, `postgres`, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. `forwardPorts` publica hacia tu máquina tanto el `8080` (tu aplicación, cuando la arranques) como el `5432` (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La *feature* `docker-outside-of-docker` instala dentro de `app` el cliente `docker` (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de VS Code vas a poder ejecutar `docker`, `docker compose` o `docker exec` como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.
 
 Ahora abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige **"Reopen in Container"** (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de `app` y levantando `postgres` a la vez.
+
+!!! warning "Si cambias `devcontainer.json`/`docker-compose.yml` después de haber abierto el contenedor"
+    Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: paleta de comandos (`Ctrl+Shift+P`) → **"Dev Containers: Rebuild Container"**. Si algo no aparece como debería (por ejemplo, `mvn` no se encuentra aunque hayas añadido la *feature* de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.
 
 **Captura**: la esquina inferior izquierda de VS Code, con la etiqueta del Dev Container activo.
 
@@ -244,9 +264,6 @@ public class Videojuego {
 
 **Mini-reto**: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en `Estudio` (atributo privado + getter/setter, que ya te genera `@Getter`/`@Setter` de Lombok).
 
-!!! tip "El JSONB de `detallesPlataforma` no es para hoy"
-    La entidad `Videojuego` completa de GameVault incluye también un campo `detallesPlataforma` con anotaciones de JSONB. Omítelo por completo en tu proyecto por ahora — se trabaja en el Tema 3, cuando tengas la base necesaria para entenderlo.
-
 ---
 
 ## Paso 4 — Verificar que Hibernate ha hecho su trabajo
@@ -257,12 +274,34 @@ Desde la terminal integrada de VS Code (la que corre **dentro** del Dev Containe
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
+!!! tip "Alternativa: el botón ▷ Run de VS Code"
+    La extensión de Java añade un botón **Run** (o el *CodeLens* `▷ Run` encima del `main`) sobre `GamevaultApplication`. Es más cómodo, pero por defecto arranca la clase directamente con `java`, **sin** el perfil `dev` activo — y sin él, tu aplicación no sabe cómo conectarse a PostgreSQL. Para que el botón Run también use el perfil `dev`, crea `.vscode/launch.json` en tu proyecto:
+    ```json
+    {
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "type": "java",
+          "name": "GamevaultApplication (dev)",
+          "request": "launch",
+          "mainClass": "com.tunombre.gamevault.GamevaultApplication",
+          "env": { "SPRING_PROFILES_ACTIVE": "dev" }
+        }
+      ]
+    }
+    ```
+    Ajusta `mainClass` a tu propio *group id*. A partir de ahora, arrancar con esta configuración desde el panel "Run and Debug" equivale exactamente al comando de arriba.
+
 Mira la consola: con `show-sql: true` deberías ver sentencias `create table` (o `alter table`, en arranques posteriores) para `estudio` y `videojuego`.
 
 Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:
 
 - **Herramienta gráfica desde tu equipo** (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto `5432` hacia tu máquina, apunta a `localhost:5432` con las credenciales del Paso 1.
-- **`psql` desde la propia terminal integrada de VS Code**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Ejecuta `docker compose ps` para localizar el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de VS Code.
+- **`psql` desde la propia terminal integrada de VS Code**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Pero ojo: `docker compose`, a secas, busca un `docker-compose.yml` en la carpeta donde estés (`/workspace`) y no lo encuentra — el tuyo vive en `.devcontainer/`. Indícaselo con `-f`, y añade también `-p` con el nombre de proyecto que ha usado la propia extensión de Dev Containers para crear los contenedores (combina el nombre de tu carpeta con `_devcontainer`; si la llamaste `gamevault` como se sugería en el Paso 0, es `gamevault_devcontainer` — ajusta el prefijo si le pusiste otro nombre):
+    ```bash
+    docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer ps
+    ```
+    Localiza ahí el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de VS Code. A partir de aquí, cualquier `docker compose` que ejecutes desde dentro del contenedor va a necesitar esos mismos `-f`/`-p`.
 
 **Comprueba**:
 
