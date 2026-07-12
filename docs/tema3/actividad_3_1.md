@@ -46,6 +46,9 @@ Y en el `mapToDTO`/`create`/`update` de tu `VideojuegoService`, asegúrate de qu
 
 Borra la tabla `videojuego` (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.
 
+!!! warning "Esto rompe el test MockMvc que ya tienes de PSP"
+    `VideojuegoControllerTest` (Programación de Servicios y Procesos, Actividad 1.3) construye un `VideojuegoResponseDTO` con el constructor de los campos antiguos — al añadir `detallesPlataforma` como sexto campo, ese `new VideojuegoResponseDTO(...)` deja de compilar. Actualiza esa llamada en el test, añadiendo un último argumento (por ejemplo, `Map.of()` para un videojuego sin plataformas).
+
 ---
 
 ## Paso 2 — Crear un videojuego con una plataforma

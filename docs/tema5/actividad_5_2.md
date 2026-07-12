@@ -68,6 +68,7 @@ public record VideojuegoResponseDTO(
         BigDecimal precio,
         LocalDate fechaLanzamiento,
         String nombreEstudio,
+        Map<String, Object> detallesPlataforma,
         Double puntuacionMedia // campo nuevo
 ) {}
 ```
@@ -77,7 +78,8 @@ public record VideojuegoResponseDTO(
 private VideojuegoResponseDTO mapToDTO(Videojuego v) {
     Double media = reviewsConsultaService.puntuacionMediaDe(v.getId());
     return new VideojuegoResponseDTO(
-            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(), v.getEstudio().getNombre(), media
+            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(),
+            v.getEstudio().getNombre(), v.getDetallesPlataforma(), media
     );
 }
 ```

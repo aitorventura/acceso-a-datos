@@ -19,6 +19,9 @@ Tu columna `detallesPlataforma` (Actividad 3.1) y el filtro `disponibleEnPlatafo
 
 ## Paso 1 — Configuración del test, guiada al completo
 
+!!! tip "Por qué esto funciona dentro de tu Dev Container"
+    Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, montaste el socket de Docker del host dentro de `app` y añadiste la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
+
 Añade las dependencias de Testcontainers a tu `pom.xml` (si no las tienes ya de otra actividad):
 
 ```xml

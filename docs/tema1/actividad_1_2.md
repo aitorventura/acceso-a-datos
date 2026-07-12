@@ -6,7 +6,7 @@
 ## Qué vas a practicar
 
 - Definir DTOs de entrada y salida como `record`, distintos de la entidad JPA.
-- Construir un controller REST completo (GET, POST, PUT, DELETE).
+- Construir un controller REST completo (GET, POST, PUT, DELETE) para `Videojuego`, y uno parcial (GET, POST) para `Estudio`.
 - Aplicar `@Transactional` correctamente en operaciones de escritura y de lectura.
 - Gestionar el caso "no encontrado" con `ResponseStatusException`.
 
@@ -72,6 +72,26 @@ Fíjate en la diferencia entre los dos: `VideojuegoCreateDTO` pide `estudioId` (
 ---
 
 ## Paso 2 — GET y POST, guiados al completo
+
+Antes del service necesitas el repositorio — la pieza que de verdad habla con la base de datos. Con Spring Data JPA no escribes ninguna implementación: declaras una interfaz vacía que extiende `JpaRepository<Entidad, TipoDeLaId>`, y Spring genera la implementación real (`findAll`, `findById`, `save`, `existsById`, `deleteById`...) en tiempo de ejecución, sin que tú escribas una sola línea de SQL ni de código de acceso a datos:
+
+```java
+package com.tunombre.gamevault.catalogo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface VideojuegoRepository extends JpaRepository<Videojuego, Long> {}
+```
+
+```java
+package com.tunombre.gamevault.catalogo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EstudioRepository extends JpaRepository<Estudio, Long> {}
+```
+
+Con esto ya tienes `findAll()`, `findById(id)`, `save(entidad)`, `existsById(id)` y `deleteById(id)` disponibles sobre `Videojuego` y `Estudio`, respectivamente — los vas a usar constantemente a partir de ahora, empezando ya mismo en `VideojuegoService`.
 
 En `VideojuegoService`, empieza por el mapeo y las operaciones de lectura:
 
@@ -228,6 +248,96 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/1
 
 ---
 
+## Paso 5 — `Estudio`: el mismo patrón, con un matiz
+
+Replica ahora el mismo patrón sobre `Estudio` — mismo `@RestController`/`@Service`, mismo manejo de "no encontrado" con `ResponseStatusException`. Como `Estudio` solo tiene `nombre` y `pais` (sin relación que validar al crearlo, a diferencia de `Videojuego` con su `estudioId`), un único DTO te vale tanto para crear como para leer:
+
+```java
+package com.tunombre.gamevault.catalogo.dto;
+
+public record EstudioDTO(Long id, String nombre, String pais) {}
+```
+
+```java
+@Service
+@RequiredArgsConstructor
+public class EstudioService {
+    private final EstudioRepository estudioRepository;
+
+    @Transactional(readOnly = true)
+    public List<EstudioDTO> findAll() {
+        return estudioRepository.findAll().stream().map(this::mapToDTO).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public EstudioDTO findById(Long id) {
+        return estudioRepository.findById(id)
+                .map(this::mapToDTO)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
+    }
+
+    @Transactional
+    public EstudioDTO create(EstudioDTO dto) {
+        Estudio estudio = new Estudio();
+        estudio.setNombre(dto.nombre());
+        estudio.setPais(dto.pais());
+        return mapToDTO(estudioRepository.save(estudio));
+    }
+
+    @Transactional
+    public EstudioDTO update(Long id, EstudioDTO dto) {
+        Estudio estudio = estudioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
+        estudio.setNombre(dto.nombre());
+        estudio.setPais(dto.pais());
+        return mapToDTO(estudioRepository.save(estudio));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!estudioRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado");
+        }
+        estudioRepository.deleteById(id);
+    }
+
+    private EstudioDTO mapToDTO(Estudio e) {
+        return new EstudioDTO(e.getId(), e.getNombre(), e.getPais());
+    }
+}
+```
+
+```java
+@RestController
+@RequestMapping("/api/v1/estudios")
+@RequiredArgsConstructor
+public class EstudioController {
+    private final EstudioService estudioService;
+
+    @GetMapping
+    public ResponseEntity<List<EstudioDTO>> getAll() {
+        return ResponseEntity.ok(estudioService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EstudioDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(estudioService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<EstudioDTO> create(@RequestBody EstudioDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(estudioService.create(dto));
+    }
+}
+```
+
+!!! tip "`update`/`delete` existen, pero todavía no tienen endpoint"
+    Fíjate en que `EstudioService` ya tiene `update` y `delete` completos y funcionando — pero `EstudioController` **no** expone todavía ningún `@PutMapping`/`@DeleteMapping` que los invoque. No es un olvido: esa pieza (el endpoint, la capa REST) es justo lo que vas a construir en Programación de Servicios y Procesos las próximas dos semanas, reutilizando estos mismos métodos de servicio en vez de reescribirlos.
+
+**Comprueba** con `curl` o Swagger UI que `GET /api/v1/estudios`, `GET /api/v1/estudios/{id}` y `POST /api/v1/estudios` funcionan igual que sus equivalentes de `Videojuego`.
+
+---
+
 ## Pregunta final
 
 `create()` tiene una sola operación de guardado (`videojuegoRepository.save(v)`). ¿Qué aporta exactamente `@Transactional` en ese caso, si solo hay una escritura? ¿Y si mañana ese mismo método tuviera que guardar el videojuego *y* actualizar un contador en otra tabla — cambiaría en algo la respuesta?
@@ -236,4 +346,4 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/1
 
 ## ✅ Cierre
 
-Tu GameVault ya tiene un CRUD completo y transaccional sobre `Videojuego`. Todavía lo has hecho todo con Spring Data JPA gestionando la conexión por ti — en la próxima actividad vas a ver, con JDBC puro, toda la "fontanería" que hay debajo de ese `@Transactional` que acabas de usar.
+Tu GameVault ya tiene un CRUD completo y transaccional sobre `Videojuego`, y `Estudio` con `GET`/`POST` funcionando (con `update`/`delete` ya listos en el service, a la espera de su endpoint). Todavía lo has hecho todo con Spring Data JPA gestionando la conexión por ti — en la próxima actividad vas a ver, con JDBC puro, toda la "fontanería" que hay debajo de ese `@Transactional` que acabas de usar.

@@ -29,7 +29,7 @@ import java.sql.*;
 
 public class DiagnosticoJdbc {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/gamevault_db";
+    private static final String URL = "jdbc:postgresql://postgres:5432/gamevault_db";
     private static final String USER = "gamevault_user";
     private static final String PASSWORD = "password123";
 
@@ -56,6 +56,8 @@ public class DiagnosticoJdbc {
     }
 }
 ```
+
+Fíjate en que la `URL` usa `postgres` como host, no `localhost` — igual que en tu `application-dev.yaml` de la Actividad 1.1: esta clase se ejecuta dentro de tu Dev Container, y PostgreSQL sigue siendo el contenedor hermano `postgres`, no tu propia máquina.
 
 Ejecuta el `main()` (desde tu IDE, botón derecho → *Run*) con tu aplicación Spring **parada** o en otra ventana — esta clase no necesita que Spring Boot esté arrancado, se conecta directamente a PostgreSQL.
 

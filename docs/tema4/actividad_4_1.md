@@ -19,11 +19,11 @@ Tu PostgreSQL y tu login JWT de PSP (semanas 7-11) ya funcionando — vas a usar
 
 ## Paso 1 — MongoDB en tu proyecto
 
-Añade el servicio a tu `docker-compose.yml`:
+Añade el servicio a `.devcontainer/docker-compose.yml` — el mismo fichero que ya tienes desde la Actividad 1.1, junto a `app` y `postgres`:
 
 ```yaml
 services:
-  # ... tu servicio postgres ya existente ...
+  # ... tus servicios app y postgres ya existentes ...
   mongodb:
     image: mongo:8
     ports:
@@ -50,10 +50,12 @@ Y en `application-dev.yaml`:
 ```yaml
 spring:
   mongodb:
-    uri: mongodb://localhost:27017/gamevault_db
+    uri: mongodb://mongodb:27017/gamevault_db
 ```
 
-Levanta el servicio nuevo (`docker compose up -d`) y reinicia tu aplicación.
+Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
+
+Levanta el servicio nuevo (`docker compose -f .devcontainer/docker-compose.yml up -d mongodb`, desde la terminal integrada — el `docker-outside-of-docker` de la Actividad 1.1 hace que esto funcione igual que si estuvieras fuera del contenedor) y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
 
 ---
 
@@ -245,9 +247,10 @@ Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal
 curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
 ```
 
-Consulta MongoDB directamente:
+Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1):
 
 ```bash
+docker compose -f .devcontainer/docker-compose.yml ps
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
 ```
 

@@ -141,6 +141,9 @@ public ResponseEntity<Page<VideojuegoResponseDTO>> getAll(
 
 ---
 
+!!! warning "Esto rompe el test MockMvc que ya tienes de PSP"
+    `VideojuegoControllerTest` (Programación de Servicios y Procesos, Actividad 1.3) esperaba una `List<VideojuegoResponseDTO>` y comprobaba `jsonPath("$[0].titulo")`. Ahora que `getAll()` devuelve una `Page<VideojuegoResponseDTO>`, ese `jsonPath` deja de tener sentido — el array ya no está en la raíz del JSON, sino dentro de `content`. Actualiza ese test: cambia el mock a `when(videojuegoService.findAllPaginated(any(), any())).thenReturn(...)` y el `jsonPath` a `"$.content[0].titulo"`.
+
 ## Paso 5 — Verificación con peticiones reales
 
 ```bash

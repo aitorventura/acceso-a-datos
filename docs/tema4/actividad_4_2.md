@@ -5,6 +5,7 @@
 
 ## Qué vas a practicar
 
+- Ampliar un exchange de mensajería ya existente con una cola nueva.
 - Entender y replicar un flujo de borrado en cascada entre dos motores distintos, vía eventos.
 - Hacer una operación idempotente frente a mensajes duplicados.
 - Comparar por escrito tu experiencia con PostgreSQL y con MongoDB.
@@ -13,7 +14,31 @@
 
 ## Requisitos previos
 
-Tu módulo `reviews` de la Actividad 4.1, y RabbitMQ ya explicado en PSP (Tema 3, semana 12) — si todavía no has llegado a ese punto en PSP, repasa antes la idea básica: un broker con colas y exchanges, donde un `@RabbitListener` procesa mensajes en su propio hilo, no en el de quien los publicó.
+Tu módulo `reviews` de la Actividad 4.1, y RabbitMQ funcionando con el registro de actividad del catálogo — se construye en Programación de Servicios y Procesos, Actividad 3.1. Si todavía no has llegado a esa actividad en PSP, complétala antes de seguir: hoy vas a ampliar el `RabbitMQConfig` y el `VideojuegoEventPublisher` que se construyen ahí, no a crearlos desde cero.
+
+---
+
+## Paso 0 — Añadir la cola de reseñas al exchange existente
+
+Tu `RabbitMQConfig` (de PSP, Actividad 3.1) ya tiene un `TopicExchange` (`CATALOGO_EXCHANGE`) con una cola de actividad. Añade una segunda cola sobre ese mismo exchange, esta vez de interés solo para `reviews`:
+
+```java
+public static final String REVIEWS_VIDEOJUEGO_QUEUE = "reviews.videojuego.queue";
+
+@Bean
+public Queue reviewsVideojuegoQueue() {
+    return new Queue(REVIEWS_VIDEOJUEGO_QUEUE);
+}
+
+@Bean
+public Binding reviewsBinding(Queue reviewsVideojuegoQueue, TopicExchange catalogoExchange) {
+    return BindingBuilder.bind(reviewsVideojuegoQueue).to(catalogoExchange).with("videojuego.eliminado");
+}
+```
+
+A diferencia de la cola de actividad (enlazada a `videojuego.*`, todo evento), esta se enlaza solo a `videojuego.eliminado` — a `reviews` no le interesa que se cree o modifique un videojuego, solo que se borre. Es el mismo exchange sirviendo a dos consumidores con intereses distintos, sin que ninguno reciba mensajes que no necesita.
+
+`VideojuegoEventPublisher` y el evento `VideojuegoEvent` no cambian — ya publican en `videojuego.eliminado` cada vez que `VideojuegoService.delete()` se ejecuta, así que esta cola nueva empieza a recibir mensajes en cuanto la declaras, sin tocar nada más.
 
 ---
 
@@ -104,6 +129,8 @@ docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.fin
 ```
 
 **Anota**: en los logs de tu aplicación, ¿ves dos nombres de hilo distintos — uno para la petición `DELETE`, otro para el consumer? Compáralos.
+
+**Explica**, revisando tu `RabbitMQConfig.java`, por qué `ReviewsVideojuegoEventConsumer` se activa al borrar un videojuego pero no al crearlo o modificarlo (pista: busca la *routing key* `videojuego.eliminado` y a qué cola está enlazada) — y por qué, en cambio, `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1) sí se activa con las tres operaciones.
 
 ---
 
