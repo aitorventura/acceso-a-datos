@@ -2133,6 +2133,10 @@
 </code></pre></div></td></tr></table></div>
 <p>Y en el <code>mapToDTO</code>/<code>create</code>/<code>update</code> de tu <code>VideojuegoService</code>, asegúrate de que este campo se propaga igual que los demás (<code>v.setDetallesPlataforma(dto.detallesPlataforma())</code>, y en el DTO de respuesta).</p>
 <p>Borra la tabla <code>videojuego</code> (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.</p>
+<div class="admonition warning">
+<p class="admonition-title">Esto rompe el test MockMvc que ya tienes de PSP</p>
+<p><code>VideojuegoControllerTest</code> (Programación de Servicios y Procesos, Actividad 1.3) construye un <code>VideojuegoResponseDTO</code> con el constructor de los campos antiguos — al añadir <code>detallesPlataforma</code> como sexto campo, ese <code>new VideojuegoResponseDTO(...)</code> deja de compilar. Actualiza esa llamada en el test, añadiendo un último argumento (por ejemplo, <code>Map.of()</code> para un videojuego sin plataformas).</p>
+</div>
 <hr>
 <h2 id="paso-2-crear-un-videojuego-con-una-plataforma">Paso 2 — Crear un videojuego con una plataforma<a class="headerlink" href="#paso-2-crear-un-videojuego-con-una-plataforma" title="Permanent link">¶</a></h2>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>

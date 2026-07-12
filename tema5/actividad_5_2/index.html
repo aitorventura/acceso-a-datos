@@ -2121,14 +2121,16 @@
 <span class="normal"><a href="#__codelineno-2-5">5</a></span>
 <span class="normal"><a href="#__codelineno-2-6">6</a></span>
 <span class="normal"><a href="#__codelineno-2-7">7</a></span>
-<span class="normal"><a href="#__codelineno-2-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">VideojuegoResponseDTO</span><span class="p">(</span>
+<span class="normal"><a href="#__codelineno-2-8">8</a></span>
+<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">VideojuegoResponseDTO</span><span class="p">(</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">        </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaLanzamiento</span><span class="p">,</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">nombreEstudio</span><span class="p">,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">        </span><span class="n">Double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="c1">// campo nuevo</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">detallesPlataforma</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">        </span><span class="n">Double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="c1">// campo nuevo</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
@@ -2136,13 +2138,15 @@
 <span class="normal"><a href="#__codelineno-3-4">4</a></span>
 <span class="normal"><a href="#__codelineno-3-5">5</a></span>
 <span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1">// En VideojuegoService, inyecta ReviewsConsultaService (la interfaz, no la implementación)</span>
+<span class="normal"><a href="#__codelineno-3-7">7</a></span>
+<span class="normal"><a href="#__codelineno-3-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1">// En VideojuegoService, inyecta ReviewsConsultaService (la interfaz, no la implementación)</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Videojuego</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="n">Double</span><span class="w"> </span><span class="n">media</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviewsConsultaService</span><span class="p">.</span><span class="na">puntuacionMediaDe</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="na">getId</span><span class="p">());</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="p">(</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">            </span><span class="n">v</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getTitulo</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getPrecio</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getFechaLanzamiento</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getEstudio</span><span class="p">().</span><span class="na">getNombre</span><span class="p">(),</span><span class="w"> </span><span class="n">media</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="p">);</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">            </span><span class="n">v</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getTitulo</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getPrecio</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getFechaLanzamiento</span><span class="p">(),</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">            </span><span class="n">v</span><span class="p">.</span><span class="na">getEstudio</span><span class="p">().</span><span class="na">getNombre</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="na">getDetallesPlataforma</span><span class="p">(),</span><span class="w"> </span><span class="n">media</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="p">);</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Fíjate</strong>: <code>catalogo</code> no importa nada de <code>reviews</code> salvo la interfaz del paquete <code>api</code> — ni conoce <code>Review</code>, ni <code>ReviewRepository</code>, ni cómo se calcula la media por dentro.</p>
 <hr>

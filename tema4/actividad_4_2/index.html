@@ -1623,6 +1623,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#paso-0-anadir-la-cola-de-resenas-al-exchange-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 0 — Añadir la cola de reseñas al exchange existente
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#paso-1-entender-el-flujo-antes-de-tocar-nada" class="md-nav__link">
     <span class="md-ellipsis">
       Paso 1 — Entender el flujo, antes de tocar nada
@@ -1989,6 +1998,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#paso-0-anadir-la-cola-de-resenas-al-exchange-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 0 — Añadir la cola de reseñas al exchange existente
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#paso-1-entender-el-flujo-antes-de-tocar-nada" class="md-nav__link">
     <span class="md-ellipsis">
       Paso 1 — Entender el flujo, antes de tocar nada
@@ -2065,22 +2083,17 @@
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
+<li>Ampliar un exchange de mensajería ya existente con una cola nueva.</li>
 <li>Entender y replicar un flujo de borrado en cascada entre dos motores distintos, vía eventos.</li>
 <li>Hacer una operación idempotente frente a mensajes duplicados.</li>
 <li>Comparar por escrito tu experiencia con PostgreSQL y con MongoDB.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Tu módulo <code>reviews</code> de la Actividad 4.1, y RabbitMQ ya explicado en PSP (Tema 3, semana 12) — si todavía no has llegado a ese punto en PSP, repasa antes la idea básica: un broker con colas y exchanges, donde un <code>@RabbitListener</code> procesa mensajes en su propio hilo, no en el de quien los publicó.</p>
+<p>Tu módulo <code>reviews</code> de la Actividad 4.1, y RabbitMQ funcionando con el registro de actividad del catálogo — se construye en Programación de Servicios y Procesos, Actividad 3.1. Si todavía no has llegado a esa actividad en PSP, complétala antes de seguir: hoy vas a ampliar el <code>RabbitMQConfig</code> y el <code>VideojuegoEventPublisher</code> que se construyen ahí, no a crearlos desde cero.</p>
 <hr>
-<h2 id="paso-1-entender-el-flujo-antes-de-tocar-nada">Paso 1 — Entender el flujo, antes de tocar nada<a class="headerlink" href="#paso-1-entender-el-flujo-antes-de-tocar-nada" title="Permanent link">¶</a></h2>
-<p>El borrado en cascada de reseñas sigue un flujo ya definido — no lo vas a inventar, lo vas a construir siguiendo este diseño. El viaje completo de un evento:</p>
-<pre class="mermaid"><code>flowchart LR
-    A["DELETE /videojuegos/{id}&lt;br/&gt;(hilo de la petición)"] --&gt; B["VideojuegoService.delete()"]
-    B --&gt;|"publica evento"| C["RabbitMQ&lt;br/&gt;routing key: videojuego.eliminado"]
-    C -.-&gt;|"consume&lt;br/&gt;(hilo del listener)"| D["ReviewsVideojuegoEventConsumer"]
-    D --&gt; E["reviewService.deleteByVideojuegoId(id)"]</code></pre>
-<p><code>VideojuegoService.delete()</code> (en el módulo <code>catalogo</code>) no llama directamente a nada de <code>reviews</code> — publica un evento a través de <code>VideojuegoEventPublisher</code>, y sigue su camino sin esperar. En otro hilo, en su propio momento, <code>ReviewsVideojuegoEventConsumer</code> lo recibe y actúa:</p>
+<h2 id="paso-0-anadir-la-cola-de-resenas-al-exchange-existente">Paso 0 — Añadir la cola de reseñas al exchange existente<a class="headerlink" href="#paso-0-anadir-la-cola-de-resenas-al-exchange-existente" title="Permanent link">¶</a></h2>
+<p>Tu <code>RabbitMQConfig</code> (de PSP, Actividad 3.1) ya tiene un <code>TopicExchange</code> (<code>CATALOGO_EXCHANGE</code>) con una cola de actividad. Añade una segunda cola sobre ese mismo exchange, esta vez de interés solo para <code>reviews</code>:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -2091,25 +2104,29 @@
 <span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@Service</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsVideojuegoEventConsumer</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nd">@RabbitListener</span><span class="p">(</span><span class="n">queues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RabbitMQConfig</span><span class="p">.</span><span class="na">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="p">)</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">recibir</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">        </span><span class="n">VideojuegoEvent</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* deserializar */</span><span class="p">;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">VideojuegoEvent</span><span class="p">.</span><span class="na">VIDEOJUEGO_ELIMINADO</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">tipo</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">            </span><span class="n">reviewService</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"reviews.videojuego.queue"</span><span class="p">;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nd">@Bean</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kd">public</span><span class="w"> </span><span class="n">Queue</span><span class="w"> </span><span class="nf">reviewsVideojuegoQueue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Queue</span><span class="p">(</span><span class="n">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="p">);</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="p">}</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nd">@Bean</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="kd">public</span><span class="w"> </span><span class="n">Binding</span><span class="w"> </span><span class="nf">reviewsBinding</span><span class="p">(</span><span class="n">Queue</span><span class="w"> </span><span class="n">reviewsVideojuegoQueue</span><span class="p">,</span><span class="w"> </span><span class="n">TopicExchange</span><span class="w"> </span><span class="n">catalogoExchange</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">BindingBuilder</span><span class="p">.</span><span class="na">bind</span><span class="p">(</span><span class="n">reviewsVideojuegoQueue</span><span class="p">).</span><span class="na">to</span><span class="p">(</span><span class="n">catalogoExchange</span><span class="p">).</span><span class="na">with</span><span class="p">(</span><span class="s">"videojuego.eliminado"</span><span class="p">);</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Fíjate</strong>: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que analizaste en PSP.</p>
+<p>A diferencia de la cola de actividad (enlazada a <code>videojuego.*</code>, todo evento), esta se enlaza solo a <code>videojuego.eliminado</code> — a <code>reviews</code> no le interesa que se cree o modifique un videojuego, solo que se borre. Es el mismo exchange sirviendo a dos consumidores con intereses distintos, sin que ninguno reciba mensajes que no necesita.</p>
+<p><code>VideojuegoEventPublisher</code> y el evento <code>VideojuegoEvent</code> no cambian — ya publican en <code>videojuego.eliminado</code> cada vez que <code>VideojuegoService.delete()</code> se ejecuta, así que esta cola nueva empieza a recibir mensajes en cuanto la declaras, sin tocar nada más.</p>
 <hr>
-<h2 id="paso-2-replicar-el-consumer-en-tu-gamevault">Paso 2 — Replicar el consumer en tu GameVault<a class="headerlink" href="#paso-2-replicar-el-consumer-en-tu-gamevault" title="Permanent link">¶</a></h2>
+<h2 id="paso-1-entender-el-flujo-antes-de-tocar-nada">Paso 1 — Entender el flujo, antes de tocar nada<a class="headerlink" href="#paso-1-entender-el-flujo-antes-de-tocar-nada" title="Permanent link">¶</a></h2>
+<p>El borrado en cascada de reseñas sigue un flujo ya definido — no lo vas a inventar, lo vas a construir siguiendo este diseño. El viaje completo de un evento:</p>
+<pre class="mermaid"><code>flowchart LR
+    A["DELETE /videojuegos/{id}&lt;br/&gt;(hilo de la petición)"] --&gt; B["VideojuegoService.delete()"]
+    B --&gt;|"publica evento"| C["RabbitMQ&lt;br/&gt;routing key: videojuego.eliminado"]
+    C -.-&gt;|"consume&lt;br/&gt;(hilo del listener)"| D["ReviewsVideojuegoEventConsumer"]
+    D --&gt; E["reviewService.deleteByVideojuegoId(id)"]</code></pre>
+<p><code>VideojuegoService.delete()</code> (en el módulo <code>catalogo</code>) no llama directamente a nada de <code>reviews</code> — publica un evento a través de <code>VideojuegoEventPublisher</code>, y sigue su camino sin esperar. En otro hilo, en su propio momento, <code>ReviewsVideojuegoEventConsumer</code> lo recibe y actúa:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
@@ -2122,42 +2139,24 @@
 <span class="normal"><a href="#__codelineno-1-10">10</a></span>
 <span class="normal"><a href="#__codelineno-1-11">11</a></span>
 <span class="normal"><a href="#__codelineno-1-12">12</a></span>
-<span class="normal"><a href="#__codelineno-1-13">13</a></span>
-<span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span>
-<span class="normal"><a href="#__codelineno-1-16">16</a></span>
-<span class="normal"><a href="#__codelineno-1-17">17</a></span>
-<span class="normal"><a href="#__codelineno-1-18">18</a></span>
-<span class="normal"><a href="#__codelineno-1-19">19</a></span>
-<span class="normal"><a href="#__codelineno-1-20">20</a></span>
-<span class="normal"><a href="#__codelineno-1-21">21</a></span>
-<span class="normal"><a href="#__codelineno-1-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.mensajeria</span><span class="p">;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent</span><span class="p">;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.config.RabbitMQConfig</span><span class="p">;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.ReviewService</span><span class="p">;</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.RequiredArgsConstructor</span><span class="p">;</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.amqp.rabbit.annotation.RabbitListener</span><span class="p">;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="nd">@Service</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsVideojuegoEventConsumer</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span><span class="nd">@RabbitListener</span><span class="p">(</span><span class="n">queues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RabbitMQConfig</span><span class="p">.</span><span class="na">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="p">)</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">recibir</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">        </span><span class="n">VideojuegoEvent</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* deserializar con tu JsonMapper */</span><span class="p">;</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">VideojuegoEvent</span><span class="p">.</span><span class="na">VIDEOJUEGO_ELIMINADO</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">tipo</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">            </span><span class="n">reviewService</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nd">@Service</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsVideojuegoEventConsumer</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nd">@RabbitListener</span><span class="p">(</span><span class="n">queues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RabbitMQConfig</span><span class="p">.</span><span class="na">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">recibir</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">        </span><span class="n">VideojuegoEvent</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* deserializar */</span><span class="p">;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">VideojuegoEvent</span><span class="p">.</span><span class="na">VIDEOJUEGO_ELIMINADO</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">tipo</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">            </span><span class="n">reviewService</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Si no lo tenías ya de la Actividad 4.1, añade también <code>deleteByVideojuegoId</code> a tu <code>ReviewRepository</code> (<code>long deleteByVideojuegoId(Long videojuegoId);</code>) y un método correspondiente en <code>ReviewService</code> que lo invoque.</p>
+<p><strong>Fíjate</strong>: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que analizaste en PSP.</p>
 <hr>
-<h2 id="paso-3-prueba-con-datos-reales">Paso 3 — Prueba con datos reales<a class="headerlink" href="#paso-3-prueba-con-datos-reales" title="Permanent link">¶</a></h2>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<h2 id="paso-2-replicar-el-consumer-en-tu-gamevault">Paso 2 — Replicar el consumer en tu GameVault<a class="headerlink" href="#paso-2-replicar-el-consumer-en-tu-gamevault" title="Permanent link">¶</a></h2>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
@@ -2166,37 +2165,85 @@
 <span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
 <span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Crea un videojuego y una reseña</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span>/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Prueba"}'</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="c1"># Borra el videojuego</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.mensajeria</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent</span><span class="p">;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.config.RabbitMQConfig</span><span class="p">;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.ReviewService</span><span class="p">;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.RequiredArgsConstructor</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.amqp.rabbit.annotation.RabbitListener</span><span class="p">;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="nd">@Service</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsVideojuegoEventConsumer</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">    </span><span class="nd">@RabbitListener</span><span class="p">(</span><span class="n">queues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RabbitMQConfig</span><span class="p">.</span><span class="na">REVIEWS_VIDEOJUEGO_QUEUE</span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">recibir</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">        </span><span class="n">VideojuegoEvent</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* deserializar con tu JsonMapper */</span><span class="p">;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">VideojuegoEvent</span><span class="p">.</span><span class="na">VIDEOJUEGO_ELIMINADO</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">tipo</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="w">            </span><span class="n">reviewService</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Si no lo tenías ya de la Actividad 4.1, añade también <code>deleteByVideojuegoId</code> a tu <code>ReviewRepository</code> (<code>long deleteByVideojuegoId(Long videojuegoId);</code>) y un método correspondiente en <code>ReviewService</code> que lo invoque.</p>
+<hr>
+<h2 id="paso-3-prueba-con-datos-reales">Paso 3 — Prueba con datos reales<a class="headerlink" href="#paso-3-prueba-con-datos-reales" title="Permanent link">¶</a></h2>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Crea un videojuego y una reseña</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span>/reviews<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Prueba"}'</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="c1"># Borra el videojuego</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Comprueba en MongoDB, <strong>esperando un instante</strong> (no es síncrono):</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-mongo&gt;<span class="w"> </span>mongosh<span class="w"> </span>gamevault_db<span class="w"> </span>--eval<span class="w"> </span><span class="s2">"db.review.find({videojuegoId: &lt;id&gt;})"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-mongo&gt;<span class="w"> </span>mongosh<span class="w"> </span>gamevault_db<span class="w"> </span>--eval<span class="w"> </span><span class="s2">"db.review.find({videojuegoId: &lt;id&gt;})"</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Anota</strong>: en los logs de tu aplicación, ¿ves dos nombres de hilo distintos — uno para la petición <code>DELETE</code>, otro para el consumer? Compáralos.</p>
+<p><strong>Explica</strong>, revisando tu <code>RabbitMQConfig.java</code>, por qué <code>ReviewsVideojuegoEventConsumer</code> se activa al borrar un videojuego pero no al crearlo o modificarlo (pista: busca la <em>routing key</em> <code>videojuego.eliminado</code> y a qué cola está enlazada) — y por qué, en cambio, <code>ActividadVideojuegoEventConsumer</code> (PSP, Actividad 3.1) sí se activa con las tres operaciones.</p>
 <hr>
 <h2 id="paso-4-la-mejora-real-idempotencia">Paso 4 — La mejora real: idempotencia<a class="headerlink" href="#paso-4-la-mejora-real-idempotencia" title="Permanent link">¶</a></h2>
 <p>Los brokers de mensajería pueden, en ciertas circunstancias (una caída de red, un reintento), entregar el <strong>mismo</strong> mensaje más de una vez. Haz que <code>deleteByVideojuegoId</code> sea seguro frente a eso — no debería fallar ni hacer nada extraño si se invoca dos veces seguidas para el mismo <code>videojuegoId</code>.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span>
-<span class="normal"><a href="#__codelineno-4-6">6</a></span>
-<span class="normal"><a href="#__codelineno-4-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kd">public</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">eliminadas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">);</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="c1">// deleteByVideojuegoId de Mongo ya es seguro por sí mismo si no quedan documentos:</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="c1">// borrar sobre una colección vacía para ese id simplemente elimina 0 documentos,</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="c1">// no lanza ningún error</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">eliminadas</span><span class="p">;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span>
+<span class="normal"><a href="#__codelineno-5-6">6</a></span>
+<span class="normal"><a href="#__codelineno-5-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">public</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">eliminadas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">deleteByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">);</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="c1">// deleteByVideojuegoId de Mongo ya es seguro por sí mismo si no quedan documentos:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="c1">// borrar sobre una colección vacía para ese id simplemente elimina 0 documentos,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="c1">// no lanza ningún error</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">eliminadas</span><span class="p">;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Pregunta de comprensión</strong>: si RabbitMQ reintentara la entrega del mismo evento <code>VIDEOJUEGO_ELIMINADO</code> dos veces, ¿qué pasaría la segunda vez que se invoca <code>deleteByVideojuegoId</code> sobre reseñas que ya no existen? ¿Es necesario añadir alguna comprobación extra, o el propio comportamiento de <code>deleteByVideojuegoId</code> sobre MongoDB ya es seguro por diseño?</p>
 <hr>

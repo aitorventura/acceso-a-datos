@@ -2113,7 +2113,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DiagnosticoJdbc</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"jdbc:postgresql://localhost:5432/gamevault_db"</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"jdbc:postgresql://postgres:5432/gamevault_db"</span><span class="p">;</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">USER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gamevault_user"</span><span class="p">;</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"password123"</span><span class="p">;</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a>
@@ -2140,6 +2140,7 @@
 <a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>Fíjate en que la <code>URL</code> usa <code>postgres</code> como host, no <code>localhost</code> — igual que en tu <code>application-dev.yaml</code> de la Actividad 1.1: esta clase se ejecuta dentro de tu Dev Container, y PostgreSQL sigue siendo el contenedor hermano <code>postgres</code>, no tu propia máquina.</p>
 <p>Ejecuta el <code>main()</code> (desde tu IDE, botón derecho → <em>Run</em>) con tu aplicación Spring <strong>parada</strong> o en otra ventana — esta clase no necesita que Spring Boot esté arrancado, se conecta directamente a PostgreSQL.</p>
 <p><strong>Comprueba</strong>: que la consola imprime los videojuegos del estudio que hayas puesto, con el formato <code>#id - título (precio€)</code>.</p>
 <hr>

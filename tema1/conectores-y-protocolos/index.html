@@ -908,6 +908,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tipos-de-relacion-entre-entidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Tipos de relación entre entidades
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Tipos de relación entre entidades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uno-a-uno-libro-y-fichatecnica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uno a uno: Libro y FichaTecnica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uno-a-muchos-editorial-y-libro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uno a muchos: Editorial y Libro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#muchos-a-muchos-libro-y-autor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Muchos a muchos: Libro y Autor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#las-piezas-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
       🗄️ Las piezas en un proyecto Spring Boot
@@ -2022,6 +2064,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tipos-de-relacion-entre-entidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Tipos de relación entre entidades
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Tipos de relación entre entidades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uno-a-uno-libro-y-fichatecnica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uno a uno: Libro y FichaTecnica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uno-a-muchos-editorial-y-libro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uno a muchos: Editorial y Libro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#muchos-a-muchos-libro-y-autor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Muchos a muchos: Libro y Autor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#las-piezas-en-un-proyecto-spring-boot" class="md-nav__link">
     <span class="md-ellipsis">
       🗄️ Las piezas en un proyecto Spring Boot
@@ -2090,37 +2174,38 @@
 
 <div><p><a id="conectores-y-protocolos"></a></p>
 <h1 id="2-conectores-y-protocolos-de-acceso-a-bases-de-datos">🧩 2. Conectores y protocolos de acceso a bases de datos<a class="headerlink" href="#2-conectores-y-protocolos-de-acceso-a-bases-de-datos" title="Permanent link">¶</a></h1>
-<p>Conoces SQL y bases de datos relacionales desde 1º de DAM — pero hasta ahora las has usado siempre desde una herramienta externa (un cliente SQL, un script). Este apartado responde a la pregunta que viene ahora: ¿cómo habla tu programa Java, con sus clases y objetos, con una base de datos que solo entiende tablas y filas?</p>
+<p>Conoces SQL y bases de datos relacionales desde 1º de DAM — pero hasta ahora las has usado siempre desde una herramienta externa (un cliente SQL, un script). En el apartado anterior viste que el <strong>repository</strong> es la capa que habla con la base de datos, sin entrar en cómo lo hace por dentro. Este apartado responde a esa pregunta: ¿cómo habla tu programa Java, con sus clases y objetos, con una base de datos que solo entiende tablas y filas?</p>
 <hr>
 <h2 id="el-problema-de-partida-objetos-contra-tablas">🧩 El problema de partida: objetos contra tablas<a class="headerlink" href="#el-problema-de-partida-objetos-contra-tablas" title="Permanent link">¶</a></h2>
-<p>Imagina una clase <code>Alumno</code> con una lista de <code>Asignatura</code>:</p>
+<p>Imagina una clase <code>Editorial</code> con una lista de <code>Libro</code> — la misma pareja de clases que vas a usar durante todo este tema:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
 <span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">class</span> <span class="nc">Alumno</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">class</span> <span class="nc">Editorial</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Asignatura</span><span class="o">&gt;</span><span class="w"> </span><span class="n">asignaturas</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Y, en la base de datos, dos tablas relacionadas por clave foránea:</p>
 <div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">alumno</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">nombre</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">asignatura</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">alumno_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">alumno</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">nombre</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">editorial_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">editorial</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
 </code></pre></div></td></tr></table></div>
 <p>Aunque representan la misma idea, la forma de trabajar con cada una es distinta:</p>
 <ul>
-<li><strong>Tipos que no coinciden</strong>: Java tiene <code>List&lt;Asignatura&gt;</code>, <code>LocalDate</code>, <code>boolean</code>; SQL tiene <code>INT</code>, <code>VARCHAR</code>, <code>DATE</code>. No hay una correspondencia 1:1 automática.</li>
-<li><strong>Relaciones expresadas de forma distinta</strong>: en Java, un alumno <em>contiene</em> su lista de asignaturas (una referencia en memoria); en SQL, esa misma relación es una clave foránea en la tabla <code>asignatura</code> — la dirección de la flecha depende de quién almacena la referencia a quién, y hace falta un <code>JOIN</code> para reconstruirla.</li>
+<li><strong>Tipos que no coinciden</strong>: Java tiene <code>List&lt;Libro&gt;</code>, <code>LocalDate</code>, <code>boolean</code>; SQL tiene <code>INT</code>, <code>VARCHAR</code>, <code>DATE</code>. No hay una correspondencia 1:1 automática.</li>
+<li><strong>Relaciones expresadas de forma distinta</strong>: en Java, una editorial <em>contiene</em> su lista de libros (una referencia en memoria); en SQL, esa misma relación es una clave foránea en la tabla <code>libro</code> — la dirección de la flecha depende de quién almacena la referencia a quién, y hace falta un <code>JOIN</code> para reconstruirla.</li>
 <li><strong>Identidad</strong>: en Java, dos objetos son iguales si <code>==</code> los considera el mismo (o si <code>equals()</code> lo dice); en la base de datos, la identidad de una fila es su clave primaria. Son dos formas distintas de responder a "¿es esto lo mismo que aquello?".</li>
 </ul>
 <p>Esta diferencia de fondo tiene nombre: <strong>desfase objeto-relacional</strong> (<em>impedance mismatch</em>). No es un error de diseño de nadie — es que los dos mundos, orientado a objetos y relacional, modelan la información de forma distinta por naturaleza. Todo lo que vas a ver en este tema (y en el Tema 2, con el ORM) existe para tender puentes sobre ese desfase.</p>
 <hr>
 <h2 id="protocolos-de-acceso-y-conectores">🔌 Protocolos de acceso y conectores<a class="headerlink" href="#protocolos-de-acceso-y-conectores" title="Permanent link">¶</a></h2>
-<p>Para que tu programa Java hable con un gestor de base de datos necesita dos cosas: un <strong>protocolo</strong> de acceso (las reglas de esa conversación) y un <strong>conector</strong> (o <em>driver</em>) que las implemente para un gestor concreto.</p>
+<p>Para que tu programa Java hable con un gestor de base de datos necesita dos cosas: un <strong>protocolo</strong> de acceso (las reglas de esa conversación — el mismo concepto que ya viste con HTTP en el apartado 1, un formato de mensaje acordado de antemano, aplicado ahora a bases de datos en vez de a un servidor web) y un <strong>conector</strong> (o <em>driver</em>) que las implemente para un gestor concreto.</p>
 <p>En Java, ese protocolo estándar es <strong>JDBC</strong> (<em>Java Database Connectivity</em>): una interfaz común que cualquier gestor puede implementar. Tu código programa contra esa interfaz común (<code>Connection</code>, <code>Statement</code>, <code>ResultSet</code> — los verás en detalle en el apartado de JDBC puro, más adelante en este tema), y es el <strong>driver</strong> concreto — una librería distinta para cada gestor (PostgreSQL, MySQL, SQL Server...) — quien traduce esas llamadas al protocolo de red real de ese gestor.</p>
 <pre class="mermaid"><code>flowchart LR
     A["☕ Tu código Java&lt;br/&gt;(programa contra JDBC)"] --&gt; B["🔌 Driver JDBC&lt;br/&gt;(uno por gestor)"]
     B --&gt; C[("🐘 PostgreSQL")]</code></pre>
+<p>Esto tiene una ventaja concreta y un inconveniente concreto, y merece la pena nombrarlos los dos: la ventaja es que tu código queda desacoplado del gestor exacto — programas contra <code>Connection</code>/<code>Statement</code>, no contra PostgreSQL directamente. El inconveniente es que dependes de que exista un driver JDBC para tu gestor: si eligieras un motor muy nuevo o poco extendido, podrías encontrarte sin esa pieza todavía.</p>
 <div class="admonition tip">
 <p class="admonition-title">La ventaja de programar contra una interfaz común</p>
 <p>Si mañana tu proyecto cambiara de PostgreSQL a MySQL, tu código Java (el que usa <code>Connection</code>/<code>Statement</code>) apenas cambiaría — cambiarías el driver y la cadena de conexión, no la forma de escribir las consultas. Ese es el valor de un protocolo estándar: desacopla tu código del gestor concreto.</p>
@@ -2155,90 +2240,229 @@
 </tbody>
 </table>
 <p>Un gestor <strong>embebido</strong> vive dentro de tu propio proceso: no hay nada que instalar ni levantar aparte, arranca y desaparece con tu aplicación. Es rápido de poner en marcha, pero normalmente no está pensado para que varias aplicaciones distintas lo usen a la vez.</p>
-<p>Un gestor <strong>independiente</strong> corre como su propio servicio, escuchando en un puerto de red, y puede atender a muchos clientes (distintas aplicaciones, distintas instancias de la misma aplicación) al mismo tiempo. Es lo que ya conoces de Docker: un contenedor de PostgreSQL, separado de tu aplicación, al que te conectas por IP/puerto.</p>
+<p>Un gestor <strong>independiente</strong> corre como su propio servicio, escuchando en un puerto de red, y puede atender a muchos clientes (distintas aplicaciones, distintas instancias de la misma aplicación) al mismo tiempo. Es el mismo concepto de IP/puerto del apartado 1, aplicado ahora a una base de datos en vez de a tu propia aplicación: es lo que ya conoces de Docker, un contenedor de PostgreSQL, separado de tu aplicación, al que te conectas por IP/puerto.</p>
 <hr>
 <h2 id="pooling-de-conexiones">🏊 Pooling de conexiones<a class="headerlink" href="#pooling-de-conexiones" title="Permanent link">¶</a></h2>
 <p>Abrir una conexión a una base de datos no es gratis: implica una negociación de red, autenticación, reserva de recursos en el gestor — tiene un coste real, medible en milisegundos. Si tu aplicación abriera y cerrara una conexión nueva por cada consulta, ese coste se pagaría una y otra vez, sin necesidad.</p>
 <p>El <strong>pooling de conexiones</strong> resuelve esto manteniendo un conjunto de conexiones ya abiertas y listas para usar: cuando tu código necesita hablar con la base de datos, coge una conexión prestada del <em>pool</em>, la usa, y la devuelve — sin cerrarla de verdad.</p>
+<pre class="mermaid"><code>flowchart LR
+    P["🏊 Pool de conexiones&lt;br/&gt;(ya abiertas)"] -- "1. coge prestada" --&gt; T["Tu código"]
+    T -- "2. la usa" --&gt; T
+    T -- "3. la devuelve" --&gt; P</code></pre>
 <div class="admonition example">
 <p class="admonition-title">Analogía: taquillas ya abiertas</p>
 <p>Forzar una cerradura nueva cada vez que necesitas guardar algo es lento. Un pool de conexiones es como un conjunto de taquillas que ya están abiertas de antemano: coges una libre, la usas, y la dejas lista para el siguiente — nadie tiene que forzar una cerradura nueva cada vez.</p>
 </div>
 <hr>
+<h2 id="tipos-de-relacion-entre-entidades">🔗 Tipos de relación entre entidades<a class="headerlink" href="#tipos-de-relacion-entre-entidades" title="Permanent link">¶</a></h2>
+<p>Antes de ver las entidades reales, falta una pieza: cuando dos clases están relacionadas, no basta con decir "están relacionadas" — hace falta precisar <strong>cuántas</strong> instancias de una pueden asociarse con <strong>cuántas</strong> de la otra. A ese matiz se le llama <strong>multiplicidad</strong> (o cardinalidad), y determina qué anotación JPA usas para mapear la relación.</p>
+<pre class="mermaid"><code>erDiagram
+    LIBRO ||--|| FICHA_TECNICA : "1 a 1"
+    EDITORIAL ||--o{ LIBRO : "1 a N"
+    LIBRO }o--o{ AUTOR : "N a M"</code></pre>
+<table>
+<thead>
+<tr>
+<th>Relación</th>
+<th>Ejemplo en la librería</th>
+<th>Anotación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Uno a uno (1:1)</strong></td>
+<td>Un libro tiene una única ficha técnica con sus datos extendidos</td>
+<td><code>@OneToOne</code> en los dos lados</td>
+</tr>
+<tr>
+<td><strong>Uno a muchos (1:N)</strong></td>
+<td>Una editorial publica muchos libros</td>
+<td><code>@OneToMany</code> (lado "uno") + <code>@ManyToOne</code> (lado "muchos")</td>
+</tr>
+<tr>
+<td><strong>Muchos a muchos (N:M)</strong></td>
+<td>Un libro puede tener varios autores, y un autor puede haber escrito varios libros</td>
+<td><code>@ManyToMany</code> en los dos lados</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uno-a-uno-libro-y-fichatecnica">Uno a uno: <code>Libro</code> y <code>FichaTecnica</code><a class="headerlink" href="#uno-a-uno-libro-y-fichatecnica" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Entity</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Libro</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="nd">@OneToOne</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"libro"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">FichaTecnica</span><span class="w"> </span><span class="n">fichaTecnica</span><span class="p">;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="p">}</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="nd">@Entity</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FichaTecnica</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">numeroPaginas</span><span class="p">;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">idioma</span><span class="p">;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="w">    </span><span class="nd">@OneToOne</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">    </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"libro_id"</span><span class="p">,</span><span class="w"> </span><span class="n">unique</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>FichaTecnica</code> es el lado que tiene la clave foránea real (<code>@JoinColumn(name = "libro_id")</code>, igual que en una relación 1:N), y <code>Libro</code> es el lado inverso (<code>mappedBy</code>). Lo único que distingue un 1:1 de un 1:N en la base de datos es esa columna <code>unique = true</code>: sin ella, nada impediría que varias fichas técnicas apuntaran al mismo libro, y dejaría de ser "uno a uno".</p>
+<h3 id="uno-a-muchos-editorial-y-libro">Uno a muchos: <code>Editorial</code> y <code>Libro</code><a class="headerlink" href="#uno-a-muchos-editorial-y-libro" title="Permanent link">¶</a></h3>
+<p>Es la relación que ya conoces del principio del apartado, y la que vas a ver a continuación con código real: una editorial tiene muchos libros, pero cada libro pertenece a una única editorial.</p>
+<h3 id="muchos-a-muchos-libro-y-autor">Muchos a muchos: <code>Libro</code> y <code>Autor</code><a class="headerlink" href="#muchos-a-muchos-libro-y-autor" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@Entity</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Libro</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="nd">@ManyToMany</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="nd">@JoinTable</span><span class="p">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">        </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"libro_autor"</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">        </span><span class="n">joinColumns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"libro_id"</span><span class="p">),</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="n">inverseJoinColumns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"autor_id"</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Autor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">autores</span><span class="p">;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="p">}</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="nd">@Entity</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Autor</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a>
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="w">    </span><span class="nd">@ManyToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"autores"</span><span class="p">)</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Aquí ninguna de las dos tablas (<code>libro</code>, <code>autor</code>) puede llevar la clave foránea: una columna solo puede guardar un valor, y aquí cada libro necesita apuntar a varios autores a la vez (y viceversa). La solución es una <strong>tabla intermedia</strong> — aquí <code>libro_autor</code> — con dos claves foráneas, una hacia cada tabla. <code>@JoinTable</code> es la anotación que le dice a Hibernate cómo se llama esa tabla intermedia y cuáles son sus dos columnas; <code>joinColumns</code> apunta al lado donde está la anotación (<code>Libro</code>), <code>inverseJoinColumns</code> al lado contrario (<code>Autor</code>).</p>
+<hr>
 <h2 id="las-piezas-en-un-proyecto-spring-boot">🗄️ Las piezas en un proyecto Spring Boot<a class="headerlink" href="#las-piezas-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
 <h3 id="el-gestor-postgresql-independiente-via-docker">El gestor: PostgreSQL independiente, vía Docker<a class="headerlink" href="#el-gestor-postgresql-independiente-via-docker" title="Permanent link">¶</a></h3>
 <p>Un <code>docker-compose.yaml</code> como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:</p>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span>
-<span class="normal"><a href="#__codelineno-2-6">6</a></span>
-<span class="normal"><a href="#__codelineno-2-7">7</a></span>
-<span class="normal"><a href="#__codelineno-2-8">8</a></span>
-<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_db</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span>
+<span class="normal"><a href="#__codelineno-4-8">8</a></span>
+<span class="normal"><a href="#__codelineno-4-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_db</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
 </code></pre></div></td></tr></table></div>
 <p>Es exactamente el caso de la tabla de más arriba: un proceso separado, en su propio contenedor, al que la aplicación se conecta por red (<code>localhost:5432</code> desde tu máquina).</p>
 <div class="admonition tip">
 <p class="admonition-title">Una mejora posible: H2 embebido para tests</p>
 <p>Una práctica habitual en proyectos reales es añadir H2 (embebido) en un perfil <code>test</code> para los tests unitarios más simples, que así no dependen de tener Docker levantado — el gestor embebido arranca y muere con los propios tests.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Dos versiones de Postgres en el mismo proyecto — y no es un error</p>
-<p>Si más adelante (Tema 3, Actividad 3.3) ves que un test de integración usa <code>postgres:16-alpine</code> en vez del <code>postgres:18-alpine</code> del <code>docker-compose.yaml</code> de desarrollo, no es una inconsistencia que arreglar: la versión del gestor de desarrollo y la usada en tests no tienen por qué coincidir exactamente, siempre que ambas sean compatibles con el SQL y las características (como JSONB) que usa tu aplicación.</p>
-</div>
 <h3 id="la-conexion-application-devyaml">La conexión: <code>application-dev.yaml</code><a class="headerlink" href="#la-conexion-application-devyaml" title="Permanent link">¶</a></h3>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">spring</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://localhost:5432/libreria_db</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://localhost:5432/libreria_db</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libreria_user</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
 </code></pre></div></td></tr></table></div>
-<p><code>spring.datasource.*</code> es toda la información que Spring Boot necesita para conectar: la URL JDBC (fíjate en el prefijo <code>jdbc:postgresql://</code>, el protocolo que has visto arriba, seguido de host, puerto y nombre de la base de datos), usuario y contraseña. El pooling no lo configuras tú a mano: Spring Boot trae por defecto <strong>HikariCP</strong>, un pool de conexiones que se activa solo con tener el driver de PostgreSQL en el <code>pom.xml</code> — no hace falta ni una línea de configuración adicional para tenerlo funcionando.</p>
+<p><code>spring.datasource.*</code> es toda la información que Spring Boot necesita para conectar: la URL JDBC (fíjate en el prefijo <code>jdbc:postgresql://</code>, el protocolo que has visto arriba, seguido de host, puerto y nombre de la base de datos), usuario y contraseña. El pooling no lo configuras tú a mano: Spring Boot trae por defecto <strong>HikariCP</strong>, un pool de conexiones que se activa solo con tener el driver de PostgreSQL en el <code>pom.xml</code> — la misma idea de <em>starter</em> del apartado 1: declaras la dependencia en Maven, y la pieza llega ya configurada, sin que escribas ni una línea más.</p>
 <h3 id="la-estructura-entidades-libro-y-editorial">La estructura: entidades <code>Libro</code> y <code>Editorial</code><a class="headerlink" href="#la-estructura-entidades-libro-y-editorial" title="Permanent link">¶</a></h3>
 <p>La "definición de la estructura de la base de datos" en un proyecto Spring Data JPA no se escribe como <code>CREATE TABLE</code> a mano — se declara sobre las propias clases Java, con anotaciones:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span>
-<span class="normal"><a href="#__codelineno-4-12">12</a></span>
-<span class="normal"><a href="#__codelineno-4-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Entity</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">)</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Editorial</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="nd">@Id</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Entity</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Editorial</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"editorial"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><code>@Entity</code> + <code>@Table(name = "editorial")</code>: esta clase se mapea contra la tabla <code>editorial</code>.</li>
 <li><code>@Id</code> + <code>@GeneratedValue</code>: el identificador y cómo se genera (aquí, autoincremental, delegado en la propia base de datos).</li>
-<li><code>@OneToMany</code>/<code>@ManyToOne</code>: la relación entre <code>Editorial</code> y <code>Libro</code> — el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.</li>
+<li><code>@OneToMany(mappedBy = "editorial", ...)</code>: la relación 1:N que acabas de ver — <code>mappedBy</code> indica que la clave foránea real vive en <code>Libro</code> (que llevará su propio <code>@ManyToOne</code> apuntando de vuelta a <code>Editorial</code>), no aquí. Es el mismo desfase objeto-relacional del principio del apartado, ahora resuelto con anotaciones en vez de a mano.</li>
+<li><code>cascade = CascadeType.ALL</code>: propaga las operaciones de <code>Editorial</code> a sus <code>Libro</code> — si guardas o borras una editorial, Hibernate aplica esa misma operación a todos sus libros automáticamente. Sin <code>cascade</code>, tendrías que guardar o borrar cada libro tú mismo, uno por uno.</li>
+<li><code>orphanRemoval = true</code>: va un paso más allá — si quitas un libro de la lista <code>libros</code> sin borrar la editorial entera, ese libro queda "huérfano" (ya no lo referencia ninguna editorial) y Hibernate lo elimina de la base de datos por su cuenta, sin que tengas que borrarlo tú explícitamente.</li>
 </ul>
 <p>Y en <code>application-dev.yaml</code>, la propiedad <code>spring.jpa.hibernate.ddl-auto: update</code> es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el <code>CREATE TABLE</code>. Existen otros valores (<code>validate</code>, que solo comprueba que las tablas coincidan sin tocarlas, o <code>none</code>, que no hace nada): en un proyecto real, en producción, casi nunca se usa <code>update</code> ni mucho menos <code>create-drop</code> (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.</p>
 <p>Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y definir las primeras entidades de tu proyecto.</p>
@@ -2251,8 +2475,9 @@
 <li><strong>JDBC</strong> es la API estándar de Java para hablar con bases de datos; un <strong>driver/conector</strong> la implementa para un gestor concreto.</li>
 <li>Un gestor <strong>embebido</strong> (H2, SQLite) corre dentro de tu proceso; uno <strong>independiente</strong> (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.</li>
 <li>El <strong>pooling de conexiones</strong> reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.</li>
+<li>Las relaciones entre entidades tienen <strong>multiplicidad</strong>: 1:1 (<code>@OneToOne</code>), 1:N (<code>@OneToMany</code>/<code>@ManyToOne</code>) y N:M (<code>@ManyToMany</code>, con una tabla intermedia vía <code>@JoinTable</code>).</li>
 <li>En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en <code>application-dev.yaml</code> (<code>spring.datasource.*</code>).</li>
-<li>La estructura de la base de datos se declara con anotaciones JPA (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>/<code>@ManyToOne</code>) sobre las propias clases Java; <code>ddl-auto</code> controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).</li>
+<li>La estructura de la base de datos se declara con anotaciones JPA (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>/<code>@ManyToOne</code>) sobre las propias clases Java; <code>mappedBy</code> señala el lado inverso, <code>cascade</code> propaga operaciones y <code>orphanRemoval</code> borra registros huérfanos automáticamente. <code>ddl-auto</code> controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).</li>
 </ul>
 </details></div>
 

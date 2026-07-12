@@ -895,6 +895,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#que-es-gamevault" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué es GameVault
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
       Qué vas a practicar
@@ -922,22 +931,31 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-1-postgresql-con-docker-compose" class="md-nav__link">
+  <a href="#paso-1-el-dev-container-tu-entorno-y-postgresql-juntos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — PostgreSQL con Docker Compose
+      Paso 1 — El Dev Container: tu entorno y PostgreSQL, juntos
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-las-entidades-estudio-y-videojuego" class="md-nav__link">
+  <a href="#paso-2-configurar-la-conexion-a-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — Las entidades: Estudio y Videojuego
+      Paso 2 — Configurar la conexión a PostgreSQL
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Paso 2 — Las entidades: Estudio y Videojuego">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-las-entidades-estudio-y-videojuego" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Las entidades: Estudio y Videojuego
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso 3 — Las entidades: Estudio y Videojuego">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -964,9 +982,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-verificar-que-hibernate-ha-hecho-su-trabajo" class="md-nav__link">
+  <a href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Verificar que Hibernate ha hecho su trabajo
+      Paso 4 — Verificar que Hibernate ha hecho su trabajo
     </span>
   </a>
   
@@ -1995,6 +2013,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#que-es-gamevault" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué es GameVault
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#que-vas-a-practicar" class="md-nav__link">
     <span class="md-ellipsis">
       Qué vas a practicar
@@ -2022,22 +2049,31 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-1-postgresql-con-docker-compose" class="md-nav__link">
+  <a href="#paso-1-el-dev-container-tu-entorno-y-postgresql-juntos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — PostgreSQL con Docker Compose
+      Paso 1 — El Dev Container: tu entorno y PostgreSQL, juntos
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-las-entidades-estudio-y-videojuego" class="md-nav__link">
+  <a href="#paso-2-configurar-la-conexion-a-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — Las entidades: Estudio y Videojuego
+      Paso 2 — Configurar la conexión a PostgreSQL
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Paso 2 — Las entidades: Estudio y Videojuego">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-las-entidades-estudio-y-videojuego" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — Las entidades: Estudio y Videojuego
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso 3 — Las entidades: Estudio y Videojuego">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2064,9 +2100,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-verificar-que-hibernate-ha-hecho-su-trabajo" class="md-nav__link">
+  <a href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Verificar que Hibernate ha hecho su trabajo
+      Paso 4 — Verificar que Hibernate ha hecho su trabajo
     </span>
   </a>
   
@@ -2107,24 +2143,79 @@
 
 
 <div><h1 id="actividad-11-docker-compose-postgresql-arranque-de-las-entidades-del-catalogo">🧪 Actividad 1.1: Docker Compose + PostgreSQL — arranque de las entidades del catálogo<a class="headerlink" href="#actividad-11-docker-compose-postgresql-arranque-de-las-entidades-del-catalogo" title="Permanent link">¶</a></h1>
+<h2 id="que-es-gamevault">Qué es GameVault<a class="headerlink" href="#que-es-gamevault" title="Permanent link">¶</a></h2>
+<p><strong>GameVault</strong> es la aplicación que vas a construir, pieza a pieza, durante todo el curso — a la vez desde Acceso a Datos y desde Programación de Servicios y Procesos. Es una API REST que gestiona el catálogo de una tienda de videojuegos: qué juegos hay, qué estudio ha desarrollado cada uno, qué reseñas han dejado los usuarios, y quién puede hacer qué sobre esos datos.</p>
+<p>No la construyes de una vez: cada actividad añade una pieza sobre las anteriores, hasta llegar a una aplicación completa con persistencia en dos motores distintos, autenticación y comunicación en tiempo real.</p>
+<table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Qué hace</th>
+<th>Dónde la construyes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Catálogo</strong></td>
+<td>Videojuegos y estudios, con su relación, CRUD completo</td>
+<td>Acceso a Datos, Temas 1-2</td>
+</tr>
+<tr>
+<td><strong>API REST</strong></td>
+<td>Los mismos datos, expuestos por HTTP y documentados con OpenAPI</td>
+<td>Programación de Servicios y Procesos, Tema 1</td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td>Login, roles y rutas protegidas con JWT</td>
+<td>Programación de Servicios y Procesos, Tema 2</td>
+</tr>
+<tr>
+<td><strong>Detalles de plataforma</strong></td>
+<td>Información estructurada de cada videojuego (JSONB), con consultas sobre su contenido</td>
+<td>Acceso a Datos, Tema 3</td>
+</tr>
+<tr>
+<td><strong>Reseñas</strong></td>
+<td>Opiniones de usuarios sobre cada videojuego, guardadas en MongoDB</td>
+<td>Acceso a Datos, Tema 4</td>
+</tr>
+<tr>
+<td><strong>Rendimiento en segundo plano</strong></td>
+<td>Una caché de novedades que se recalienta sola, con hilos, tras cada cambio en el catálogo</td>
+<td>Programación de Servicios y Procesos, Tema 3</td>
+</tr>
+<tr>
+<td><strong>Tiempo real</strong></td>
+<td>Un panel de actividad en vivo por WebSocket</td>
+<td>Programación de Servicios y Procesos, Tema 4</td>
+</tr>
+</tbody>
+</table>
+<p>La tabla está en el orden aproximado en que las vas a ir construyendo: Catálogo y API REST arrancan la misma semana, desde los dos módulos a la vez; el resto de piezas se apoya en las anteriores (por ejemplo, las reseñas necesitan que ya exista login y roles).</p>
+<p>Hoy construyes la primera pieza: el proyecto vacío, la base de datos, y las dos primeras entidades del catálogo.</p>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
 <p>Esta es la primera actividad de tu propio GameVault: vas a crear el proyecto desde cero y a dejarlo con una base de datos real y dos entidades JPA funcionando. Sigue los pasos en orden — cada uno se apoya en el anterior.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
-<p>Hasta ahora todo lo que has visto de Spring Boot ha sido teoría y ejemplos de código. Hoy generas <strong>tu propio</strong> proyecto Spring Boot desde cero, levantas un PostgreSQL con Docker Compose (como hiciste con MariaDB en la Actividad 0.6, pero ahora para tu propia aplicación) y creas las entidades <code>Estudio</code> y <code>Videojuego</code> con su relación, comprobando que Hibernate las traduce en tablas reales.</p>
+<p>Hasta ahora todo lo que has visto de Spring Boot ha sido teoría y ejemplos de código. Hoy generas <strong>tu propio</strong> proyecto Spring Boot desde cero, lo conviertes en un <strong>Dev Container</strong> que trae PostgreSQL incluido, y creas las entidades <code>Estudio</code> y <code>Videojuego</code> con su relación, comprobando que Hibernate las traduce en tablas reales.</p>
 <ul>
 <li>Generar un proyecto Spring Boot con Spring Initializr, eligiendo solo las dependencias que necesitas hoy.</li>
-<li>Levantar un gestor de base de datos independiente (PostgreSQL) con Docker Compose.</li>
+<li>Montar un Dev Container propio para el proyecto, con Java, Maven y PostgreSQL ya listos dentro.</li>
 <li>Definir la estructura de la base de datos con entidades JPA anotadas.</li>
 <li>Verificar que la conexión y el mapeo funcionan de verdad, no solo que "compila".</li>
 </ul>
+<div class="admonition info">
+<p class="admonition-title">Por qué esta vez todo va dentro de un Dev Container</p>
+<p>A partir de hoy trabajas con tu propio proyecto, no con ejercicios sueltos — y ese proyecto tiene que arrancar igual en tu portátil, en el ordenador del aula o en el de un compañero. Instalar Java, Maven, Git o el driver de PostgreSQL a mano en cada equipo es justo lo que falla: versiones distintas, permisos de instalación limitados en los equipos del centro, media hora perdida antes de escribir una sola línea. Metiendo todo eso dentro de un Dev Container (lo viste en el Tema 0, Actividad 0.7) te aseguras de que el entorno es siempre el mismo, esté donde esté tu proyecto — y no dependes de qué tenga instalado el equipo en el que te sientes ese día.</p>
+</div>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Docker funcionando (Actividad 0.6) y un IDE con soporte de Java/Maven (IntelliJ, VS Code con extensión Java, o tu Dev Container del Tema 0).</p>
+<p>Docker funcionando y Visual Studio Code con la extensión <strong>Dev Containers</strong> instalada (Actividad 0.7).</p>
 <hr>
 <h2 id="paso-0-crear-el-proyecto-desde-cero">Paso 0 — Crear el proyecto desde cero<a class="headerlink" href="#paso-0-crear-el-proyecto-desde-cero" title="Permanent link">¶</a></h2>
-<p>Ve a <a href="https://start.spring.io">start.spring.io</a> (o al asistente equivalente de tu IDE: <em>File → New → Spring Starter Project</em> en la mayoría) y genera un proyecto con:</p>
+<p>Ve a <a href="https://start.spring.io">start.spring.io</a> y genera un proyecto con:</p>
 <ul>
 <li><strong>Project</strong>: Maven</li>
 <li><strong>Language</strong>: Java</li>
@@ -2138,16 +2229,17 @@
 </ul>
 </li>
 </ul>
-<p>Pulsa <strong>Generate</strong>, descomprime el <code>.zip</code> e impórtalo en tu IDE como proyecto Maven.</p>
+<p>Pulsa <strong>Generate</strong>, descomprime el <code>.zip</code>, y renombra la carpeta a <code>gamevault</code> (o el nombre que prefieras) — todavía no la abras en tu IDE.</p>
 <div class="admonition warning">
 <p class="admonition-title">No añadas todavía el resto de dependencias</p>
-<p>La referencia tiene también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... No las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.</p>
+<p>Tu GameVault terminado va a incluir también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... pero no las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.</p>
 </div>
-<p>Abre el <code>pom.xml</code> generado y localiza las cuatro dependencias que acabas de elegir. Fíjate en que Spring Initializr ya te ha creado también una clase con <code>@SpringBootApplication</code> (el equivalente a <code>GamevaultApplication.java</code> que viste la semana pasada) y la estructura de carpetas <code>src/main/java</code> / <code>src/main/resources</code> — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.</p>
+<p>Fíjate en que Spring Initializr ya te ha creado una clase con <code>@SpringBootApplication</code> (el equivalente a <code>GamevaultApplication.java</code> que viste la semana pasada) y la estructura de carpetas <code>src/main/java</code> / <code>src/main/resources</code> — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.</p>
 <p><strong>Pregunta</strong>: ¿por qué crees que Spring Initializr te deja elegir las dependencias en vez de añadirlas todas por defecto?</p>
 <hr>
-<h2 id="paso-1-postgresql-con-docker-compose">Paso 1 — PostgreSQL con Docker Compose<a class="headerlink" href="#paso-1-postgresql-con-docker-compose" title="Permanent link">¶</a></h2>
-<p>En la raíz de tu proyecto, crea un <code>docker-compose.yml</code>:</p>
+<h2 id="paso-1-el-dev-container-tu-entorno-y-postgresql-juntos">Paso 1 — El Dev Container: tu entorno y PostgreSQL, juntos<a class="headerlink" href="#paso-1-el-dev-container-tu-entorno-y-postgresql-juntos" title="Permanent link">¶</a></h2>
+<p>En la teoría del Tema 0 viste que un <code>devcontainer.json</code> puede apoyarse en un <code>docker-compose.yml</code> en vez de en una sola <code>image</code> suelta — así el mismo fichero que describe tu entorno de programación puede levantar, en otro de sus servicios, la base de datos. Es justo lo que vas a montar hoy: un servicio <code>app</code> (tu entorno Java) y un servicio <code>postgres</code> (el gestor), arrancando los dos a la vez.</p>
+<p>En la raíz de tu proyecto, crea la carpeta <code>.devcontainer</code> y, dentro, <code>docker-compose.yml</code>:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -2161,59 +2253,84 @@
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_db</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="nt">volumes</span><span class="p">:</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcr.microsoft.com/devcontainers/java:1-21-bookworm</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">..:/workspace:cached</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/var/run/docker.sock</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep infinity</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:18-alpine</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_db</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
 </code></pre></div></td></tr></table></div>
-<p>Línea a línea, ya lo conoces de la Actividad 0.6: <code>image</code> fija la versión exacta del gestor (<code>postgres:18-alpine</code>); <code>environment</code> crea la base de datos y el usuario la primera vez que arranca el contenedor; <code>ports</code> publica el <code>5432</code> de tu máquina hacia el <code>5432</code> del contenedor; <code>volumes</code> guarda los datos fuera del contenedor para que sobrevivan a un reinicio.</p>
-<p>Levántalo:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps
+<p><code>app</code> usa una imagen que ya trae <strong>Java 21, Maven y Git instalados</strong> — nada que instalar a mano, ni en tu portátil ni en un equipo del aula. <code>command: sleep infinity</code> mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). <code>postgres</code> es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo <code>volumes</code> de <code>app</code>, <code>/var/run/docker.sock:/var/run/docker.sock</code>, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.</p>
+<p>Y, junto a él, <code>devcontainer.json</code>:</p>
+<div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GameVault Dev Container"</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">"dockerComposeFile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"docker-compose.yml"</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span><span class="nt">"workspaceFolder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/workspace"</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="nt">"forwardPorts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">8080</span><span class="p">,</span><span class="w"> </span><span class="mi">5432</span><span class="p">],</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">"ghcr.io/devcontainers/features/docker-outside-of-docker:1"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">  </span><span class="nt">"customizations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nt">"vscode"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">      </span><span class="nt">"extensions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"vscjava.vscode-java-pack"</span><span class="p">,</span><span class="w"> </span><span class="s2">"vmware.vscode-boot-dev-pack"</span><span class="p">]</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Ahora crea <code>src/main/resources/application-dev.yaml</code> con la configuración de conexión:</p>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span>
-<span class="normal"><a href="#__codelineno-2-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">spring</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://localhost:5432/gamevault_db</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<p><code>service: "app"</code> le dice a la extensión Dev Containers a cuál de los dos servicios del <code>docker-compose.yml</code> debe conectar tu editor — al otro, <code>postgres</code>, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. <code>forwardPorts</code> publica hacia tu máquina tanto el <code>8080</code> (tu aplicación, cuando la arranques) como el <code>5432</code> (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La <em>feature</em> <code>docker-outside-of-docker</code> instala dentro de <code>app</code> el cliente <code>docker</code> (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de VS Code vas a poder ejecutar <code>docker</code>, <code>docker compose</code> o <code>docker exec</code> como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.</p>
+<p>Ahora abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige <strong>"Reopen in Container"</strong> (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de <code>app</code> y levantando <code>postgres</code> a la vez.</p>
+<p><strong>Captura</strong>: la esquina inferior izquierda de VS Code, con la etiqueta del Dev Container activo.</p>
+<p>Con el contenedor ya abierto, abre una terminal integrada y comprueba que todo lo necesario está ahí, sin que lo hayas instalado tú:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>java<span class="w"> </span>-version
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>mvn<span class="w"> </span>-v
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>--version
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>docker<span class="w"> </span>version
 </code></pre></div></td></tr></table></div>
-<p><code>spring.datasource.*</code> es cómo tu aplicación encuentra y se autentica contra el PostgreSQL que acabas de levantar. <code>ddl-auto: update</code> le dice a Hibernate que, al arrancar, cree o actualice las tablas según tus entidades — es justo lo que vas a comprobar en el Paso 3. <code>show-sql: true</code> te va a permitir ver, en la consola, el SQL real que Hibernate ejecuta por debajo — actívalo, te va a servir el resto del curso para entender qué está pasando de verdad.</p>
-<p><strong>Predicción</strong>: si ahora mismo arrancaras tu aplicación, ¿aparecería alguna tabla en la base de datos? Escribe tu respuesta y el porqué antes de continuar.</p>
+<p><strong>Pregunta</strong>: si estos mismos tres comandos los ejecutaras en un ordenador del aula sin Dev Container, ¿qué esperarías que pasara? Relaciónalo con lo que ya viste en la Actividad 0.7 sobre qué corre dentro del contenedor y qué no.</p>
 <hr>
-<h2 id="paso-2-las-entidades-estudio-y-videojuego">Paso 2 — Las entidades: <code>Estudio</code> y <code>Videojuego</code><a class="headerlink" href="#paso-2-las-entidades-estudio-y-videojuego" title="Permanent link">¶</a></h2>
-<h3 id="estudio-guiada-al-completo"><code>Estudio</code>, guiada al completo<a class="headerlink" href="#estudio-guiada-al-completo" title="Permanent link">¶</a></h3>
-<p>Crea el paquete <code>catalogo</code> y, dentro, <code>Estudio.java</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<h2 id="paso-2-configurar-la-conexion-a-postgresql">Paso 2 — Configurar la conexión a PostgreSQL<a class="headerlink" href="#paso-2-configurar-la-conexion-a-postgresql" title="Permanent link">¶</a></h2>
+<p>Crea <code>src/main/resources/application-dev.yaml</code> con la configuración de conexión:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
@@ -2224,52 +2341,26 @@
 <span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-3-10">10</a></span>
 <span class="normal"><a href="#__codelineno-3-11">11</a></span>
-<span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span>
-<span class="normal"><a href="#__codelineno-3-15">15</a></span>
-<span class="normal"><a href="#__codelineno-3-16">16</a></span>
-<span class="normal"><a href="#__codelineno-3-17">17</a></span>
-<span class="normal"><a href="#__codelineno-3-18">18</a></span>
-<span class="normal"><a href="#__codelineno-3-19">19</a></span>
-<span class="normal"><a href="#__codelineno-3-20">20</a></span>
-<span class="normal"><a href="#__codelineno-3-21">21</a></span>
-<span class="normal"><a href="#__codelineno-3-22">22</a></span>
-<span class="normal"><a href="#__codelineno-3-23">23</a></span>
-<span class="normal"><a href="#__codelineno-3-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo</span><span class="p">;</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.persistence.*</span><span class="p">;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Getter</span><span class="p">;</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Setter</span><span class="p">;</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.ArrayList</span><span class="p">;</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nd">@Entity</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nd">@Getter</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nd">@Setter</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Estudio</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a>
-<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">    </span><span class="nd">@Id</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18"></a>
-<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">pais</span><span class="p">;</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21"></a>
-<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">videojuegos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:postgresql://postgres:5432/gamevault_db</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault_user</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password123</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></td></tr></table></div>
-<ul>
-<li><code>@Entity</code> + <code>@Table(name = "estudio")</code>: le dice a Hibernate que esta clase se mapea contra la tabla <code>estudio</code> (la crea si no existe, gracias al <code>ddl-auto: update</code> del Paso 1).</li>
-<li><code>@Id</code> + <code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code>: el identificador, generado por la propia base de datos (una columna autoincremental de PostgreSQL).</li>
-<li><code>@OneToMany(mappedBy = "estudio", ...)</code>: un estudio tiene muchos videojuegos. <code>mappedBy = "estudio"</code> dice que el lado que realmente controla la relación en la base de datos (la columna con la clave foránea) está en <code>Videojuego</code>, no aquí.</li>
-<li><code>cascade = CascadeType.ALL, orphanRemoval = true</code>: si borras un <code>Estudio</code>, se borran también sus videojuegos; y si sacas un videojuego de la lista sin borrar el estudio, ese videojuego "huérfano" también se elimina.</li>
-</ul>
-<p><strong>Pregunta</strong>: ¿por qué crees que tiene sentido que <code>cascade</code>/<code>orphanRemoval</code> estén en <code>Estudio → Videojuego</code>, y no tendría sentido ponerlos al revés (<code>Videojuego → Estudio</code>)? Piensa en qué pasaría si borraras un videojuego: ¿debería eso borrar el estudio entero?</p>
-<h3 id="videojuego-el-esqueleto-guiado-el-resto-es-tuyo"><code>Videojuego</code>: el esqueleto guiado, el resto es tuyo<a class="headerlink" href="#videojuego-el-esqueleto-guiado-el-resto-es-tuyo" title="Permanent link">¶</a></h3>
-<p>La estructura de <code>Videojuego</code> repite un patrón que ya conoces (id autogenerado, campos simples) más una pieza nueva, la relación bidireccional. Te doy el esqueleto con lo nuevo ya resuelto:</p>
+<p>Fíjate en el host de la URL: <code>postgres</code>, no <code>localhost</code>. Tu aplicación va a correr <strong>dentro</strong> del contenedor <code>app</code>, y <code>postgres</code> es un contenedor hermano, no el propio equipo — exactamente el mismo motivo por el que en la Actividad 0.6 WordPress tenía que apuntar al <em>nombre del servicio</em> de la base de datos, no a una IP ni a <code>localhost</code>. Docker Compose resuelve <code>postgres</code> automáticamente a la dirección interna de ese contenedor, porque los dos servicios comparten la misma red creada por el <code>docker-compose.yml</code> del Paso 1.</p>
+<p><strong>Predicción</strong>: si dejaras <code>localhost</code> en vez de <code>postgres</code> en la URL, ¿arrancaría tu aplicación? Escribe tu respuesta y el porqué antes de continuar.</p>
+<p><code>ddl-auto: update</code> le dice a Hibernate que, al arrancar, cree o actualice las tablas según tus entidades — es justo lo que vas a comprobar en el Paso 4. <code>show-sql: true</code> te va a permitir ver, en la consola, el SQL real que Hibernate ejecuta por debajo — actívalo, te va a servir el resto del curso para entender qué está pasando de verdad.</p>
+<hr>
+<h2 id="paso-3-las-entidades-estudio-y-videojuego">Paso 3 — Las entidades: <code>Estudio</code> y <code>Videojuego</code><a class="headerlink" href="#paso-3-las-entidades-estudio-y-videojuego" title="Permanent link">¶</a></h2>
+<h3 id="estudio-guiada-al-completo"><code>Estudio</code>, guiada al completo<a class="headerlink" href="#estudio-guiada-al-completo" title="Permanent link">¶</a></h3>
+<p>Crea el paquete <code>catalogo</code> y, dentro, <code>Estudio.java</code>:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
@@ -2293,36 +2384,93 @@
 <span class="normal"><a href="#__codelineno-4-21">21</a></span>
 <span class="normal"><a href="#__codelineno-4-22">22</a></span>
 <span class="normal"><a href="#__codelineno-4-23">23</a></span>
-<span class="normal"><a href="#__codelineno-4-24">24</a></span>
-<span class="normal"><a href="#__codelineno-4-25">25</a></span>
-<span class="normal"><a href="#__codelineno-4-26">26</a></span>
-<span class="normal"><a href="#__codelineno-4-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo</span><span class="p">;</span>
+<span class="normal"><a href="#__codelineno-4-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo</span><span class="p">;</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.persistence.*</span><span class="p">;</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Getter</span><span class="p">;</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Setter</span><span class="p">;</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.math.BigDecimal</span><span class="p">;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.ArrayList</span><span class="p">;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a>
 <a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="nd">@Entity</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"videojuego"</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">)</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="nd">@Getter</span>
 <a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="nd">@Setter</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Videojuego</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Estudio</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-14" name="__codelineno-4-14"></a>
 <a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">    </span><span class="nd">@Id</span>
 <a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
 <a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 <a id="__codelineno-4-18" name="__codelineno-4-18"></a>
-<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="w">    </span><span class="c1">// Mini-reto: añade aquí los campos simples que ya conoces del patrón de Estudio:</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="w">    </span><span class="c1">// - titulo (String)</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="w">    </span><span class="c1">// - precio (BigDecimal) — usa BigDecimal, no double, para no perder precisión con dinero</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="w">    </span><span class="c1">// - fechaLanzamiento (LocalDate)</span>
-<a id="__codelineno-4-23" name="__codelineno-4-23"></a>
-<a id="__codelineno-4-24" name="__codelineno-4-24"></a><span class="w">    </span><span class="nd">@ManyToOne</span><span class="p">(</span><span class="n">fetch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FetchType</span><span class="p">.</span><span class="na">LAZY</span><span class="p">)</span>
-<a id="__codelineno-4-25" name="__codelineno-4-25"></a><span class="w">    </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio_id"</span><span class="p">)</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Estudio</span><span class="w"> </span><span class="n">estudio</span><span class="p">;</span>
-<a id="__codelineno-4-27" name="__codelineno-4-27"></a><span class="p">}</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">;</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">pais</span><span class="p">;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21"></a>
+<a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="w">    </span><span class="nd">@OneToMany</span><span class="p">(</span><span class="n">mappedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio"</span><span class="p">,</span><span class="w"> </span><span class="n">cascade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CascadeType</span><span class="p">.</span><span class="na">ALL</span><span class="p">,</span><span class="w"> </span><span class="n">orphanRemoval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="n">videojuegos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li><code>@Entity</code> + <code>@Table(name = "estudio")</code>: le dice a Hibernate que esta clase se mapea contra la tabla <code>estudio</code> (la crea si no existe, gracias al <code>ddl-auto: update</code> del Paso 2).</li>
+<li><code>@Id</code> + <code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code>: el identificador, generado por la propia base de datos (una columna autoincremental de PostgreSQL).</li>
+<li><code>@OneToMany(mappedBy = "estudio", ...)</code>: un estudio tiene muchos videojuegos. <code>mappedBy = "estudio"</code> dice que el lado que realmente controla la relación en la base de datos (la columna con la clave foránea) está en <code>Videojuego</code>, no aquí.</li>
+<li><code>cascade = CascadeType.ALL, orphanRemoval = true</code>: si borras un <code>Estudio</code>, se borran también sus videojuegos; y si sacas un videojuego de la lista sin borrar el estudio, ese videojuego "huérfano" también se elimina.</li>
+</ul>
+<p><strong>Pregunta</strong>: ¿por qué crees que tiene sentido que <code>cascade</code>/<code>orphanRemoval</code> estén en <code>Estudio → Videojuego</code>, y no tendría sentido ponerlos al revés (<code>Videojuego → Estudio</code>)? Piensa en qué pasaría si borraras un videojuego: ¿debería eso borrar el estudio entero?</p>
+<h3 id="videojuego-el-esqueleto-guiado-el-resto-es-tuyo"><code>Videojuego</code>: el esqueleto guiado, el resto es tuyo<a class="headerlink" href="#videojuego-el-esqueleto-guiado-el-resto-es-tuyo" title="Permanent link">¶</a></h3>
+<p>La estructura de <code>Videojuego</code> repite un patrón que ya conoces (id autogenerado, campos simples) más una pieza nueva, la relación bidireccional. Te doy el esqueleto con lo nuevo ya resuelto:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span>
+<span class="normal"><a href="#__codelineno-5-20">20</a></span>
+<span class="normal"><a href="#__codelineno-5-21">21</a></span>
+<span class="normal"><a href="#__codelineno-5-22">22</a></span>
+<span class="normal"><a href="#__codelineno-5-23">23</a></span>
+<span class="normal"><a href="#__codelineno-5-24">24</a></span>
+<span class="normal"><a href="#__codelineno-5-25">25</a></span>
+<span class="normal"><a href="#__codelineno-5-26">26</a></span>
+<span class="normal"><a href="#__codelineno-5-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.persistence.*</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Getter</span><span class="p">;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.Setter</span><span class="p">;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.math.BigDecimal</span><span class="p">;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.time.LocalDate</span><span class="p">;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="nd">@Entity</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="nd">@Table</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"videojuego"</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="nd">@Getter</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="nd">@Setter</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Videojuego</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="w">    </span><span class="nd">@GeneratedValue</span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerationType</span><span class="p">.</span><span class="na">IDENTITY</span><span class="p">)</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a>
+<a id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="w">    </span><span class="c1">// Mini-reto: añade aquí los campos simples que ya conoces del patrón de Estudio:</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20"></a><span class="w">    </span><span class="c1">// - titulo (String)</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21"></a><span class="w">    </span><span class="c1">// - precio (BigDecimal) — usa BigDecimal, no double, para no perder precisión con dinero</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="w">    </span><span class="c1">// - fechaLanzamiento (LocalDate)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23"></a>
+<a id="__codelineno-5-24" name="__codelineno-5-24"></a><span class="w">    </span><span class="nd">@ManyToOne</span><span class="p">(</span><span class="n">fetch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FetchType</span><span class="p">.</span><span class="na">LAZY</span><span class="p">)</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25"></a><span class="w">    </span><span class="nd">@JoinColumn</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"estudio_id"</span><span class="p">)</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Estudio</span><span class="w"> </span><span class="n">estudio</span><span class="p">;</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@ManyToOne</code> es el lado contrario de la relación: muchos videojuegos pertenecen a un estudio. <code>@JoinColumn(name = "estudio_id")</code> es la columna real, con la clave foránea, que vivirá en la tabla <code>videojuego</code>. <code>fetch = FetchType.LAZY</code> significa que Hibernate no carga el <code>Estudio</code> completo hasta que de verdad lo pidas (<code>videojuego.getEstudio()</code>), en vez de traerlo siempre aunque no lo uses.</p>
 <p><strong>Mini-reto</strong>: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en <code>Estudio</code> (atributo privado + getter/setter, que ya te genera <code>@Getter</code>/<code>@Setter</code> de Lombok).</p>
@@ -2331,25 +2479,29 @@
 <p>La entidad <code>Videojuego</code> completa de GameVault incluye también un campo <code>detallesPlataforma</code> con anotaciones de JSONB. Omítelo por completo en tu proyecto por ahora — se trabaja en el Tema 3, cuando tengas la base necesaria para entenderlo.</p>
 </div>
 <hr>
-<h2 id="paso-3-verificar-que-hibernate-ha-hecho-su-trabajo">Paso 3 — Verificar que Hibernate ha hecho su trabajo<a class="headerlink" href="#paso-3-verificar-que-hibernate-ha-hecho-su-trabajo" title="Permanent link">¶</a></h2>
-<p>Arranca tu aplicación con el perfil <code>dev</code> activo (en IntelliJ: <em>Edit Configurations</em> → <em>Active profiles</em> = <code>dev</code>; por línea de comandos: <code>./mvnw spring-boot:run -Dspring-boot.run.profiles=dev</code>).</p>
-<p>Mira la consola: con <code>show-sql: true</code> deberías ver sentencias <code>create table</code> (o <code>alter table</code>, en arranques posteriores) para <code>estudio</code> y <code>videojuego</code>.</p>
-<p>Conéctate con la herramienta que prefieras (pgAdmin, DBeaver, o <code>psql</code> desde la terminal):</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;nombre-del-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"\d videojuego"</span>
+<h2 id="paso-4-verificar-que-hibernate-ha-hecho-su-trabajo">Paso 4 — Verificar que Hibernate ha hecho su trabajo<a class="headerlink" href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" title="Permanent link">¶</a></h2>
+<p>Desde la terminal integrada de VS Code (la que corre <strong>dentro</strong> del Dev Container), arranca tu aplicación con el perfil <code>dev</code> activo:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>./mvnw<span class="w"> </span>spring-boot:run<span class="w"> </span>-Dspring-boot.run.profiles<span class="o">=</span>dev
 </code></pre></div></td></tr></table></div>
+<p>Mira la consola: con <code>show-sql: true</code> deberías ver sentencias <code>create table</code> (o <code>alter table</code>, en arranques posteriores) para <code>estudio</code> y <code>videojuego</code>.</p>
+<p>Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:</p>
+<ul>
+<li><strong>Herramienta gráfica desde tu equipo</strong> (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto <code>5432</code> hacia tu máquina, apunta a <code>localhost:5432</code> con las credenciales del Paso 1.</li>
+<li><strong><code>psql</code> desde la propia terminal integrada de VS Code</strong>: gracias al <code>docker-outside-of-docker</code> del Paso 1, puedes usar <code>docker</code> normalmente aunque esa terminal esté dentro del contenedor <code>app</code>. Ejecuta <code>docker compose ps</code> para localizar el nombre del contenedor de <code>postgres</code>, y luego <code>docker exec -it &lt;ese-nombre&gt; psql -U gamevault_user -d gamevault_db -c "\d videojuego"</code> — sin salir de VS Code.</li>
+</ul>
 <p><strong>Comprueba</strong>:</p>
 <ol>
 <li>Que existen las tablas <code>estudio</code> y <code>videojuego</code>.</li>
 <li>Que <code>videojuego</code> tiene una columna <code>estudio_id</code> con una clave foránea hacia <code>estudio</code>.</li>
 <li>Que los tipos de columna coinciden con lo esperado (<code>precio</code> como <code>numeric</code>, <code>fecha_lanzamiento</code> como <code>date</code>).</li>
 </ol>
-<p><strong>Captura</strong>: el resultado de <code>\d videojuego</code> (o el equivalente gráfico de tu herramienta) mostrando la clave foránea.</p>
+<p><strong>Captura</strong>: el resultado mostrando la clave foránea (de tu herramienta gráfica, o de <code>\d videojuego</code> si has usado <code>psql</code>).</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
-<p>Repite la pregunta del Paso 2, pero ahora con la evidencia delante: mirando la tabla <code>videojuego</code> que acabas de crear, ¿en qué columna concreta vive la relación con <code>estudio</code>? ¿Existe alguna columna equivalente en la tabla <code>estudio</code> que apunte a <code>videojuego</code>? Relaciona tu respuesta con <code>mappedBy</code>.</p>
+<p>Repite la pregunta del Paso 3, pero ahora con la evidencia delante: mirando la tabla <code>videojuego</code> que acabas de crear, ¿en qué columna concreta vive la relación con <code>estudio</code>? ¿Existe alguna columna equivalente en la tabla <code>estudio</code> que apunte a <code>videojuego</code>? Relaciona tu respuesta con <code>mappedBy</code>.</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un PostgreSQL real levantado con Docker Compose (Paso 1) y dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 2-3). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.</p></div>
+<p>Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un Dev Container que arranca tu entorno y PostgreSQL a la vez, en cualquier equipo (Paso 1), la conexión configurada (Paso 2) y dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 3-4). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.</p></div>
 
 
 
