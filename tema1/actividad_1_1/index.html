@@ -2143,6 +2143,10 @@
 
 
 <div><h1 id="actividad-11-docker-compose-postgresql-arranque-de-las-entidades-del-catalogo">🧪 Actividad 1.1: Docker Compose + PostgreSQL — arranque de las entidades del catálogo<a class="headerlink" href="#actividad-11-docker-compose-postgresql-arranque-de-las-entidades-del-catalogo" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_1_1_AD_Plantilla.docx" rel="noopener" target="_blank">Plantilla 1.1 — Docker Compose + PostgreSQL: arranque de las entidades del catálogo</a></p>
+</div>
 <h2 id="que-es-gamevault">Qué es GameVault<a class="headerlink" href="#que-es-gamevault" title="Permanent link">¶</a></h2>
 <p><strong>GameVault</strong> es la aplicación que vas a construir, pieza a pieza, durante todo el curso — a la vez desde Acceso a Datos y desde Programación de Servicios y Procesos. Es una API REST que gestiona el catálogo de una tienda de videojuegos: qué juegos hay, qué estudio ha desarrollado cada uno, qué reseñas han dejado los usuarios, y quién puede hacer qué sobre esos datos.</p>
 <p>No la construyes de una vez: cada actividad añade una pieza sobre las anteriores, hasta llegar a una aplicación completa con persistencia en dos motores distintos, autenticación y comunicación en tiempo real.</p>
@@ -2220,6 +2224,8 @@
 <li><strong>Project</strong>: Maven</li>
 <li><strong>Language</strong>: Java</li>
 <li><strong>Spring Boot</strong>: la versión estable más reciente de la rama 4.x que te ofrezca el asistente</li>
+<li><strong>Packaging</strong>: Jar (no War — no vas a desplegar esto en un servidor de aplicaciones externo, el propio <code>.jar</code> ya trae el servidor embebido)</li>
+<li><strong>Java</strong>: 21 — tiene que coincidir con el Java del Dev Container que montas en el Paso 1</li>
 <li><strong>Group/Artifact</strong>: los que quieras (por ejemplo <code>com.tunombre</code> / <code>gamevault</code>)</li>
 <li><strong>Dependencies</strong>: añade solo estas cuatro — ni una más:<ul>
 <li><strong>Spring Web</strong> (el starter real se llama <code>spring-boot-starter-webmvc</code> en esta versión de Spring Boot, no <code>-web</code>)</li>
@@ -2262,7 +2268,7 @@
 <span class="normal"><a href="#__codelineno-0-20">20</a></span>
 <span class="normal"><a href="#__codelineno-0-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcr.microsoft.com/devcontainers/java:1-21-bookworm</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcr.microsoft.com/devcontainers/base:bookworm</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">..:/workspace:cached</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/var/run/docker.sock</span>
@@ -2277,12 +2283,16 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
 <a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"5432:5432"</span>
 <a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql</span>
 <a id="__codelineno-0-19" name="__codelineno-0-19"></a>
 <a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="nt">volumes</span><span class="p">:</span>
 <a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
 </code></pre></div></td></tr></table></div>
-<p><code>app</code> usa una imagen que ya trae <strong>Java 21, Maven y Git instalados</strong> — nada que instalar a mano, ni en tu portátil ni en un equipo del aula. <code>command: sleep infinity</code> mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). <code>postgres</code> es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo <code>volumes</code> de <code>app</code>, <code>/var/run/docker.sock:/var/run/docker.sock</code>, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.</p>
+<div class="admonition warning">
+<p class="admonition-title">Con Postgres 18, el volumen va en <code>/var/lib/postgresql</code>, no en <code>/var/lib/postgresql/data</code></p>
+<p>Desde la versión 18, la imagen organiza los datos en subcarpetas por versión mayor dentro de <code>/var/lib/postgresql</code> — si montas el volumen directamente en <code>/var/lib/postgresql/data</code> (la ruta que usaban las versiones anteriores), el contenedor se niega a arrancar y sale con error nada más crearse. Si ya te ha pasado esto, sigue las instrucciones de abajo para limpiar el volumen roto antes de continuar.</p>
+</div>
+<p><code>app</code> parte esta vez de la imagen <strong>base</strong> genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. <code>command: sleep infinity</code> mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). <code>postgres</code> es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo <code>volumes</code> de <code>app</code>, <code>/var/run/docker.sock:/var/run/docker.sock</code>, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.</p>
 <p>Y, junto a él, <code>devcontainer.json</code>:</p>
 <div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
@@ -2298,24 +2308,41 @@
 <span class="normal"><a href="#__codelineno-1-12">12</a></span>
 <span class="normal"><a href="#__codelineno-1-13">13</a></span>
 <span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GameVault Dev Container"</span><span class="p">,</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">"dockerComposeFile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"docker-compose.yml"</span><span class="p">,</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span><span class="nt">"workspaceFolder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/workspace"</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span><span class="nt">"forwardPorts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">8080</span><span class="p">,</span><span class="w"> </span><span class="mi">5432</span><span class="p">],</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">"ghcr.io/devcontainers/features/docker-outside-of-docker:1"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">  </span><span class="nt">"customizations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="nt">"vscode"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">      </span><span class="nt">"extensions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"vscjava.vscode-java-pack"</span><span class="p">,</span><span class="w"> </span><span class="s2">"vmware.vscode-boot-dev-pack"</span><span class="p">]</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">"ghcr.io/devcontainers/features/java:1"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">      </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"21"</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">      </span><span class="nt">"installMaven"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">"ghcr.io/devcontainers/features/docker-outside-of-docker:1"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">  </span><span class="nt">"customizations"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">    </span><span class="nt">"vscode"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">      </span><span class="nt">"extensions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"vscjava.vscode-java-pack"</span><span class="p">,</span><span class="w"> </span><span class="s2">"vmware.vscode-boot-dev-pack"</span><span class="p">]</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>Java ya no viene incluido en la imagen — lo añades como <em>feature</em>, igual que <code>docker-outside-of-docker</code>: son piezas que se instalan por encima de la imagen base, sin que tengas que elegir una imagen distinta por cada lenguaje o herramienta que necesites. <code>ghcr.io/devcontainers/features/java:1</code> instala el JDK, en la versión que le indiques en <code>"version"</code>; <code>"installMaven": "true"</code> le pide <strong>además</strong> Maven — no lo des por hecho ni lo dejes al valor por defecto de la <em>feature</em>: indícalo explícitamente, como aquí, o <code>mvn</code> no va a existir dentro del contenedor.</p>
+<div class="admonition tip">
+<p class="admonition-title">Por qué esta imagen y no una con Java ya incluido</p>
+<p>Existen imágenes que ya traen el JDK preinstalado (como <code>mcr.microsoft.com/devcontainers/java</code>), y en principio ahorran un paso. El problema es que esas imágenes "completas" también traen preinstaladas otras herramientas que no vas a usar (Node.js, Yarn...) — y si el repositorio de alguna de ellas deja de estar disponible o su clave de firma caduca, el contenedor entero puede fallar al construirse por algo que no tiene nada que ver con tu proyecto. Partir de la imagen base y añadir solo las <em>features</em> que necesitas (Java, Docker) es más código, pero es más robusto: solo dependes de lo que realmente usas.</p>
+</div>
 <p><code>service: "app"</code> le dice a la extensión Dev Containers a cuál de los dos servicios del <code>docker-compose.yml</code> debe conectar tu editor — al otro, <code>postgres</code>, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. <code>forwardPorts</code> publica hacia tu máquina tanto el <code>8080</code> (tu aplicación, cuando la arranques) como el <code>5432</code> (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La <em>feature</em> <code>docker-outside-of-docker</code> instala dentro de <code>app</code> el cliente <code>docker</code> (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de VS Code vas a poder ejecutar <code>docker</code>, <code>docker compose</code> o <code>docker exec</code> como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.</p>
 <p>Ahora abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige <strong>"Reopen in Container"</strong> (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de <code>app</code> y levantando <code>postgres</code> a la vez.</p>
+<div class="admonition warning">
+<p class="admonition-title">Si cambias <code>devcontainer.json</code>/<code>docker-compose.yml</code> después de haber abierto el contenedor</p>
+<p>Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: paleta de comandos (<code>Ctrl+Shift+P</code>) → <strong>"Dev Containers: Rebuild Container"</strong>. Si algo no aparece como debería (por ejemplo, <code>mvn</code> no se encuentra aunque hayas añadido la <em>feature</em> de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.</p>
+</div>
 <p><strong>Captura</strong>: la esquina inferior izquierda de VS Code, con la etiqueta del Dev Container activo.</p>
 <p>Con el contenedor ya abierto, abre una terminal integrada y comprueba que todo lo necesario está ahí, sin que lo hayas instalado tú:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
@@ -2474,20 +2501,48 @@
 </code></pre></div></td></tr></table></div>
 <p><code>@ManyToOne</code> es el lado contrario de la relación: muchos videojuegos pertenecen a un estudio. <code>@JoinColumn(name = "estudio_id")</code> es la columna real, con la clave foránea, que vivirá en la tabla <code>videojuego</code>. <code>fetch = FetchType.LAZY</code> significa que Hibernate no carga el <code>Estudio</code> completo hasta que de verdad lo pidas (<code>videojuego.getEstudio()</code>), en vez de traerlo siempre aunque no lo uses.</p>
 <p><strong>Mini-reto</strong>: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en <code>Estudio</code> (atributo privado + getter/setter, que ya te genera <code>@Getter</code>/<code>@Setter</code> de Lombok).</p>
-<div class="admonition tip">
-<p class="admonition-title">El JSONB de <code>detallesPlataforma</code> no es para hoy</p>
-<p>La entidad <code>Videojuego</code> completa de GameVault incluye también un campo <code>detallesPlataforma</code> con anotaciones de JSONB. Omítelo por completo en tu proyecto por ahora — se trabaja en el Tema 3, cuando tengas la base necesaria para entenderlo.</p>
-</div>
 <hr>
 <h2 id="paso-4-verificar-que-hibernate-ha-hecho-su-trabajo">Paso 4 — Verificar que Hibernate ha hecho su trabajo<a class="headerlink" href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" title="Permanent link">¶</a></h2>
 <p>Desde la terminal integrada de VS Code (la que corre <strong>dentro</strong> del Dev Container), arranca tu aplicación con el perfil <code>dev</code> activo:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>./mvnw<span class="w"> </span>spring-boot:run<span class="w"> </span>-Dspring-boot.run.profiles<span class="o">=</span>dev
 </code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Alternativa: el botón ▷ Run de VS Code</p>
+<p>La extensión de Java añade un botón <strong>Run</strong> (o el <em>CodeLens</em> <code>▷ Run</code> encima del <code>main</code>) sobre <code>GamevaultApplication</code>. Es más cómodo, pero por defecto arranca la clase directamente con <code>java</code>, <strong>sin</strong> el perfil <code>dev</code> activo — y sin él, tu aplicación no sabe cómo conectarse a PostgreSQL. Para que el botón Run también use el perfil <code>dev</code>, crea <code>.vscode/launch.json</code> en tu proyecto:
+</p><div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2.0"</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span><span class="nt">"configurations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"java"</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GamevaultApplication (dev)"</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">      </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"launch"</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">      </span><span class="nt">"mainClass"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.tunombre.gamevault.GamevaultApplication"</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"SPRING_PROFILES_ACTIVE"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dev"</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+Ajusta <code>mainClass</code> a tu propio <em>group id</em>. A partir de ahora, arrancar con esta configuración desde el panel "Run and Debug" equivale exactamente al comando de arriba.
+</div>
 <p>Mira la consola: con <code>show-sql: true</code> deberías ver sentencias <code>create table</code> (o <code>alter table</code>, en arranques posteriores) para <code>estudio</code> y <code>videojuego</code>.</p>
 <p>Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:</p>
 <ul>
 <li><strong>Herramienta gráfica desde tu equipo</strong> (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto <code>5432</code> hacia tu máquina, apunta a <code>localhost:5432</code> con las credenciales del Paso 1.</li>
-<li><strong><code>psql</code> desde la propia terminal integrada de VS Code</strong>: gracias al <code>docker-outside-of-docker</code> del Paso 1, puedes usar <code>docker</code> normalmente aunque esa terminal esté dentro del contenedor <code>app</code>. Ejecuta <code>docker compose ps</code> para localizar el nombre del contenedor de <code>postgres</code>, y luego <code>docker exec -it &lt;ese-nombre&gt; psql -U gamevault_user -d gamevault_db -c "\d videojuego"</code> — sin salir de VS Code.</li>
+<li><strong><code>psql</code> desde la propia terminal integrada de VS Code</strong>: gracias al <code>docker-outside-of-docker</code> del Paso 1, puedes usar <code>docker</code> normalmente aunque esa terminal esté dentro del contenedor <code>app</code>. Pero ojo: <code>docker compose</code>, a secas, busca un <code>docker-compose.yml</code> en la carpeta donde estés (<code>/workspace</code>) y no lo encuentra — el tuyo vive en <code>.devcontainer/</code>. Indícaselo con <code>-f</code>, y añade también <code>-p</code> con el nombre de proyecto que ha usado la propia extensión de Dev Containers para crear los contenedores (combina el nombre de tu carpeta con <code>_devcontainer</code>; si la llamaste <code>gamevault</code> como se sugería en el Paso 0, es <code>gamevault_devcontainer</code> — ajusta el prefijo si le pusiste otro nombre):
+    <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/docker-compose.yml<span class="w"> </span>-p<span class="w"> </span>gamevault_devcontainer<span class="w"> </span>ps
+</code></pre></div></td></tr></table></div>
+    Localiza ahí el nombre del contenedor de <code>postgres</code>, y luego <code>docker exec -it &lt;ese-nombre&gt; psql -U gamevault_user -d gamevault_db -c "\d videojuego"</code> — sin salir de VS Code. A partir de aquí, cualquier <code>docker compose</code> que ejecutes desde dentro del contenedor va a necesitar esos mismos <code>-f</code>/<code>-p</code>.</li>
 </ul>
 <p><strong>Comprueba</strong>:</p>
 <ol>
