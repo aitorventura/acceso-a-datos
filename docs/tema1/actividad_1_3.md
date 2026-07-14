@@ -69,7 +69,7 @@ Ejecuta el `main()` (desde tu IDE, botón derecho → *Run*) con tu aplicación 
 
 Ya está usando `try-with-resources` en el código de arriba. Fíjate en el orden: `Connection` y `PreparedStatement` se abren en el mismo `try`, y `ResultSet` en uno anidado — se cierran automáticamente en orden inverso al salir de cada bloque, incluso si algo falla a mitad.
 
-**Pregunta**: si quitaras el `try-with-resources` y abrieras la conexión con un `Connection conn = DriverManager.getConnection(...)` normal, sin cerrarla nunca, ¿qué pasaría si ejecutaras este `main()` 200 veces seguidas? Relaciona tu respuesta con el *pool* de conexiones que viste en el apartado de teoría de la semana 3.
+**Pregunta**: si quitaras el `try-with-resources` y abrieras la conexión con un `Connection conn = DriverManager.getConnection(...)` normal, sin cerrarla nunca, ¿qué pasaría si ejecutaras este `main()` 200 veces seguidas? Relaciona tu respuesta con el *pool* de conexiones (HikariCP) que viste en el apartado de "Conectores y protocolos de acceso a bases de datos".
 
 ---
 

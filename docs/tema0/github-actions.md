@@ -9,7 +9,7 @@
 
 ## 5.1 ¿Qué problema resuelve la integración continua?
 
-Imagina que un equipo de cuatro personas trabaja en el mismo repositorio. Cada una desarrolla su parte en su rama y cuando termina hace merge en `main`. El problema: en el momento del merge nadie sabe si el código del compañero rompe los tests que otra persona escribió la semana pasada. Descubrirlo tres días después —o peor, en producción— cuesta mucho más que haberlo detectado en el acto.
+Imagina que un equipo de cuatro personas trabaja en el mismo repositorio. Cada una desarrolla su parte en su rama y cuando termina hace merge en `main`. El problema: en el momento del merge nadie sabe si el código del compañero rompe los tests que otra persona escribió hace unos días. Descubrirlo tres días después —o peor, en producción— cuesta mucho más que haberlo detectado en el acto.
 
 La **integración continua** (CI, de *Continuous Integration*) es la práctica de ejecutar comprobaciones automáticas sobre el código **cada vez que alguien propone un cambio**. Compilar, pasar los tests, revisar el estilo... todo de forma automática y en segundos. Si algo falla, el sistema avisa antes de que el código llegue a `main`.
 

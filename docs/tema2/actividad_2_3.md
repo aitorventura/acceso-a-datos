@@ -44,7 +44,7 @@ ORDER BY COUNT(v.id) DESC;
 
 ## Paso 2 — El DTO de respuesta
 
-Crea un DTO específico para el ranking — no reutilices `EstudioDTO` ni devuelvas la entidad `Estudio` completa:
+Crea un DTO específico para el ranking — no reutilices `EstudioResponseDTO` ni devuelvas la entidad `Estudio` completa:
 
 ```java
 public record EstudioRankingDTO(
@@ -106,4 +106,4 @@ Con tus propias palabras (2-3 frases, no copiadas del enunciado ni de la teoría
 
 ## ✅ Cierre
 
-En el Tema 3 das el salto a bases de datos objeto-relacionales: vas a retomar `disponibleEnPlataforma`, la Specification que usaba `jsonb_exists` y que dejaste de lado en la Actividad 2.2 — ahora la vas a entender de verdad, trabajando con la columna JSONB que la hace posible.
+En el Tema 3 das el salto a bases de datos objeto-relacionales: vas a construir `disponibleEnPlataforma`, una Specification que usa `jsonb_exists` — ahora la vas a entender de verdad, trabajando con la columna JSONB que la hace posible.

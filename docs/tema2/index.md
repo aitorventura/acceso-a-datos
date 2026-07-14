@@ -24,13 +24,13 @@
 
 ## 📘 Índice de contenidos
 
-1. [Instalación y configuración de Hibernate](instalacion-configuracion-orm.md)
+1. [Hibernate por dentro: instalación, configuración y ciclo de vida](instalacion-configuracion-orm.md)
 2. [Persistencia y recuperación de objetos](persistencia-objetos.md)
 3. [Consultas JPQL y transacciones](consultas-jpql-transacciones.md)
 
 **Actividades:**
 
-- [Actividad 2.1 — De JDBC puro a Hibernate: mapeo con anotaciones](actividad_2_1.md)
+- [Actividad 2.1 — Mapeo con anotaciones: qué SQL genera Hibernate por debajo](actividad_2_1.md)
 - [Actividad 2.2 — Consultas dinámicas con Specifications](actividad_2_2.md)
 - [Actividad 2.3 — Ranking con `@Query` JPQL](actividad_2_3.md)
 

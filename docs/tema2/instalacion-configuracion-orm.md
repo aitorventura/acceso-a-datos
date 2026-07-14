@@ -1,6 +1,6 @@
 <a id="instalacion-configuracion-orm"></a>
 
-# 🧩 1. Instalación y configuración de Hibernate
+# 🧩 1. Hibernate por dentro: instalación, configuración y ciclo de vida
 
 En el Tema 1 conociste el desfase objeto-relacional y aprendiste a tender el puente hacia la base de datos primero con JDBC puro, después con Spring Data JPA sin entrar en detalle. Toca ahora entender de verdad la herramienta que hace posible esa comodidad: un **ORM**.
 

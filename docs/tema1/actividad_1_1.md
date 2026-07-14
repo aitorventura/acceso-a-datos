@@ -67,7 +67,7 @@ Pulsa **Generate**, descomprime el `.zip`, y renombra la carpeta a `gamevault` (
 !!! warning "No añadas todavía el resto de dependencias"
     Tu GameVault terminado va a incluir también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... pero no las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.
 
-Fíjate en que Spring Initializr ya te ha creado una clase con `@SpringBootApplication` (el equivalente a `GamevaultApplication.java` que viste la semana pasada) y la estructura de carpetas `src/main/java` / `src/main/resources` — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.
+Fíjate en que Spring Initializr ya te ha creado una clase con `@SpringBootApplication` (el equivalente a `LibreriaApplication` que has visto en la teoría) y la estructura de carpetas `src/main/java` / `src/main/resources` — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.
 
 **Pregunta**: ¿por qué crees que Spring Initializr te deja elegir las dependencias en vez de añadirlas todas por defecto?
 

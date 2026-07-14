@@ -384,7 +384,7 @@ Sin tocar el repositorio, responde en la tabla siguiente qué evento usarías en
 | Regenerar el manifiesto de build todas las noches a las 3:00 aunque no haya cambios | | |
 
 !!! tip "Pista"
-    Los eventos más habituales son: `push`, `pull_request`, `release` y `schedule` (con expresión cron). Puedes consultarlos en el apartado 5.2 de la teoría.
+    Los eventos más habituales son: `push`, `pull_request`, `release` y `schedule` (con expresión cron). Puedes consultarlos en el apartado de teoría sobre GitHub Actions, en la sección de eventos que disparan un workflow.
 
 ---
 

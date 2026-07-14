@@ -126,7 +126,7 @@ public class LibroService {
 }
 ```
 
-La diferencia parece pequeña en el código, pero cambia quién manda: `LibroService` ya no sabe (ni le importa) de dónde sale su `LibroRepository` — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de **inversión de control** del apartado anterior, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.
+La diferencia parece pequeña en el código, pero cambia quién manda: `LibroService` ya no sabe (ni le importa) de dónde sale su `LibroRepository` — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de **inversión de control** visto más arriba, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.
 
 !!! example "La misma analogía del restaurante, un paso más"
     Cuando cocinas en el restaurante (recuerda la analogía de antes), no vas tú al almacén a buscar los ingredientes — te los traen a la mesa de trabajo, ya listos, cuando los necesitas. La inyección de dependencias es justo eso, pero con objetos: `LibroService` no va a buscar su `LibroRepository`; se lo entregan.

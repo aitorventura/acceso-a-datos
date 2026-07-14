@@ -1,79 +1,74 @@
 # 🧪 Actividad 1.2: CRUD completo y DTOs sobre el catálogo
 
-!!! info "Práctica guiada"
-    Vas a construir, sobre las entidades que creaste en la Actividad 1.1, el CRUD completo de `Videojuego`: DTOs, controller y service con transacciones. Al terminar, tu GameVault sabrá crear, leer, modificar y borrar videojuegos de verdad.
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 1.2 — CRUD completo y DTOs sobre el catálogo](plantillas/Actividad_1_2_AD_Plantilla.docx){target="_blank" rel="noopener"}
+
+!!! info "Práctica guiada — con partes a tu cargo"
+    Vas a construir, sobre las entidades que creaste en la Actividad 1.1, el CRUD completo de `Videojuego` y de `Estudio`. En la teoría ya tienes un ejemplo completo y funcionando (`Libro`/`Editorial`) — aquí no lo vas a copiar y adaptar el nombre: unos pasos vienen guiados al completo, otros solo con la especificación y pistas, y tienes que escribir tú el código, apoyándote en el patrón que ya conoces.
 
 ## Qué vas a practicar
 
 - Definir DTOs de entrada y salida como `record`, distintos de la entidad JPA.
-- Construir un controller REST completo (GET, POST, PUT, DELETE) para `Videojuego`, y uno parcial (GET, POST) para `Estudio`.
+- Construir un controller REST completo (GET, POST, PUT, DELETE) para `Videojuego` y para `Estudio`.
 - Aplicar `@Transactional` correctamente en operaciones de escritura y de lectura.
 - Gestionar el caso "no encontrado" con `ResponseStatusException`.
-
-!!! warning "Qué NO incluye esta actividad todavía"
-    No incluyas paginación con `Pageable`, el filtro `VideojuegoFiltroDTO` ni `Specifications` — eso llega en el Tema 2. Tampoco incluyas ninguna llamada a un `EventPublisher`: la versión completa de GameVault publica eventos de mensajería tras cada operación, pero eso es contenido de Programación de Servicios y Procesos más adelante en el curso. Omite esas líneas por completo en tu propio código por ahora.
+- Reconocer qué partes de un patrón ya conocido puedes escribir tú solo, y en cuáles conviene volver a mirar el ejemplo.
 
 ---
 
 ## Requisitos previos
 
-Tu proyecto de la Actividad 1.1, con las entidades `Estudio` y `Videojuego` ya creadas y verificadas contra la base de datos.
+Tu proyecto de la Actividad 1.1, con las entidades `Estudio` y `Videojuego` ya creadas y verificadas contra la base de datos. Ten a mano la teoría de este apartado — el ejemplo de `Libro`/`Editorial` es la referencia que vas a adaptar en cada paso, no algo que debas releer de memoria.
 
 ---
 
-## Paso 1 — Los DTOs
+## Paso 1 — Los DTOs, con la especificación (no el código)
 
-Crea el paquete `catalogo.dto` con dos records:
+!!! warning "Antes de usar `@NotBlank` y compañía: revisa el `pom.xml`"
+    Bean Validation (`@NotBlank`, `@NotNull`, `@PositiveOrZero`...) no viene incluido en `spring-boot-starter-webmvc` — es una dependencia aparte. Si al escribir el DTO el IDE no encuentra esas anotaciones para importar, o el proyecto no compila, añade esto al `pom.xml` (detalle en la teoría de este apartado):
 
-```java
-package com.tunombre.gamevault.catalogo.dto;
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    ```
 
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+Crea el paquete `catalogo.dto` con dos records — pero esta vez solo tienes la tabla de campos, no el código:
 
-public record VideojuegoCreateDTO(
-        @NotBlank(message = "El título no puede estar vacío")
-        @Size(max = 150)
-        String titulo,
+**`VideojuegoCreateDTO`** (lo que se recibe al crear/actualizar):
 
-        @NotNull
-        @PositiveOrZero(message = "El precio no puede ser negativo")
-        BigDecimal precio,
+| Campo | Tipo | Validación |
+|---|---|---|
+| `titulo` | `String` | `@NotBlank`, `@Size(max = 150)` |
+| `precio` | `BigDecimal` | `@NotNull`, `@PositiveOrZero` |
+| `fechaLanzamiento` | `LocalDate` | `@NotNull`, `@PastOrPresent` |
+| `estudioId` | `Long` | `@NotNull` |
 
-        @NotNull
-        @PastOrPresent(message = "La fecha de lanzamiento no puede ser futura")
-        LocalDate fechaLanzamiento,
+**`VideojuegoResponseDTO`** (lo que se devuelve al consultar):
 
-        @NotNull
-        Long estudioId
-) {}
-```
+| Campo | Tipo |
+|---|---|
+| `id` | `Long` |
+| `titulo` | `String` |
+| `precio` | `BigDecimal` |
+| `fechaLanzamiento` | `LocalDate` |
+| `nombreEstudio` | `String` |
 
-```java
-package com.tunombre.gamevault.catalogo.dto;
+Escribe los dos `record`, con el paquete y los `import` que hagan falta (`jakarta.validation.constraints.*`, `java.math.BigDecimal`, `java.time.LocalDate`). Usa `LibroCreateDTO`/`LibroResponseDTO` de la teoría como patrón para la forma general (dónde van los `@NotNull`/`@NotBlank`, cómo se declara un `record` con varias líneas) — pero fíjate en una diferencia real, no cosmética: `LibroResponseDTO` anidaba un `EditorialDTO` completo; aquí `VideojuegoResponseDTO` solo lleva `nombreEstudio`, un `String` suelto.
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+**Pregunta**: ¿por qué crees que aquí basta con un `String` (`nombreEstudio`) en vez de anidar un `EstudioResponseDTO` completo, como sí hacía `LibroResponseDTO` con `EditorialDTO`? Piensa en qué necesita mostrar realmente un cliente que consulta un videojuego.
 
-public record VideojuegoResponseDTO(
-        Long id,
-        String titulo,
-        BigDecimal precio,
-        LocalDate fechaLanzamiento,
-        String nombreEstudio
-) {}
-```
+**Segunda pregunta**: ¿por qué `VideojuegoResponseDTO` no tiene sentido que lleve anotaciones `@NotBlank`/`@NotNull` como el DTO de creación?
 
-Fíjate en la diferencia entre los dos: `VideojuegoCreateDTO` pide `estudioId` (un simple `Long`, lo mínimo necesario para relacionar) y lleva las anotaciones de validación (`@NotBlank`, `@PositiveOrZero`...) que se comprobarán cuando actives `@Valid` en el controller; `VideojuegoResponseDTO` no lleva validación (nadie valida lo que tu propia aplicación devuelve) y en vez de `estudioId` lleva `nombreEstudio`, un dato ya "aplanado" y listo para mostrar.
-
-**Pregunta**: ¿por qué `VideojuegoResponseDTO` no tiene sentido que lleve anotaciones `@NotBlank`/`@NotNull` como el DTO de creación?
+!!! tip "Ese mismo razonamiento se aplica a `Estudio`"
+    En el Paso 8 vas a construir el CRUD de `Estudio` completo. Aunque no tiene ninguna relación que resolver, sigue necesitando dos DTOs distintos — piensa por qué antes de llegar allí: ¿qué pasaría si el cliente pudiera mandar un `id` en el `POST` de creación?
 
 ---
 
-## Paso 2 — GET y POST, guiados al completo
+## Paso 2 — El repository
 
-Antes del service necesitas el repositorio — la pieza que de verdad habla con la base de datos. Con Spring Data JPA no escribes ninguna implementación: declaras una interfaz vacía que extiende `JpaRepository<Entidad, TipoDeLaId>`, y Spring genera la implementación real (`findAll`, `findById`, `save`, `existsById`, `deleteById`...) en tiempo de ejecución, sin que tú escribas una sola línea de SQL ni de código de acceso a datos:
+Esta pieza es mecánica — declárala igual que en la teoría, sin nada que decidir:
 
 ```java
 package com.tunombre.gamevault.catalogo;
@@ -91,11 +86,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EstudioRepository extends JpaRepository<Estudio, Long> {}
 ```
 
-Con esto ya tienes `findAll()`, `findById(id)`, `save(entidad)`, `existsById(id)` y `deleteById(id)` disponibles sobre `Videojuego` y `Estudio`, respectivamente — los vas a usar constantemente a partir de ahora, empezando ya mismo en `VideojuegoService`.
+Con esto ya tienes `findAll()`, `findById(id)`, `save(entidad)`, `existsById(id)` y `deleteById(id)` disponibles sobre `Videojuego` y `Estudio`, respectivamente.
 
-En `VideojuegoService`, empieza por el mapeo y las operaciones de lectura:
+---
+
+## Paso 3 — La lectura: un método guiado, el otro tuyo
+
+`findById` es el más delicado (hay que resolver el caso "no encontrado"), así que va guiado al completo — junto con `mapToDTO`, que vas a reutilizar en todo lo que queda de actividad:
 
 ```java
+package com.tunombre.gamevault.catalogo;
+
+import com.tunombre.gamevault.catalogo.dto.VideojuegoResponseDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 @Service
 @RequiredArgsConstructor
 public class VideojuegoService {
@@ -103,32 +111,10 @@ public class VideojuegoService {
     private final EstudioRepository estudioRepository;
 
     @Transactional(readOnly = true)
-    public List<VideojuegoResponseDTO> findAll() {
-        return videojuegoRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
     public VideojuegoResponseDTO findById(Long id) {
         return videojuegoRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
-    }
-
-    @Transactional
-    public VideojuegoResponseDTO create(VideojuegoCreateDTO dto) {
-        Estudio estudio = estudioRepository.findById(dto.estudioId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
-
-        Videojuego v = new Videojuego();
-        v.setTitulo(dto.titulo());
-        v.setPrecio(dto.precio());
-        v.setFechaLanzamiento(dto.fechaLanzamiento());
-        v.setEstudio(estudio);
-
-        return mapToDTO(videojuegoRepository.save(v));
     }
 
     private VideojuegoResponseDTO mapToDTO(Videojuego v) {
@@ -139,35 +125,65 @@ public class VideojuegoService {
 }
 ```
 
-`findById` y `create` siguen el mismo patrón que ya viste en la teoría: `readOnly = true` en la lectura, transacción normal en la escritura, `orElseThrow` con `ResponseStatusException(HttpStatus.NOT_FOUND, ...)` cuando algo no existe — tanto para el videojuego como, en `create`, para el estudio al que debe pertenecer.
+**Añade tú `findAll()`** a esta misma clase: devuelve `List<VideojuegoResponseDTO>`, es `@Transactional(readOnly = true)` igual que `findById`, y mapea la lista completa del repository con `mapToDTO` — sin `orElseThrow`, porque una lista vacía no es un error (es exactamente el mismo caso que ya viste con `LibroService.findAll()` en la teoría).
 
-Ahora el controller:
+---
+
+## Paso 4 — El controller: un método guiado, el otro tuyo
+
+Mismo reparto que en el service — `getById` guiado, `getAll` para ti:
 
 ```java
+package com.tunombre.gamevault.catalogo;
+
+import com.tunombre.gamevault.catalogo.dto.VideojuegoResponseDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api/v1/videojuegos")
 @RequiredArgsConstructor
 public class VideojuegoController {
     private final VideojuegoService videojuegoService;
 
-    @GetMapping
-    public ResponseEntity<List<VideojuegoResponseDTO>> getAll() {
-        return ResponseEntity.ok(videojuegoService.findAll());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<VideojuegoResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(videojuegoService.findById(id));
     }
-
-    @PostMapping
-    public ResponseEntity<VideojuegoResponseDTO> create(@Valid @RequestBody VideojuegoCreateDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(videojuegoService.create(dto));
-    }
 }
 ```
 
-Arranca tu aplicación y prueba, con `curl` o Postman:
+**Añade tú `getAll()`**: sin `@PathVariable`, sin argumentos, delega en `videojuegoService.findAll()` y responde `200` con la lista completa.
+
+Arranca tu aplicación y comprueba ambos con `curl` o el navegador antes de seguir — si `getAll()`/`findAll()` no funcionan todavía, no tiene sentido construir la escritura encima.
+
+---
+
+## Paso 5 — `create()`, sin código dado
+
+Aquí ya no hay ningún método de ejemplo — solo la especificación. Añade a `VideojuegoService`:
+
+- Un método `create(VideojuegoCreateDTO dto)` que devuelve `VideojuegoResponseDTO`, anotado `@Transactional` (sin `readOnly`: es una escritura).
+- Dentro, en este orden:
+    1. Busca el `Estudio` con `estudioRepository.findById(dto.estudioId())`. Si no existe, lanza `ResponseStatusException(HttpStatus.NOT_FOUND, ...)` — mismo patrón que ya usaste en `findById`, aplicado esta vez al estudio, no al videojuego.
+    2. Crea un `Videojuego` nuevo (`new Videojuego()`) y rellena sus campos con los setters de Lombok — `titulo`, `precio`, `fechaLanzamiento` desde el DTO, y `estudio` con el objeto que acabas de cargar.
+    3. Guarda con `videojuegoRepository.save(...)` y devuelve el resultado pasado por `mapToDTO`.
+
+Y en `VideojuegoController`, un método `create` anotado `@PostMapping`, que recibe `@Valid @RequestBody VideojuegoCreateDTO dto` y responde `201 Created` (`HttpStatus.CREATED`) con el resultado.
+
+Guíate por `LibroService.create()`/`LibroController.create()` de la teoría — es exactamente el mismo patrón, con otros nombres de campo.
+
+Antes de probarlo, hace falta un `Estudio` real al que asociar el videojuego — y el endpoint para crear estudios todavía no existe (lo construyes en el Paso 8). Siémbralo directamente por SQL, desde la misma terminal `psql` que ya usaste en la Actividad 1.1:
+
+```sql
+INSERT INTO estudio (nombre, pais) VALUES ('Supergiant Games', 'Estados Unidos');
+```
+
+Comprueba con `SELECT * FROM estudio;` que se ha creado con `id = 1` (si es la primera fila que insertas en una tabla recién creada, lo será). Ahora sí, prueba `create()`:
+
+!!! warning "Asegúrate de que el servidor está arrancado"
+    Necesitas tu aplicación Spring Boot corriendo (con la terminal del servidor visible) antes de lanzar este `curl` — si la paraste en algún momento, vuelve a arrancarla ahora.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos \
@@ -175,48 +191,21 @@ curl -X POST http://localhost:8080/api/v1/videojuegos \
   -d '{"titulo":"Hades","precio":24.99,"fechaLanzamiento":"2020-09-17","estudioId":1}'
 ```
 
-**Predicción**: si `estudioId` apunta a un estudio que no existe en tu base de datos, ¿qué código de estado esperas recibir? Compruébalo después de escribir tu respuesta.
+**Predicción**: si en vez de `1` pusieras un `estudioId` que no existe en tu base de datos, ¿qué código de estado esperas recibir? Pruébalo también, cambiando el número, antes de seguir.
 
 ---
 
-## Paso 3 — El PUT, guiado al completo
+## Paso 6 — `update()`, el `PUT`
 
-El `PUT` es la operación con más matices: hay que cargar el recurso existente, comprobar que existe, modificar sus campos y guardar — no crear uno nuevo.
+`update()` se parece mucho a `create()`, con dos diferencias: no crea un `Videojuego` nuevo, carga el que ya existe (y responde `404` si no lo encuentra, igual que en `findById`); y usa el mismo `VideojuegoCreateDTO` que `create()` — no hace falta un DTO distinto, los datos que se piden son los mismos.
 
-```java
-// En VideojuegoService
-@Transactional
-public VideojuegoResponseDTO update(Long id, VideojuegoCreateDTO dto) {
-    Videojuego v = videojuegoRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
-
-    Estudio estudio = estudioRepository.findById(dto.estudioId())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
-
-    v.setTitulo(dto.titulo());
-    v.setPrecio(dto.precio());
-    v.setFechaLanzamiento(dto.fechaLanzamiento());
-    v.setEstudio(estudio);
-
-    return mapToDTO(videojuegoRepository.save(v));
-}
-```
-
-```java
-// En VideojuegoController
-@PutMapping("/{id}")
-public ResponseEntity<VideojuegoResponseDTO> update(@PathVariable Long id, @Valid @RequestBody VideojuegoCreateDTO dto) {
-    return ResponseEntity.ok(videojuegoService.update(id, dto));
-}
-```
-
-Fíjate en que `update` reutiliza el mismo `VideojuegoCreateDTO` que `create` — no necesitas un DTO distinto para actualizar, porque los datos que se piden son los mismos. Nota también que, aunque el objeto `v` ya está siendo gestionado por Hibernate (viene de un `findById` dentro de la misma transacción), el `save()` explícito al final no sobra: deja claro en el código, sin ambigüedad, cuál es el punto en el que se persiste el cambio.
+Escribe `update(Long id, VideojuegoCreateDTO dto)` en `VideojuegoService` (`@Transactional`, sin `readOnly`) y el `@PutMapping("/{id}")` correspondiente en el controller. Si te atascas, `LibroService.update()`/`LibroController.update()` de la teoría siguen exactamente esta misma forma.
 
 ---
 
-## Mini-reto — el DELETE
+## Mini-reto — el `DELETE`
 
-Repite el patrón que ya has usado dos veces (cargar + comprobar existencia + actuar). Sin más pistas que estas:
+Repite el patrón que ya has usado dos veces (cargar/comprobar + actuar). Sin más pistas que estas:
 
 - El método del service debe devolver `void`.
 - El endpoint debe responder `204 No Content` si todo va bien.
@@ -226,7 +215,7 @@ Complétalo tú mismo en `VideojuegoService` y en `VideojuegoController`.
 
 ---
 
-## Paso 4 — Comprobación final de las cuatro operaciones
+## Paso 7 — Comprobación final de las cuatro operaciones
 
 ```bash
 # Crear
@@ -248,93 +237,50 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/1
 
 ---
 
-## Paso 5 — `Estudio`: el mismo patrón, con un matiz
+## Paso 8 — `Estudio`: el mismo patrón, completo, ahora sin ejemplo
 
-Replica ahora el mismo patrón sobre `Estudio` — mismo `@RestController`/`@Service`, mismo manejo de "no encontrado" con `ResponseStatusException`. Como `Estudio` solo tiene `nombre` y `pais` (sin relación que validar al crearlo, a diferencia de `Videojuego` con su `estudioId`), un único DTO te vale tanto para crear como para leer:
+`Estudio` es más simple que `Videojuego` — no tiene que resolver ninguna relación al crearse o actualizarse (`nombre` y `pais`, nada más). Pero eso no significa que valga un único DTO para todo: sigue habiendo un dato, el `id`, que nunca debe poder mandar el cliente al crear (lo genera la base de datos), y campos de entrada que sí necesitan validación (`@NotBlank` en `nombre`/`pais`) pero que no tiene sentido exigir en la respuesta. Mismo motivo que en `Videojuego`, dos DTOs otra vez. Esta vez no hay ningún fragmento de código dado — tienes la especificación y el patrón que acabas de escribir para `Videojuego`. Construye el CRUD completo, las cuatro operaciones.
 
-```java
-package com.tunombre.gamevault.catalogo.dto;
+**`EstudioCreateDTO`** (lo que se recibe al crear/actualizar), en `catalogo.dto`:
 
-public record EstudioDTO(Long id, String nombre, String pais) {}
+| Campo | Tipo | Validación |
+|---|---|---|
+| `nombre` | `String` | `@NotBlank` |
+| `pais` | `String` | `@NotBlank` |
+
+**`EstudioResponseDTO`** (lo que se devuelve al consultar):
+
+| Campo | Tipo |
+|---|---|
+| `id` | `Long` |
+| `nombre` | `String` |
+| `pais` | `String` |
+
+**`EstudioService`**, con el mismo patrón que `VideojuegoService` pero sin `EstudioRepository` adicional que resolver (no hay una segunda entidad relacionada que buscar):
+
+- `findAll()` y `findById(id)` — igual que en `Videojuego`, devolviendo `EstudioResponseDTO` con su propio `mapToDTO(Estudio e)` privado.
+- `create(EstudioCreateDTO dto)` — más simple que el de `Videojuego`: no hay ningún `findById` previo, solo `new Estudio()`, rellenar y guardar.
+- `update(Long id, EstudioCreateDTO dto)` y `delete(Long id)` — mismo patrón que ya usaste en `VideojuegoService`.
+
+**`EstudioController`**, en `/api/v1/estudios`: las cuatro operaciones — `GET` (los dos), `POST`, `PUT` y `DELETE`, igual que en `VideojuegoController` — incluido el `@Valid` en `create`/`update`, ahora que `EstudioCreateDTO` lleva anotaciones que comprobar.
+
+**Comprueba** con `curl` que las cuatro operaciones de `/api/v1/estudios` funcionan igual que sus equivalentes de `Videojuego`:
+
+```bash
+# Crear
+curl -X POST http://localhost:8080/api/v1/estudios -H "Content-Type: application/json" \
+  -d '{"nombre":"FromSoftware","pais":"Japón"}'
+
+# Leer
+curl http://localhost:8080/api/v1/estudios
+
+# Actualizar (sustituye 1 por el id real que te haya devuelto el create)
+curl -X PUT http://localhost:8080/api/v1/estudios/1 -H "Content-Type: application/json" \
+  -d '{"nombre":"FromSoftware","pais":"Japón"}'
+
+# Borrar
+curl -X DELETE http://localhost:8080/api/v1/estudios/1
 ```
-
-```java
-@Service
-@RequiredArgsConstructor
-public class EstudioService {
-    private final EstudioRepository estudioRepository;
-
-    @Transactional(readOnly = true)
-    public List<EstudioDTO> findAll() {
-        return estudioRepository.findAll().stream().map(this::mapToDTO).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public EstudioDTO findById(Long id) {
-        return estudioRepository.findById(id)
-                .map(this::mapToDTO)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
-    }
-
-    @Transactional
-    public EstudioDTO create(EstudioDTO dto) {
-        Estudio estudio = new Estudio();
-        estudio.setNombre(dto.nombre());
-        estudio.setPais(dto.pais());
-        return mapToDTO(estudioRepository.save(estudio));
-    }
-
-    @Transactional
-    public EstudioDTO update(Long id, EstudioDTO dto) {
-        Estudio estudio = estudioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado"));
-        estudio.setNombre(dto.nombre());
-        estudio.setPais(dto.pais());
-        return mapToDTO(estudioRepository.save(estudio));
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        if (!estudioRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudio no encontrado");
-        }
-        estudioRepository.deleteById(id);
-    }
-
-    private EstudioDTO mapToDTO(Estudio e) {
-        return new EstudioDTO(e.getId(), e.getNombre(), e.getPais());
-    }
-}
-```
-
-```java
-@RestController
-@RequestMapping("/api/v1/estudios")
-@RequiredArgsConstructor
-public class EstudioController {
-    private final EstudioService estudioService;
-
-    @GetMapping
-    public ResponseEntity<List<EstudioDTO>> getAll() {
-        return ResponseEntity.ok(estudioService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EstudioDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(estudioService.findById(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<EstudioDTO> create(@RequestBody EstudioDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(estudioService.create(dto));
-    }
-}
-```
-
-!!! tip "`update`/`delete` existen, pero todavía no tienen endpoint"
-    Fíjate en que `EstudioService` ya tiene `update` y `delete` completos y funcionando — pero `EstudioController` **no** expone todavía ningún `@PutMapping`/`@DeleteMapping` que los invoque. No es un olvido: esa pieza (el endpoint, la capa REST) es justo lo que vas a construir en Programación de Servicios y Procesos las próximas dos semanas, reutilizando estos mismos métodos de servicio en vez de reescribirlos.
-
-**Comprueba** con `curl` o Swagger UI que `GET /api/v1/estudios`, `GET /api/v1/estudios/{id}` y `POST /api/v1/estudios` funcionan igual que sus equivalentes de `Videojuego`.
 
 ---
 
@@ -344,6 +290,16 @@ public class EstudioController {
 
 ---
 
+## Entregable
+
+Lo que entregas es la plantilla descargable del principio de la actividad, completa. Como último punto de esa plantilla: una captura del código completo de `EstudioService` o `EstudioController` (el que prefieras), tal y como lo has escrito tú en el Paso 8 — como evidencia de tu propia implementación, no la del ejemplo de la teoría.
+
+---
+
 ## ✅ Cierre
 
-Tu GameVault ya tiene un CRUD completo y transaccional sobre `Videojuego`, y `Estudio` con `GET`/`POST` funcionando (con `update`/`delete` ya listos en el service, a la espera de su endpoint). Todavía lo has hecho todo con Spring Data JPA gestionando la conexión por ti — en la próxima actividad vas a ver, con JDBC puro, toda la "fontanería" que hay debajo de ese `@Transactional` que acabas de usar.
+Tu GameVault ya tiene un CRUD completo y transaccional sobre `Videojuego` y sobre `Estudio`. Esta vez buena parte del código lo has escrito tú, apoyándote en el patrón de la teoría en vez de copiarlo — es la misma habilidad que vas a necesitar el resto del curso.
+
+Has probado todo esto con `curl`, línea a línea — suficiente para verificar un endpoint suelto, pero incómodo para probar varios seguidos o repetir pruebas. En Programación de Servicios y Procesos, Actividad 1.2, vas a documentar estos mismos endpoints con OpenAPI/Swagger y a probarlos desde una interfaz visual en el navegador — sin dejar de usar `curl` cuando te convenga, pero con una alternativa más cómoda para el día a día.
+
+Todavía lo has hecho todo con Spring Data JPA gestionando la conexión por ti — en la próxima actividad vas a ver, con JDBC puro, toda la "fontanería" que hay debajo de ese `@Transactional` que acabas de usar.

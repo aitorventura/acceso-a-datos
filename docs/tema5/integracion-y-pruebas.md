@@ -8,21 +8,21 @@
 
 ## 🧪 Probar un componente aislado — repaso
 
-Ya construiste este tipo de test en el Tema 5 (Actividad 5.1):
+Ya construiste este tipo de test en la Actividad 5.1:
 
 ```java
 @ExtendWith(MockitoExtension.class)
 class CatalogoConsultaServiceImplTest {
     @Mock
-    private LibroRepository libroRepository;
+    private VideojuegoRepository videojuegoRepository;
 
     @InjectMocks
     private CatalogoConsultaServiceImpl catalogoConsultaService;
 
     @Test
-    void existeLibro_DebeDevolverTrue_CuandoExiste() {
-        when(libroRepository.existsById(1L)).thenReturn(true);
-        assertTrue(catalogoConsultaService.existeLibro(1L));
+    void existeVideojuego_DebeDevolverTrue_CuandoExiste() {
+        when(videojuegoRepository.existsById(1L)).thenReturn(true);
+        assertTrue(catalogoConsultaService.existeVideojuego(1L));
     }
 }
 ```

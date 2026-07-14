@@ -75,7 +75,7 @@ try (Connection conn = DriverManager.getConnection(url, user, pass);
 }
 ```
 
-`try-with-resources` cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un `finally` con cada `close()` a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el *pool* de conexiones que viste en el apartado 2, y la aplicación deja de poder conectarse a la base de datos.
+`try-with-resources` cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un `finally` con cada `close()` a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el *pool* de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos", y la aplicación deja de poder conectarse a la base de datos.
 
 ---
 

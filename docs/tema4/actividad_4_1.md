@@ -13,7 +13,7 @@
 
 ## Requisitos previos
 
-Tu PostgreSQL y tu login JWT de PSP (semanas 7-11) ya funcionando — vas a usar `Principal` para identificar al autor de cada reseña.
+Tu PostgreSQL y tu login JWT de PSP (Tema 2 — Programación Segura) ya funcionando — vas a usar `Principal` para identificar al autor de cada reseña.
 
 ---
 

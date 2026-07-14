@@ -1,4 +1,4 @@
-# 🧪 Actividad 2.1: De JDBC puro a Hibernate — mapeo con anotaciones
+# 🧪 Actividad 2.1: Mapeo con anotaciones — qué SQL genera Hibernate por debajo
 
 !!! info "Práctica guiada — experimentos sobre tu propio mapeo"
     No vas a escribir entidades nuevas hoy — vas a experimentar sobre las que ya tienes (`Videojuego`, `Estudio`), cambiando anotaciones a propósito y observando qué SQL genera Hibernate en cada caso.

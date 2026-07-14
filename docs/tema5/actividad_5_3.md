@@ -117,4 +117,4 @@ Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu reposito
 
 ## ✅ Cierre del módulo
 
-Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, semana a semana, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.
+Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, actividad a actividad, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.

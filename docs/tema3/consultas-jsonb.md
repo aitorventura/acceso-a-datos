@@ -68,7 +68,7 @@ Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una
 
 ## ✏️ Modificar objetos JSONB: reemplazo, no *merge*
 
-Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `detallesEdicion`, no combina el nuevo contenido con el anterior — lo comprobarás tú mismo en la Actividad 3.1.
+Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `detallesEdicion`, no combina el nuevo contenido con el anterior — como comprobaste tú mismo en la Actividad 3.1.
 
 ```java
 libro.setDetallesEdicion(dto.detallesEdicion()); // sustituye el Map entero
