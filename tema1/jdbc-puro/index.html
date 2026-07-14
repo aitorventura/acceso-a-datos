@@ -2165,7 +2165,7 @@
 <a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>try-with-resources</code> cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un <code>finally</code> con cada <code>close()</code> a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el <em>pool</em> de conexiones que viste en el apartado 2, y la aplicación deja de poder conectarse a la base de datos.</p>
+<p><code>try-with-resources</code> cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un <code>finally</code> con cada <code>close()</code> a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el <em>pool</em> de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos", y la aplicación deja de poder conectarse a la base de datos.</p>
 <hr>
 <h2 id="lo-que-spring-data-jpa-te-estaba-ahorrando">🆚 Lo que Spring Data JPA te estaba ahorrando<a class="headerlink" href="#lo-que-spring-data-jpa-te-estaba-ahorrando" title="Permanent link">¶</a></h2>
 <p>Compara este ciclo completo con lo que ya conoces de <code>operaciones-crud-transacciones.md</code>:</p>

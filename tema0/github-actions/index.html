@@ -2224,7 +2224,7 @@
 </div>
 <hr>
 <h2 id="51-que-problema-resuelve-la-integracion-continua">5.1 ¿Qué problema resuelve la integración continua?<a class="headerlink" href="#51-que-problema-resuelve-la-integracion-continua" title="Permanent link">¶</a></h2>
-<p>Imagina que un equipo de cuatro personas trabaja en el mismo repositorio. Cada una desarrolla su parte en su rama y cuando termina hace merge en <code>main</code>. El problema: en el momento del merge nadie sabe si el código del compañero rompe los tests que otra persona escribió la semana pasada. Descubrirlo tres días después —o peor, en producción— cuesta mucho más que haberlo detectado en el acto.</p>
+<p>Imagina que un equipo de cuatro personas trabaja en el mismo repositorio. Cada una desarrolla su parte en su rama y cuando termina hace merge en <code>main</code>. El problema: en el momento del merge nadie sabe si el código del compañero rompe los tests que otra persona escribió hace unos días. Descubrirlo tres días después —o peor, en producción— cuesta mucho más que haberlo detectado en el acto.</p>
 <p>La <strong>integración continua</strong> (CI, de <em>Continuous Integration</em>) es la práctica de ejecutar comprobaciones automáticas sobre el código <strong>cada vez que alguien propone un cambio</strong>. Compilar, pasar los tests, revisar el estilo... todo de forma automática y en segundos. Si algo falla, el sistema avisa antes de que el código llegue a <code>main</code>.</p>
 <pre class="mermaid"><code>flowchart LR
     A[git push / PR] --&gt; B[GitHub Actions]

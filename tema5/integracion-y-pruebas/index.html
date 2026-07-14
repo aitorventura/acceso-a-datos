@@ -2057,7 +2057,7 @@
 <p>Último apartado del módulo. Responde a la pregunta que da sentido a todo lo anterior: ¿cómo sabes que tus componentes, diseñados por separado, funcionan bien <strong>juntos</strong>?</p>
 <hr>
 <h2 id="probar-un-componente-aislado-repaso">🧪 Probar un componente aislado — repaso<a class="headerlink" href="#probar-un-componente-aislado-repaso" title="Permanent link">¶</a></h2>
-<p>Ya construiste este tipo de test en el Tema 5 (Actividad 5.1):</p>
+<p>Ya construiste este tipo de test en la Actividad 5.1:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -2074,15 +2074,15 @@
 <span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@ExtendWith</span><span class="p">(</span><span class="n">MockitoExtension</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nd">@Mock</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nd">@InjectMocks</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">;</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nd">@Test</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeLibro_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeLibro</span><span class="p">(</span><span class="mi">1L</span><span class="p">));</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">1L</span><span class="p">));</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>

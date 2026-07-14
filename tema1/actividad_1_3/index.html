@@ -2146,7 +2146,7 @@
 <hr>
 <h2 id="paso-2-por-que-el-cierre-importa">Paso 2 — Por qué el cierre importa<a class="headerlink" href="#paso-2-por-que-el-cierre-importa" title="Permanent link">¶</a></h2>
 <p>Ya está usando <code>try-with-resources</code> en el código de arriba. Fíjate en el orden: <code>Connection</code> y <code>PreparedStatement</code> se abren en el mismo <code>try</code>, y <code>ResultSet</code> en uno anidado — se cierran automáticamente en orden inverso al salir de cada bloque, incluso si algo falla a mitad.</p>
-<p><strong>Pregunta</strong>: si quitaras el <code>try-with-resources</code> y abrieras la conexión con un <code>Connection conn = DriverManager.getConnection(...)</code> normal, sin cerrarla nunca, ¿qué pasaría si ejecutaras este <code>main()</code> 200 veces seguidas? Relaciona tu respuesta con el <em>pool</em> de conexiones que viste en el apartado de teoría de la semana 3.</p>
+<p><strong>Pregunta</strong>: si quitaras el <code>try-with-resources</code> y abrieras la conexión con un <code>Connection conn = DriverManager.getConnection(...)</code> normal, sin cerrarla nunca, ¿qué pasaría si ejecutaras este <code>main()</code> 200 veces seguidas? Relaciona tu respuesta con el <em>pool</em> de conexiones (HikariCP) que viste en el apartado de "Conectores y protocolos de acceso a bases de datos".</p>
 <hr>
 <h2 id="mini-reto-segunda-consulta">Mini-reto — segunda consulta<a class="headerlink" href="#mini-reto-segunda-consulta" title="Permanent link">¶</a></h2>
 <p>Repite exactamente el mismo patrón del Paso 1 (conexión, <code>PreparedStatement</code> parametrizado, recorrido del <code>ResultSet</code>, cierre con <code>try-with-resources</code>) para esta consulta nueva:</p>

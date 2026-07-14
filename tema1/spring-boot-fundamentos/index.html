@@ -2198,7 +2198,7 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>La diferencia parece pequeña en el código, pero cambia quién manda: <code>LibroService</code> ya no sabe (ni le importa) de dónde sale su <code>LibroRepository</code> — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de <strong>inversión de control</strong> del apartado anterior, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.</p>
+<p>La diferencia parece pequeña en el código, pero cambia quién manda: <code>LibroService</code> ya no sabe (ni le importa) de dónde sale su <code>LibroRepository</code> — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de <strong>inversión de control</strong> visto más arriba, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.</p>
 <div class="admonition example">
 <p class="admonition-title">La misma analogía del restaurante, un paso más</p>
 <p>Cuando cocinas en el restaurante (recuerda la analogía de antes), no vas tú al almacén a buscar los ingredientes — te los traen a la mesa de trabajo, ya listos, cuando los necesitas. La inyección de dependencias es justo eso, pero con objetos: <code>LibroService</code> no va a buscar su <code>LibroRepository</code>; se lo entregan.</p>

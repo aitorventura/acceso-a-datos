@@ -2097,7 +2097,7 @@
 <p><code>JOIN e.videojuegos v</code> navega la relación <code>@OneToMany</code> que ya tienes declarada en <code>Estudio</code> — no hace falta que escribas la condición del <code>JOIN</code> explícitamente (<code>ON v.estudio_id = e.id</code>), porque JPQL ya conoce esa relación por el propio mapeo de tu entidad. <code>GROUP BY e</code> agrupa por estudio completo (no por una columna suelta, como harías en SQL), y <code>ORDER BY COUNT(v) DESC</code> ordena por el tamaño de cada grupo, de mayor a menor.</p>
 <hr>
 <h2 id="paso-2-el-dto-de-respuesta">Paso 2 — El DTO de respuesta<a class="headerlink" href="#paso-2-el-dto-de-respuesta" title="Permanent link">¶</a></h2>
-<p>Crea un DTO específico para el ranking — no reutilices <code>EstudioDTO</code> ni devuelvas la entidad <code>Estudio</code> completa:</p>
+<p>Crea un DTO específico para el ranking — no reutilices <code>EstudioResponseDTO</code> ni devuelvas la entidad <code>Estudio</code> completa:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
@@ -2149,7 +2149,7 @@
 <p>Con tus propias palabras (2-3 frases, no copiadas del enunciado ni de la teoría), explica cómo esta actividad, junto con las dos anteriores del tema (mapeo con anotaciones, Specifications dinámicas), te ha permitido consultar tu catálogo de formas muy distintas. ¿Qué tipo de consulta usarías para cada una de las tres situaciones siguientes, y por qué: "buscar un videojuego por su id exacto", "listar videojuegos filtrando por hasta cuatro criterios opcionales", "calcular cuántos videojuegos ha publicado cada estudio"?</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>En el Tema 3 das el salto a bases de datos objeto-relacionales: vas a retomar <code>disponibleEnPlataforma</code>, la Specification que usaba <code>jsonb_exists</code> y que dejaste de lado en la Actividad 2.2 — ahora la vas a entender de verdad, trabajando con la columna JSONB que la hace posible.</p></div>
+<p>En el Tema 3 das el salto a bases de datos objeto-relacionales: vas a construir <code>disponibleEnPlataforma</code>, una Specification que usa <code>jsonb_exists</code> — ahora la vas a entender de verdad, trabajando con la columna JSONB que la hace posible.</p></div>
 
 
 
