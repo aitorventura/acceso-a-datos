@@ -69,7 +69,36 @@ libroRepository.findById(id)
 
 `orElseThrow(...)` dice, en una línea: "si el `Optional` trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos resolviste el caso "recurso no encontrado" con un `if` explícito comprobando `null` — esto es la versión más directa de esa misma idea, apoyada en que `findById` ya te avisa con un `Optional` vacío en vez de con un `null` a pelo.
 
-Declara `LibroRepository` y `EditorialRepository` de la misma forma:
+### Y si necesitas una consulta que no viene de fábrica
+
+`findAll`/`findById`/`save`... cubren lo genérico, pero ¿y si necesitas "todos los libros de una editorial concreta"? No hace falta escribir SQL a mano ni implementar nada: declaras el método en la interfaz, sin cuerpo, siguiendo un patrón de nombre:
+
+```java
+public interface LibroRepository extends JpaRepository<Libro, Long> {
+    List<Libro> findByEditorialId(Long editorialId);
+}
+```
+
+Spring Data JPA lee el nombre del método al arrancar la aplicación, lo descompone (`find` + `By` + `EditorialId`) y genera la consulta él solo — el `EditorialId` del nombre tiene que coincidir con un campo real de `Libro` (aquí, la relación `editorial`, a través de su `id`). El resultado equivale a:
+
+```sql
+SELECT * FROM libro WHERE editorial_id = ?
+```
+
+La convención admite más piezas combinables, todas sin escribir una sola consulta:
+
+| Patrón | Ejemplo | Equivale a |
+|---|---|---|
+| `findByX` | `findByTitulo(String titulo)` | `WHERE titulo = ?` |
+| `findByXAndY` | `findByTituloAndPrecioLessThan(String t, BigDecimal p)` | `WHERE titulo = ? AND precio < ?` |
+| `findByXOrderByY` | `findByEditorialIdOrderByPrecioDesc(Long id)` | `WHERE editorial_id = ? ORDER BY precio DESC` |
+| `existsByX` | `existsByTitulo(String titulo)` | igual que `findByX`, pero devuelve `boolean` |
+| `countByX` | `countByEditorialId(Long id)` | igual, pero devuelve `long` |
+
+!!! tip "Cuidado con los límites de esta convención"
+    Es cómoda para consultas simples y fijas. Si necesitas filtros que cambian según el caso (a veces por título, a veces por precio, a veces ambos) o consultas más elaboradas, esta convención se queda corta — para eso están las **Specifications** (filtros dinámicos) y `@Query` con JPQL, que verás en el Tema 2.
+
+El CRUD que vas a construir en este apartado no necesita ninguna consulta personalizada todavía — `findAll`/`findById`/`save`/`deleteById` bastan. Declara `LibroRepository` y `EditorialRepository` vacías, sabiendo ya cómo añadirles un método propio el día que lo necesites:
 
 ```java
 public interface LibroRepository extends JpaRepository<Libro, Long> {}
@@ -459,6 +488,7 @@ Cada flecha de este diagrama es algo que ya has visto por separado en el apartad
 
     - **CRUD** = Create/Read/Update/Delete, equivalentes a `INSERT`/`SELECT`/`UPDATE`/`DELETE` en SQL y a `POST`/`GET`/`PUT`/`DELETE` en HTTP — las tres son la misma idea.
     - Un **repository** (`interface XRepository extends JpaRepository<X, Long>`) te da `findAll`/`findById`/`save`/`existsById`/`deleteById` sin escribir SQL ni implementación propia.
+    - Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (`findByEditorialId`, `findByTituloAndPrecioLessThan`...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y `@Query` (Tema 2).
     - Devolver la entidad JPA tal cual expone campos internos que no deberías publicar (y puede arrastrar detalles de Hibernate en las relaciones *lazy*) — por eso se convierte a un **DTO** antes de salir.
     - Un **`record`** de Java declara en una línea una clase inmutable — encaja con los DTOs porque nunca cambian tras crearse. No es lo mismo que una `@Entity` (mutable, gestionada por Hibernate).
     - Las anotaciones de **Bean Validation** (`@NotBlank`, `@PositiveOrZero`...) sobre el DTO de entrada, combinadas con `@Valid` en el controller, rechazan datos basura con un `400` antes de que tu código se ejecute.
