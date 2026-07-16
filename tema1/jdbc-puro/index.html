@@ -973,13 +973,31 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#el-ciclo-completo-paso-a-paso" class="md-nav__link">
+  <a href="#la-problematica-todo-lo-que-pasa-a-ser-cosa-tuya" class="md-nav__link">
     <span class="md-ellipsis">
-      🔧 El ciclo completo, paso a paso
+      ⚠️ La problemática: todo lo que pasa a ser cosa tuya
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🔧 El ciclo completo, paso a paso">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-misma-consulta-dos-formas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🆚 La misma consulta, dos formas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-ciclo-completo-pieza-a-pieza" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 El ciclo completo, pieza a pieza
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 El ciclo completo, pieza a pieza">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1020,6 +1038,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#y-para-escribir-insert-con-jdbc-puro" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ ¿Y para escribir? INSERT, con JDBC puro
+    </span>
+  </a>
   
 </li>
       
@@ -1986,13 +2013,31 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#el-ciclo-completo-paso-a-paso" class="md-nav__link">
+  <a href="#la-problematica-todo-lo-que-pasa-a-ser-cosa-tuya" class="md-nav__link">
     <span class="md-ellipsis">
-      🔧 El ciclo completo, paso a paso
+      ⚠️ La problemática: todo lo que pasa a ser cosa tuya
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🔧 El ciclo completo, paso a paso">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-misma-consulta-dos-formas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🆚 La misma consulta, dos formas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-ciclo-completo-pieza-a-pieza" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 El ciclo completo, pieza a pieza
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 El ciclo completo, pieza a pieza">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2033,6 +2078,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#y-para-escribir-insert-con-jdbc-puro" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✍️ ¿Y para escribir? INSERT, con JDBC puro
+    </span>
+  </a>
   
 </li>
       
@@ -2104,81 +2158,232 @@
 </table>
 <p>Cada una de estas piezas es un <strong>recurso</strong>: mientras está abierta, mantiene ocupada una conexión de red y memoria en el gestor de base de datos. Un recurso que se abre y no se cierra no desaparece solo — sigue consumiendo esos recursos hasta que algo lo cierre explícitamente (o, en el peor caso, hasta que el proceso entero termine).</p>
 <hr>
-<h2 id="el-ciclo-completo-paso-a-paso">🔧 El ciclo completo, paso a paso<a class="headerlink" href="#el-ciclo-completo-paso-a-paso" title="Permanent link">¶</a></h2>
-<h3 id="1-abrir-la-conexion">1. Abrir la conexión<a class="headerlink" href="#1-abrir-la-conexion" title="Permanent link">¶</a></h3>
+<h2 id="la-problematica-todo-lo-que-pasa-a-ser-cosa-tuya">⚠️ La problemática: todo lo que pasa a ser cosa tuya<a class="headerlink" href="#la-problematica-todo-lo-que-pasa-a-ser-cosa-tuya" title="Permanent link">¶</a></h2>
+<p>Cuando escribes <code>libroRepository.findAll()</code>, das por hecho un montón de trabajo que alguien tiene que hacer. Con JDBC puro, ese "alguien" eres tú, para cada consulta que escribas:</p>
+<ul>
+<li><strong>Abrir la conexión</strong> con la URL, usuario y contraseña correctos, y <strong>cerrarla</strong> después — sin olvidarte, o el recurso queda ocupado para siempre.</li>
+<li><strong>Escribir el SQL a mano</strong>, como texto, sin que nadie compruebe que la sintaxis es correcta hasta que lo ejecutas.</li>
+<li><strong>Pasar los parámetros con cuidado</strong>, o exponerte a una inyección SQL (lo ves en detalle más abajo).</li>
+<li><strong>Recorrer el resultado fila a fila</strong>, extrayendo cada columna con el método <code>getXxx</code> que corresponda a su tipo, y <strong>construir tú mismo</strong> el objeto Java con esos datos.</li>
+<li><strong>Gestionar <code>SQLException</code></strong>, una excepción <em>checked</em> que Java te obliga a capturar o declarar en cada método que toque JDBC.</li>
+</ul>
+<p>Ninguna de estas piezas es difícil por separado — el problema es que hay que acordarse de las cinco, en cada consulta, cada vez.</p>
+<hr>
+<h2 id="la-misma-consulta-dos-formas">🆚 La misma consulta, dos formas<a class="headerlink" href="#la-misma-consulta-dos-formas" title="Permanent link">¶</a></h2>
+<p>Antes de entrar en el código pieza a pieza, compara el punto de partida y el de llegada: "todos los libros de una editorial", resuelto de las dos formas.</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Con Spring Data JPA (lo que ya conoces)</label><label for="__tabbed_1_2">Con JDBC puro (lo que vas a hacer hoy)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span>
-<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">        </span><span class="s">"jdbc:postgresql://localhost:5432/libreria_db"</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">        </span><span class="s">"libreria_user"</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">        </span><span class="s">"password123"</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="p">);</span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByEditorialId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yaml</code> — solo que aquí los pasas directamente en Java, sin que Spring medie. En un proyecto real, en vez de <code>DriverManager</code> se usaría casi siempre un <code>DataSource</code> con pooling (como el HikariCP que Spring configura automáticamente por ti) — <code>DriverManager</code> abre una conexión nueva cada vez, sin reutilizar nada.</p>
+<p>Una línea, sin cuerpo. Spring Data JPA lee el nombre del método (<code>findBy</code> + <code>EditorialId</code>) y genera la consulta SQL él solo, sin que escribas nada dentro de la interfaz — el mismo principio de "interfaz no vacía" que ya viste con <code>findAll()</code>/<code>save()</code>, aplicado ahora a una consulta que tú mismo has pedido.</p>
+</div>
+<div class="tabbed-block">
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT id, titulo, precio FROM libro WHERE editorial_id = ?"</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">pass</span><span class="p">);</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">     </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">            </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Libro</span><span class="p">();</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">            </span><span class="n">libro</span><span class="p">.</span><span class="na">setId</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="s">"id"</span><span class="p">));</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">            </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">));</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">            </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getBigDecimal</span><span class="p">(</span><span class="s">"precio"</span><span class="p">));</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">            </span><span class="n">libros</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">libro</span><span class="p">);</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">libros</span><span class="p">;</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">"Error accediendo a la base de datos"</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Quince líneas para lo mismo — y esto es la versión <em>ya</em> correcta, con los recursos cerrándose solos. El resto de este apartado explica cada pieza de este bloque, una a una.</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<h2 id="el-ciclo-completo-pieza-a-pieza">🔧 El ciclo completo, pieza a pieza<a class="headerlink" href="#el-ciclo-completo-pieza-a-pieza" title="Permanent link">¶</a></h2>
+<h3 id="1-abrir-la-conexion">1. Abrir la conexión<a class="headerlink" href="#1-abrir-la-conexion" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="s">"jdbc:postgresql://localhost:5432/libreria_db"</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="s">"libreria_user"</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="s">"password123"</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yaml</code> — solo que aquí los pasas directamente en Java, sin que Spring medie. En un proyecto real, en vez de <code>DriverManager</code> se usaría casi siempre un <code>DataSource</code> con <em>pooling</em> (como el HikariCP que Spring configura automáticamente por ti) — <code>DriverManager</code> abre una conexión nueva cada vez, sin reutilizar nada.</p>
 <h3 id="2-preparar-la-sentencia-y-por-que-nunca-con">2. Preparar la sentencia — y por qué nunca con <code>+</code><a class="headerlink" href="#2-preparar-la-sentencia-y-por-que-nunca-con" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT id, titulo, precio FROM libro WHERE editorial_id = ?"</span><span class="p">;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT id, titulo, precio FROM libro WHERE editorial_id = ?"</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <div class="admonition danger">
 <p class="admonition-title">Nunca concatenes el SQL con datos del usuario</p>
 <p>Podrías escribir <code>"SELECT * FROM libro WHERE editorial_id = " + editorialId</code> y funcionaría... hasta que <code>editorialId</code> (o cualquier dato que venga de fuera) contenga algo como <code>1 OR 1=1</code>. Eso es una <strong>inyección SQL</strong>: el atacante consigue que su texto se interprete como código SQL, no como un simple valor. <code>PreparedStatement</code> con parámetros (<code>?</code>) evita esto por diseño: el valor se envía por separado del SQL, y el driver lo trata siempre como un dato, nunca como código a ejecutar, sea lo que sea lo que contenga.</p>
 </div>
 <h3 id="3-ejecutar-y-recorrer-el-resultado">3. Ejecutar y recorrer el resultado<a class="headerlink" href="#3-ejecutar-y-recorrer-el-resultado" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span>
-<span class="normal"><a href="#__codelineno-2-6">6</a></span>
-<span class="normal"><a href="#__codelineno-2-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">();</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="s">"id"</span><span class="p">);</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">);</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getBigDecimal</span><span class="p">(</span><span class="s">"precio"</span><span class="p">);</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="c1">// mapear a mano a un objeto Java</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">();</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="s">"id"</span><span class="p">);</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">);</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rs</span><span class="p">.</span><span class="na">getBigDecimal</span><span class="p">(</span><span class="s">"precio"</span><span class="p">);</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="c1">// mapear a mano a un objeto Java</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>ResultSet</code> es un cursor: <code>rs.next()</code> avanza fila a fila (y devuelve <code>false</code> cuando ya no quedan más), y <code>rs.getXxx("columna")</code> extrae cada valor de la fila actual, con el tipo Java que corresponda.</p>
+<p><code>ResultSet</code> es un cursor: <code>rs.next()</code> avanza fila a fila (y devuelve <code>false</code> cuando ya no quedan más), y <code>rs.getXxx("columna")</code> extrae cada valor de la fila actual, con el tipo Java que corresponda. Este mapeo — convertir una fila de columnas sueltas en un objeto <code>Libro</code> completo — es exactamente lo que Hibernate hace por ti, para cada fila, cada vez, sin que lo veas.</p>
 <h3 id="4-cerrar-los-recursos-en-orden-o-con-try-with-resources">4. Cerrar los recursos — en orden, o con try-with-resources<a class="headerlink" href="#4-cerrar-los-recursos-en-orden-o-con-try-with-resources" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-3-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">pass</span><span class="p">);</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">     </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">            </span><span class="c1">// ...</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">pass</span><span class="p">);</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">     </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">            </span><span class="c1">// ...</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>try-with-resources</code> cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un <code>finally</code> con cada <code>close()</code> a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el <em>pool</em> de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos", y la aplicación deja de poder conectarse a la base de datos.</p>
 <hr>
-<h2 id="lo-que-spring-data-jpa-te-estaba-ahorrando">🆚 Lo que Spring Data JPA te estaba ahorrando<a class="headerlink" href="#lo-que-spring-data-jpa-te-estaba-ahorrando" title="Permanent link">¶</a></h2>
-<p>Compara este ciclo completo con lo que ya conoces de <code>operaciones-crud-transacciones.md</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1">// Con Spring Data JPA — todo esto está oculto:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">libros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">();</span>
+<h2 id="y-para-escribir-insert-con-jdbc-puro">✍️ ¿Y para escribir? INSERT, con JDBC puro<a class="headerlink" href="#y-para-escribir-insert-con-jdbc-puro" title="Permanent link">¶</a></h2>
+<p>La lectura ya cuesta quince líneas. Escribir es, si cabe, más delicado — porque además del <code>INSERT</code> en sí, normalmente necesitas recuperar el <code>id</code> que la base de datos acaba de generar para esa fila nueva.</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Con Spring Data JPA (lo que ya conoces)</label><label for="__tabbed_2_2">Con JDBC puro</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">Libro</span><span class="w"> </span><span class="n">guardado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">);</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="n">Long</span><span class="w"> </span><span class="n">idGenerado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">guardado</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span><span class="w"> </span><span class="c1">// ya viene relleno</span>
 </code></pre></div></td></tr></table></div>
-<p>Una sola línea, sin gestionar conexión, sin escribir SQL, sin mapear filas a mano, sin preocuparte de cerrar nada — Spring Data JPA hace todo eso por ti, usando JDBC exactamente igual por debajo. Ahora que has visto la "fontanería" real, esa línea deja de ser magia: es JDBC con un montón de trabajo repetitivo automatizado.</p>
+<p><code>save()</code> construye el <code>INSERT</code>, lo ejecuta, y además rellena automáticamente el campo <code>id</code> de tu propio objeto <code>Libro</code> con el valor que ha generado la base de datos. Tú no vuelves a pedir nada.</p>
+</div>
+<div class="tabbed-block">
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"INSERT INTO libro (titulo, precio, editorial_id) VALUES (?, ?, ?)"</span><span class="p">;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">pass</span><span class="p">);</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">     </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="w"> </span><span class="n">Statement</span><span class="p">.</span><span class="na">RETURN_GENERATED_KEYS</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">titulo</span><span class="p">);</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setBigDecimal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">precio</span><span class="p">);</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">    </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">ResultSet</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">getGeneratedKeys</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">keys</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="w">            </span><span class="n">Long</span><span class="w"> </span><span class="n">idGenerado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">keys</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>Statement.RETURN_GENERATED_KEYS</code> es un detalle fácil de olvidar: sin él, <code>getGeneratedKeys()</code> devuelve un <code>ResultSet</code> vacío, y te quedas sin saber qué <code>id</code> le ha puesto la base de datos a la fila que acabas de crear. <code>executeUpdate()</code> (no <code>executeQuery()</code>) es el método que usan <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> — devuelve el número de filas afectadas, no un <code>ResultSet</code> con datos.</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<h2 id="lo-que-spring-data-jpa-te-estaba-ahorrando">🆚 Lo que Spring Data JPA te estaba ahorrando<a class="headerlink" href="#lo-que-spring-data-jpa-te-estaba-ahorrando" title="Permanent link">¶</a></h2>
+<p>Con las dos comparaciones ya delante, esto es lo que cambia de fondo entre un enfoque y otro:</p>
+<table>
+<thead>
+<tr>
+<th>Con JDBC puro, tienes que...</th>
+<th>Con Spring Data JPA, lo gestiona por ti...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abrir y cerrar cada <code>Connection</code> a mano</td>
+<td>HikariCP (el <em>pool</em> que ya conoces)</td>
+</tr>
+<tr>
+<td>Escribir el SQL como texto, tú mismo</td>
+<td>Hibernate lo genera a partir de tus entidades y del nombre del método</td>
+</tr>
+<tr>
+<td>Mapear cada fila del <code>ResultSet</code> a un objeto</td>
+<td>Hibernate mapea automáticamente cada fila a tu entidad</td>
+</tr>
+<tr>
+<td>Capturar <code>SQLException</code> en cada método</td>
+<td>Spring la convierte en excepciones <em>unchecked</em>, más cómodas de propagar</td>
+</tr>
+<tr>
+<td>Controlar manualmente cuándo hacer <code>commit()</code>/<code>rollback()</code></td>
+<td><code>@Transactional</code>, que ya viste en el apartado anterior</td>
+</tr>
+</tbody>
+</table>
+<p>Ahora que has visto la "fontanería" real, <code>libroRepository.findAll()</code> deja de ser magia: es JDBC con todo este trabajo repetitivo automatizado.</p>
 <div class="admonition tip">
 <p class="admonition-title">¿Entonces por qué aprender JDBC puro, si un ORM lo hace todo?</p>
 <p>Porque un ORM sigue generando SQL por debajo, y entender qué SQL genera (y por qué a veces conviene evitarlo) te va a ayudar a diagnosticar problemas de rendimiento más adelante en tu carrera. Además, hay situaciones — consultas muy específicas, procedimientos almacenados (que verás en el siguiente apartado) — donde JDBC puro, o herramientas intermedias como <code>JdbcTemplate</code>, siguen siendo la opción más directa.</p>
 </div>
-<p>En este punto del curso, tu propio proyecto usa Spring Data JPA en todas partes, sin una sola línea de JDBC manual (tus repositorios son interfaces vacías que extienden <code>JpaRepository</code>). Por eso, en la Actividad 1.3, vas a escribir esta consulta manual en una clase de consola aparte, fuera de tus controladores y servicios, conectándote al mismo PostgreSQL que ya tienes levantado.</p>
+<p>En este punto del curso, tu propio proyecto usa Spring Data JPA en todas partes, sin una sola línea de JDBC manual (tus repositorios son interfaces vacías que extienden <code>JpaRepository</code>). Por eso, en la Actividad 1.3, vas a dejar GameVault a un lado por un momento: un proyecto Java suelto, sin Spring, con su propia base de datos — para ver JDBC sin nada alrededor que lo oculte.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -2186,9 +2391,11 @@
 <ul>
 <li><strong>JDBC</strong> es la API estándar de Java para bases de datos, y la base sobre la que se apoya cualquier ORM, incluido Hibernate.</li>
 <li>Sus cuatro piezas: <code>DriverManager</code>/<code>DataSource</code> (abre conexión), <code>Connection</code> (la sesión), <code>Statement</code>/<code>PreparedStatement</code> (transporta el SQL), <code>ResultSet</code> (cursor sobre el resultado).</li>
+<li>Con JDBC puro, tú te encargas de todo lo que JPA automatiza: abrir/cerrar conexión, escribir el SQL, mapear cada fila a mano, y capturar <code>SQLException</code>.</li>
 <li>Un <strong>recurso</strong> abierto y no cerrado sigue consumiendo conexión y memoria — por eso se cierra siempre, idealmente con <code>try-with-resources</code>.</li>
 <li><code>PreparedStatement</code> con parámetros (<code>?</code>) evita la <strong>inyección SQL</strong>; concatenar SQL con datos externos (<code>+</code>) es peligroso siempre.</li>
-<li>Todo lo que hace <code>@Transactional</code>/<code>JpaRepository</code> de forma automática (abrir conexión, ejecutar, cerrar, mapear filas a objetos) es exactamente esto, hecho a mano.</li>
+<li>Escribir con JDBC puro (<code>INSERT</code>) es más delicado que leer: <code>executeUpdate()</code> en vez de <code>executeQuery()</code>, y <code>Statement.RETURN_GENERATED_KEYS</code> si necesitas el <code>id</code> generado — nada de esto hace falta con <code>save()</code>.</li>
+<li>Todo lo que hace <code>@Transactional</code>/<code>JpaRepository</code> de forma automática es exactamente esto, hecho a mano.</li>
 </ul>
 </details></div>
 

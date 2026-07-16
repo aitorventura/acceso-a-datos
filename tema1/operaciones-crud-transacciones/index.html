@@ -954,6 +954,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#y-si-necesitas-una-consulta-que-no-viene-de-fabrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Y si necesitas una consulta que no viene de fábrica
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2058,6 +2067,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#y-si-necesitas-una-consulta-que-no-viene-de-fabrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Y si necesitas una consulta que no viene de fábrica
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2269,76 +2287,128 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
 </code></pre></div></td></tr></table></div>
 <p><code>orElseThrow(...)</code> dice, en una línea: "si el <code>Optional</code> trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos resolviste el caso "recurso no encontrado" con un <code>if</code> explícito comprobando <code>null</code> — esto es la versión más directa de esa misma idea, apoyada en que <code>findById</code> ya te avisa con un <code>Optional</code> vacío en vez de con un <code>null</code> a pelo.</p>
-<p>Declara <code>LibroRepository</code> y <code>EditorialRepository</code> de la misma forma:</p>
+<h3 id="y-si-necesitas-una-consulta-que-no-viene-de-fabrica">Y si necesitas una consulta que no viene de fábrica<a class="headerlink" href="#y-si-necesitas-una-consulta-que-no-viene-de-fabrica" title="Permanent link">¶</a></h3>
+<p><code>findAll</code>/<code>findById</code>/<code>save</code>... cubren lo genérico, pero ¿y si necesitas "todos los libros de una editorial concreta"? No hace falta escribir SQL a mano ni implementar nada: declaras el método en la interfaz, sin cuerpo, siguiendo un patrón de nombre:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EditorialRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Editorial</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}</span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByEditorialId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Spring Data JPA lee el nombre del método al arrancar la aplicación, lo descompone (<code>find</code> + <code>By</code> + <code>EditorialId</code>) y genera la consulta él solo — el <code>EditorialId</code> del nombre tiene que coincidir con un campo real de <code>Libro</code> (aquí, la relación <code>editorial</code>, a través de su <code>id</code>). El resultado equivale a:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">editorial_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+</code></pre></div></td></tr></table></div>
+<p>La convención admite más piezas combinables, todas sin escribir una sola consulta:</p>
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Ejemplo</th>
+<th>Equivale a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>findByX</code></td>
+<td><code>findByTitulo(String titulo)</code></td>
+<td><code>WHERE titulo = ?</code></td>
+</tr>
+<tr>
+<td><code>findByXAndY</code></td>
+<td><code>findByTituloAndPrecioLessThan(String t, BigDecimal p)</code></td>
+<td><code>WHERE titulo = ? AND precio &lt; ?</code></td>
+</tr>
+<tr>
+<td><code>findByXOrderByY</code></td>
+<td><code>findByEditorialIdOrderByPrecioDesc(Long id)</code></td>
+<td><code>WHERE editorial_id = ? ORDER BY precio DESC</code></td>
+</tr>
+<tr>
+<td><code>existsByX</code></td>
+<td><code>existsByTitulo(String titulo)</code></td>
+<td>igual que <code>findByX</code>, pero devuelve <code>boolean</code></td>
+</tr>
+<tr>
+<td><code>countByX</code></td>
+<td><code>countByEditorialId(Long id)</code></td>
+<td>igual, pero devuelve <code>long</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Cuidado con los límites de esta convención</p>
+<p>Es cómoda para consultas simples y fijas. Si necesitas filtros que cambian según el caso (a veces por título, a veces por precio, a veces ambos) o consultas más elaboradas, esta convención se queda corta — para eso están las <strong>Specifications</strong> (filtros dinámicos) y <code>@Query</code> con JPQL, que verás en el Tema 2.</p>
+</div>
+<p>El CRUD que vas a construir en este apartado no necesita ninguna consulta personalizada todavía — <code>findAll</code>/<code>findById</code>/<code>save</code>/<code>deleteById</code> bastan. Declara <code>LibroRepository</code> y <code>EditorialRepository</code> vacías, sabiendo ya cómo añadirles un método propio el día que lo necesites:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EditorialRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Editorial</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
 <p>Con las dos interfaces declaradas, tienes las tres capas listas para empezar: <strong>Controller</strong> recibe la petición HTTP, <strong>Service</strong> decide qué hacer, <strong>Repository</strong> habla con la base de datos. Vas a construir las tres, una encima de otra, empezando por la lectura.</p>
 <hr>
 <h2 id="primer-intento-leer-y-devolver-la-entidad-tal-cual">📖 Primer intento: leer y devolver la entidad tal cual<a class="headerlink" href="#primer-intento-leer-y-devolver-la-entidad-tal-cual" title="Permanent link">¶</a></h2>
 <p>La forma más directa de exponer un libro por HTTP es la que probablemente se te ocurriría a ti solo: el controller le pide al service el libro, el service se lo pide al repository, y todo el mundo se pasa el mismo objeto <code>Libro</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-4-10">10</a></span>
-<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Service</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Libro</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">                </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Service</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">    </span><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Libro</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">                </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@RestController</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nd">@RestController</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Ignora por un momento el <code>@Transactional(readOnly = true)</code> — vuelves a él más abajo. Fíjate en la forma: el controller no toca el repository directamente, solo habla con el service; el service es quien de verdad llama a <code>libroRepository.findById(...)</code>. Ese orden (Controller → Service → Repository, cada uno hablando solo con el siguiente) no cambia en todo lo que viene a continuación — lo único que cambia es lo que circula por esas capas.</p>
 <p>Compila, funciona, y <code>GET /api/v1/libros/3</code> te devuelve algo así:</p>
-<div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span>
-<span class="normal"><a href="#__codelineno-6-5">5</a></span>
-<span class="normal"><a href="#__codelineno-6-6">6</a></span>
-<span class="normal"><a href="#__codelineno-6-7">7</a></span>
-<span class="normal"><a href="#__codelineno-6-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span><span class="nt">"titulo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"El nombre del viento"</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">  </span><span class="nt">"precio"</span><span class="p">:</span><span class="w"> </span><span class="mf">19.95</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">  </span><span class="nt">"coste"</span><span class="p">:</span><span class="w"> </span><span class="mf">8.40</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">  </span><span class="nt">"fechaPublicacion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2007-03-27"</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">  </span><span class="nt">"editorial"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"nombre"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plaza &amp; Janés"</span><span class="p">,</span><span class="w"> </span><span class="nt">"hibernateLazyInitializer"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="p">}</span>
+<div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span>
+<span class="normal"><a href="#__codelineno-8-7">7</a></span>
+<span class="normal"><a href="#__codelineno-8-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">  </span><span class="nt">"titulo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"El nombre del viento"</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">  </span><span class="nt">"precio"</span><span class="p">:</span><span class="w"> </span><span class="mf">19.95</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">  </span><span class="nt">"coste"</span><span class="p">:</span><span class="w"> </span><span class="mf">8.40</span><span class="p">,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">  </span><span class="nt">"fechaPublicacion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2007-03-27"</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">  </span><span class="nt">"editorial"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"nombre"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plaza &amp; Janés"</span><span class="p">,</span><span class="w"> </span><span class="nt">"hibernateLazyInitializer"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <hr>
 <h2 id="el-problema-la-entidad-expone-mas-de-lo-que-quieres">❌ El problema: la entidad expone más de lo que quieres<a class="headerlink" href="#el-problema-la-entidad-expone-mas-de-lo-que-quieres" title="Permanent link">¶</a></h2>
@@ -2366,7 +2436,7 @@
 <h2 id="la-solucion-dtos">📦 La solución: DTOs<a class="headerlink" href="#la-solucion-dtos" title="Permanent link">¶</a></h2>
 <p>Un <strong>DTO</strong> (<em>Data Transfer Object</em>, objeto de transferencia de datos) es un objeto hecho a medida de lo que sale (o entra) de tu aplicación — distinto de la entidad interna. En vez de devolver <code>Libro</code> tal cual, defines una clase nueva con exactamente los campos que quieres exponer, ni uno más.</p>
 <p>Antes de escribirlo, una construcción del lenguaje que encaja perfectamente aquí: el <strong>record</strong> (desde Java 16). Un record declara, en una sola línea, una clase inmutable pensada exactamente para "llevar datos de un sitio a otro":</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kd">record</span> <span class="nc">Punto</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kd">record</span> <span class="nc">Punto</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
 <p>Con esa única línea, el compilador genera automáticamente un <strong>constructor</strong> que recibe <code>x</code> e <code>y</code>, un <strong>getter</strong> por cada campo sin el prefijo <code>get</code> (<code>punto.x()</code>, no <code>punto.getX()</code>), y <code>equals()</code>/<code>hashCode()</code>/<code>toString()</code> coherentes. Todos los campos de un record son <code>final</code> por diseño — no hay setters, ni forma de cambiarlos tras construirlo. Esa <strong>inmutabilidad</strong> es justo lo que necesitas para un DTO: un objeto que representa un dato en un momento concreto, no algo que deba cambiar de estado con el tiempo.</p>
 <div class="admonition warning">
@@ -2374,50 +2444,50 @@
 <p><code>Libro</code>/<code>Editorial</code> siguen siendo clases normales, con <code>@Getter</code>/<code>@Setter</code> de Lombok: necesitan ser mutables (Hibernate las modifica al cargarlas y guardarlas) y tener un identificador gestionado por el framework. Un record encaja con los DTOs porque nunca necesita cambiar una vez construido. Si ves <code>record</code> en una clase, es un DTO; si ves <code>@Entity</code>, es una entidad persistente.</p>
 </div>
 <p>Con eso, el DTO de salida:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
-<span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span>
-<span class="normal"><a href="#__codelineno-8-4">4</a></span>
-<span class="normal"><a href="#__codelineno-8-5">5</a></span>
-<span class="normal"><a href="#__codelineno-8-6">6</a></span>
-<span class="normal"><a href="#__codelineno-8-7">7</a></span>
-<span class="normal"><a href="#__codelineno-8-8">8</a></span>
-<span class="normal"><a href="#__codelineno-8-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">EditorialDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroResponseDTO</span><span class="p">(</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">        </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">        </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">        </span><span class="n">EditorialDTO</span><span class="w"> </span><span class="n">editorial</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span>
+<span class="normal"><a href="#__codelineno-10-7">7</a></span>
+<span class="normal"><a href="#__codelineno-10-8">8</a></span>
+<span class="normal"><a href="#__codelineno-10-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">EditorialDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroResponseDTO</span><span class="p">(</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">        </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">        </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">        </span><span class="n">EditorialDTO</span><span class="w"> </span><span class="n">editorial</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
 <p>Ni rastro de <code>coste</code>, ni de los detalles internos de Hibernate — solo lo que quieres que vea un cliente. Ahora reescribe <code>LibroService.findById</code> para que, antes de devolver nada, convierta la entidad al DTO:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-9-10">10</a></span>
-<span class="normal"><a href="#__codelineno-9-11">11</a></span>
-<span class="normal"><a href="#__codelineno-9-12">12</a></span>
-<span class="normal"><a href="#__codelineno-9-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libro</span><span class="p">);</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="p">}</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7"></a>
-<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="kd">private</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span><span class="n">EditorialDTO</span><span class="w"> </span><span class="n">editorialDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EditorialDTO</span><span class="p">(</span><span class="n">libro</span><span class="p">.</span><span class="na">getEditorial</span><span class="p">().</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getEditorial</span><span class="p">().</span><span class="na">getNombre</span><span class="p">());</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="p">(</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">            </span><span class="n">libro</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getTitulo</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getPrecio</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getFechaPublicacion</span><span class="p">(),</span><span class="w"> </span><span class="n">editorialDTO</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">    </span><span class="p">);</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libro</span><span class="p">);</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="p">}</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="kd">private</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">    </span><span class="n">EditorialDTO</span><span class="w"> </span><span class="n">editorialDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EditorialDTO</span><span class="p">(</span><span class="n">libro</span><span class="p">.</span><span class="na">getEditorial</span><span class="p">().</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getEditorial</span><span class="p">().</span><span class="na">getNombre</span><span class="p">());</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="p">(</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="w">            </span><span class="n">libro</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getTitulo</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getPrecio</span><span class="p">(),</span><span class="w"> </span><span class="n">libro</span><span class="p">.</span><span class="na">getFechaPublicacion</span><span class="p">(),</span><span class="w"> </span><span class="n">editorialDTO</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="w">    </span><span class="p">);</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Fíjate en <code>mapToDTO</code>, porque va a reaparecer en todo lo que queda de apartado. Es <strong><code>private</code></strong> — a diferencia de <code>findById</code>, que es <code>public</code> — porque no forma parte de lo que <code>LibroService</code> ofrece hacia fuera: el controller no lo llama nunca, ni sabe que existe, es solo cómo <code>LibroService</code> traduce cada <code>Libro</code> (la entidad que gestiona Hibernate) al DTO que ve el cliente, <strong>campo a campo</strong>:</p>
 <table>
@@ -2456,72 +2526,72 @@
 </table>
 <p>No hay ninguna librería detrás de esta conversión (existen herramientas que la automatizan, como MapStruct, pero escribirla a mano tiene la ventaja de que se ve exactamente qué campo va a parar a dónde). A partir de aquí, cualquier método de <code>LibroService</code> que necesite devolver un libro (<code>findAll</code>, <code>create</code>, <code>update</code>) va a llamar a este mismo <code>mapToDTO</code> en vez de repetir la traducción cada vez.</p>
 <p>Y el controller cambia una sola palabra — el tipo que envuelve <code>ResponseEntity</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
-<span class="normal"><a href="#__codelineno-10-2">2</a></span>
-<span class="normal"><a href="#__codelineno-10-3">3</a></span>
-<span class="normal"><a href="#__codelineno-10-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Fíjate en que el flujo no ha cambiado: sigue siendo Controller → Service → Repository. Lo único nuevo es que el <strong>service</strong>, además de pedirle datos al repository, ahora también decide qué parte de esos datos sale de la aplicación — esa traducción es trabajo suyo, no del controller ni del repository.</p>
 <hr>
 <h2 id="ahora-la-escritura-create-y-el-problema-de-los-datos-basura">✍️ Ahora la escritura: <code>create()</code>, y el problema de los datos basura<a class="headerlink" href="#ahora-la-escritura-create-y-el-problema-de-los-datos-basura" title="Permanent link">¶</a></h2>
 <p>Para crear un libro necesitas un DTO de entrada — y aquí no vale reutilizar <code>LibroResponseDTO</code>: al crear, no tiene sentido pedir un <code>id</code> (todavía no existe), y si reutilizas el DTO de salida, nada te impide que alguien intente fijar el <code>id</code> a mano. Un primer intento, sin pensarlo mucho:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroCreateDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroCreateDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-12-10">10</a></span>
-<span class="normal"><a href="#__codelineno-12-11">11</a></span>
-<span class="normal"><a href="#__codelineno-12-12">12</a></span>
-<span class="normal"><a href="#__codelineno-12-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@Transactional</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="n">Editorial</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">editorialId</span><span class="p">())</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Editorial no encontrada"</span><span class="p">));</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5"></a>
-<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Libro</span><span class="p">();</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setFechaPublicacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">fechaPublicacion</span><span class="p">());</span>
-<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11"></a>
-<a id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="#__codelineno-14-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nd">@Transactional</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="w">    </span><span class="n">Editorial</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">editorialId</span><span class="p">())</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Editorial no encontrada"</span><span class="p">));</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Libro</span><span class="p">();</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setFechaPublicacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">fechaPublicacion</span><span class="p">());</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Funciona... con datos razonables. Pero nada impide mandar <code>{"titulo": "", "precio": -5, "fechaPublicacion": "2099-01-01", "editorialId": -1}</code> — un título vacío, un precio negativo, una fecha de publicación en el futuro. Tu aplicación lo aceptaría igual, porque <code>create()</code> no comprueba nada de eso.</p>
 <p><strong>La solución</strong>: anotaciones de <strong>Bean Validation</strong> (<code>jakarta.validation</code>) sobre el propio DTO, declarando la restricción justo donde vive el dato:</p>
 <div class="admonition warning">
 <p class="admonition-title">Falta una dependencia en el <code>pom.xml</code></p>
 <p><code>spring-boot-starter-webmvc</code> no trae Bean Validation incluido — es un starter aparte. Si usas <code>@NotBlank</code> y compañero sin haberlo añadido, el propio IDE no reconoce la anotación (no la encuentra para importar) o el proyecto falla al compilar. Añade esto al <code>pom.xml</code>:</p>
-<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
-<span class="normal"><a href="#__codelineno-13-2">2</a></span>
-<span class="normal"><a href="#__codelineno-13-3">3</a></span>
-<span class="normal"><a href="#__codelineno-13-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
 <p>Esta dependencia trae Hibernate Validator, la implementación de Bean Validation que Spring usa por debajo — sin ella, <code>jakarta.validation.constraints</code> (de donde vienen <code>@NotBlank</code>, <code>@NotNull</code>...) ni siquiera está en el classpath del proyecto.</p>
 </div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span>
-<span class="normal"><a href="#__codelineno-14-3">3</a></span>
-<span class="normal"><a href="#__codelineno-14-4">4</a></span>
-<span class="normal"><a href="#__codelineno-14-5">5</a></span>
-<span class="normal"><a href="#__codelineno-14-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroCreateDTO</span><span class="p">(</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PositiveOrZero</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PastOrPresent</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@Positive</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span>
+<span class="normal"><a href="#__codelineno-16-3">3</a></span>
+<span class="normal"><a href="#__codelineno-16-4">4</a></span>
+<span class="normal"><a href="#__codelineno-16-5">5</a></span>
+<span class="normal"><a href="#__codelineno-16-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroCreateDTO</span><span class="p">(</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PositiveOrZero</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@PastOrPresent</span><span class="w"> </span><span class="n">LocalDate</span><span class="w"> </span><span class="n">fechaPublicacion</span><span class="p">,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@Positive</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
 <p>Estas cuatro no son las únicas — Bean Validation trae toda una familia de anotaciones para las restricciones más habituales, todas se usan igual (sobre el campo, sin nada más que declararlas):</p>
 <table>
@@ -2592,61 +2662,61 @@
 </table>
 <p>Todas se pueden combinar sobre el mismo campo, como <code>@NotNull @PositiveOrZero</code> en <code>precio</code>.</p>
 <p>Y en el controller, un único añadido delante del parámetro:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
-<span class="normal"><a href="#__codelineno-15-2">2</a></span>
-<span class="normal"><a href="#__codelineno-15-3">3</a></span>
-<span class="normal"><a href="#__codelineno-15-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="nd">@PostMapping</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">3</a></span>
+<span class="normal"><a href="#__codelineno-17-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="nd">@PostMapping</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@RequestBody</code> convierte el cuerpo JSON de la petición en un <code>LibroCreateDTO</code>; <code>@Valid</code> es lo que activa de verdad las comprobaciones — sin él, las anotaciones de arriba existirían pero nadie las miraría. Si algún campo incumple su restricción, Spring rechaza la petición con un <code>400 Bad Request</code> antes de que tu código llegue a ejecutarse — <code>create()</code> ya ni se entera de que ha habido un intento con datos basura. Lo comprobarás en detalle en Programación de Servicios y Procesos, que profundiza en cómo se gestiona ese error.</p>
 <hr>
 <h2 id="update-y-delete-el-problema-del-recurso-que-no-existe">🔄 <code>update()</code> y <code>delete()</code>: el problema del recurso que no existe<a class="headerlink" href="#update-y-delete-el-problema-del-recurso-que-no-existe" title="Permanent link">¶</a></h2>
 <p><code>update()</code> reutiliza <code>LibroCreateDTO</code> (pide los mismos datos que <code>create()</code>) y sigue un patrón parecido, con un matiz: primero tiene que cargar el libro que ya existe.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-16-10">10</a></span>
-<span class="normal"><a href="#__codelineno-16-11">11</a></span>
-<span class="normal"><a href="#__codelineno-16-12">12</a></span>
-<span class="normal"><a href="#__codelineno-16-13">13</a></span>
-<span class="normal"><a href="#__codelineno-16-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="nd">@Transactional</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5"></a>
-<a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="w">    </span><span class="n">Editorial</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">editorialId</span><span class="p">())</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Editorial no encontrada"</span><span class="p">));</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8"></a>
-<a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12"></a>
-<a id="__codelineno-16-13" name="__codelineno-16-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-18-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-18-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-18-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-18-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-18-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-18-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-18-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-18-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-18-10">10</a></span>
+<span class="normal"><a href="#__codelineno-18-11">11</a></span>
+<span class="normal"><a href="#__codelineno-18-12">12</a></span>
+<span class="normal"><a href="#__codelineno-18-13">13</a></span>
+<span class="normal"><a href="#__codelineno-18-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nd">@Transactional</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="w">    </span><span class="n">Editorial</span><span class="w"> </span><span class="n">editorial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editorialRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">editorialId</span><span class="p">())</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Editorial no encontrada"</span><span class="p">));</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12"></a>
+<a id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>¿Qué pasaría si no comprobaras si el libro existe, y simplemente llamaras a <code>libro.setTitulo(...)</code> sobre un <code>libro</code> que nunca has cargado? No compilaría — necesitas el objeto antes de poder modificarlo, así que la comprobación de "no encontrado" no es opcional aquí, es la única forma de tener algo que modificar. El mismo <code>orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, ...))</code> que ya usaste en <code>findById</code> resuelve el caso: si no existe, la petición corta ahí mismo con un <code>404</code>, antes de tocar nada.</p>
 <p><code>delete()</code> no tiene nada que cargar ni modificar, así que usa la comprobación más ligera que ofrece el repository:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
-<span class="normal"><a href="#__codelineno-17-2">2</a></span>
-<span class="normal"><a href="#__codelineno-17-3">3</a></span>
-<span class="normal"><a href="#__codelineno-17-4">4</a></span>
-<span class="normal"><a href="#__codelineno-17-5">5</a></span>
-<span class="normal"><a href="#__codelineno-17-6">6</a></span>
-<span class="normal"><a href="#__codelineno-17-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="nd">@Transactional</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">id</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">);</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">deleteById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
+<span class="normal"><a href="#__codelineno-19-2">2</a></span>
+<span class="normal"><a href="#__codelineno-19-3">3</a></span>
+<span class="normal"><a href="#__codelineno-19-4">4</a></span>
+<span class="normal"><a href="#__codelineno-19-5">5</a></span>
+<span class="normal"><a href="#__codelineno-19-6">6</a></span>
+<span class="normal"><a href="#__codelineno-19-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="nd">@Transactional</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">id</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">);</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6"></a><span class="w">    </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">deleteById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>findAll()</code> no tiene ninguno de estos problemas (no hay "no encontrado" posible al pedir una lista completa, que puede estar vacía sin que sea un error) — es un <code>@Transactional(readOnly = true)</code> que mapea la lista entera del repository, tal como ya has visto hacer con un único libro.</p>
 <hr>
@@ -2701,69 +2771,69 @@
 <hr>
 <h2 id="las-piezas-juntas-el-librocontroller-completo">🗄️ Las piezas juntas: el <code>LibroController</code> completo<a class="headerlink" href="#las-piezas-juntas-el-librocontroller-completo" title="Permanent link">¶</a></h2>
 <p>Con el service ya resuelto, el controller completo es la traducción directa de la tabla CRUD↔HTTP del principio — cada método delega en su equivalente de <code>LibroService</code> y no hace nada más:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-18-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-18-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-18-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-18-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-18-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-18-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-18-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-18-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-18-10">10</a></span>
-<span class="normal"><a href="#__codelineno-18-11">11</a></span>
-<span class="normal"><a href="#__codelineno-18-12">12</a></span>
-<span class="normal"><a href="#__codelineno-18-13">13</a></span>
-<span class="normal"><a href="#__codelineno-18-14">14</a></span>
-<span class="normal"><a href="#__codelineno-18-15">15</a></span>
-<span class="normal"><a href="#__codelineno-18-16">16</a></span>
-<span class="normal"><a href="#__codelineno-18-17">17</a></span>
-<span class="normal"><a href="#__codelineno-18-18">18</a></span>
-<span class="normal"><a href="#__codelineno-18-19">19</a></span>
-<span class="normal"><a href="#__codelineno-18-20">20</a></span>
-<span class="normal"><a href="#__codelineno-18-21">21</a></span>
-<span class="normal"><a href="#__codelineno-18-22">22</a></span>
-<span class="normal"><a href="#__codelineno-18-23">23</a></span>
-<span class="normal"><a href="#__codelineno-18-24">24</a></span>
-<span class="normal"><a href="#__codelineno-18-25">25</a></span>
-<span class="normal"><a href="#__codelineno-18-26">26</a></span>
-<span class="normal"><a href="#__codelineno-18-27">27</a></span>
-<span class="normal"><a href="#__codelineno-18-28">28</a></span>
-<span class="normal"><a href="#__codelineno-18-29">29</a></span>
-<span class="normal"><a href="#__codelineno-18-30">30</a></span>
-<span class="normal"><a href="#__codelineno-18-31">31</a></span>
-<span class="normal"><a href="#__codelineno-18-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nd">@RestController</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6"></a>
-<a id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="w">    </span><span class="nd">@GetMapping</span>
-<a id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAll</span><span class="p">());</span>
-<a id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-18-11" name="__codelineno-18-11"></a>
-<a id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
-<a id="__codelineno-18-15" name="__codelineno-18-15"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-18-16" name="__codelineno-18-16"></a>
-<a id="__codelineno-18-17" name="__codelineno-18-17"></a><span class="w">    </span><span class="nd">@PostMapping</span>
-<a id="__codelineno-18-18" name="__codelineno-18-18"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-19" name="__codelineno-18-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
-<a id="__codelineno-18-20" name="__codelineno-18-20"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-18-21" name="__codelineno-18-21"></a>
-<a id="__codelineno-18-22" name="__codelineno-18-22"></a><span class="w">    </span><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-18-23" name="__codelineno-18-23"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-24" name="__codelineno-18-24"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">));</span>
-<a id="__codelineno-18-25" name="__codelineno-18-25"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-18-26" name="__codelineno-18-26"></a>
-<a id="__codelineno-18-27" name="__codelineno-18-27"></a><span class="w">    </span><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-18-28" name="__codelineno-18-28"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-18-29" name="__codelineno-18-29"></a><span class="w">        </span><span class="n">libroService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-<a id="__codelineno-18-30" name="__codelineno-18-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">noContent</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
-<a id="__codelineno-18-31" name="__codelineno-18-31"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-18-32" name="__codelineno-18-32"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-20-10">10</a></span>
+<span class="normal"><a href="#__codelineno-20-11">11</a></span>
+<span class="normal"><a href="#__codelineno-20-12">12</a></span>
+<span class="normal"><a href="#__codelineno-20-13">13</a></span>
+<span class="normal"><a href="#__codelineno-20-14">14</a></span>
+<span class="normal"><a href="#__codelineno-20-15">15</a></span>
+<span class="normal"><a href="#__codelineno-20-16">16</a></span>
+<span class="normal"><a href="#__codelineno-20-17">17</a></span>
+<span class="normal"><a href="#__codelineno-20-18">18</a></span>
+<span class="normal"><a href="#__codelineno-20-19">19</a></span>
+<span class="normal"><a href="#__codelineno-20-20">20</a></span>
+<span class="normal"><a href="#__codelineno-20-21">21</a></span>
+<span class="normal"><a href="#__codelineno-20-22">22</a></span>
+<span class="normal"><a href="#__codelineno-20-23">23</a></span>
+<span class="normal"><a href="#__codelineno-20-24">24</a></span>
+<span class="normal"><a href="#__codelineno-20-25">25</a></span>
+<span class="normal"><a href="#__codelineno-20-26">26</a></span>
+<span class="normal"><a href="#__codelineno-20-27">27</a></span>
+<span class="normal"><a href="#__codelineno-20-28">28</a></span>
+<span class="normal"><a href="#__codelineno-20-29">29</a></span>
+<span class="normal"><a href="#__codelineno-20-30">30</a></span>
+<span class="normal"><a href="#__codelineno-20-31">31</a></span>
+<span class="normal"><a href="#__codelineno-20-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nd">@RestController</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="w">    </span><span class="nd">@GetMapping</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAll</span><span class="p">());</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11"></a>
+<a id="__codelineno-20-12" name="__codelineno-20-12"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-16" name="__codelineno-20-16"></a>
+<a id="__codelineno-20-17" name="__codelineno-20-17"></a><span class="w">    </span><span class="nd">@PostMapping</span>
+<a id="__codelineno-20-18" name="__codelineno-20-18"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-19" name="__codelineno-20-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
+<a id="__codelineno-20-20" name="__codelineno-20-20"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-21" name="__codelineno-20-21"></a>
+<a id="__codelineno-20-22" name="__codelineno-20-22"></a><span class="w">    </span><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-20-23" name="__codelineno-20-23"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-24" name="__codelineno-20-24"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">));</span>
+<a id="__codelineno-20-25" name="__codelineno-20-25"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-26" name="__codelineno-20-26"></a>
+<a id="__codelineno-20-27" name="__codelineno-20-27"></a><span class="w">    </span><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-20-28" name="__codelineno-20-28"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-29" name="__codelineno-20-29"></a><span class="w">        </span><span class="n">libroService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<a id="__codelineno-20-30" name="__codelineno-20-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">noContent</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+<a id="__codelineno-20-31" name="__codelineno-20-31"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-20-32" name="__codelineno-20-32"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Fíjate en que cada método usa exactamente el código de estado que anticipaba la tabla del principio: <code>create</code> responde <code>201</code> con <code>HttpStatus.CREATED</code> explícito, <code>update</code> responde <code>200</code> con <code>ResponseEntity.ok(...)</code>, y <code>delete</code> responde <code>204</code> con <code>ResponseEntity.noContent().build()</code> — sin cuerpo, porque una vez borrado el libro no hay nada que devolver. Y en las cinco líneas de este controller se repite la misma regla que has visto todo el apartado: el controller no habla nunca con el repository, ni construye nunca SQL — solo traduce entre HTTP y una llamada a <code>LibroService</code>.</p>
 <p>Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, un CRUD completo como este en tu propio proyecto.</p>
@@ -2802,6 +2872,7 @@
 <ul>
 <li><strong>CRUD</strong> = Create/Read/Update/Delete, equivalentes a <code>INSERT</code>/<code>SELECT</code>/<code>UPDATE</code>/<code>DELETE</code> en SQL y a <code>POST</code>/<code>GET</code>/<code>PUT</code>/<code>DELETE</code> en HTTP — las tres son la misma idea.</li>
 <li>Un <strong>repository</strong> (<code>interface XRepository extends JpaRepository&lt;X, Long&gt;</code>) te da <code>findAll</code>/<code>findById</code>/<code>save</code>/<code>existsById</code>/<code>deleteById</code> sin escribir SQL ni implementación propia.</li>
+<li>Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (<code>findByEditorialId</code>, <code>findByTituloAndPrecioLessThan</code>...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y <code>@Query</code> (Tema 2).</li>
 <li>Devolver la entidad JPA tal cual expone campos internos que no deberías publicar (y puede arrastrar detalles de Hibernate en las relaciones <em>lazy</em>) — por eso se convierte a un <strong>DTO</strong> antes de salir.</li>
 <li>Un <strong><code>record</code></strong> de Java declara en una línea una clase inmutable — encaja con los DTOs porque nunca cambian tras crearse. No es lo mismo que una <code>@Entity</code> (mutable, gestionada por Hibernate).</li>
 <li>Las anotaciones de <strong>Bean Validation</strong> (<code>@NotBlank</code>, <code>@PositiveOrZero</code>...) sobre el DTO de entrada, combinadas con <code>@Valid</code> en el controller, rechazan datos basura con un <code>400</code> antes de que tu código se ejecute.</li>
