@@ -42,7 +42,7 @@ Hasta ahora todo lo que has visto de Spring Boot ha sido teoría y ejemplos de c
 
 ## Requisitos previos
 
-Docker funcionando y Visual Studio Code con la extensión **Dev Containers** instalada (Actividad 0.7).
+Docker funcionando y tu editor listo para Dev Containers: Visual Studio Code con la extensión **Dev Containers**, o IntelliJ IDEA Ultimate con su soporte nativo (Actividad 0.7).
 
 ---
 
@@ -137,14 +137,25 @@ Java ya no viene incluido en la imagen — lo añades como *feature*, igual que 
 !!! tip "Por qué esta imagen y no una con Java ya incluido"
     Existen imágenes que ya traen el JDK preinstalado (como `mcr.microsoft.com/devcontainers/java`), y en principio ahorran un paso. El problema es que esas imágenes "completas" también traen preinstaladas otras herramientas que no vas a usar (Node.js, Yarn...) — y si el repositorio de alguna de ellas deja de estar disponible o su clave de firma caduca, el contenedor entero puede fallar al construirse por algo que no tiene nada que ver con tu proyecto. Partir de la imagen base y añadir solo las *features* que necesitas (Java, Docker) es más código, pero es más robusto: solo dependes de lo que realmente usas.
 
-`service: "app"` le dice a la extensión Dev Containers a cuál de los dos servicios del `docker-compose.yml` debe conectar tu editor — al otro, `postgres`, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. `forwardPorts` publica hacia tu máquina tanto el `8080` (tu aplicación, cuando la arranques) como el `5432` (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La *feature* `docker-outside-of-docker` instala dentro de `app` el cliente `docker` (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de VS Code vas a poder ejecutar `docker`, `docker compose` o `docker exec` como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.
+!!! tip "La clave `customizations.vscode` es solo para VS Code"
+    Si usas IntelliJ IDEA, esas extensiones no hacen falta: el soporte de Java, Maven y Spring Boot ya viene integrado en el propio editor (Ultimate), sin instalar nada aparte.
 
-Ahora abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige **"Reopen in Container"** (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de `app` y levantando `postgres` a la vez.
+`service: "app"` le dice a la extensión Dev Containers (o al soporte nativo de IntelliJ) a cuál de los dos servicios del `docker-compose.yml` debe conectar tu editor — al otro, `postgres`, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. `forwardPorts` publica hacia tu máquina tanto el `8080` (tu aplicación, cuando la arranques) como el `5432` (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La *feature* `docker-outside-of-docker` instala dentro de `app` el cliente `docker` (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de tu editor vas a poder ejecutar `docker`, `docker compose` o `docker exec` como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.
+
+<div class="tabs-colored" markdown>
+
+=== "🔵 VS Code"
+    Abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige **"Reopen in Container"** (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de `app` y levantando `postgres` a la vez.
+
+=== "🟣 IntelliJ IDEA"
+    Abre el proyecto en IntelliJ IDEA, abre el fichero `devcontainer.json` y usa el icono **"Create Dev Container"** del margen izquierdo → **"Create Dev Container and Mount Sources…"** (igual que en la Actividad 0.7). Sigue el progreso en la ventana **Services** y pulsa **Connect** cuando termine.
+
+</div>
 
 !!! warning "Si cambias `devcontainer.json`/`docker-compose.yml` después de haber abierto el contenedor"
-    Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: paleta de comandos (`Ctrl+Shift+P`) → **"Dev Containers: Rebuild Container"**. Si algo no aparece como debería (por ejemplo, `mvn` no se encuentra aunque hayas añadido la *feature* de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.
+    Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: en VS Code, paleta de comandos (`Ctrl+Shift+P`) → **"Dev Containers: Rebuild Container"**; en IntelliJ IDEA, cierra la conexión desde la ventana **Services** y vuelve a crear el Dev Container desde el icono del margen en `devcontainer.json`. Si algo no aparece como debería (por ejemplo, `mvn` no se encuentra aunque hayas añadido la *feature* de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.
 
-**Captura**: la esquina inferior izquierda de VS Code, con la etiqueta del Dev Container activo.
+**Captura**: el indicativo de Dev Container activo (la esquina inferior izquierda en VS Code; el indicativo de conexión remota en IntelliJ IDEA).
 
 Con el contenedor ya abierto, abre una terminal integrada y comprueba que todo lo necesario está ahí, sin que lo hayas instalado tú:
 
@@ -268,40 +279,49 @@ public class Videojuego {
 
 ## Paso 4 — Verificar que Hibernate ha hecho su trabajo
 
-Desde la terminal integrada de VS Code (la que corre **dentro** del Dev Container), arranca tu aplicación con el perfil `dev` activo:
+Desde la terminal integrada de tu editor (la que corre **dentro** del Dev Container), arranca tu aplicación con el perfil `dev` activo:
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-!!! tip "Alternativa: el botón ▷ Run de VS Code"
-    La extensión de Java añade un botón **Run** (o el *CodeLens* `▷ Run` encima del `main`) sobre `GamevaultApplication`. Es más cómodo, pero por defecto arranca la clase directamente con `java`, **sin** el perfil `dev` activo — y sin él, tu aplicación no sabe cómo conectarse a PostgreSQL. Para que el botón Run también use el perfil `dev`, crea `.vscode/launch.json` en tu proyecto:
-    ```json
-    {
-      "version": "0.2.0",
-      "configurations": [
+<div class="tabs-colored" markdown>
+
+=== "🔵 VS Code"
+    !!! tip "Alternativa: el botón ▷ Run de VS Code"
+        La extensión de Java añade un botón **Run** (o el *CodeLens* `▷ Run` encima del `main`) sobre `GamevaultApplication`. Es más cómodo, pero por defecto arranca la clase directamente con `java`, **sin** el perfil `dev` activo — y sin él, tu aplicación no sabe cómo conectarse a PostgreSQL. Para que el botón Run también use el perfil `dev`, crea `.vscode/launch.json` en tu proyecto:
+        ```json
         {
-          "type": "java",
-          "name": "GamevaultApplication (dev)",
-          "request": "launch",
-          "mainClass": "com.tunombre.gamevault.GamevaultApplication",
-          "env": { "SPRING_PROFILES_ACTIVE": "dev" }
+          "version": "0.2.0",
+          "configurations": [
+            {
+              "type": "java",
+              "name": "GamevaultApplication (dev)",
+              "request": "launch",
+              "mainClass": "com.tunombre.gamevault.GamevaultApplication",
+              "env": { "SPRING_PROFILES_ACTIVE": "dev" }
+            }
+          ]
         }
-      ]
-    }
-    ```
-    Ajusta `mainClass` a tu propio *group id*. A partir de ahora, arrancar con esta configuración desde el panel "Run and Debug" equivale exactamente al comando de arriba.
+        ```
+        Ajusta `mainClass` a tu propio *group id*. A partir de ahora, arrancar con esta configuración desde el panel "Run and Debug" equivale exactamente al comando de arriba.
+
+=== "🟣 IntelliJ IDEA"
+    !!! tip "Alternativa: el botón ▷ Run de IntelliJ"
+        Al ejecutar por primera vez `GamevaultApplication` desde el *gutter* (▷ junto al `main`), IntelliJ genera una configuración de ejecución (**Run/Debug Configurations**), pero por defecto **sin** el perfil `dev` activo. Edítala (menú desplegable de configuraciones → **Edit Configurations…**) y en el campo **Active profiles** escribe `dev`. No hace falta ningún fichero adicional — a partir de ahora, volver a ejecutar esa misma configuración equivale exactamente al comando de arriba.
+
+</div>
 
 Mira la consola: con `show-sql: true` deberías ver sentencias `create table` (o `alter table`, en arranques posteriores) para `estudio` y `videojuego`.
 
 Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:
 
 - **Herramienta gráfica desde tu equipo** (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto `5432` hacia tu máquina, apunta a `localhost:5432` con las credenciales del Paso 1.
-- **`psql` desde la propia terminal integrada de VS Code**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Pero ojo: `docker compose`, a secas, busca un `docker-compose.yml` en la carpeta donde estés (`/workspace`) y no lo encuentra — el tuyo vive en `.devcontainer/`. Indícaselo con `-f`, y añade también `-p` con el nombre de proyecto que ha usado la propia extensión de Dev Containers para crear los contenedores (combina el nombre de tu carpeta con `_devcontainer`; si la llamaste `gamevault` como se sugería en el Paso 0, es `gamevault_devcontainer` — ajusta el prefijo si le pusiste otro nombre):
+- **`psql` desde la propia terminal integrada de tu editor**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Pero ojo: `docker compose`, a secas, busca un `docker-compose.yml` en la carpeta donde estés (`/workspace`) y no lo encuentra — el tuyo vive en `.devcontainer/`. Indícaselo con `-f`, y añade también `-p` con el nombre de proyecto que ha usado tu editor para crear los contenedores (combina el nombre de tu carpeta con `_devcontainer`; si la llamaste `gamevault` como se sugería en el Paso 0, es `gamevault_devcontainer` — ajusta el prefijo si le pusiste otro nombre):
     ```bash
     docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer ps
     ```
-    Localiza ahí el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de VS Code. A partir de aquí, cualquier `docker compose` que ejecutes desde dentro del contenedor va a necesitar esos mismos `-f`/`-p`.
+    Localiza ahí el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de tu editor. A partir de aquí, cualquier `docker compose` que ejecutes desde dentro del contenedor va a necesitar esos mismos `-f`/`-p`.
 
 **Comprueba**:
 

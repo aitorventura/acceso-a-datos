@@ -112,15 +112,15 @@ Y `.devcontainer/devcontainer.json`:
 }
 ```
 
-Abre la carpeta `jdbc-practica` en una ventana nueva de VS Code y elige **"Reopen in Container"**. No hace falta `docker-outside-of-docker` esta vez — este proyecto no va a lanzar contenedores desde dentro de sí mismo, a diferencia de lo que harás en el Tema 3 con Testcontainers en GameVault.
+Abre la carpeta `jdbc-practica` en una ventana nueva de tu editor y reábrela en el Dev Container: en VS Code, elige **"Reopen in Container"**; en IntelliJ IDEA, usa el icono **"Create Dev Container"** sobre `devcontainer.json` (igual que en la Actividad 0.7). No hace falta `docker-outside-of-docker` esta vez — este proyecto no va a lanzar contenedores desde dentro de sí mismo, a diferencia de lo que harás en el Tema 3 con Testcontainers en GameVault.
 
-**Captura**: la esquina inferior izquierda de VS Code, con la etiqueta de este Dev Container activo (distinto del de GameVault).
+**Captura**: el indicativo de Dev Container activo (la esquina inferior izquierda en VS Code; el indicativo de conexión remota en IntelliJ IDEA), con la etiqueta de este Dev Container (distinto del de GameVault).
 
 ---
 
 ## Paso 2 — La tabla y los datos de prueba
 
-Con el contenedor abierto, conéctate a `jdbc_practica_db` y crea el esquema — mismo procedimiento que en la Actividad 1.1: desde una herramienta gráfica en tu equipo (`localhost:5433`, el puerto publicado), o con `docker exec -it <contenedor-postgres> psql -U jdbc_user -d jdbc_practica_db` desde la propia terminal integrada (ahí dentro, el puerto sigue siendo el `5432` interno, no el `5433`):
+Con el contenedor abierto, conéctate a `jdbc_practica_db` y crea el esquema — mismo procedimiento que en la Actividad 1.1: desde una herramienta gráfica en tu equipo (`localhost:5433`, el puerto publicado), o con `docker exec -it <contenedor-postgres> psql -U jdbc_user -d jdbc_practica_db` desde la propia terminal integrada de tu editor (ahí dentro, el puerto sigue siendo el `5432` interno, no el `5433`):
 
 ```sql
 CREATE TABLE curso (

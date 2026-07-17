@@ -350,11 +350,25 @@ Esto afecta a repos nuevos que crees a partir de ahora.
 ### 🧾 3) Editor por defecto (opcional, recomendado)
 
 A veces Git necesita que escribas un mensaje (por ejemplo, en operaciones que verás más adelante).  
-Para que no se abra un editor raro, puedes fijar uno. Con VS Code:
+Para que no se abra un editor raro, puedes fijar uno.
 
-```bash
-git config --global core.editor "code --wait"
-```
+<div class="tabs-colored" markdown>
+
+=== "🔵 VS Code"
+    ```bash
+    git config --global core.editor "code --wait"
+    ```
+
+=== "🟣 IntelliJ IDEA"
+    Primero crea el lanzador de línea de comandos (menú **Tools → Create Command-line Launcher**), y luego:
+    ```bash
+    git config --global core.editor "idea --wait"
+    ```
+    En Windows, si no has creado el lanzador, usa la ruta completa al ejecutable en su lugar, por ejemplo `git config --global core.editor "'C:/Program Files/JetBrains/IntelliJ IDEA/bin/idea64.exe' --wait"`.
+
+    En la práctica usarás poco esta opción con IntelliJ: la propia ventana de commit del IDE ya te deja escribir el mensaje sin pasar por un editor externo.
+
+</div>
 
 ---
 
