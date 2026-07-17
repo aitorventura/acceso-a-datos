@@ -2216,7 +2216,7 @@
 </div>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Docker funcionando y Visual Studio Code con la extensión <strong>Dev Containers</strong> instalada (Actividad 0.7).</p>
+<p>Docker funcionando y tu editor listo para Dev Containers: Visual Studio Code con la extensión <strong>Dev Containers</strong>, o IntelliJ IDEA Ultimate con su soporte nativo (Actividad 0.7).</p>
 <hr>
 <h2 id="paso-0-crear-el-proyecto-desde-cero">Paso 0 — Crear el proyecto desde cero<a class="headerlink" href="#paso-0-crear-el-proyecto-desde-cero" title="Permanent link">¶</a></h2>
 <p>Ve a <a href="https://start.spring.io">start.spring.io</a> y genera un proyecto con:</p>
@@ -2337,13 +2337,28 @@
 <p class="admonition-title">Por qué esta imagen y no una con Java ya incluido</p>
 <p>Existen imágenes que ya traen el JDK preinstalado (como <code>mcr.microsoft.com/devcontainers/java</code>), y en principio ahorran un paso. El problema es que esas imágenes "completas" también traen preinstaladas otras herramientas que no vas a usar (Node.js, Yarn...) — y si el repositorio de alguna de ellas deja de estar disponible o su clave de firma caduca, el contenedor entero puede fallar al construirse por algo que no tiene nada que ver con tu proyecto. Partir de la imagen base y añadir solo las <em>features</em> que necesitas (Java, Docker) es más código, pero es más robusto: solo dependes de lo que realmente usas.</p>
 </div>
-<p><code>service: "app"</code> le dice a la extensión Dev Containers a cuál de los dos servicios del <code>docker-compose.yml</code> debe conectar tu editor — al otro, <code>postgres</code>, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. <code>forwardPorts</code> publica hacia tu máquina tanto el <code>8080</code> (tu aplicación, cuando la arranques) como el <code>5432</code> (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La <em>feature</em> <code>docker-outside-of-docker</code> instala dentro de <code>app</code> el cliente <code>docker</code> (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de VS Code vas a poder ejecutar <code>docker</code>, <code>docker compose</code> o <code>docker exec</code> como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.</p>
-<p>Ahora abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige <strong>"Reopen in Container"</strong> (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de <code>app</code> y levantando <code>postgres</code> a la vez.</p>
+<div class="admonition tip">
+<p class="admonition-title">La clave <code>customizations.vscode</code> es solo para VS Code</p>
+<p>Si usas IntelliJ IDEA, esas extensiones no hacen falta: el soporte de Java, Maven y Spring Boot ya viene integrado en el propio editor (Ultimate), sin instalar nada aparte.</p>
+</div>
+<p><code>service: "app"</code> le dice a la extensión Dev Containers (o al soporte nativo de IntelliJ) a cuál de los dos servicios del <code>docker-compose.yml</code> debe conectar tu editor — al otro, <code>postgres</code>, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. <code>forwardPorts</code> publica hacia tu máquina tanto el <code>8080</code> (tu aplicación, cuando la arranques) como el <code>5432</code> (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La <em>feature</em> <code>docker-outside-of-docker</code> instala dentro de <code>app</code> el cliente <code>docker</code> (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de tu editor vas a poder ejecutar <code>docker</code>, <code>docker compose</code> o <code>docker exec</code> como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">🔵 VS Code</label><label for="__tabbed_1_2">🟣 IntelliJ IDEA</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Abre la carpeta del proyecto en VS Code y, cuando te lo proponga, elige <strong>"Reopen in Container"</strong> (igual que en la Actividad 0.7). La primera vez tarda un poco: está construyendo el contenedor de <code>app</code> y levantando <code>postgres</code> a la vez.</p>
+</div>
+<div class="tabbed-block">
+<p>Abre el proyecto en IntelliJ IDEA, abre el fichero <code>devcontainer.json</code> y usa el icono <strong>"Create Dev Container"</strong> del margen izquierdo → <strong>"Create Dev Container and Mount Sources…"</strong> (igual que en la Actividad 0.7). Sigue el progreso en la ventana <strong>Services</strong> y pulsa <strong>Connect</strong> cuando termine.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Si cambias <code>devcontainer.json</code>/<code>docker-compose.yml</code> después de haber abierto el contenedor</p>
-<p>Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: paleta de comandos (<code>Ctrl+Shift+P</code>) → <strong>"Dev Containers: Rebuild Container"</strong>. Si algo no aparece como debería (por ejemplo, <code>mvn</code> no se encuentra aunque hayas añadido la <em>feature</em> de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.</p>
+<p>Editar estos ficheros no tiene efecto por sí solo — el contenedor ya está construido con la versión anterior. Tienes que reconstruirlo: en VS Code, paleta de comandos (<code>Ctrl+Shift+P</code>) → <strong>"Dev Containers: Rebuild Container"</strong>; en IntelliJ IDEA, cierra la conexión desde la ventana <strong>Services</strong> y vuelve a crear el Dev Container desde el icono del margen en <code>devcontainer.json</code>. Si algo no aparece como debería (por ejemplo, <code>mvn</code> no se encuentra aunque hayas añadido la <em>feature</em> de Java), lo primero que hay que comprobar es si de verdad has reconstruido después del último cambio.</p>
 </div>
-<p><strong>Captura</strong>: la esquina inferior izquierda de VS Code, con la etiqueta del Dev Container activo.</p>
+<p><strong>Captura</strong>: el indicativo de Dev Container activo (la esquina inferior izquierda en VS Code; el indicativo de conexión remota en IntelliJ IDEA).</p>
 <p>Con el contenedor ya abierto, abre una terminal integrada y comprueba que todo lo necesario está ahí, sin que lo hayas instalado tú:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
@@ -2503,9 +2518,13 @@
 <p><strong>Mini-reto</strong>: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en <code>Estudio</code> (atributo privado + getter/setter, que ya te genera <code>@Getter</code>/<code>@Setter</code> de Lombok).</p>
 <hr>
 <h2 id="paso-4-verificar-que-hibernate-ha-hecho-su-trabajo">Paso 4 — Verificar que Hibernate ha hecho su trabajo<a class="headerlink" href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" title="Permanent link">¶</a></h2>
-<p>Desde la terminal integrada de VS Code (la que corre <strong>dentro</strong> del Dev Container), arranca tu aplicación con el perfil <code>dev</code> activo:</p>
+<p>Desde la terminal integrada de tu editor (la que corre <strong>dentro</strong> del Dev Container), arranca tu aplicación con el perfil <code>dev</code> activo:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>./mvnw<span class="w"> </span>spring-boot:run<span class="w"> </span>-Dspring-boot.run.profiles<span class="o">=</span>dev
 </code></pre></div></td></tr></table></div>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">🔵 VS Code</label><label for="__tabbed_2_2">🟣 IntelliJ IDEA</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="admonition tip">
 <p class="admonition-title">Alternativa: el botón ▷ Run de VS Code</p>
 <p>La extensión de Java añade un botón <strong>Run</strong> (o el <em>CodeLens</em> <code>▷ Run</code> encima del <code>main</code>) sobre <code>GamevaultApplication</code>. Es más cómodo, pero por defecto arranca la clase directamente con <code>java</code>, <strong>sin</strong> el perfil <code>dev</code> activo — y sin él, tu aplicación no sabe cómo conectarse a PostgreSQL. Para que el botón Run también use el perfil <code>dev</code>, crea <code>.vscode/launch.json</code> en tu proyecto:
@@ -2535,14 +2554,24 @@
 </code></pre></div></td></tr></table></div>
 Ajusta <code>mainClass</code> a tu propio <em>group id</em>. A partir de ahora, arrancar con esta configuración desde el panel "Run and Debug" equivale exactamente al comando de arriba.
 </div>
+</div>
+<div class="tabbed-block">
+<div class="admonition tip">
+<p class="admonition-title">Alternativa: el botón ▷ Run de IntelliJ</p>
+<p>Al ejecutar por primera vez <code>GamevaultApplication</code> desde el <em>gutter</em> (▷ junto al <code>main</code>), IntelliJ genera una configuración de ejecución (<strong>Run/Debug Configurations</strong>), pero por defecto <strong>sin</strong> el perfil <code>dev</code> activo. Edítala (menú desplegable de configuraciones → <strong>Edit Configurations…</strong>) y en el campo <strong>Active profiles</strong> escribe <code>dev</code>. No hace falta ningún fichero adicional — a partir de ahora, volver a ejecutar esa misma configuración equivale exactamente al comando de arriba.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>Mira la consola: con <code>show-sql: true</code> deberías ver sentencias <code>create table</code> (o <code>alter table</code>, en arranques posteriores) para <code>estudio</code> y <code>videojuego</code>.</p>
 <p>Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:</p>
 <ul>
 <li><strong>Herramienta gráfica desde tu equipo</strong> (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto <code>5432</code> hacia tu máquina, apunta a <code>localhost:5432</code> con las credenciales del Paso 1.</li>
-<li><strong><code>psql</code> desde la propia terminal integrada de VS Code</strong>: gracias al <code>docker-outside-of-docker</code> del Paso 1, puedes usar <code>docker</code> normalmente aunque esa terminal esté dentro del contenedor <code>app</code>. Pero ojo: <code>docker compose</code>, a secas, busca un <code>docker-compose.yml</code> en la carpeta donde estés (<code>/workspace</code>) y no lo encuentra — el tuyo vive en <code>.devcontainer/</code>. Indícaselo con <code>-f</code>, y añade también <code>-p</code> con el nombre de proyecto que ha usado la propia extensión de Dev Containers para crear los contenedores (combina el nombre de tu carpeta con <code>_devcontainer</code>; si la llamaste <code>gamevault</code> como se sugería en el Paso 0, es <code>gamevault_devcontainer</code> — ajusta el prefijo si le pusiste otro nombre):
+<li><strong><code>psql</code> desde la propia terminal integrada de tu editor</strong>: gracias al <code>docker-outside-of-docker</code> del Paso 1, puedes usar <code>docker</code> normalmente aunque esa terminal esté dentro del contenedor <code>app</code>. Pero ojo: <code>docker compose</code>, a secas, busca un <code>docker-compose.yml</code> en la carpeta donde estés (<code>/workspace</code>) y no lo encuentra — el tuyo vive en <code>.devcontainer/</code>. Indícaselo con <code>-f</code>, y añade también <code>-p</code> con el nombre de proyecto que ha usado tu editor para crear los contenedores (combina el nombre de tu carpeta con <code>_devcontainer</code>; si la llamaste <code>gamevault</code> como se sugería en el Paso 0, es <code>gamevault_devcontainer</code> — ajusta el prefijo si le pusiste otro nombre):
     <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/docker-compose.yml<span class="w"> </span>-p<span class="w"> </span>gamevault_devcontainer<span class="w"> </span>ps
 </code></pre></div></td></tr></table></div>
-    Localiza ahí el nombre del contenedor de <code>postgres</code>, y luego <code>docker exec -it &lt;ese-nombre&gt; psql -U gamevault_user -d gamevault_db -c "\d videojuego"</code> — sin salir de VS Code. A partir de aquí, cualquier <code>docker compose</code> que ejecutes desde dentro del contenedor va a necesitar esos mismos <code>-f</code>/<code>-p</code>.</li>
+    Localiza ahí el nombre del contenedor de <code>postgres</code>, y luego <code>docker exec -it &lt;ese-nombre&gt; psql -U gamevault_user -d gamevault_db -c "\d videojuego"</code> — sin salir de tu editor. A partir de aquí, cualquier <code>docker compose</code> que ejecutes desde dentro del contenedor va a necesitar esos mismos <code>-f</code>/<code>-p</code>.</li>
 </ul>
 <p><strong>Comprueba</strong>:</p>
 <ol>

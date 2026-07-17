@@ -3119,17 +3119,32 @@ Ejemplos buenos:</p>
 <hr>
 <h3 id="3-editor-por-defecto-opcional-recomendado">🧾 3) Editor por defecto (opcional, recomendado)<a class="headerlink" href="#3-editor-por-defecto-opcional-recomendado" title="Permanent link">¶</a></h3>
 <p>A veces Git necesita que escribas un mensaje (por ejemplo, en operaciones que verás más adelante).<br>
-Para que no se abra un editor raro, puedes fijar uno. Con VS Code:</p>
+Para que no se abra un editor raro, puedes fijar uno.</p>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">🔵 VS Code</label><label for="__tabbed_1_2">🟣 IntelliJ IDEA</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">"code --wait"</span>
 </code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<p>Primero crea el lanzador de línea de comandos (menú <strong>Tools → Create Command-line Launcher</strong>), y luego:
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">"idea --wait"</span>
+</code></pre></div></td></tr></table></div>
+En Windows, si no has creado el lanzador, usa la ruta completa al ejecutable en su lugar, por ejemplo <code>git config --global core.editor "'C:/Program Files/JetBrains/IntelliJ IDEA/bin/idea64.exe' --wait"</code>.
+<p>En la práctica usarás poco esta opción con IntelliJ: la propia ventana de commit del IDE ya te deja escribir el mensaje sin pasar por un editor externo.</p>
+</div>
+</div>
+</div>
+</div>
 <hr>
 <h2 id="crear-un-repositorio-git-init">🧱 Crear un repositorio: <code>git init</code><a class="headerlink" href="#crear-un-repositorio-git-init" title="Permanent link">¶</a></h2>
 <p>Para que Git empiece a guardar el historial de un proyecto, primero necesitas un <strong>repositorio</strong>: una carpeta "con Git activado".</p>
 <h3 id="paso-1-entra-en-la-carpeta-del-proyecto">✅ Paso 1) Entra en la carpeta del proyecto<a class="headerlink" href="#paso-1-entra-en-la-carpeta-del-proyecto" title="Permanent link">¶</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nb">cd</span><span class="w"> </span>~/Documents/pruebas_git
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nb">cd</span><span class="w"> </span>~/Documents/pruebas_git
 </code></pre></div></td></tr></table></div>
 <h3 id="paso-2-inicializa-git">✅ Paso 2) Inicializa Git<a class="headerlink" href="#paso-2-inicializa-git" title="Permanent link">¶</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>git<span class="w"> </span>init
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>git<span class="w"> </span>init
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-init.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3161,7 +3176,7 @@ Para que no se abra un editor raro, puedes fijar uno. Con VS Code:</p>
 <hr>
 <h3 id="1-git-status-el-que-esta-pasando">1) <code>git status</code> — el "¿qué está pasando?"<a class="headerlink" href="#1-git-status-el-que-esta-pasando" title="Permanent link">¶</a></h3>
 <p><code>git status</code> te dice <strong>en qué situación está tu repo</strong> y <strong>en qué estado están tus archivos</strong>.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>git<span class="w"> </span>status
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>git<span class="w"> </span>status
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-status.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3184,7 +3199,7 @@ Para que no se abra un editor raro, puedes fijar uno. Con VS Code:</p>
 <hr>
 <h3 id="2-git-diff-el-que-ha-cambiado-exactamente">2) <code>git diff</code> — el "¿qué ha cambiado exactamente?"<a class="headerlink" href="#2-git-diff-el-que-ha-cambiado-exactamente" title="Permanent link">¶</a></h3>
 <p><code>git diff</code> muestra cambios <strong>línea a línea</strong> respecto al último commit (o respecto al staging, según el caso).</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>git<span class="w"> </span>diff
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>git<span class="w"> </span>diff
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-diff.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3208,7 +3223,7 @@ Para que no se abra un editor raro, puedes fijar uno. Con VS Code:</p>
 <h3 id="3-git-add-pongo-esto-en-la-bandeja-staging">3) <code>git add</code> — "pongo esto en la bandeja (staging)"<a class="headerlink" href="#3-git-add-pongo-esto-en-la-bandeja-staging" title="Permanent link">¶</a></h3>
 <p><code>git add</code> no guarda nada todavía: solo <strong>prepara</strong> archivos para el próximo commit.</p>
 <p>Ejemplo (lo típico en tu caso):
-</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>git<span class="w"> </span>add<span class="w"> </span>adios.txt<span class="w"> </span>hola.txt
+</p><div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>git<span class="w"> </span>add<span class="w"> </span>adios.txt<span class="w"> </span>hola.txt
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-add.png"></p>
 <p><strong>Qué estás viendo en la captura (después del add)</strong></p>
@@ -3235,7 +3250,7 @@ Al principio, es mejor añadir <strong>archivo a archivo</strong> para no llevar
 <hr>
 <h3 id="4-git-commit-guardo-la-partida">4) <code>git commit</code> — "guardo la partida"<a class="headerlink" href="#4-git-commit-guardo-la-partida" title="Permanent link">¶</a></h3>
 <p><code>git commit</code> guarda en el historial <strong>lo que esté en staging</strong>.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añado los archivos hola y adios"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Añado los archivos hola y adios"</span>
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-commit.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3261,7 +3276,7 @@ Al principio, es mejor añadir <strong>archivo a archivo</strong> para no llevar
 <hr>
 <h3 id="5-git-log-muestrame-el-historial">5) <code>git log</code> — "muéstrame el historial"<a class="headerlink" href="#5-git-log-muestrame-el-historial" title="Permanent link">¶</a></h3>
 <p>Para ver los commits que has hecho:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a>git<span class="w"> </span>log
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>git<span class="w"> </span>log
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-log.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3271,7 +3286,7 @@ Al principio, es mejor añadir <strong>archivo a archivo</strong> para no llevar
 </ul>
 <p>Cada commit tiene un identificador único llamado <strong>hash</strong> — una cadena larga de letras y números como <code>a3f8c21d9e4b...</code>. No hace falta usarlo entero; con los 7 primeros caracteres es suficiente.</p>
 <p>La versión más usada en el día a día es con <code>--oneline</code>, que muestra una sola línea por commit:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
 </code></pre></div></td></tr></table></div>
 <p><img alt="Salida de git log --oneline con los commits del repositorio de ejemplo" src="../img/intro/git-log-oneline.png"></p>
 <div class="admonition tip">
@@ -3282,7 +3297,7 @@ Al principio, es mejor añadir <strong>archivo a archivo</strong> para no llevar
 <h2 id="me-he-equivocado-descartar-cambios-git-restore">♻️ "Me he equivocado": descartar cambios (<code>git restore</code>)<a class="headerlink" href="#me-he-equivocado-descartar-cambios-git-restore" title="Permanent link">¶</a></h2>
 <h3 id="a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit">A) Descartar cambios de un archivo (volver al último commit)<a class="headerlink" href="#a-descartar-cambios-de-un-archivo-volver-al-ultimo-commit" title="Permanent link">¶</a></h3>
 <p>Si modificas <code>hola.txt</code> y no quieres esos cambios:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a>git<span class="w"> </span>restore<span class="w"> </span>hola.txt
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a>git<span class="w"> </span>restore<span class="w"> </span>hola.txt
 </code></pre></div></td></tr></table></div>
 <p><img alt="" src="../img/intro/git-restore.png"></p>
 <p><strong>Qué estás viendo en la captura</strong></p>
@@ -3334,7 +3349,7 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <hr>
 <h3 id="paso-previo-ver-el-historial">Paso previo: ver el historial<a class="headerlink" href="#paso-previo-ver-el-historial" title="Permanent link">¶</a></h3>
 <p>Antes de hacer cualquier cosa, necesitas saber <strong>qué commits tienes y cuáles son sus hashes</strong>:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline
 </code></pre></div></td></tr></table></div>
 <p><img alt="Salida de git log --oneline mostrando los commits con sus hashes y mensajes" src="../img/intro/git-log-oneline.png"></p>
 <p>Esos 7 caracteres al inicio de cada línea (<code>1cd8f5a</code>, <code>448751c</code>…) son el <strong>hash abreviado</strong> — el identificador único de cada commit. Los vas a necesitar para todos los comandos que siguen.</p>
@@ -3345,14 +3360,14 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <hr>
 <h3 id="ver-que-cambio-en-un-commit-concreto">Ver qué cambió en un commit concreto<a class="headerlink" href="#ver-que-cambio-en-un-commit-concreto" title="Permanent link">¶</a></h3>
 <p>Antes de deshacer nada, conviene ver exactamente qué hizo ese commit:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-23-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a>git<span class="w"> </span>show<span class="w"> </span>58fbc71
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>git<span class="w"> </span>show<span class="w"> </span>58fbc71
 </code></pre></div></td></tr></table></div>
 <p><img alt="Salida de git show con el hash, autor, fecha y el diff del commit" src="../img/intro/git-show.png"></p>
 <p>Las líneas con <code>+</code> son lo que ese commit añadió. Las líneas con <code>-</code> son lo que eliminó. Mientras solo ejecutas <code>git show</code>, <strong>no cambias nada</strong> en el proyecto.</p>
 <hr>
 <h3 id="opcion-a-recuperar-un-archivo-a-como-estaba-antes">Opción A — Recuperar un archivo a como estaba antes<a class="headerlink" href="#opcion-a-recuperar-un-archivo-a-como-estaba-antes" title="Permanent link">¶</a></h3>
 <p>Esto es útil cuando <strong>un archivo concreto</strong> ha empeorado y quieres recuperarlo a una versión anterior, sin tocar el resto del proyecto.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-24-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>58fbc71<span class="w"> </span>llibres.txt
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="o">=</span>58fbc71<span class="w"> </span>llibres.txt
 </code></pre></div></td></tr></table></div>
 <p><img alt="Ejecución de git restore --source y comprobación del contenido recuperado con cat" src="../img/intro/git-restore-source.png"></p>
 <p>El archivo queda exactamente como estaba en el commit <code>58fbc71</code>. Aparece como <strong>modified</strong> en <code>git status</code> — los cambios están en tu carpeta de trabajo, pero el historial no ha cambiado. Puedes revisarlo y hacer un <code>git commit</code> si quieres guardar esa recuperación.</p>
@@ -3363,7 +3378,7 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <hr>
 <h3 id="opcion-b-deshacer-un-commit-completo-git-revert">Opción B — Deshacer un commit completo (<code>git revert</code>)<a class="headerlink" href="#opcion-b-deshacer-un-commit-completo-git-revert" title="Permanent link">¶</a></h3>
 <p><code>git revert</code> <strong>crea un commit nuevo</strong> que deshace exactamente los cambios de un commit anterior. Es la opción más segura: no borra nada del historial, solo añade un paso nuevo que revierte lo que se hizo.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-25-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1"></a>git<span class="w"> </span>revert<span class="w"> </span>1cd8f5a
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>git<span class="w"> </span>revert<span class="w"> </span>1cd8f5a
 </code></pre></div></td></tr></table></div>
 <p><img alt="git revert crea un nuevo commit de reversión, y el log muestra cuatro commits" src="../img/intro/git-revert.png"></p>
 <p>Git genera el mensaje del commit de reversión automáticamente. El historial queda así — el commit original sigue ahí, pero neutralizado:</p>
@@ -3383,16 +3398,16 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <p><img alt="Situación de partida: git log --oneline con 3 commits — Corregeix majúscules, Afegeix el quart llibre, Primer commit" src="../img/intro/git-reset-comun.png"></p>
 <p>El commit más reciente ("Corregeix majuscules del titol") es el que va a desaparecer con el reset. Lo que cambia entre variantes es <strong>adónde van sus cambios</strong>.</p>
 <div class="tabs-colored">
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><input id="__tabbed_1_3" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">--soft — cambios en staging</label><label for="__tabbed_1_2">--mixed — cambios en el escritorio</label><label for="__tabbed_1_3">--hard — cambios borrados</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">--soft — cambios en staging</label><label for="__tabbed_2_2">--mixed — cambios en el escritorio</label><label for="__tabbed_2_3">--hard — cambios borrados</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>El commit desaparece, pero Git deja los cambios <strong>ya preparados para el siguiente commit</strong> — como si ya hubieras hecho <code>git add</code>. Solo te faltaría escribir <code>git commit</code>.</p>
 <p>Caso típico: has hecho un commit con un mensaje mal escrito. Con <code>--soft</code> deshaces el commit, el archivo queda listo para commit y puedes volver a hacer <code>git commit -m "mensaje correcto"</code> sin tocar nada más.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-26-1">1</a></span>
-<span class="normal"><a href="#__codelineno-26-2">2</a></span>
-<span class="normal"><a href="#__codelineno-26-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1
-<a id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="c1"># A continuación puedes hacer directamente:</span>
-<a id="__codelineno-26-3" name="__codelineno-26-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje correcto"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
+<span class="normal"><a href="#__codelineno-27-2">2</a></span>
+<span class="normal"><a href="#__codelineno-27-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--soft<span class="w"> </span>HEAD~1
+<a id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="c1"># A continuación puedes hacer directamente:</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje correcto"</span>
 </code></pre></div></td></tr></table></div>
 <p><img alt="git reset --soft: el log pasa a 2 commits y git status short muestra M dos espacios llibres.txt" src="../img/intro/git-reset-soft.png"></p>
 <p><code>git status --short</code> muestra <code>M  llibres.txt</code> — la M está en la zona de <strong>staging</strong>. No hace falta <code>git add</code>.</p>
@@ -3400,20 +3415,20 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <div class="tabbed-block">
 <p>El commit desaparece y los cambios vuelven al archivo, pero Git <strong>no los prepara</strong> para el siguiente commit. Es como si nunca hubieras hecho <code>git add</code>.</p>
 <p>Caso típico: quieres deshacer el commit y revisitar los cambios desde cero — decidiendo qué añadir y qué dejar fuera. Necesitas hacer <code>git add</code> de nuevo antes de poder hacer commit.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-27-1">1</a></span>
-<span class="normal"><a href="#__codelineno-27-2">2</a></span>
-<span class="normal"><a href="#__codelineno-27-3">3</a></span>
-<span class="normal"><a href="#__codelineno-27-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1"></a>git<span class="w"> </span>reset<span class="w"> </span>HEAD~1
-<a id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="c1"># A continuación necesitas:</span>
-<a id="__codelineno-27-3" name="__codelineno-27-3"></a>git<span class="w"> </span>add<span class="w"> </span>llibres.txt
-<a id="__codelineno-27-4" name="__codelineno-27-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1">1</a></span>
+<span class="normal"><a href="#__codelineno-28-2">2</a></span>
+<span class="normal"><a href="#__codelineno-28-3">3</a></span>
+<span class="normal"><a href="#__codelineno-28-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>git<span class="w"> </span>reset<span class="w"> </span>HEAD~1
+<a id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="c1"># A continuación necesitas:</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3"></a>git<span class="w"> </span>add<span class="w"> </span>llibres.txt
+<a id="__codelineno-28-4" name="__codelineno-28-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"mensaje"</span>
 </code></pre></div></td></tr></table></div>
 <p><img alt="git reset mixed: Git avisa Unstaged changes after reset, el log pasa a 2 commits y git status muestra M con espacio delante" src="../img/intro/git-reset-mixed.png"></p>
 <p>Git avisa: <code>Unstaged changes after reset</code>. <code>git status --short</code> muestra <code>M llibres.txt</code> — la M está en la zona de <strong>trabajo</strong> (fuera de staging). Necesitas <code>git add</code> antes de poder hacer commit.</p>
 </div>
 <div class="tabbed-block">
 <p>El commit desaparece <strong>y los cambios se borran definitivamente</strong>. El proyecto vuelve exactamente al estado del commit anterior.</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-28-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1
 </code></pre></div></td></tr></table></div>
 <p><img alt="git reset hard: HEAD is now at el commit anterior, log muestra 2 commits, cat muestra el archivo sin la corrección de mayúsculas" src="../img/intro/git-reset-hard.png"></p>
 <p>Git confirma con <code>HEAD is now at ...</code>. El log pasa a 2 commits. <code>cat llibres.txt</code> muestra el archivo <strong>sin la corrección de mayúsculas</strong> — ese cambio ha desaparecido para siempre.</p>
@@ -3493,41 +3508,41 @@ Si esos cambios te importan, guarda antes (commit) o copia el archivo.</p>
 <p>El archivo <code>.gitignore</code> sirve para decirle a Git qué archivos o carpetas debe ignorar — aunque estén en la carpeta del proyecto, Git actuará como si no existieran.</p>
 <p>Esto es útil para no incluir en el historial cosas que no tienen sentido versionar: archivos generados automáticamente, credenciales, binarios compilados o carpetas temporales.</p>
 <p>Para crearlo, simplemente crea un archivo llamado <code>.gitignore</code> en la raíz del repositorio y añade reglas:</p>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-29-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-29-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-29-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-29-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-29-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-29-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-29-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-29-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-29-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-29-10">10</a></span>
-<span class="normal"><a href="#__codelineno-29-11">11</a></span>
-<span class="normal"><a href="#__codelineno-29-12">12</a></span>
-<span class="normal"><a href="#__codelineno-29-13">13</a></span>
-<span class="normal"><a href="#__codelineno-29-14">14</a></span>
-<span class="normal"><a href="#__codelineno-29-15">15</a></span>
-<span class="normal"><a href="#__codelineno-29-16">16</a></span>
-<span class="normal"><a href="#__codelineno-29-17">17</a></span>
-<span class="normal"><a href="#__codelineno-29-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a># Archivos de log
-<a id="__codelineno-29-2" name="__codelineno-29-2"></a>*.log
-<a id="__codelineno-29-3" name="__codelineno-29-3"></a>
-<a id="__codelineno-29-4" name="__codelineno-29-4"></a># Carpeta de archivos temporales
-<a id="__codelineno-29-5" name="__codelineno-29-5"></a>/tmp/
-<a id="__codelineno-29-6" name="__codelineno-29-6"></a>
-<a id="__codelineno-29-7" name="__codelineno-29-7"></a># Carpeta de compilación de Java
-<a id="__codelineno-29-8" name="__codelineno-29-8"></a>/target/
-<a id="__codelineno-29-9" name="__codelineno-29-9"></a>/out/
-<a id="__codelineno-29-10" name="__codelineno-29-10"></a>*.class
-<a id="__codelineno-29-11" name="__codelineno-29-11"></a>
-<a id="__codelineno-29-12" name="__codelineno-29-12"></a># Archivos de configuración del IDE (IntelliJ)
-<a id="__codelineno-29-13" name="__codelineno-29-13"></a>.idea/
-<a id="__codelineno-29-14" name="__codelineno-29-14"></a>*.iml
-<a id="__codelineno-29-15" name="__codelineno-29-15"></a>
-<a id="__codelineno-29-16" name="__codelineno-29-16"></a># Variables de entorno y credenciales — NUNCA deben subirse
-<a id="__codelineno-29-17" name="__codelineno-29-17"></a>.env
-<a id="__codelineno-29-18" name="__codelineno-29-18"></a>secrets.txt
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-30-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-30-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-30-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-30-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-30-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-30-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-30-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-30-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-30-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-30-10">10</a></span>
+<span class="normal"><a href="#__codelineno-30-11">11</a></span>
+<span class="normal"><a href="#__codelineno-30-12">12</a></span>
+<span class="normal"><a href="#__codelineno-30-13">13</a></span>
+<span class="normal"><a href="#__codelineno-30-14">14</a></span>
+<span class="normal"><a href="#__codelineno-30-15">15</a></span>
+<span class="normal"><a href="#__codelineno-30-16">16</a></span>
+<span class="normal"><a href="#__codelineno-30-17">17</a></span>
+<span class="normal"><a href="#__codelineno-30-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1"></a># Archivos de log
+<a id="__codelineno-30-2" name="__codelineno-30-2"></a>*.log
+<a id="__codelineno-30-3" name="__codelineno-30-3"></a>
+<a id="__codelineno-30-4" name="__codelineno-30-4"></a># Carpeta de archivos temporales
+<a id="__codelineno-30-5" name="__codelineno-30-5"></a>/tmp/
+<a id="__codelineno-30-6" name="__codelineno-30-6"></a>
+<a id="__codelineno-30-7" name="__codelineno-30-7"></a># Carpeta de compilación de Java
+<a id="__codelineno-30-8" name="__codelineno-30-8"></a>/target/
+<a id="__codelineno-30-9" name="__codelineno-30-9"></a>/out/
+<a id="__codelineno-30-10" name="__codelineno-30-10"></a>*.class
+<a id="__codelineno-30-11" name="__codelineno-30-11"></a>
+<a id="__codelineno-30-12" name="__codelineno-30-12"></a># Archivos de configuración del IDE (IntelliJ)
+<a id="__codelineno-30-13" name="__codelineno-30-13"></a>.idea/
+<a id="__codelineno-30-14" name="__codelineno-30-14"></a>*.iml
+<a id="__codelineno-30-15" name="__codelineno-30-15"></a>
+<a id="__codelineno-30-16" name="__codelineno-30-16"></a># Variables de entorno y credenciales — NUNCA deben subirse
+<a id="__codelineno-30-17" name="__codelineno-30-17"></a>.env
+<a id="__codelineno-30-18" name="__codelineno-30-18"></a>secrets.txt
 </code></pre></div></td></tr></table></div>
 <p>Cada línea es un patrón:
 - <code>*.log</code> → ignora cualquier archivo que acabe en <code>.log</code>

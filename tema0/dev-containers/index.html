@@ -2016,7 +2016,7 @@
 <p>Instalar Java, Node o cualquier herramienta del curso directamente en tu ordenador tiene los mismos problemas que ya has visto con Docker: una versión distinta a la de tu compañero, un sistema operativo distinto, media mañana perdida configurando un portátil nuevo. Hasta ahora has usado Docker para meter un <strong>servicio</strong> dentro de un contenedor, como una base de datos. Un <strong>Dev Container</strong> aplica la misma idea a otra cosa: mete dentro del contenedor tu propio entorno de programación, y tu editor se conecta ahí para trabajar como si ese contenedor fuera tu ordenador.</p>
 <hr>
 <h2 id="la-parte-que-cuesta-entender-la-primera-vez">La parte que cuesta entender la primera vez<a class="headerlink" href="#la-parte-que-cuesta-entender-la-primera-vez" title="Permanent link">¶</a></h2>
-<p>"¿Cómo que mi editor está dentro de un contenedor, si lo sigo viendo en mi propia pantalla?" Es la duda razonable, y la respuesta está en separar dos cosas. La ventana que ves —los menús, las pestañas, el propio VS Code— se queda en tu ordenador, exactamente igual que siempre. Pero todo lo que hace falta para trabajar de verdad (la terminal que abres, los comandos que ejecutas, el compilador o intérprete que usa el editor para subrayarte errores, las extensiones instaladas) corre <strong>dentro</strong> del contenedor.</p>
+<p>"¿Cómo que mi editor está dentro de un contenedor, si lo sigo viendo en mi propia pantalla?" Es la duda razonable, y la respuesta está en separar dos cosas. La ventana que ves —los menús, las pestañas, el propio VS Code o IntelliJ IDEA— se queda en tu ordenador, exactamente igual que siempre. Pero todo lo que hace falta para trabajar de verdad (la terminal que abres, los comandos que ejecutas, el compilador o intérprete que usa el editor para subrayarte errores, las extensiones o plugins instalados) corre <strong>dentro</strong> del contenedor.</p>
 <div class="admonition example">
 <p class="admonition-title">Como un escritorio remoto</p>
 <p>Es la misma idea que conectarte por escritorio remoto a otro ordenador: la pantalla, el ratón y el teclado son tuyos, pero el trabajo de verdad —los programas ejecutándose, los archivos que se procesan— ocurre en la máquina remota. Con Dev Containers pasa lo mismo, solo que la "máquina remota" es un contenedor Docker en tu propio ordenador, no otro equipo.</p>
@@ -2024,14 +2024,23 @@
 <hr>
 <h2 id="que-ocurre-paso-a-paso">Qué ocurre paso a paso<a class="headerlink" href="#que-ocurre-paso-a-paso" title="Permanent link">¶</a></h2>
 <pre class="mermaid"><code>flowchart TD
-    A["Abres la carpeta del proyecto en VS Code"] --&gt; B{"¿Hay un .devcontainer/devcontainer.json?"}
-    B -- No --&gt; H["VS Code funciona como siempre, sobre tu máquina"]
-    B -- Sí --&gt; C["VS Code te propone 'Reopen in Container'"]
+    A["Abres la carpeta del proyecto en tu editor (VS Code o IntelliJ IDEA)"] --&gt; B{"¿Hay un .devcontainer/devcontainer.json?"}
+    B -- No --&gt; H["Tu editor funciona como siempre, sobre tu máquina"]
+    B -- Sí --&gt; C["Tu editor te propone reabrir dentro del contenedor"]
     C --&gt; D["Docker construye o descarga la imagen y crea el contenedor"]
     D --&gt; E["Tu carpeta del proyecto se monta dentro del contenedor"]
-    E --&gt; F["VS Code instala ahí dentro las extensiones indicadas"]
+    E --&gt; F["Tu editor instala ahí dentro las extensiones o plugins indicados"]
     F --&gt; G["A partir de ahora: terminal, depurador y autocompletado corren dentro del contenedor"]</code></pre>
-<p>La ventana de VS Code no cambia de aspecto en ningún momento de este proceso — por eso cuesta notar la diferencia a simple vista. Lo único que delata que estás dentro de un contenedor es una etiqueta en la esquina inferior izquierda con el nombre del Dev Container activo. Lo vas a comprobar tú mismo en la Actividad 0.7.</p>
+<p>La ventana de tu editor no cambia de aspecto en ningún momento de este proceso — por eso cuesta notar la diferencia a simple vista. Lo único que delata que estás dentro de un contenedor es algún indicativo de conexión remota (en VS Code, una etiqueta en la esquina inferior izquierda con el nombre del Dev Container activo). Lo vas a comprobar tú mismo en la Actividad 0.7.</p>
+<div class="admonition info">
+<p class="admonition-title">VS Code o IntelliJ IDEA: el mismo fichero, dos editores posibles</p>
+<p>Todo lo que ves en esta página funciona igual sea cual sea tu editor, porque el contrato es el propio <code>.devcontainer/devcontainer.json</code>: no es un fichero de configuración de VS Code, sino un estándar abierto (<a href="https://containers.dev">containers.dev</a>) que distintos editores saben leer.</p>
+<ul>
+<li><strong>VS Code</strong> necesita la extensión <strong>Dev Containers</strong> (la que instalaste en la Actividad 0.7). Al abrir una carpeta con <code>.devcontainer/</code>, te propone directamente <strong>"Reopen in Container"</strong>.</li>
+<li><strong>IntelliJ IDEA Ultimate</strong> (2023.2 o posterior) trae soporte nativo para Dev Containers, sin instalar nada aparte. Abre el proyecto, abre el propio fichero <code>devcontainer.json</code> en el editor, y usa el icono <strong>"Create Dev Container"</strong> que aparece en el margen izquierdo de esa línea — elige <strong>"Create Dev Container and Mount Sources…"</strong>. La ventana <strong>Services</strong> muestra el progreso de construcción; cuando termine, pulsa <strong>Connect</strong> y el proyecto se reabre conectado al contenedor a través de un <em>JetBrains Client</em>. La <strong>Community Edition</strong> no trae esto integrado de serie — para este curso usa Ultimate (gratuita con la licencia educativa de JetBrains si aún no la tienes).</li>
+</ul>
+<p>A partir de aquí, cuando esta guía diga "VS Code te propone Reopen in Container" o mencione la paleta de comandos, aplica el equivalente de IntelliJ que acabas de ver.</p>
+</div>
 <hr>
 <h2 id="el-fichero-que-lo-describe-todo">El fichero que lo describe todo<a class="headerlink" href="#el-fichero-que-lo-describe-todo" title="Permanent link">¶</a></h2>
 <p>Todo lo anterior lo define un único fichero, <code>.devcontainer/devcontainer.json</code>, en la raíz del proyecto:</p>
@@ -2058,6 +2067,10 @@
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>image</code> es la imagen que se usa para construir el contenedor donde vas a trabajar — el mismo concepto de imagen que ya conoces, solo que aquí no aloja una base de datos sino un sistema base para programar. <code>forwardPorts</code> te deja ver desde tu navegador algo que corre dentro del contenedor, por ejemplo el puerto de una base de datos que arranques ahí dentro mientras programas. <code>postCreateCommand</code> es un comando que se ejecuta una única vez, justo tras crear el contenedor por primera vez — el sitio típico para instalar las dependencias del proyecto. Y <code>customizations.vscode.extensions</code> evita que tengas que instalar a mano, cada vez, las mismas extensiones: se instalan solas dentro del contenedor la primera vez que lo abres.</p>
+<div class="admonition tip">
+<p class="admonition-title">Esa clave <code>customizations.vscode</code> solo la lee VS Code</p>
+<p>Si trabajas con IntelliJ IDEA, este bloque concreto se ignora sin más — no da error, simplemente no le dice nada a IntelliJ. No pasa nada: el soporte de Java, Maven o Spring que en VS Code hay que traer con una extensión, en IntelliJ ya viene integrado en el propio editor, así que no necesitas ningún equivalente a esa lista.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">También puede apoyarse en un docker-compose.yml</p>
 <p>En vez de <code>image</code>, un <code>devcontainer.json</code> puede usar <code>dockerComposeFile</code> y <code>service</code> para decir "mi entorno de desarrollo es este servicio concreto de este <code>docker-compose.yml</code>". Así, el mismo fichero de Compose que levanta tu base de datos puede levantar, en otro de sus servicios, el contenedor donde vive tu editor — los dos usos de Docker conviven en el mismo fichero.</p>

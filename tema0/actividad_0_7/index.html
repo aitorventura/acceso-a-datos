@@ -2089,7 +2089,7 @@
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
 <ul>
 <li>Docker instalado y funcionando.</li>
-<li>Visual Studio Code con la extensión <strong>Dev Containers</strong> instalada.</li>
+<li>Tu editor listo para Dev Containers: <strong>Visual Studio Code</strong> con la extensión <strong>Dev Containers</strong> instalada, o <strong>IntelliJ IDEA Ultimate</strong> (2023.2 o posterior, que ya trae soporte nativo — ver <a href="../dev-containers/">la teoría</a>).</li>
 </ul>
 <hr>
 <h2 id="paso-1-crear-el-proyecto">Paso 1 — Crear el proyecto<a class="headerlink" href="#paso-1-crear-el-proyecto" title="Permanent link">¶</a></h2>
@@ -2104,17 +2104,28 @@
 </code></pre></div></td></tr></table></div>
 <hr>
 <h2 id="paso-2-abrir-en-el-contenedor">Paso 2 — Abrir en el contenedor<a class="headerlink" href="#paso-2-abrir-en-el-contenedor" title="Permanent link">¶</a></h2>
+<div class="tabs-colored">
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">🔵 VS Code</label><label for="__tabbed_1_2">🟣 IntelliJ IDEA</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p>Abre la carpeta <code>actividad0_7</code> en VS Code. Debería aparecer, abajo a la derecha, una notificación ofreciendo <strong>"Reopen in Container"</strong>. Si no aparece, ábrela tú mismo desde la paleta de comandos (<code>Ctrl+Shift+P</code> / <code>Cmd+Shift+P</code>) buscando <strong>"Dev Containers: Reopen in Container"</strong>.</p>
-<p><strong>Captura</strong>: la notificación o el proceso de construcción del contenedor mientras arranca.</p>
+</div>
+<div class="tabbed-block">
+<p>Abre la carpeta <code>actividad0_7</code> como proyecto en IntelliJ IDEA y abre el fichero <code>devcontainer.json</code> en el editor. En el margen izquierdo de esa línea aparece un icono <strong>"Create Dev Container"</strong>; haz clic y elige <strong>"Create Dev Container and Mount Sources…"</strong>. La ventana <strong>Services</strong> muestra la construcción del contenedor; cuando termine, pulsa <strong>Connect</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Captura</strong>: la notificación (o el proceso en la ventana Services, si usas IntelliJ) mientras el contenedor arranca.</p>
 <p>Espera a que termine. La primera vez tarda un poco más porque tiene que descargar la imagen.</p>
 <hr>
 <h2 id="paso-3-comprobar-que-estas-dentro">Paso 3 — Comprobar que estás dentro<a class="headerlink" href="#paso-3-comprobar-que-estas-dentro" title="Permanent link">¶</a></h2>
-<p>Mira la esquina inferior izquierda de la ventana de VS Code.</p>
-<p><strong>Captura</strong>: esa esquina, donde debería verse una etiqueta con el nombre del Dev Container activo.</p>
+<p>En VS Code, mira la esquina inferior izquierda de la ventana: debería verse una etiqueta con el nombre del Dev Container activo. En IntelliJ IDEA, la señal equivalente es el indicativo de conexión remota (<em>JetBrains Client</em>) que aparece tras pulsar <strong>Connect</strong>, con el nombre del contenedor.</p>
+<p><strong>Captura</strong>: ese indicativo, mostrando el Dev Container activo.</p>
 <p><strong>Pregunta</strong>: ¿qué texto muestra exactamente esa etiqueta?</p>
 <hr>
 <h2 id="paso-4-comparar-terminal-de-dentro-y-de-fuera">Paso 4 — Comparar terminal de dentro y de fuera<a class="headerlink" href="#paso-4-comparar-terminal-de-dentro-y-de-fuera" title="Permanent link">¶</a></h2>
-<p>Con el contenedor activo, abre una terminal integrada en VS Code (<code>Ctrl+ñ</code> o desde el menú <em>Terminal</em>) y ejecuta:</p>
+<p>Con el contenedor activo, abre una terminal integrada (<code>Ctrl+ñ</code> o el menú <em>Terminal</em> en VS Code; la ventana <strong>Terminal</strong> en IntelliJ IDEA) y ejecuta:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
 <span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>cat<span class="w"> </span>/etc/os-release
@@ -2122,18 +2133,18 @@
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="nb">pwd</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Captura</strong>: la salida de estos tres comandos.</p>
-<p>Ahora, <strong>sin cerrar VS Code</strong>, abre una terminal de tu propio sistema operativo (la que usarías normalmente, fuera del editor) y ejecuta los mismos tres comandos.</p>
+<p>Ahora, <strong>sin cerrar el editor</strong>, abre una terminal de tu propio sistema operativo (la que usarías normalmente, fuera del editor) y ejecuta los mismos tres comandos.</p>
 <p><strong>Captura</strong>: la salida de esa segunda terminal.</p>
 <p><strong>Preguntas a responder</strong>:</p>
 <ol>
 <li>¿Qué diferencias hay entre las dos salidas de <code>cat /etc/os-release</code> (o su equivalente si tu sistema operativo no tiene ese fichero)?</li>
 <li>¿El resultado de <code>pwd</code> es el mismo en las dos terminales? ¿Tiene sentido que lo sea o que no lo sea?</li>
-<li>Si las dos terminales están abiertas "dentro de VS Code, en la misma ventana", ¿por qué devuelven cosas distintas?</li>
+<li>Si las dos terminales están abiertas "dentro del editor, en la misma ventana", ¿por qué devuelven cosas distintas?</li>
 </ol>
 <hr>
 <h2 id="paso-5-volver-a-tu-entorno-local">Paso 5 — Volver a tu entorno local<a class="headerlink" href="#paso-5-volver-a-tu-entorno-local" title="Permanent link">¶</a></h2>
-<p>Desde la paleta de comandos, busca <strong>"Dev Containers: Reopen Folder Locally"</strong>.</p>
-<p><strong>Captura</strong>: la esquina inferior izquierda después de volver, mostrando que la etiqueta del Dev Container ha desaparecido.</p>
+<p>En VS Code, desde la paleta de comandos, busca <strong>"Dev Containers: Reopen Folder Locally"</strong>. En IntelliJ IDEA, cierra la conexión remota desde la ventana <strong>Services</strong> (o <em>File → Close Remote Connection</em>) para volver a trabajar sobre la carpeta local.</p>
+<p><strong>Captura</strong>: el indicativo de conexión, mostrando que ya no aparece el Dev Container activo.</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
 <p>Si borraras el contenedor (<code>docker rm</code>) y volvieras a hacer "Reopen in Container" sobre la misma carpeta, ¿qué esperas que pase con los archivos que veías dentro de <code>/workspace</code>? Razona tu respuesta pensando en qué se monta desde tu ordenador y qué se reconstruye desde la imagen.</p>
