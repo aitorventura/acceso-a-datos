@@ -38,13 +38,16 @@ Esta diferencia de fondo tiene nombre: **desfase objeto-relacional** (*impedance
 
 Vas a resolver este desfase con una herramienta **ORM** (*Object-Relational Mapping*): declaras, una sola vez, las reglas de correspondencia entre una clase y una tabla — y a partir de ahí, guardar, actualizar y consultar objetos se traduce automáticamente al SQL correspondiente, sin que lo escribas tú. Todo lo que verás en este tema —las anotaciones de más abajo, el CRUD completo, las consultas dinámicas, JPQL— son, en el fondo, distintas caras de esa misma herramienta.
 
-Tres nombres que aparecen siempre juntos y no significan lo mismo:
+"ORM" es solo el concepto general. En Java se concreta en dos piezas que conviene no confundir:
 
-| Nombre | Qué es |
-|---|---|
-| **ORM** | El concepto: mapeo objeto-relacional en general. |
-| **JPA** | *Jakarta Persistence API* — la especificación estándar de Java: qué anotaciones e interfaces debe ofrecer un ORM en Java. |
-| **Hibernate** | La implementación más usada de JPA — el motor real que hace el trabajo. |
+**JPA** (*Jakarta Persistence API*) es la especificación estándar de Java: el documento de reglas que dice qué anotaciones (`@Entity`, `@Id`, `@OneToMany`...) y qué operaciones debe ofrecer cualquier ORM que quiera usarse en Java — sin ejecutar nada por sí sola, igual que una interfaz Java declara qué métodos debe tener una clase sin decir cómo funcionan por dentro.
+
+**Hibernate** es quien cumple esas reglas de verdad: la implementación de JPA más usada, el motor que traduce cada anotación en el SQL real que llega a PostgreSQL.
+
+| Nombre | Qué es | Su equivalente en POO |
+|---|---|---|
+| **JPA** | El contrato: qué debe ofrecer un ORM en Java | Una interfaz |
+| **Hibernate** | Quien lo cumple: el motor que hace el trabajo real | Una clase que la implementa |
 
 ```mermaid
 flowchart TB
@@ -56,7 +59,7 @@ flowchart TB
 **Spring Data JPA** (el `JpaRepository` que vas a usar durante todo este tema) no es un ORM distinto — es una capa adicional de comodidad **por encima** de JPA/Hibernate: te genera automáticamente implementaciones de repositorios (`save`, `findById`, `findAll`...) para que ni siquiera tengas que escribir el código que usa directamente las anotaciones JPA.
 
 !!! tip "Hibernate no es la única opción"
-    Es la implementación de JPA más usada en el mundo Java, pero no la única — **EclipseLink** es otra implementación completa de la misma especificación. Fuera de Java, cada lenguaje tiene su propio ORM con la misma idea de fondo (SQLAlchemy en Python, Entity Framework en C#): el mapeo objeto-relacional no es un invento exclusivo de Hibernate ni de Java.
+    Es la implementación de JPA más usada en el mundo Java, pero no la única — **EclipseLink** es otra implementación completa de la misma especificación (la misma interfaz, otra clase distinta que la cumple). Fuera de Java, cada lenguaje tiene su propio ORM con la misma idea de fondo (SQLAlchemy en Python, Entity Framework en C#): el mapeo objeto-relacional no es un invento exclusivo de Hibernate ni de Java.
 
 Las anotaciones que vas a ver más abajo (`@Entity`, `@Id`, `@OneToMany`...) son, literalmente, cómo se declara ese mapeo — hoy las vas a leer como "así defines la estructura de la base de datos", pero por debajo es la propia herramienta ORM en funcionamiento.
 
