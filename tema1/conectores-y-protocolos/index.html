@@ -3142,26 +3142,27 @@
 <hr>
 <h2 id="la-solucion-una-herramienta-orm">🌉 La solución: una herramienta ORM<a class="headerlink" href="#la-solucion-una-herramienta-orm" title="Permanent link">¶</a></h2>
 <p>Vas a resolver este desfase con una herramienta <strong>ORM</strong> (<em>Object-Relational Mapping</em>): declaras, una sola vez, las reglas de correspondencia entre una clase y una tabla — y a partir de ahí, guardar, actualizar y consultar objetos se traduce automáticamente al SQL correspondiente, sin que lo escribas tú. Todo lo que verás en este tema —las anotaciones de más abajo, el CRUD completo, las consultas dinámicas, JPQL— son, en el fondo, distintas caras de esa misma herramienta.</p>
-<p>Tres nombres que aparecen siempre juntos y no significan lo mismo:</p>
+<p>"ORM" es solo el concepto general. En Java se concreta en dos piezas que conviene no confundir:</p>
+<p><strong>JPA</strong> (<em>Jakarta Persistence API</em>) es la especificación estándar de Java: el documento de reglas que dice qué anotaciones (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>...) y qué operaciones debe ofrecer cualquier ORM que quiera usarse en Java — sin ejecutar nada por sí sola, igual que una interfaz Java declara qué métodos debe tener una clase sin decir cómo funcionan por dentro.</p>
+<p><strong>Hibernate</strong> es quien cumple esas reglas de verdad: la implementación de JPA más usada, el motor que traduce cada anotación en el SQL real que llega a PostgreSQL.</p>
 <table>
 <thead>
 <tr>
 <th>Nombre</th>
 <th>Qué es</th>
+<th>Su equivalente en POO</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>ORM</strong></td>
-<td>El concepto: mapeo objeto-relacional en general.</td>
-</tr>
-<tr>
 <td><strong>JPA</strong></td>
-<td><em>Jakarta Persistence API</em> — la especificación estándar de Java: qué anotaciones e interfaces debe ofrecer un ORM en Java.</td>
+<td>El contrato: qué debe ofrecer un ORM en Java</td>
+<td>Una interfaz</td>
 </tr>
 <tr>
 <td><strong>Hibernate</strong></td>
-<td>La implementación más usada de JPA — el motor real que hace el trabajo.</td>
+<td>Quien lo cumple: el motor que hace el trabajo real</td>
+<td>Una clase que la implementa</td>
 </tr>
 </tbody>
 </table>
@@ -3172,7 +3173,7 @@
 <p><strong>Spring Data JPA</strong> (el <code>JpaRepository</code> que vas a usar durante todo este tema) no es un ORM distinto — es una capa adicional de comodidad <strong>por encima</strong> de JPA/Hibernate: te genera automáticamente implementaciones de repositorios (<code>save</code>, <code>findById</code>, <code>findAll</code>...) para que ni siquiera tengas que escribir el código que usa directamente las anotaciones JPA.</p>
 <div class="admonition tip">
 <p class="admonition-title">Hibernate no es la única opción</p>
-<p>Es la implementación de JPA más usada en el mundo Java, pero no la única — <strong>EclipseLink</strong> es otra implementación completa de la misma especificación. Fuera de Java, cada lenguaje tiene su propio ORM con la misma idea de fondo (SQLAlchemy en Python, Entity Framework en C#): el mapeo objeto-relacional no es un invento exclusivo de Hibernate ni de Java.</p>
+<p>Es la implementación de JPA más usada en el mundo Java, pero no la única — <strong>EclipseLink</strong> es otra implementación completa de la misma especificación (la misma interfaz, otra clase distinta que la cumple). Fuera de Java, cada lenguaje tiene su propio ORM con la misma idea de fondo (SQLAlchemy en Python, Entity Framework en C#): el mapeo objeto-relacional no es un invento exclusivo de Hibernate ni de Java.</p>
 </div>
 <p>Las anotaciones que vas a ver más abajo (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>...) son, literalmente, cómo se declara ese mapeo — hoy las vas a leer como "así defines la estructura de la base de datos", pero por debajo es la propia herramienta ORM en funcionamiento.</p>
 <hr>
