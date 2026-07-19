@@ -30,7 +30,35 @@ Aunque representan la misma idea, la forma de trabajar con cada una es distinta:
 - **Relaciones expresadas de forma distinta**: en Java, una editorial *contiene* su lista de libros (una referencia en memoria); en SQL, esa misma relación es una clave foránea en la tabla `libro` — la dirección de la flecha depende de quién almacena la referencia a quién, y hace falta un `JOIN` para reconstruirla.
 - **Identidad**: en Java, dos objetos son iguales si `==` los considera el mismo (o si `equals()` lo dice); en la base de datos, la identidad de una fila es su clave primaria. Son dos formas distintas de responder a "¿es esto lo mismo que aquello?".
 
-Esta diferencia de fondo tiene nombre: **desfase objeto-relacional** (*impedance mismatch*). No es un error de diseño de nadie — es que los dos mundos, orientado a objetos y relacional, modelan la información de forma distinta por naturaleza. Todo lo que vas a ver en este tema (y en el Tema 2, con el ORM) existe para tender puentes sobre ese desfase.
+Esta diferencia de fondo tiene nombre: **desfase objeto-relacional** (*impedance mismatch*). No es un error de diseño de nadie — es que los dos mundos, orientado a objetos y relacional, modelan la información de forma distinta por naturaleza. Todo lo que vas a ver en este tema existe para tender puentes sobre ese desfase — empezando por la propia herramienta que lo resuelve.
+
+---
+
+## 🌉 La solución: una herramienta ORM
+
+Vas a resolver este desfase con una herramienta **ORM** (*Object-Relational Mapping*): declaras, una sola vez, las reglas de correspondencia entre una clase y una tabla — y a partir de ahí, guardar, actualizar y consultar objetos se traduce automáticamente al SQL correspondiente, sin que lo escribas tú. Todo lo que verás en este tema —las anotaciones de más abajo, el CRUD completo, las consultas dinámicas, JPQL— son, en el fondo, distintas caras de esa misma herramienta.
+
+Tres nombres que aparecen siempre juntos y no significan lo mismo:
+
+| Nombre | Qué es |
+|---|---|
+| **ORM** | El concepto: mapeo objeto-relacional en general. |
+| **JPA** | *Jakarta Persistence API* — la especificación estándar de Java: qué anotaciones e interfaces debe ofrecer un ORM en Java. |
+| **Hibernate** | La implementación más usada de JPA — el motor real que hace el trabajo. |
+
+```mermaid
+flowchart TB
+    A["🌉 ORM<br/>(el concepto)"] --> B["📜 JPA<br/>(la especificación estándar de Java)"]
+    B --> C["⚙️ Hibernate<br/>(la implementación más usada)"]
+    C --> D["🧰 Spring Data JPA<br/>(capa de comodidad: los repositorios)"]
+```
+
+**Spring Data JPA** (el `JpaRepository` que vas a usar durante todo este tema) no es un ORM distinto — es una capa adicional de comodidad **por encima** de JPA/Hibernate: te genera automáticamente implementaciones de repositorios (`save`, `findById`, `findAll`...) para que ni siquiera tengas que escribir el código que usa directamente las anotaciones JPA.
+
+!!! tip "Hibernate no es la única opción"
+    Es la implementación de JPA más usada en el mundo Java, pero no la única — **EclipseLink** es otra implementación completa de la misma especificación. Fuera de Java, cada lenguaje tiene su propio ORM con la misma idea de fondo (SQLAlchemy en Python, Entity Framework en C#): el mapeo objeto-relacional no es un invento exclusivo de Hibernate ni de Java.
+
+Las anotaciones que vas a ver más abajo (`@Entity`, `@Id`, `@OneToMany`...) son, literalmente, cómo se declara ese mapeo — hoy las vas a leer como "así defines la estructura de la base de datos", pero por debajo es la propia herramienta ORM en funcionamiento.
 
 ---
 
@@ -210,7 +238,7 @@ spring:
 
 ### La estructura: entidades `Libro` y `Editorial`
 
-La "definición de la estructura de la base de datos" en un proyecto Spring Data JPA no se escribe como `CREATE TABLE` a mano — se declara sobre las propias clases Java, con anotaciones:
+La "definición de la estructura de la base de datos" en un proyecto Spring Data JPA no se escribe como `CREATE TABLE` a mano — se declara sobre las propias clases Java, con anotaciones. Esto es el ORM que acabas de conocer, en código real:
 
 ```java
 @Entity
@@ -245,6 +273,7 @@ Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreS
 ??? tip "Abrir resumen"
 
     - El **desfase objeto-relacional** es la diferencia estructural entre cómo Java modela la información (objetos, referencias) y cómo lo hace SQL (tablas, claves foráneas) — no es un error, es una diferencia de naturaleza entre los dos modelos.
+    - Una herramienta **ORM** resuelve ese desfase; **JPA** es la especificación estándar de Java, **Hibernate** su implementación más usada (no la única — EclipseLink es otra), y **Spring Data JPA** añade los repositorios como capa de comodidad por encima.
     - **JDBC** es la API estándar de Java para hablar con bases de datos; un **driver/conector** la implementa para un gestor concreto.
     - Un gestor **embebido** (H2, SQLite) corre dentro de tu proceso; uno **independiente** (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.
     - El **pooling de conexiones** reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.

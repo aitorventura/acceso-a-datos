@@ -1,109 +1,138 @@
-# 🧪 Actividad 2.3: Ranking con `@Query` JPQL
+# 🧪 Actividad 2.3: Pruebas de integración sobre JSONB
 
 !!! info "Práctica guiada"
-    Hoy añades a tu GameVault un ranking de estudios por número de videojuegos publicados, usando `@Query` con JPQL.
+    Hoy escribes un test de integración real, con Testcontainers, que verifica de verdad el comportamiento de la columna JSONB y el filtro `jsonb_exists` que construiste en las dos actividades anteriores.
 
 ## Qué vas a practicar
 
-- Escribir una consulta JPQL con `@Query` sobre un repositorio.
-- Diseñar un DTO de respuesta que no exponga más de lo necesario.
-- Aplicar `@Transactional(readOnly = true)` correctamente.
+- Configurar un test con Testcontainers y `@ServiceConnection`.
+- Escribir un test de integración completo, vía la API, sobre JSONB.
+- Entender qué detecta un test así que un test con mocks nunca detectaría.
 
 ---
 
 ## Requisitos previos
 
-Varios estudios con distinto número de videojuegos asociados (créalos si hace falta, para que el ranking tenga sentido al comprobarlo).
+Tu columna `detallesPlataforma` (Actividad 2.1) y el filtro `disponibleEnPlataforma` (Actividad 2.2), ambos funcionando.
 
 ---
 
-## Paso 1 — La consulta JPQL, guiada al completo
+## Paso 1 — Configuración del test, guiada al completo
 
-En `EstudioRepository`:
+!!! tip "Por qué esto funciona dentro de tu Dev Container"
+    Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, montaste el socket de Docker del host dentro de `app` y añadiste la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
+
+Añade las dependencias de Testcontainers a tu `pom.xml` (si no las tienes ya de otra actividad):
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-testcontainers</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+Crea la clase de test:
 
 ```java
-public interface EstudioRepository extends JpaRepository<Estudio, Long> {
+package com.tunombre.gamevault.integration;
 
-    @Query("SELECT e FROM Estudio e JOIN e.videojuegos v GROUP BY e ORDER BY COUNT(v) DESC")
-    List<Estudio> rankingPorNumeroDeVideojuegos();
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Testcontainers
+class JsonbIntegrationTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    // los tests van aquí
 }
 ```
 
-Compara esta consulta con su equivalente en SQL nativo:
-
-```sql
-SELECT e.* FROM estudio e
-JOIN videojuego v ON v.estudio_id = e.id
-GROUP BY e.id
-ORDER BY COUNT(v.id) DESC;
-```
-
-`JOIN e.videojuegos v` navega la relación `@OneToMany` que ya tienes declarada en `Estudio` — no hace falta que escribas la condición del `JOIN` explícitamente (`ON v.estudio_id = e.id`), porque JPQL ya conoce esa relación por el propio mapeo de tu entidad. `GROUP BY e` agrupa por estudio completo (no por una columna suelta, como harías en SQL), y `ORDER BY COUNT(v) DESC` ordena por el tamaño de cada grupo, de mayor a menor.
+`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yaml` — Spring Boot lo resuelve por ti. Fíjate en que la imagen es `postgres:16-alpine`, no la `18-alpine` de tu `docker-compose.yaml` de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto. `@ActiveProfiles("test")` activa un perfil de test (créalo si no lo tienes, con `ddl-auto: create-drop` — aquí sí conviene, porque cada ejecución del test parte de una base de datos limpia).
 
 ---
 
-## Paso 2 — El DTO de respuesta
-
-Crea un DTO específico para el ranking — no reutilices `EstudioResponseDTO` ni devuelvas la entidad `Estudio` completa:
+## Paso 2 — Primer test, guiado al completo
 
 ```java
-public record EstudioRankingDTO(
-        String nombreEstudio,
-        int numeroDeVideojuegos
-) {}
-```
+@Test
+void filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene() throws Exception {
+    mockMvc.perform(post("/api/v1/videojuegos")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("""
+                            {
+                              "titulo": "Hades",
+                              "precio": 24.99,
+                              "fechaLanzamiento": "2020-09-17",
+                              "estudioId": 1,
+                              "detallesPlataforma": {"steam": {"idApp": 123}}
+                            }
+                            """))
+            .andExpect(status().isCreated());
 
-**Pregunta**: ¿por qué no tiene sentido devolver, dentro de este DTO, la lista completa de objetos `Videojuego` de cada estudio? Relaciona tu respuesta con lo que ya sabes sobre por qué GameVault nunca expone directamente sus entidades JPA (Tema 1).
-
----
-
-## Paso 3 — El service y el endpoint
-
-```java
-// En EstudioService
-@Transactional(readOnly = true)
-public List<EstudioRankingDTO> obtenerRanking() {
-    return estudioRepository.rankingPorNumeroDeVideojuegos()
-            .stream()
-            .map(e -> new EstudioRankingDTO(e.getNombre(), e.getVideojuegos().size()))
-            .toList();
+    mockMvc.perform(get("/api/v1/videojuegos?plataforma=steam"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].titulo").value("Hades"));
 }
 ```
 
-```java
-// En EstudioController
-@GetMapping("/ranking")
-public ResponseEntity<List<EstudioRankingDTO>> getRanking() {
-    return ResponseEntity.ok(estudioService.obtenerRanking());
-}
-```
+(ajusta `estudioId: 1` a un estudio que exista de verdad en tu base de datos de test — puede que necesites crearlo primero con otro `POST`, o cargar datos de prueba antes del test).
 
-Prueba:
-
-```bash
-curl http://localhost:8080/api/v1/estudios/ranking
-```
-
-**Comprueba**: que el orden de los estudios en la respuesta coincide con el número real de videojuegos que tiene cada uno en tu base de datos.
-
-**Pregunta de comprensión**: ¿qué ventaja concreta aporta `readOnly = true` en este método, frente a dejarlo con `@Transactional` a secas? (Ya la viste en la teoría — enúnciala con tus propias palabras).
+Línea a línea: primero un `POST` real, vía MockMvc, que crea un videojuego con una plataforma concreta en su `detallesPlataforma`; después un `GET` filtrado por esa misma plataforma, comprobando con `jsonPath` que el videojuego creado aparece en el resultado. Todo esto ocurre contra el PostgreSQL **real** del contenedor — no hay ningún mock de por medio.
 
 ---
 
-## Mini-reto — criterio de desempate
+## Mini-reto — el test negativo
 
-Ahora mismo, si dos estudios tienen exactamente el mismo número de videojuegos, su orden relativo en el ranking no está garantizado de forma predecible. Añade al `ORDER BY` de tu consulta JPQL un segundo criterio: nombre alfabético (`e.nombre ASC`) como desempate.
-
-Para comprobarlo de verdad, crea (o ajusta) dos estudios con exactamente el mismo número de videojuegos y verifica que aparecen ordenados alfabéticamente entre sí, no en un orden arbitrario.
+Repite el mismo patrón del Paso 2, pero esta vez filtrando por una plataforma que el videojuego creado **no tiene** (por ejemplo, `?plataforma=xbox`), y comprueba que la lista de resultados **no** incluye ese videojuego. Solo se indica el objetivo — la estructura es idéntica a la del Paso 2.
 
 ---
 
-## Síntesis propia
+## Pregunta de comprensión
 
-Con tus propias palabras (2-3 frases, no copiadas del enunciado ni de la teoría), explica cómo esta actividad, junto con las dos anteriores del tema (mapeo con anotaciones, Specifications dinámicas), te ha permitido consultar tu catálogo de formas muy distintas. ¿Qué tipo de consulta usarías para cada una de las tres situaciones siguientes, y por qué: "buscar un videojuego por su id exacto", "listar videojuegos filtrando por hasta cuatro criterios opcionales", "calcular cuántos videojuegos ha publicado cada estudio"?
+¿Qué detectaría este test con Testcontainers que **no** detectaría un test equivalente con el repositorio mockeado? Piensa en un error concreto: por ejemplo, si escribieras mal el nombre de la función SQL en `criteriaBuilder.function("jsonb_exists", ...)` (una errata tipográfica), o si el tipo de columna generado no fuera realmente `jsonb`. ¿Un mock del repositorio detectaría ese error? ¿Por qué sí o por qué no?
+
+---
+
+## Resumen de tu evolución
+
+Escribe un resumen propio (5-6 líneas) de cómo tu GameVault ha evolucionado a lo largo de las tres actividades de este tema: desde la columna JSONB básica (Actividad 2.1) hasta una consulta filtrada y probada de verdad con Testcontainers (esta actividad).
+
+Incluye, como parte explícita de este entregable, 2-3 líneas explicando por qué JSONB no abre ni cierra una conexión propia: reutiliza la misma conexión JDBC/JPA ya gestionada por el framework desde el Tema 1.
 
 ---
 
 ## ✅ Cierre
 
-En el Tema 3 das el salto a bases de datos objeto-relacionales: vas a construir `disponibleEnPlataforma`, una Specification que usa `jsonb_exists` — ahora la vas a entender de verdad, trabajando con la columna JSONB que la hace posible.
+En el Tema 3 das el salto a MongoDB: la primera base de datos NoSQL distinta de PostgreSQL de todo el curso, con un modelo documental nativo, sin tablas de ningún tipo.

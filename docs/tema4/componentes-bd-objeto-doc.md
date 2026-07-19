@@ -2,7 +2,7 @@
 
 # 🧩 2. Componentes con BD objeto-relacional y documental
 
-Este apartado no introduce ninguna tecnología nueva — es un repaso integrador. Revisitas JSONB (Tema 3) y MongoDB (Tema 4), esta vez con la óptica de "componente" que acabas de conocer en el apartado anterior.
+Este apartado no introduce ninguna tecnología nueva — es un repaso integrador. Revisitas JSONB (Tema 2) y MongoDB (Tema 3), esta vez con la óptica de "componente" que acabas de conocer en el apartado anterior.
 
 ---
 
@@ -34,7 +34,7 @@ public ResenaResumenDTO getResumenByLibroId(Long libroId) {
 
 ## 🪞 Cerrando el círculo: el mismo patrón, tres motores distintos
 
-Ya conoces `CatalogoConsultaService` del apartado anterior (y lo construirás en la Actividad 5.1) — interfaz en un paquete `api`, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde el módulo de reseñas hacia otros módulos un componente análogo — por ejemplo, `ResenasConsultaService`, con algo como "cuántas reseñas tiene un libro". Es justo lo que vas a construir en la Actividad 5.2.
+Ya conoces `CatalogoConsultaService` del apartado anterior (y lo construirás en la Actividad 4.1) — interfaz en un paquete `api`, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde el módulo de reseñas hacia otros módulos un componente análogo — por ejemplo, `ResenasConsultaService`, con algo como "cuántas reseñas tiene un libro". Es justo lo que vas a construir en la Actividad 4.2.
 
 ```mermaid
 flowchart TB

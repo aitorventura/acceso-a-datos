@@ -11,11 +11,11 @@ No la construyes de una vez: cada actividad añade una pieza sobre las anteriore
 
 | Pieza | Qué hace | Dónde la construyes |
 |---|---|---|
-| **Catálogo** | Videojuegos y estudios, con su relación, CRUD completo | Acceso a Datos, Temas 1-2 |
+| **Catálogo** | Videojuegos y estudios, con su relación, CRUD completo | Acceso a Datos, Tema 1 |
 | **API REST** | Los mismos datos, expuestos por HTTP y documentados con OpenAPI | Programación de Servicios y Procesos, Tema 1 |
 | **Seguridad** | Login, roles y rutas protegidas con JWT | Programación de Servicios y Procesos, Tema 2 |
-| **Detalles de plataforma** | Información estructurada de cada videojuego (JSONB), con consultas sobre su contenido | Acceso a Datos, Tema 3 |
-| **Reseñas** | Opiniones de usuarios sobre cada videojuego, guardadas en MongoDB | Acceso a Datos, Tema 4 |
+| **Detalles de plataforma** | Información estructurada de cada videojuego (JSONB), con consultas sobre su contenido | Acceso a Datos, Tema 2 |
+| **Reseñas** | Opiniones de usuarios sobre cada videojuego, guardadas en MongoDB | Acceso a Datos, Tema 3 |
 | **Rendimiento en segundo plano** | Una caché de novedades que se recalienta sola, con hilos, tras cada cambio en el catálogo | Programación de Servicios y Procesos, Tema 3 |
 | **Tiempo real** | Un panel de actividad en vivo por WebSocket | Programación de Servicios y Procesos, Tema 4 |
 

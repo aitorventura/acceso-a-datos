@@ -137,4 +137,4 @@ No hay código dado para el service ni el controller — ya sabes escribir ese p
 
 ## ✅ Cierre
 
-En el Tema 2 vuelves a la comodidad de Spring Data JPA, pero esta vez con Hibernate como herramienta ORM completa — vas a instalarla, configurarla y usarla para persistir objetos sin escribir SQL a mano, retomando exactamente el desfase objeto-relacional del que arrancó este tema.
+Toca profundizar en el ORM que llevas usando desde la Actividad 1.1: instalación y configuración de Hibernate en detalle, decisiones de mapeo que ya tomaste sin cuestionarlas, y las dos vías de consulta que te faltan — Specifications dinámicas y JPQL con `@Query`. Cuando termines esos apartados, el siguiente tema da el salto a JSONB, la primera base de datos objeto-relacional del curso.

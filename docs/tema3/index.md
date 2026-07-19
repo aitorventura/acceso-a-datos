@@ -1,40 +1,34 @@
-# 🧩 Tema 3: Bases de datos objeto relacionales y orientadas a objetos
+# 🧩 Tema 3: Bases de datos documentales
 
-> **RA4**: Desarrolla aplicaciones que gestionan la información almacenada en bases de datos objeto relacionales y orientadas a objetos valorando sus características y utilizando los mecanismos de acceso incorporados.
+> **RA5**: Desarrolla aplicaciones que gestionan la información almacenada en bases de datos documentales nativas evaluando y utilizando clases específicas.
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se han identificado las ventajas e inconvenientes de las bases de datos que almacenan objetos.
+✅ Se han valorado las ventajas e inconvenientes de utilizar bases de datos documentales nativas.
 
-✅ Se han establecido y cerrado conexiones.
+✅ Se ha establecido la conexión con la base de datos.
 
-✅ Se ha gestionado la persistencia de objetos simples.
+✅ Se han desarrollado aplicaciones que efectúan consultas sobre el contenido de la base de datos.
 
-✅ Se ha gestionado la persistencia de objetos estructurados.
+✅ Se han añadido y eliminado colecciones de la base de datos.
 
-✅ Se han desarrollado aplicaciones que realizan consultas.
-
-✅ Se han modificado los objetos almacenados.
-
-✅ Se han gestionado las transacciones.
-
-✅ Se han probado y documentado las aplicaciones desarrolladas.
+✅ Se han desarrollado aplicaciones para añadir, modificar y eliminar documentos de la base de datos.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Persistencia de objetos con JSONB](persistencia-objetos-jsonb.md)
-2. [Consultas sobre columnas JSONB](consultas-jsonb.md)
-3. [Bases de datos orientadas a objetos, pruebas y documentación](bd-orientadas-a-objetos.md)
+1. [Conexión a MongoDB y consultas sobre reseñas](conexion-mongodb.md)
+2. [Colecciones documentales: relacional vs. documental](colecciones-documentales.md)
+3. [Modificación de documentos](modificacion-documentos.md)
 
 **Actividades:**
 
-- [Actividad 3.1 — La columna `detallesPlataforma`: persistiendo objetos estructurados](actividad_3_1.md)
-- [Actividad 3.2 — Filtrar por plataforma con `jsonb_exists`](actividad_3_2.md)
-- [Actividad 3.3 — Pruebas de integración sobre JSONB](actividad_3_3.md)
+- [Actividad 3.1 — Reseñas de videojuegos en MongoDB](actividad_3_1.md)
+- [Actividad 3.2 — Tu propia colección documental](actividad_3_2.md)
+- [Actividad 3.3 — PUT de reseñas con control de autoría](actividad_3_3.md)
 
 ---
 

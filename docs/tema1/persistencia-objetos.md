@@ -1,6 +1,6 @@
 <a id="persistencia-objetos"></a>
 
-# 🧩 2. Persistencia y recuperación de objetos
+# 🧩 7. Persistencia y recuperación de objetos
 
 Ya sabes cómo se mapea una entidad. Toca ahora usar ese mapeo para lo que de verdad importa: guardar, buscar, actualizar y borrar objetos — y hacerlo con consultas que se adapten a lo que pida cada usuario, no solo con listados fijos.
 

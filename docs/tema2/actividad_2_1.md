@@ -1,102 +1,125 @@
-# 🧪 Actividad 2.1: Mapeo con anotaciones — qué SQL genera Hibernate por debajo
+# 🧪 Actividad 2.1: La columna `detallesPlataforma` — persistiendo objetos estructurados
 
-!!! info "Práctica guiada — experimentos sobre tu propio mapeo"
-    No vas a escribir entidades nuevas hoy — vas a experimentar sobre las que ya tienes (`Videojuego`, `Estudio`), cambiando anotaciones a propósito y observando qué SQL genera Hibernate en cada caso.
+!!! info "Práctica guiada"
+    Añades a tu `Videojuego` una columna JSONB real, la expones en tu API, y comprueba con tus propios ojos que PostgreSQL la guarda como JSON de verdad, no como texto plano.
 
 ## Qué vas a practicar
 
-- Entender por qué `GenerationType.IDENTITY` encaja con PostgreSQL.
-- Comprobar experimentalmente el efecto de `@Column(precision, scale)`.
-- Comparar `FetchType.LAZY` frente a `EAGER` mirando el SQL real generado.
-- Comprobar el efecto de `cascade`/`orphanRemoval` al borrar.
+- Añadir un campo JSONB a una entidad ya existente.
+- Ampliar DTOs para exponer ese campo en la API.
+- Verificar en la base de datos que el tipo de columna es realmente `jsonb`.
+- Entender el comportamiento de reemplazo total al actualizar.
 
 ---
 
 ## Requisitos previos
 
-Tus entidades `Videojuego` y `Estudio` del Tema 1, con algunos datos de prueba ya creados.
+Tu entidad `Videojuego` y su CRUD completo (Tema 1).
 
 ---
 
-## Paso 1 — `GenerationType.IDENTITY`, ¿por qué esa estrategia?
+## Paso 1 — El campo en la entidad, y en los DTOs
 
-Mira tu anotación actual:
+En `Videojuego.java`:
 
 ```java
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+@JdbcTypeCode(SqlTypes.JSON)
+@Column(columnDefinition = "jsonb")
+private Map<String, Object> detallesPlataforma;
 ```
 
-Existen otras estrategias (`SEQUENCE`, `AUTO`, `TABLE`) — `IDENTITY` delega la generación del id directamente en una columna autoincremental de la base de datos (en PostgreSQL, por debajo usa un tipo serial/identity nativo), mientras que `SEQUENCE` usa un objeto secuencia independiente que Hibernate puede consultar por adelantado (útil para reservar varios ids antes de insertar, algo que `IDENTITY` no permite).
+En `VideojuegoCreateDTO` y `VideojuegoResponseDTO`, añade el campo correspondiente:
 
-**Pregunta**: dado que PostgreSQL soporta columnas identity de forma nativa y eficiente, ¿por qué crees que el proyecto ha elegido `IDENTITY` en vez de `SEQUENCE`, si ambas son válidas?
+```java
+public record VideojuegoCreateDTO(
+        // ... campos ya existentes ...
+        Map<String, Object> detallesPlataforma
+) {}
+
+public record VideojuegoResponseDTO(
+        // ... campos ya existentes ...
+        Map<String, Object> detallesPlataforma
+) {}
+```
+
+Y en el `mapToDTO`/`create`/`update` de tu `VideojuegoService`, asegúrate de que este campo se propaga igual que los demás (`v.setDetallesPlataforma(dto.detallesPlataforma())`, y en el DTO de respuesta).
+
+Borra la tabla `videojuego` (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.
+
+!!! warning "Esto rompe el test MockMvc que ya tienes de PSP"
+    `VideojuegoControllerTest` (Programación de Servicios y Procesos, Actividad 1.3) construye un `VideojuegoResponseDTO` con el constructor de los campos antiguos — al añadir `detallesPlataforma` como sexto campo, ese `new VideojuegoResponseDTO(...)` deja de compilar. Actualiza esa llamada en el test, añadiendo un último argumento (por ejemplo, `Map.of()` para un videojuego sin plataformas).
 
 ---
 
-## Paso 2 — Experimento con `@Column(precision, scale)`
+## Paso 2 — Crear un videojuego con una plataforma
 
-Con tu aplicación **parada**, quita temporalmente la anotación de `precio`:
-
-```java
-// Antes
-@Column(precision = 10, scale = 2)
-private BigDecimal precio;
-
-// Ahora, para el experimento
-private BigDecimal precio;
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"steam": {"idApp": 504230, "logros": 45}}
+  }'
 ```
 
-Borra la tabla `videojuego` de tu base de datos (o usa una base de datos de prueba nueva) y arranca la aplicación con `show-sql: true` activo. Mira en la consola el `create table` generado, y comprueba el tipo de columna con:
+**Comprueba**: que la respuesta incluye `detallesPlataforma` con exactamente esa estructura.
+
+### Mini-reto — varias plataformas anidadas
+
+Sin más indicaciones, crea un segundo videojuego, esta vez con `detallesPlataforma` conteniendo **al menos dos** plataformas distintas, con las claves que tú elijas dentro de cada una (id de la app, número de logros, o lo que consideres relevante). Verifica igual que en el paso anterior.
+
+---
+
+## Paso 3 — Verificación en la base de datos
 
 ```bash
 docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db -c "\d videojuego"
 ```
 
-**Anota** el tipo exacto de la columna `precio` sin la anotación.
+**Comprueba** que la columna `detallesplataforma` (Postgres normaliza a minúsculas) aparece con tipo `jsonb`, no `text` ni `character varying`.
 
-Ahora vuelve a poner `@Column(precision = 10, scale = 2)`, borra la tabla de nuevo, reinicia, y repite la comprobación.
-
-**Responde**: ¿qué diferencia exacta hay entre los dos tipos de columna generados? ¿Qué problema práctico podría causar la versión sin precisión definida, en una columna que guarda dinero?
-
----
-
-## Paso 3 — `LAZY` vs. `EAGER`, mirando el SQL real
-
-Activa el log detallado de Hibernate en `application-dev.yaml` si no lo tienes ya:
-
-```yaml
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-```
-
-Con tu relación actual (`fetch = FetchType.LAZY` en `Videojuego.estudio`), llama a tu endpoint `GET /api/v1/videojuegos` y mira los logs. **Anota** cuántas consultas SQL distintas ves.
-
-Cambia temporalmente a `fetch = FetchType.EAGER`, reinicia, repite la misma petición, y vuelve a mirar los logs.
-
-**Compara** ambos casos: ¿el número de consultas SQL es el mismo, o cambia? ¿En qué momento (antes o después de necesitar realmente el dato de `Estudio`) se ejecuta la consulta relacionada en cada caso? Deja tu código con `LAZY` al terminar — es la configuración correcta del proyecto.
-
----
-
-## Paso 4 — El experimento de cierre: cascade y orphanRemoval
-
-Con tu configuración actual (`cascade = CascadeType.ALL, orphanRemoval = true` en `Estudio.videojuegos`), crea un `Estudio` con dos o tres `Videojuego` asociados. Bórralo:
+Consulta el contenido directamente en SQL:
 
 ```bash
-curl -X DELETE http://localhost:8080/api/v1/estudios/{id}
+docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db \
+  -c "SELECT titulo, detallesplataforma FROM videojuego;"
 ```
 
-**Comprueba** en la base de datos que los videojuegos asociados también han desaparecido.
+**Anota**: ¿el JSON que ves en la consola de PostgreSQL coincide exactamente con el que mandaste por la API?
 
-Ahora, quita temporalmente `cascade = CascadeType.ALL, orphanRemoval = true` de `Estudio.videojuegos` (déjalo solo como `@OneToMany(mappedBy = "estudio")`), reinicia, crea otro estudio con videojuegos, e intenta borrarlo de la misma forma.
+---
 
-**Observa** qué pasa esta vez (probablemente un error, por la restricción de clave foránea que sigue apuntando a un estudio que ya no existe).
+## Paso 4 — Actualizar y observar el reemplazo total
 
-**Pregunta de comprensión**: ¿por qué la cascada se declara en el lado `Estudio → Videojuego` de la relación, y no tendría sentido ponerla al revés (`Videojuego → Estudio`)? Piensa en qué significaría, en ese caso, borrar un solo videojuego. Cuando termines, restaura `cascade = CascadeType.ALL, orphanRemoval = true` — es la configuración correcta del proyecto.
+Actualiza el primer videojuego con un `PUT`, cambiando `detallesPlataforma` a una estructura **distinta** (por ejemplo, solo con la clave `"switch"`, sin `"steam"`):
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}
+  }'
+```
+
+**Comprueba**: consultando de nuevo en `psql`, ¿sigue estando `"steam"` en el JSON guardado, o ha desaparecido por completo?
+
+**Pregunta de comprensión**: ¿por qué el `PUT` reemplaza el objeto JSON completo en vez de combinar (*merge*) el nuevo contenido con el anterior? Relaciona tu respuesta con cómo funciona el mapeo `Map` → `jsonb`: ¿en qué punto del proceso Hibernate tendría que decidir "combinar" en vez de "sustituir", y por qué no lo hace por defecto?
+
+---
+
+## Pregunta final
+
+¿Qué ventaja concreta tiene JSONB frente a crear una tabla `plataforma_videojuego` (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?
 
 ---
 
 ## ✅ Cierre
 
-Has comprobado con SQL real, no solo de memoria, qué hace cada decisión de mapeo que ya tenías en tu código desde el Tema 1. En el siguiente apartado dejas de mirar el mapeo y empiezas a trabajar con consultas dinámicas: Specifications.
+Tu `Videojuego` ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando `jsonb_exists`.

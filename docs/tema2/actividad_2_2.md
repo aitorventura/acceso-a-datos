@@ -1,172 +1,112 @@
-# 🧪 Actividad 2.2: Consultas dinámicas con Specifications
+# 🧪 Actividad 2.2: Filtrar por plataforma con `jsonb_exists`
 
 !!! info "Práctica guiada"
-    Vas a construir el sistema de filtros dinámicos del listado de videojuegos: varias Specifications combinables, un DTO de filtro y paginación real.
+    Añades el filtro por plataforma a tu listado de videojuegos, usando `jsonb_exists` sobre la columna JSONB de la Actividad 2.1.
 
 ## Qué vas a practicar
 
-- Habilitar Specifications en un repositorio.
-- Construir condiciones de consulta combinables, con el patrón `unrestricted()` para filtros ausentes.
-- Combinar varias Specifications y aplicar paginación en el service.
+- Invocar una función SQL nativa desde Criteria API con `criteriaBuilder.function(...)`.
+- Combinar un filtro JSONB con los filtros ya existentes.
+- Verificar el comportamiento de modificación de un campo JSONB filtrado.
 
 ---
 
 ## Requisitos previos
 
-Tu CRUD de `Videojuego` del Tema 1, con varios videojuegos de distinto precio y estudio ya creados.
+Tu columna `detallesPlataforma` de la Actividad 2.1, con videojuegos de distintas plataformas ya creados; tus Specifications de la Actividad 1.5.
 
 ---
 
-## Paso 1 — Preparación: `JpaSpecificationExecutor` y la clase de Specifications
+## Paso 1 — La Specification, guiada al completo
 
-Modifica tu `VideojuegoRepository`:
-
-```java
-public interface VideojuegoRepository extends
-        JpaRepository<Videojuego, Long>,
-        JpaSpecificationExecutor<Videojuego> {
-}
-```
-
-Crea la clase `VideojuegoSpecifications` en el paquete `catalogo`:
+En `VideojuegoSpecifications`:
 
 ```java
-package com.tunombre.gamevault.catalogo;
-
-import org.springframework.data.jpa.domain.Specification;
-import java.math.BigDecimal;
-
-public final class VideojuegoSpecifications {
-
-    private VideojuegoSpecifications() { }
-
-    // los métodos van aquí
-}
-```
-
-El constructor privado y la clase `final` son deliberados: esta clase es una simple colección de métodos estáticos, no tiene sentido instanciarla.
-
----
-
-## Paso 2 — Primera Specification, guiada al completo
-
-```java
-public static Specification<Videojuego> tituloContiene(String titulo) {
-    if (titulo == null || titulo.isBlank()) {
+public static Specification<Videojuego> disponibleEnPlataforma(String plataforma) {
+    if (plataforma == null || plataforma.isBlank()) {
         return Specification.unrestricted();
     }
 
     return (root, query, criteriaBuilder) ->
-            criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("titulo")),
-                    "%" + titulo.toLowerCase() + "%"
+            criteriaBuilder.isTrue(
+                    criteriaBuilder.function(
+                            "jsonb_exists",
+                            Boolean.class,
+                            root.get("detallesPlataforma"),
+                            criteriaBuilder.literal(plataforma.toLowerCase())
+                    )
             );
 }
 ```
 
-Primero, el caso "sin filtro": si `titulo` es `null` o está vacío, no queremos añadir ninguna condición — `Specification.unrestricted()` es justo eso. Si hay un valor, devolvemos una función `(root, query, criteriaBuilder) -> ...` que construye la condición: `criteriaBuilder.lower(...)` pasa el campo a minúsculas antes de comparar (para que la búsqueda no distinga mayúsculas), y `like(..., "%valor%")` busca coincidencias parciales, no exactas.
+Por qué cada pieza: `criteriaBuilder.function("jsonb_exists", Boolean.class, ...)` invoca esa función nativa de PostgreSQL, indicando que devuelve un `Boolean`; `root.get("detallesPlataforma")` es la columna sobre la que se aplica; `criteriaBuilder.literal(plataforma.toLowerCase())` es la clave a buscar, pasada como literal (no como columna) — y en minúsculas, para que la búsqueda no dependa de cómo escribió el usuario la plataforma (asumiendo que también guardas las claves del JSON en minúsculas, como en tus datos de la Actividad 2.1). `criteriaBuilder.isTrue(...)` envuelve el resultado booleano de la función para usarlo como condición del `WHERE`.
 
 ---
 
-## Paso 3 — Segunda Specification: comparación numérica
+## Paso 2 — Añadir el filtro al DTO y combinarlo — mini-reto
 
-```java
-public static Specification<Videojuego> precioMayorOIgualA(BigDecimal precioMin) {
-    if (precioMin == null) {
-        return Specification.unrestricted();
-    }
-
-    return (root, query, criteriaBuilder) ->
-            criteriaBuilder.greaterThanOrEqualTo(root.get("precio"), precioMin);
-}
-```
-
-Mismo patrón, nuevo matiz: `greaterThanOrEqualTo` para comparar un `BigDecimal`, en vez de `like` para texto.
-
----
-
-## Mini-retos — repite el patrón dos veces más
-
-Sin más código dado, escribe tú:
-
-1. `precioMenorOIgualA(BigDecimal precioMax)`: filtra videojuegos con precio menor o igual al indicado. Mismo patrón que `precioMayorOIgualA`, con el operador contrario.
-2. `perteneceAlEstudio(Long estudioId)`: filtra videojuegos que pertenecen a un estudio concreto (compara `root.get("estudio").get("id")` con `estudioId` usando `criteriaBuilder.equal`).
-
-No incluyas todavía ninguna Specification sobre `detallesPlataforma` (JSONB) — eso es contenido del Tema 3.
-
----
-
-## Paso 4 — Combinar en el service, con paginación
-
-Crea el DTO de filtro:
+Añade el campo `plataforma` a tu `VideojuegoFiltroDTO`:
 
 ```java
 public record VideojuegoFiltroDTO(
         String titulo,
         BigDecimal precioMin,
         BigDecimal precioMax,
-        Long estudioId
+        Long estudioId,
+        String plataforma
 ) {}
 ```
 
-Y en `VideojuegoService`:
-
-```java
-@Transactional(readOnly = true)
-public Page<VideojuegoResponseDTO> findAllPaginated(VideojuegoFiltroDTO filtro, Pageable pageable) {
-    Specification<Videojuego> spec = Specification
-            .where(VideojuegoSpecifications.tituloContiene(filtro.titulo()))
-            .and(VideojuegoSpecifications.precioMayorOIgualA(filtro.precioMin()))
-            .and(VideojuegoSpecifications.precioMenorOIgualA(filtro.precioMax()))
-            .and(VideojuegoSpecifications.perteneceAlEstudio(filtro.estudioId()));
-
-    return videojuegoRepository.findAll(spec, pageable)
-            .map(this::mapToDTO);
-}
-```
-
-En el controller:
-
-```java
-@GetMapping
-public ResponseEntity<Page<VideojuegoResponseDTO>> getAll(
-        @ModelAttribute VideojuegoFiltroDTO filtro,
-        @PageableDefault(size = 5) Pageable pageable
-) {
-    return ResponseEntity.ok(videojuegoService.findAllPaginated(filtro, pageable));
-}
-```
-
-`@ModelAttribute` mapea automáticamente los parámetros de query string (`?titulo=...&precioMin=...`) a los campos del DTO; `@PageableDefault(size = 5)` fija un tamaño de página por defecto si el cliente no especifica ninguno.
+Ahora, sin más indicaciones, encadena `disponibleEnPlataforma(filtro.plataforma())` con `.and(...)` en `findAllPaginated()` de tu `VideojuegoService` — es exactamente el mismo patrón que ya repetiste varias veces en la Actividad 1.5, así que no necesitas código nuevo mostrado: solo añadir una línea más a la cadena que ya tienes.
 
 ---
 
-!!! warning "Esto rompe el test MockMvc que ya tienes de PSP"
-    `VideojuegoControllerTest` (Programación de Servicios y Procesos, Actividad 1.3) esperaba una `List<VideojuegoResponseDTO>` y comprobaba `jsonPath("$[0].titulo")`. Ahora que `getAll()` devuelve una `Page<VideojuegoResponseDTO>`, ese `jsonPath` deja de tener sentido — el array ya no está en la raíz del JSON, sino dentro de `content`. Actualiza ese test: cambia el mock a `when(videojuegoService.findAllPaginated(any(), any())).thenReturn(...)` y el `jsonPath` a `"$.content[0].titulo"`.
-
-## Paso 5 — Verificación con peticiones reales
+## Paso 3 — Prueba con peticiones reales
 
 ```bash
-# Sin filtros: debe devolver todo (paginado)
-curl "http://localhost:8080/api/v1/videojuegos"
+# Plataforma que SÍ existe en tus datos de prueba
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=steam"
 
-# Un solo filtro
-curl "http://localhost:8080/api/v1/videojuegos?titulo=hades"
-
-# Varios filtros combinados
-curl "http://localhost:8080/api/v1/videojuegos?precioMin=10&precioMax=30&estudioId=1"
+# Plataforma que NO existe en ningún videojuego
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=xbox"
 ```
 
-**Comprueba**, para cada caso, que el resultado tiene sentido: la petición sin filtros debe devolver todo el catálogo (paginado, no un error ni una lista vacía); la que combina varios filtros debe devolver solo lo que cumple **todas** las condiciones a la vez.
+**Comprueba**: que el primer caso devuelve solo los videojuegos que de verdad tienen la clave `"steam"` en su `detallesPlataforma`, y el segundo devuelve una lista vacía (no un error).
+
+---
+
+## Paso 4 — Modificar y comprobar que el filtro reacciona
+
+Actualiza uno de tus videojuegos que sí aparecía en el filtro por `steam`, quitando esa clave de su `detallesPlataforma`:
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "fechaLanzamiento": "2018-01-25",
+    "estudioId": 1,
+    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}
+  }'
+```
+
+Repite el filtro por `steam`:
+
+```bash
+curl "http://localhost:8080/api/v1/videojuegos?plataforma=steam"
+```
+
+**Comprueba**: que ese videojuego ya no aparece en el resultado, porque su `detallesPlataforma` ya no contiene la clave `"steam"` (recuerda: el `PUT` reemplaza el objeto completo, como viste en la Actividad 2.1).
 
 ---
 
 ## Pregunta final
 
-¿Por qué conviene que cada método de `VideojuegoSpecifications` devuelva `Specification.unrestricted()` cuando su filtro es `null`, en vez de resolverlo con un `if (filtro != null)` fuera del método, antes de encadenar los `.and(...)` en el service? Piensa en qué pasaría con el código del Paso 4 si tuvieras que añadir ese `if` para cada uno de los cuatro filtros.
+¿Qué haría falta para filtrar por "disponible en Steam **Y** en Switch a la vez"? Piensa en dos enfoques posibles: encadenar dos veces `disponibleEnPlataforma` con `.and(...)` (una vez por cada plataforma) frente a usar una función distinta de PostgreSQL como `jsonb_exists_all` (que comprueba varias claves de golpe). No hace falta que implementes ninguno de los dos — explica con tus palabras qué diferencia habría entre ambos enfoques en cuanto a cómo se construye la consulta SQL final.
 
 ---
 
 ## ✅ Cierre
 
-Tu listado de videojuegos ya soporta filtros dinámicos y paginación real, con SQL generado automáticamente según qué combinación de filtros llegue. En la próxima actividad trabajas con `@Query` JPQL — para las consultas que ni las Specifications ni los métodos derivados por nombre pueden expresar bien, como una agregación.
+Tu listado de videojuegos ya filtra por plataforma dentro de un JSON, combinado de forma transparente con el resto de filtros relacionales. En la próxima actividad haces pruebas de integración reales sobre todo lo construido en este tema: persistencia y consultas JSONB juntas, contra un PostgreSQL de verdad.

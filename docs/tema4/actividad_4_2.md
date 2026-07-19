@@ -1,163 +1,118 @@
-# 🧪 Actividad 4.2: Tu propia colección documental
+# 🧪 Actividad 4.2: Repaso integrador — un componente sobre el módulo documental
 
-!!! info "Práctica guiada"
-    Construyes el flujo real de borrado en cascada vía eventos RabbitMQ y lo endureces frente a reintentos — esa es la mejora real de hoy.
+!!! info "Práctica guiada — mini-reto de mayor peso"
+    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya construiste sobre PostgreSQL en la Actividad 4.1. Es una actividad de repaso integrador: casi todo es aplicar una estructura que ya conoces.
 
 ## Qué vas a practicar
 
-- Ampliar un exchange de mensajería ya existente con una cola nueva.
-- Entender y replicar un flujo de borrado en cascada entre dos motores distintos, vía eventos.
-- Hacer una operación idempotente frente a mensajes duplicados.
-- Comparar por escrito tu experiencia con PostgreSQL y con MongoDB.
+- Replicar el patrón interfaz + implementación oculta sobre un motor distinto.
+- Usar un componente nuevo desde otro módulo, sin conocer su implementación.
+- Comparar dos componentes que resuelven el mismo problema sobre motores distintos.
 
 ---
 
 ## Requisitos previos
 
-Tu módulo `reviews` de la Actividad 4.1, y RabbitMQ funcionando con el registro de actividad del catálogo — se construye en Programación de Servicios y Procesos, Actividad 3.1. Si todavía no has llegado a esa actividad en PSP, complétala antes de seguir: hoy vas a ampliar el `RabbitMQConfig` y el `VideojuegoEventPublisher` que se construyen ahí, no a crearlos desde cero.
+Tu `CatalogoConsultaService` (Actividades 3.1 y 4.1) como referencia visual constante.
 
 ---
 
-## Paso 0 — Añadir la cola de reseñas al exchange existente
+## Paso 1 — Planteamiento: el contrato mínimo
 
-Tu `RabbitMQConfig` (de PSP, Actividad 3.1) ya tiene un `TopicExchange` (`CATALOGO_EXCHANGE`) con una cola de actividad. Añade una segunda cola sobre ese mismo exchange, esta vez de interés solo para `reviews`:
+¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define el contrato:
 
 ```java
-public static final String REVIEWS_VIDEOJUEGO_QUEUE = "reviews.videojuego.queue";
-
-@Bean
-public Queue reviewsVideojuegoQueue() {
-    return new Queue(REVIEWS_VIDEOJUEGO_QUEUE);
-}
-
-@Bean
-public Binding reviewsBinding(Queue reviewsVideojuegoQueue, TopicExchange catalogoExchange) {
-    return BindingBuilder.bind(reviewsVideojuegoQueue).to(catalogoExchange).with("videojuego.eliminado");
+public interface ReviewsConsultaService {
+    long totalReviewsDe(Long videojuegoId);
+    double puntuacionMediaDe(Long videojuegoId);
 }
 ```
 
-A diferencia de la cola de actividad (enlazada a `videojuego.*`, todo evento), esta se enlaza solo a `videojuego.eliminado` — a `reviews` no le interesa que se cree o modifique un videojuego, solo que se borre. Es el mismo exchange sirviendo a dos consumidores con intereses distintos, sin que ninguno reciba mensajes que no necesita.
-
-`VideojuegoEventPublisher` y el evento `VideojuegoEvent` no cambian — ya publican en `videojuego.eliminado` cada vez que `VideojuegoService.delete()` se ejecuta, así que esta cola nueva empieza a recibir mensajes en cuanto la declaras, sin tocar nada más.
+La lógica de estos dos métodos **ya existe** dentro de `ReviewService.getResumenByVideojuegoId` — no la vas a reescribir, solo a exponerla como componente.
 
 ---
 
-## Paso 1 — Entender el flujo, antes de tocar nada
+## Mini-reto (con más peso de lo habitual) — el componente completo
 
-El borrado en cascada de reseñas sigue un flujo ya definido — no lo vas a inventar, lo vas a construir siguiendo este diseño. El viaje completo de un evento:
+!!! warning "El paquete `reviews.api` no existe todavía en tu proyecto"
+    A diferencia de `catalogo.api` (que ya tienes de la Actividad 3.1), aquí no hay ningún precedente — el primer paso es crear la carpeta nueva.
 
-```mermaid
-flowchart LR
-    A["DELETE /videojuegos/{id}<br/>(hilo de la petición)"] --> B["VideojuegoService.delete()"]
-    B -->|"publica evento"| C["RabbitMQ<br/>routing key: videojuego.eliminado"]
-    C -.->|"consume<br/>(hilo del listener)"| D["ReviewsVideojuegoEventConsumer"]
-    D --> E["reviewService.deleteByVideojuegoId(id)"]
+Estructura de ficheros esperada:
+
+```
+reviews/
+├── api/
+│   └── ReviewsConsultaService.java      ← interfaz (nueva)
+├── ReviewsConsultaServiceImpl.java      ← implementación (nueva, package-private)
+├── Review.java
+├── ReviewRepository.java
+└── ReviewService.java
 ```
 
-`VideojuegoService.delete()` (en el módulo `catalogo`) no llama directamente a nada de `reviews` — publica un evento a través de `VideojuegoEventPublisher`, y sigue su camino sin esperar. En otro hilo, en su propio momento, `ReviewsVideojuegoEventConsumer` lo recibe y actúa:
+Sin más código dado que la estructura de arriba y el contrato del Paso 1, crea:
+
+1. La interfaz `ReviewsConsultaService` en el paquete nuevo `reviews.api` — por analogía exacta con `catalogo.api.CatalogoConsultaService`.
+2. `ReviewsConsultaServiceImpl` (package-private, anotada `@Service`) en `reviews`, que implemente la interfaz reutilizando `ReviewRepository` — el código es idéntico en estructura al de `CatalogoConsultaServiceImpl` que ya tienes delante, solo cambia la lógica interna (usa `findByVideojuegoId` y calcula total/media como ya hace `getResumenByVideojuegoId`).
+3. Un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (mock del repositorio, `@InjectMocks` sobre la implementación).
+
+---
+
+## Paso 2 — Usarlo desde `catalogo`
+
+Enriquece `VideojuegoResponseDTO` con la puntuación media, usando el componente nuevo desde `catalogo`:
 
 ```java
-@Service
-@RequiredArgsConstructor
-public class ReviewsVideojuegoEventConsumer {
-    private final ReviewService reviewService;
-
-    @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
-    public void recibir(String payload) {
-        VideojuegoEvent event = /* deserializar */;
-        if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
-            reviewService.deleteByVideojuegoId(event.videojuegoId());
-        }
-    }
-}
+public record VideojuegoResponseDTO(
+        Long id,
+        String titulo,
+        BigDecimal precio,
+        LocalDate fechaLanzamiento,
+        String nombreEstudio,
+        Map<String, Object> detallesPlataforma,
+        Double puntuacionMedia // campo nuevo
+) {}
 ```
-
-**Fíjate**: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que analizaste en PSP.
-
----
-
-## Paso 2 — Replicar el consumer en tu GameVault
 
 ```java
-package com.tunombre.gamevault.reviews.mensajeria;
-
-import com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent;
-import com.tunombre.gamevault.config.RabbitMQConfig;
-import com.tunombre.gamevault.reviews.ReviewService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
-public class ReviewsVideojuegoEventConsumer {
-    private final ReviewService reviewService;
-
-    @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
-    public void recibir(String payload) {
-        VideojuegoEvent event = /* deserializar con tu JsonMapper */;
-        if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
-            reviewService.deleteByVideojuegoId(event.videojuegoId());
-        }
-    }
+// En VideojuegoService, inyecta ReviewsConsultaService (la interfaz, no la implementación)
+private VideojuegoResponseDTO mapToDTO(Videojuego v) {
+    Double media = reviewsConsultaService.puntuacionMediaDe(v.getId());
+    return new VideojuegoResponseDTO(
+            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(),
+            v.getEstudio().getNombre(), v.getDetallesPlataforma(), media
+    );
 }
 ```
 
-Si no lo tenías ya de la Actividad 4.1, añade también `deleteByVideojuegoId` a tu `ReviewRepository` (`long deleteByVideojuegoId(Long videojuegoId);`) y un método correspondiente en `ReviewService` que lo invoque.
+**Fíjate**: `catalogo` no importa nada de `reviews` salvo la interfaz del paquete `api` — ni conoce `Review`, ni `ReviewRepository`, ni cómo se calcula la media por dentro.
 
 ---
 
-## Paso 3 — Prueba con datos reales
+## Paso 3 — Verificación
 
 ```bash
-# Crea un videojuego y una reseña
-curl -X POST http://localhost:8080/api/v1/videojuegos -H "Content-Type: application/json" \
-  -d '{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'
-
-curl -X POST http://localhost:8080/api/v1/videojuegos/{id}/reviews \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"puntuacion": 7, "comentario": "Prueba"}'
-
-# Borra el videojuego
-curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
+curl http://localhost:8080/api/v1/videojuegos/1
 ```
 
-Comprueba en MongoDB, **esperando un instante** (no es síncrono):
-
-```bash
-docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
-```
-
-**Anota**: en los logs de tu aplicación, ¿ves dos nombres de hilo distintos — uno para la petición `DELETE`, otro para el consumer? Compáralos.
-
-**Explica**, revisando tu `RabbitMQConfig.java`, por qué `ReviewsVideojuegoEventConsumer` se activa al borrar un videojuego pero no al crearlo o modificarlo (pista: busca la *routing key* `videojuego.eliminado` y a qué cola está enlazada) — y por qué, en cambio, `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1) sí se activa con las tres operaciones.
+**Comprueba**: que la respuesta incluye `puntuacionMedia`, y que el dato coincide con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos. **Ejecuta también** tus tests existentes (`ReviewServiceTest`, `VideojuegoServiceTest`, etc.) y comprueba que siguen pasando.
 
 ---
 
-## Paso 4 — La mejora real: idempotencia
+## Reflexión de cierre — tabla comparativa
 
-Los brokers de mensajería pueden, en ciertas circunstancias (una caída de red, un reintento), entregar el **mismo** mensaje más de una vez. Haz que `deleteByVideojuegoId` sea seguro frente a eso — no debería fallar ni hacer nada extraño si se invoca dos veces seguidas para el mismo `videojuegoId`.
+Rellena esta tabla con tu propia experiencia:
 
-```java
-public long deleteByVideojuegoId(Long videojuegoId) {
-    long eliminadas = reviewRepository.deleteByVideojuegoId(videojuegoId);
-    // deleteByVideojuegoId de Mongo ya es seguro por sí mismo si no quedan documentos:
-    // borrar sobre una colección vacía para ese id simplemente elimina 0 documentos,
-    // no lanza ningún error
-    return eliminadas;
-}
-```
+| | `CatalogoConsultaService` (PostgreSQL/JPA) | `ReviewsConsultaService` (MongoDB) |
+|---|---|---|
+| ¿Dónde vive la interfaz? | | |
+| ¿La implementación es `public` o package-private? | | |
+| ¿Qué repositorio inyecta por debajo? | | |
+| ¿El consumidor sabe qué motor hay debajo? | | |
 
-**Pregunta de comprensión**: si RabbitMQ reintentara la entrega del mismo evento `VIDEOJUEGO_ELIMINADO` dos veces, ¿qué pasaría la segunda vez que se invoca `deleteByVideojuegoId` sobre reseñas que ya no existen? ¿Es necesario añadir alguna comprobación extra, o el propio comportamiento de `deleteByVideojuegoId` sobre MongoDB ya es seguro por diseño?
-
----
-
-## Reflexión de cierre
-
-Compara por escrito (4-5 líneas) tu experiencia con PostgreSQL en los temas anteriores y con MongoDB en este tema. Y compara también borrar de forma **síncrona** (como haría un `cascade`/`orphanRemoval` dentro de un único motor relacional, que ya usaste en el Tema 1 entre `Estudio` y `Videojuego`) frente a borrar de forma **asíncrona** entre dos motores distintos, como acabas de hacer aquí: ¿qué se gana (desacoplamiento entre módulos) y qué se pierde (consistencia inmediata — hay una ventana de tiempo en la que el videojuego ya no existe pero sus reseñas todavía sí)?
+**Conclusión** (2-3 frases propias): ¿en qué se diferencian las implementaciones de ambos componentes? ¿En qué son idénticas sus interfaces vistas desde fuera? La respuesta esperada: el patrón de componente es independiente del motor de persistencia que hay por debajo — se replica con exactamente el mismo molde.
 
 ---
 
 ## ✅ Cierre
 
-Tu GameVault ya limpia reseñas huérfanas automáticamente, de forma robusta frente a reintentos. En la última actividad del tema trabajas el `PUT` de reseñas y control de autoría.
+Tienes dos componentes, sobre dos motores completamente distintos, con el mismo patrón de diseño exacto. En la última actividad del módulo integras todo lo construido en un test final de extremo a extremo.

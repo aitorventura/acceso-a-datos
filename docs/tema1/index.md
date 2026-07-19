@@ -1,6 +1,8 @@
-# 🧩 Tema 1: Manejo de conectores
+# 🧩 Tema 1: Manejo de conectores y herramientas ORM
 
 > **RA2**: Desarrolla aplicaciones que gestionan información almacenada en bases de datos relacionales identificando y utilizando mecanismos de conexión.
+
+> **RA3**: Gestiona la persistencia de los datos identificando herramientas de mapeo objeto relacional (ORM) y desarrollando aplicaciones que las utilizan.
 
 ---
 
@@ -28,6 +30,18 @@
 
 ✅ Se han ejecutado procedimientos almacenados en la base de datos.
 
+✅ Se ha instalado la herramienta ORM.
+
+✅ Se ha configurado la herramienta ORM.
+
+✅ Se han definido configuraciones de mapeo.
+
+✅ Se han aplicado mecanismos de persistencia a los objetos.
+
+✅ Se han desarrollado aplicaciones que modifican y recuperan objetos persistentes.
+
+✅ Se han desarrollado aplicaciones que realizan consultas usando el lenguaje SQL.
+
 ---
 
 ## 📘 Índice de contenidos
@@ -37,6 +51,9 @@
 3. [Operaciones CRUD y gestión de transacciones](operaciones-crud-transacciones.md)
 4. [JDBC puro: conexión manual sin ORM](jdbc-puro.md)
 5. [Procedimientos almacenados](procedimientos-almacenados.md)
+6. [Hibernate a fondo: decisiones de mapeo y ciclo de vida](hibernate-a-fondo.md)
+7. [Persistencia y recuperación de objetos](persistencia-objetos.md)
+8. [Consultas JPQL y transacciones](consultas-jpql-transacciones.md)
 
 **Actividades:**
 
@@ -44,6 +61,8 @@
 - [Actividad 1.2 — CRUD completo y DTOs sobre el catálogo](actividad_1_2.md)
 - [Actividad 1.3 — Acceso a la base de datos con JDBC puro](actividad_1_3.md)
 - [Actividad 1.4 — Procedimiento almacenado con `JdbcTemplate`](actividad_1_4.md)
+- [Actividad 1.5 — Consultas dinámicas con Specifications](actividad_1_5.md)
+- [Actividad 1.6 — Ranking con `@Query` JPQL](actividad_1_6.md)
 
 ---
 

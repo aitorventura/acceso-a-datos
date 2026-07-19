@@ -2,7 +2,7 @@
 
 # 🧩 1. Conexión a MongoDB y consultas sobre reseñas
 
-Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 3 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.
+Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 2 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.
 
 ---
 
@@ -24,7 +24,7 @@ Dos piezas, y ninguna tabla:
 - **Documento**: un objeto completo, tipo JSON, autocontenido — con su propia estructura, que puede variar de un documento a otro dentro de la misma colección.
 - **Colección**: un grupo de documentos, sin esquema fijo impuesto por el motor.
 
-Contraste explícito con lo relacional: no hay tablas, ni columnas fijas, ni claves foráneas, ni `JOIN`. Y contraste con el JSONB del Tema 3: allí, el JSON era **una columna** dentro de una tabla relacional normal — aquí, **todo** es documento, no hay ninguna tabla por debajo.
+Contraste explícito con lo relacional: no hay tablas, ni columnas fijas, ni claves foráneas, ni `JOIN`. Y contraste con el JSONB del Tema 2: allí, el JSON era **una columna** dentro de una tabla relacional normal — aquí, **todo** es documento, no hay ninguna tabla por debajo.
 
 ---
 
@@ -87,7 +87,7 @@ public interface ResenaRepository extends MongoRepository<Resena, String> {
 }
 ```
 
-Spring Data también genera consultas automáticas por el nombre del método en MongoDB, exactamente igual que hacía `JpaRepository` en el Tema 2 — sin que escribas una sola query explícita.
+Spring Data también genera consultas automáticas por el nombre del método en MongoDB, exactamente igual que hacía `JpaRepository` en el Tema 1 — sin que escribas una sola query explícita.
 
 ### El patrón de "integridad referencial manual"
 

@@ -1,125 +1,263 @@
-# 🧪 Actividad 3.1: La columna `detallesPlataforma` — persistiendo objetos estructurados
+# 🧪 Actividad 3.1: Reseñas de videojuegos en MongoDB
 
 !!! info "Práctica guiada"
-    Añades a tu `Videojuego` una columna JSONB real, la expones en tu API, y comprueba con tus propios ojos que PostgreSQL la guarda como JSON de verdad, no como texto plano.
+    Levantas MongoDB junto a tu PostgreSQL, y construyes el módulo `reviews` completo: entidad, repositorio, integridad referencial manual y los endpoints de consulta.
 
 ## Qué vas a practicar
 
-- Añadir un campo JSONB a una entidad ya existente.
-- Ampliar DTOs para exponer ese campo en la API.
-- Verificar en la base de datos que el tipo de columna es realmente `jsonb`.
-- Entender el comportamiento de reemplazo total al actualizar.
+- Añadir un segundo motor de base de datos al mismo proyecto.
+- Crear una entidad documental con `@Document` y un repositorio `MongoRepository`.
+- Implementar el patrón de integridad referencial manual entre dos motores.
 
 ---
 
 ## Requisitos previos
 
-Tu entidad `Videojuego` y su CRUD completo (Temas 1-2).
+Tu PostgreSQL y tu login JWT de PSP (Tema 2 — Programación Segura) ya funcionando — vas a usar `Principal` para identificar al autor de cada reseña.
 
 ---
 
-## Paso 1 — El campo en la entidad, y en los DTOs
+## Paso 1 — MongoDB en tu proyecto
 
-En `Videojuego.java`:
+Añade el servicio a `.devcontainer/docker-compose.yml` — el mismo fichero que ya tienes desde la Actividad 1.1, junto a `app` y `postgres`:
+
+```yaml
+services:
+  # ... tus servicios app y postgres ya existentes ...
+  mongodb:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  mongo_data:
+```
+
+En tu `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
+```
+
+Y en `application-dev.yaml`:
+
+```yaml
+spring:
+  mongodb:
+    uri: mongodb://mongodb:27017/gamevault_db
+```
+
+Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
+
+Levanta el servicio nuevo desde la terminal integrada — comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`, depende de tu editor) y sustitúyelo en `docker compose -f .devcontainer/docker-compose.yml -p <proyecto> up -d mongodb` — y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
+
+---
+
+## Paso 2 — La entidad `Review` y su repositorio
 
 ```java
-@JdbcTypeCode(SqlTypes.JSON)
-@Column(columnDefinition = "jsonb")
-private Map<String, Object> detallesPlataforma;
-```
+package com.tunombre.gamevault.reviews;
 
-En `VideojuegoCreateDTO` y `VideojuegoResponseDTO`, añade el campo correspondiente:
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "review")
+@Data
+@NoArgsConstructor
+public class Review {
+
+    @Id
+    private String id;
+
+    private Long videojuegoId;
+    private String autor;
+    private Integer puntuacion;
+    private String comentario;
+}
+```
 
 ```java
-public record VideojuegoCreateDTO(
-        // ... campos ya existentes ...
-        Map<String, Object> detallesPlataforma
+package com.tunombre.gamevault.reviews;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
+
+public interface ReviewRepository extends MongoRepository<Review, String> {
+    List<Review> findByVideojuegoId(Long videojuegoId);
+}
+```
+
+`@Document(collection = "review")` es el equivalente Mongo de `@Entity`; el `@Id` es `String` porque en Mongo los identificadores son alfanuméricos. `findByVideojuegoId` se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.
+
+---
+
+## Paso 3 — Integridad referencial manual, guiada al completo
+
+Antes de usarlo desde `reviews`, crea el pequeño componente que va a permitir esa comprobación sin que `reviews` conozca nada del paquete `catalogo` por dentro — una interfaz en `catalogo.api` y su implementación oculta en `catalogo`:
+
+```java
+package com.tunombre.gamevault.catalogo.api;
+
+public interface CatalogoConsultaService {
+    boolean existeVideojuego(Long videojuegoId);
+}
+```
+
+```java
+package com.tunombre.gamevault.catalogo;
+
+import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
+
+    private final VideojuegoRepository videojuegoRepository;
+
+    @Override
+    public boolean existeVideojuego(Long videojuegoId) {
+        return videojuegoRepository.existsById(videojuegoId);
+    }
+}
+```
+
+Fíjate en dos detalles deliberados: la interfaz vive en `catalogo.api` (un paquete pensado para lo que otros módulos SÍ pueden ver), mientras que `CatalogoConsultaServiceImpl` no lleva el modificador `public` — es *package-private*, invisible fuera de `catalogo`. El módulo `reviews` va a depender solo de la interfaz, sin saber nada de cómo está implementada por dentro. Vas a profundizar en por qué esto importa en el Tema 4 — de momento, réplicalo tal cual.
+
+Ahora sí, el service de `reviews` que lo usa:
+
+```java
+package com.tunombre.gamevault.reviews;
+
+import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewService {
+    private final ReviewRepository reviewRepository;
+    private final CatalogoConsultaService catalogoConsultaService;
+
+    public List<ReviewResponseDTO> findByVideojuegoId(Long videojuegoId) {
+        if (!catalogoConsultaService.existeVideojuego(videojuegoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
+        }
+        return reviewRepository.findByVideojuegoId(videojuegoId).stream().map(this::mapToDTO).toList();
+    }
+
+    private ReviewResponseDTO mapToDTO(Review r) {
+        return new ReviewResponseDTO(r.getId(), r.getVideojuegoId(), r.getAutor(), r.getPuntuacion(), r.getComentario());
+    }
+}
+```
+
+**Pregunta de comprensión**: ¿por qué esta comprobación (`existeVideojuego`) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?
+
+---
+
+## Paso 4 — El `POST` de reseñas, guiado
+
+```java
+public record ReviewCreateDTO(Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
+public record ReviewRequestDTO(
+        @jakarta.validation.constraints.Min(1) @jakarta.validation.constraints.Max(10) Integer puntuacion,
+        @jakarta.validation.constraints.NotBlank String comentario
 ) {}
-
-public record VideojuegoResponseDTO(
-        // ... campos ya existentes ...
-        Map<String, Object> detallesPlataforma
-) {}
+public record ReviewResponseDTO(String id, Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
 ```
 
-Y en el `mapToDTO`/`create`/`update` de tu `VideojuegoService`, asegúrate de que este campo se propaga igual que los demás (`v.setDetallesPlataforma(dto.detallesPlataforma())`, y en el DTO de respuesta).
+```java
+// En ReviewService
+public ReviewResponseDTO create(ReviewCreateDTO dto) {
+    if (!catalogoConsultaService.existeVideojuego(dto.videojuegoId())) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No puedes reseñar un juego que no existe en el catálogo");
+    }
+    Review review = new Review();
+    review.setVideojuegoId(dto.videojuegoId());
+    review.setAutor(dto.autor());
+    review.setPuntuacion(dto.puntuacion());
+    review.setComentario(dto.comentario());
+    return mapToDTO(reviewRepository.save(review));
+}
+```
 
-Borra la tabla `videojuego` (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.
+```java
+@RestController
+@RequestMapping("/api/v1/videojuegos/{videojuegoId}/reviews")
+@RequiredArgsConstructor
+public class VideojuegoReviewController {
+    private final ReviewService reviewService;
 
-!!! warning "Esto rompe el test MockMvc que ya tienes de PSP"
-    `VideojuegoControllerTest` (Programación de Servicios y Procesos, Actividad 1.3) construye un `VideojuegoResponseDTO` con el constructor de los campos antiguos — al añadir `detallesPlataforma` como sexto campo, ese `new VideojuegoResponseDTO(...)` deja de compilar. Actualiza esa llamada en el test, añadiendo un último argumento (por ejemplo, `Map.of()` para un videojuego sin plataformas).
+    @GetMapping
+    public ResponseEntity<List<ReviewResponseDTO>> getByVideojuegoId(@PathVariable Long videojuegoId) {
+        return ResponseEntity.ok(reviewService.findByVideojuegoId(videojuegoId));
+    }
 
----
+    @PostMapping
+    public ResponseEntity<ReviewResponseDTO> create(
+            @PathVariable Long videojuegoId,
+            @Valid @RequestBody ReviewRequestDTO dto,
+            Principal principal
+    ) {
+        ReviewCreateDTO createDTO = new ReviewCreateDTO(videojuegoId, principal.getName(), dto.puntuacion(), dto.comentario());
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.create(createDTO));
+    }
+}
+```
 
-## Paso 2 — Crear un videojuego con una plataforma
+Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya construiste en PSP. Prueba con tu token:
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/videojuegos \
+curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
+  -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{
-    "titulo": "Celeste",
-    "precio": 19.99,
-    "fechaLanzamiento": "2018-01-25",
-    "estudioId": 1,
-    "detallesPlataforma": {"steam": {"idApp": 504230, "logros": 45}}
-  }'
+  -d '{"puntuacion": 9, "comentario": "Excelente banda sonora"}'
 ```
-
-**Comprueba**: que la respuesta incluye `detallesPlataforma` con exactamente esa estructura.
-
-### Mini-reto — varias plataformas anidadas
-
-Sin más indicaciones, crea un segundo videojuego, esta vez con `detallesPlataforma` conteniendo **al menos dos** plataformas distintas, con las claves que tú elijas dentro de cada una (id de la app, número de logros, o lo que consideres relevante). Verifica igual que en el paso anterior.
 
 ---
 
-## Paso 3 — Verificación en la base de datos
+## Mini-reto — el endpoint de resumen
 
-```bash
-docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db -c "\d videojuego"
+```java
+public record ReviewResumenDTO(Long videojuegoId, long totalReviews, double puntuacionMedia) {}
 ```
 
-**Comprueba** que la columna `detallesplataforma` (Postgres normaliza a minúsculas) aparece con tipo `jsonb`, no `text` ni `character varying`.
-
-Consulta el contenido directamente en SQL:
-
-```bash
-docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db \
-  -c "SELECT titulo, detallesplataforma FROM videojuego;"
-```
-
-**Anota**: ¿el JSON que ves en la consola de PostgreSQL coincide exactamente con el que mandaste por la API?
+Sin más código dado, completa en `ReviewService` un método `getResumenByVideojuegoId(Long videojuegoId)` que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con `findByVideojuegoId`, y calcule con streams (`mapToInt(...).average()`) el total y la puntuación media. Expón el resultado en `GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen`.
 
 ---
 
-## Paso 4 — Actualizar y observar el reemplazo total
+## Experimento de cierre — reseñas huérfanas
 
-Actualiza el primer videojuego con un `PUT`, cambiando `detallesPlataforma` a una estructura **distinta** (por ejemplo, solo con la clave `"switch"`, sin `"steam"`):
+Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal:
 
 ```bash
-curl -X PUT http://localhost:8080/api/v1/videojuegos/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "titulo": "Celeste",
-    "precio": 19.99,
-    "fechaLanzamiento": "2018-01-25",
-    "estudioId": 1,
-    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}
-  }'
+curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
 ```
 
-**Comprueba**: consultando de nuevo en `psql`, ¿sigue estando `"steam"` en el JSON guardado, o ha desaparecido por completo?
+Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1). Comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`) y sustitúyelo por `<proyecto>`:
 
-**Pregunta de comprensión**: ¿por qué el `PUT` reemplaza el objeto JSON completo en vez de combinar (*merge*) el nuevo contenido con el anterior? Relaciona tu respuesta con cómo funciona el mapeo `Map` → `jsonb`: ¿en qué punto del proceso Hibernate tendría que decidir "combinar" en vez de "sustituir", y por qué no lo hace por defecto?
+```bash
+docker compose -f .devcontainer/docker-compose.yml -p <proyecto> ps
+docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
+```
 
----
-
-## Pregunta final
-
-¿Qué ventaja concreta tiene JSONB frente a crear una tabla `plataforma_videojuego` (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?
+**Comprueba**: las reseñas siguen ahí, apuntando a un `videojuegoId` que ya no existe en PostgreSQL — son **reseñas huérfanas**. Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.
 
 ---
 
 ## ✅ Cierre
 
-Tu `Videojuego` ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando `jsonb_exists`.
+Tu GameVault ya habla con dos motores de base de datos distintos, con el patrón de integridad referencial manual resuelto. En la próxima actividad trabajas con colecciones explícitas y conectas el borrado en cascada de reseñas.

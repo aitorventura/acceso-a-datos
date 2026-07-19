@@ -8,7 +8,7 @@
 
 ## 🧪 Probar un componente aislado — repaso
 
-Ya construiste este tipo de test en la Actividad 5.1:
+Ya construiste este tipo de test en la Actividad 4.1:
 
 ```java
 @ExtendWith(MockitoExtension.class)

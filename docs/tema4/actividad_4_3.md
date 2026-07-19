@@ -1,106 +1,120 @@
-# 🧪 Actividad 4.3: PUT de reseñas con control de autoría
+# 🧪 Actividad 4.3: Integración final del proyecto
 
-!!! info "Práctica guiada"
-    Hoy añades el `PUT` que falta en tu módulo `reviews`, con control de autoría: solo quien escribió una reseña puede modificarla.
+!!! success "Entrega final del módulo"
+    Esta es la última actividad evaluable de Acceso a Datos. No es una tarea más — es el cierre de todo lo que has construido desde el Tema 1: catálogo en PostgreSQL, reseñas en MongoDB, componentes desacoplados, y todas las mejoras que has ido añadiendo por el camino.
 
-## Qué vas a practicar
+## Qué vas a entregar
 
-- Añadir un endpoint `PUT` que compruebe la identidad del solicitante.
-- Aplicar el patrón cargar → comprobar autoría → modificar → guardar.
-- Verificar con dos usuarios distintos que el control de acceso funciona de verdad.
+- Un test de integración de extremo a extremo, con Testcontainers, que recorre tu GameVault completo.
+- Un documento breve que resuma los componentes que has construido.
+- Una autoevaluación personal y razonada.
 
 ---
 
 ## Requisitos previos
 
-Tu módulo `reviews` (Actividades 4.1-4.2) y tu login JWT de PSP ya funcionando — vas a necesitar dos usuarios de prueba distintos.
+Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos los componentes de este tema.
 
 ---
 
-## Paso 1 — El endpoint, guiado al completo
+## Paso 1 — El test de integración de flujo completo
+
+### Tramo 1 — guiado al completo
 
 ```java
-// En ReviewService
-public ReviewResponseDTO update(String reviewId, ReviewRequestDTO dto, String usuarioActual) {
-    Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reseña no encontrada"));
+package com.tunombre.gamevault.integration;
 
-    if (!review.getAutor().equals(usuarioActual)) {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo el autor puede modificar esta reseña");
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.mongodb.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Testcontainers
+class FlujoCompletoIntegrationTest {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Container
+    @ServiceConnection
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void flujoCompleto_DesdeCrearHastaBorrarConReviews() throws Exception {
+        // Tramo 1: crear un estudio y un videojuego con detallesPlataforma
+        mockMvc.perform(post("/api/v1/estudios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"nombre": "Team Cherry", "pais": "Australia"}
+                                """))
+                .andExpect(status().isCreated());
+
+        String respuestaVideojuego = mockMvc.perform(post("/api/v1/videojuegos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "titulo": "Hollow Knight",
+                                  "precio": 14.99,
+                                  "fechaLanzamiento": "2017-02-24",
+                                  "estudioId": 1,
+                                  "detallesPlataforma": {"steam": {"idApp": 367520}}
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        // extrae el id del videojuego creado (con JsonPath, por ejemplo) para los tramos siguientes
     }
-
-    review.setPuntuacion(dto.puntuacion());
-    review.setComentario(dto.comentario());
-
-    return mapToDTO(reviewRepository.save(review));
 }
 ```
 
-```java
-// En VideojuegoReviewController
-@PutMapping("/{reviewId}")
-public ResponseEntity<ReviewResponseDTO> update(
-        @PathVariable Long videojuegoId,
-        @PathVariable String reviewId,
-        @Valid @RequestBody ReviewRequestDTO dto,
-        Principal principal
-) {
-    return ResponseEntity.ok(reviewService.update(reviewId, dto, principal.getName()));
-}
-```
+Este primer tramo, ya completo, crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente.
 
-Igual que ya hace el `POST`, recibes `Principal principal` y le pasas `principal.getName()` al service — la comparación de autoría ocurre dentro de `update()`, no en el controller.
+### Tramo 2 — mini-reto: la reseña y el resumen
+
+Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña para ese videojuego (necesitarás un token JWT válido — si tu test de seguridad de PSP ya tiene un método `login(...)` reutilizable, cópialo aquí), y comprobar con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya usaste en la Actividad 2.3 (MockMvc completo, `jsonPath` sobre el cuerpo).
+
+### Tramo 3 — mini-reto: el borrado en cascada
+
+Borra el videojuego, y verifica el borrado en cascada de la Actividad 3.2: la reseña que creaste en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un `Thread.sleep` breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).
 
 ---
 
-## Paso 2 — Probar con dos usuarios: el caso correcto
+## Paso 2 — Documento de cierre
 
-Crea una reseña con el usuario `user` (o el que uses habitualmente) y anota el `id` que te devuelve MongoDB:
+Escribe un documento breve (README de tu propio GameVault, o una sección de memoria si tu centro lo pide así) que liste los componentes que has desarrollado, con 1-2 frases por componente describiendo su responsabilidad. No es un manual exhaustivo, es un mapa rápido de "qué hace cada pieza".
 
-```bash
-curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
-  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
-  -d '{"puntuacion": 7, "comentario": "Buena, pero corta"}'
-```
-
-Modifícala con el **mismo** usuario:
-
-```bash
-curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
-  -d '{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'
-```
-
-**Comprueba**: `200 OK`, con los datos actualizados en la respuesta.
+Como mínimo, incluye: `CatalogoConsultaService`, `ReviewsConsultaService`, el flujo de borrado en cascada, el procedimiento almacenado `ajustar_precio_estudio`, el ranking JPQL de estudios.
 
 ---
 
-## Paso 3 — Probar con dos usuarios: el caso denegado
+## Paso 3 — Autoevaluación razonada
 
-Consigue un token de un **segundo** usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:
-
-```bash
-curl -i -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_OTRO_USUARIO" -H "Content-Type: application/json" \
-  -d '{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'
-```
-
-**Comprueba**: `403 Forbidden`. **Documenta** ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.
+De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo, y por qué concretamente? No una respuesta genérica ("necesito practicar más") — señala una pieza técnica exacta con la que todavía no te sientes cómodo, y qué harías para reforzarla.
 
 ---
 
-## Pregunta de comprensión
+## Paso 4 — Verificar el CI
 
-¿Por qué la comprobación de autoría devuelve `403 Forbidden` y no `404 Not Found`, sabiendo que la reseña sí existe? ¿Cambiaría tu respuesta si, en vez de una reseña, estuvieras protegiendo un recurso donde no quieres ni confirmar que existe a alguien sin permiso? (No hace falta que cambies el código — solo que razones la diferencia).
-
----
-
-## Resumen del tema
-
-Escribe un resumen propio (5-6 líneas) del recorrido completo de este tema: conectar y consultar MongoDB por primera vez (Actividad 4.1) → entender colecciones y el borrado en cascada vía eventos (Actividad 4.2) → modificar documentos con control de acceso real (esta actividad). ¿Qué diferencia concreta has notado entre trabajar con PostgreSQL (Temas 1-3) y con MongoDB (este tema) — en qué momento has echado en falta las garantías del modelo relacional, y en qué momento has agradecido la flexibilidad del documental?
+Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline configurado desde el Tema 0 ejecuta correctamente estos tests de integración. **Captura**: el resultado en verde del workflow.
 
 ---
 
-## ✅ Cierre
+## ✅ Cierre del módulo
 
-Con esto termina todo el bloque de bases de datos del módulo. En el Tema 5, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, con `CatalogoConsultaService` (ya usado aquí mismo) como ejemplo central.
+Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, actividad a actividad, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.

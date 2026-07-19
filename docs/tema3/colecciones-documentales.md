@@ -58,7 +58,7 @@ public interface ResenaRepository extends MongoRepository<Resena, String> {
 }
 ```
 
-`deleteByLibroId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 4.1: si se borra un libro cuyas reseñas siguen en Mongo, este método las limpia de golpe.
+`deleteByLibroId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 3.1: si se borra un libro cuyas reseñas siguen en Mongo, este método las limpia de golpe.
 
 ---
 

@@ -96,7 +96,7 @@ La convención admite más piezas combinables, todas sin escribir una sola consu
 | `countByX` | `countByEditorialId(Long id)` | igual, pero devuelve `long` |
 
 !!! tip "Cuidado con los límites de esta convención"
-    Es cómoda para consultas simples y fijas. Si necesitas filtros que cambian según el caso (a veces por título, a veces por precio, a veces ambos) o consultas más elaboradas, esta convención se queda corta — para eso están las **Specifications** (filtros dinámicos) y `@Query` con JPQL, que verás en el Tema 2.
+    Es cómoda para consultas simples y fijas. Si necesitas filtros que cambian según el caso (a veces por título, a veces por precio, a veces ambos) o consultas más elaboradas, esta convención se queda corta — para eso están las **Specifications** (filtros dinámicos) y `@Query` con JPQL, que verás más adelante en este mismo tema.
 
 El CRUD que vas a construir en este apartado no necesita ninguna consulta personalizada todavía — `findAll`/`findById`/`save`/`deleteById` bastan. Declara `LibroRepository` y `EditorialRepository` vacías, sabiendo ya cómo añadirles un método propio el día que lo necesites:
 
@@ -488,7 +488,7 @@ Cada flecha de este diagrama es algo que ya has visto por separado en el apartad
 
     - **CRUD** = Create/Read/Update/Delete, equivalentes a `INSERT`/`SELECT`/`UPDATE`/`DELETE` en SQL y a `POST`/`GET`/`PUT`/`DELETE` en HTTP — las tres son la misma idea.
     - Un **repository** (`interface XRepository extends JpaRepository<X, Long>`) te da `findAll`/`findById`/`save`/`existsById`/`deleteById` sin escribir SQL ni implementación propia.
-    - Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (`findByEditorialId`, `findByTituloAndPrecioLessThan`...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y `@Query` (Tema 2).
+    - Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (`findByEditorialId`, `findByTituloAndPrecioLessThan`...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y `@Query` (más adelante en este tema).
     - Devolver la entidad JPA tal cual expone campos internos que no deberías publicar (y puede arrastrar detalles de Hibernate en las relaciones *lazy*) — por eso se convierte a un **DTO** antes de salir.
     - Un **`record`** de Java declara en una línea una clase inmutable — encaja con los DTOs porque nunca cambian tras crearse. No es lo mismo que una `@Entity` (mutable, gestionada por Hibernate).
     - Las anotaciones de **Bean Validation** (`@NotBlank`, `@PositiveOrZero`...) sobre el DTO de entrada, combinadas con `@Valid` en el controller, rechazan datos basura con un `400` antes de que tu código se ejecute.

@@ -10,9 +10,9 @@ Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico so
 
 Una **base de datos orientada a objetos pura** va un paso más allá que lo objeto-relacional que has trabajado con JSONB: los objetos se persisten **tal cual**, con su identidad y sus referencias intactas, sin traducirlos a filas y columnas ni siquiera parcialmente. Recuerda la diferencia con JSONB: allí, una columna de una tabla relacional normal contenía un objeto JSON — seguía siendo, en el fondo, una tabla con filas. En una BD orientada a objetos pura no hay tablas en absoluto: el propio motor entiende y almacena objetos directamente.
 
-Esto tiene una consecuencia directa: **no hace falta un ORM**. Un ORM (Tema 2) existe precisamente para traducir entre el mundo de objetos de tu programa y el mundo de tablas de una base de datos relacional — si el motor ya entiende objetos de forma nativa, ese puente deja de ser necesario.
+Esto tiene una consecuencia directa: **no hace falta un ORM**. Un ORM (Tema 1) existe precisamente para traducir entre el mundo de objetos de tu programa y el mundo de tablas de una base de datos relacional — si el motor ya entiende objetos de forma nativa, ese puente deja de ser necesario.
 
-El lenguaje de consulta asociado a este modelo se llama **OQL** (*Object Query Language*) — comparado con JPQL (Tema 2), que opera sobre entidades y propiedades pero sigue traduciéndose a SQL relacional por debajo, OQL consulta directamente sobre el modelo de objetos nativo del motor, sin esa traducción intermedia.
+El lenguaje de consulta asociado a este modelo se llama **OQL** (*Object Query Language*) — comparado con JPQL (Tema 1), que opera sobre entidades y propiedades pero sigue traduciéndose a SQL relacional por debajo, OQL consulta directamente sobre el modelo de objetos nativo del motor, sin esa traducción intermedia.
 
 Algunos gestores históricos/conceptuales de esta categoría: **db4o**, **ObjectDB**, **Versant**. Los mencionas aquí solo como referencia de que existen — no vas a instalar ninguno, este bloque es puramente conceptual.
 

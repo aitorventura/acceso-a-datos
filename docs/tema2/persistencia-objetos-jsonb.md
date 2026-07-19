@@ -2,7 +2,7 @@
 
 # 🧩 1. Persistencia de objetos con JSONB
 
-Hasta ahora, cada campo de tus entidades ha sido un valor simple: un texto, un número, una fecha. Este tema abre una categoría intermedia entre lo puramente relacional (Temas 1-2) y lo orientado a objetos puro (que verás de forma teórica más adelante en este mismo tema): las **bases de datos objeto-relacionales**, gestores relacionales que además saben almacenar y consultar objetos completos dentro de sus tablas.
+Hasta ahora, cada campo de tus entidades ha sido un valor simple: un texto, un número, una fecha. Este tema abre una categoría intermedia entre lo puramente relacional (Tema 1) y lo orientado a objetos puro (que verás de forma teórica más adelante en este mismo tema): las **bases de datos objeto-relacionales**, gestores relacionales que además saben almacenar y consultar objetos completos dentro de sus tablas.
 
 ---
 
@@ -30,7 +30,7 @@ Se ha convertido en el formato universal de intercambio de datos porque es legib
 
 ## 🐘 Qué ofrece PostgreSQL: el tipo `jsonb`
 
-PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que permite que una fila normal, de una tabla normal, lleve dentro un objeto JSON completo — con estructura que puede variar de una fila a otra — conviviendo con las columnas y claves foráneas de siempre. No hace falta una base de datos documental aparte (eso lo verás en el Tema 4) para tener esta flexibilidad en casos puntuales.
+PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que permite que una fila normal, de una tabla normal, lleve dentro un objeto JSON completo — con estructura que puede variar de una fila a otra — conviviendo con las columnas y claves foráneas de siempre. No hace falta una base de datos documental aparte (eso lo verás en el Tema 3) para tener esta flexibilidad en casos puntuales.
 
 !!! tip "`json` vs. `jsonb`, en una frase"
     PostgreSQL tiene dos tipos: `json` guarda el texto tal cual, sin analizarlo; `jsonb` lo analiza y lo guarda en un formato binario indexable y más rápido de consultar — por eso `jsonb` es casi siempre la opción preferida, salvo que necesites preservar el texto original exacto (espacios, orden de claves).
@@ -60,7 +60,7 @@ public class Libro {
 
 ### `titulo`/`precio` (objeto simple) vs. `detallesEdicion` (objeto estructurado)
 
-`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 2 — un valor escalar por columna. `detallesEdicion`, en cambio, es un objeto estructurado real: puede contener claves anidadas como
+`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 1 — un valor escalar por columna. `detallesEdicion`, en cambio, es un objeto estructurado real: puede contener claves anidadas como
 
 ```json
 {"tapaDura": {"isbn": "978-84-376-0494-7", "paginas": 496}, "ebook": {"formato": "epub"}}
@@ -70,13 +70,13 @@ todo dentro de una única columna, sin que hayas tenido que crear una tabla nuev
 
 ### Cómo Hibernate serializa el `Map` a JSON
 
-Hibernate no sabe por sí solo convertir un `Map<String, Object>` Java a JSON (y de vuelta): necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring, y esa ayuda se declara en una pequeña clase de configuración — el caso de "mapeo no directo" que se anticipó en el Tema 2. No necesitas el detalle exacto todavía; lo montarás paso a paso en las actividades de este tema.
+Hibernate no sabe por sí solo convertir un `Map<String, Object>` Java a JSON (y de vuelta): necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring, y esa ayuda se declara en una pequeña clase de configuración — el caso de "mapeo no directo" que se anticipó en el Tema 1. No necesitas el detalle exacto todavía; lo montarás paso a paso en las actividades de este tema.
 
 ---
 
 ## ⚖️ Por qué JSONB y no una tabla nueva
 
-Con lo que ya sabes del Tema 2, podrías haber modelado esto como una tabla `detalle_edicion` con una relación `@OneToMany` desde `Libro` — una fila por formato, con sus propias columnas. ¿Por qué elegir JSONB en su lugar?
+Con lo que ya sabes del Tema 1, podrías haber modelado esto como una tabla `detalle_edicion` con una relación `@OneToMany` desde `Libro` — una fila por formato, con sus propias columnas. ¿Por qué elegir JSONB en su lugar?
 
 | | Tabla relacional nueva | Columna JSONB |
 |---|---|---|
@@ -84,7 +84,7 @@ Con lo que ya sabes del Tema 2, podrías haber modelado esto como una tabla `det
 | **Integridad referencial** | Garantizada por el motor (claves foráneas) | Ninguna — el contenido del JSON no se valida contra nada |
 | **Tipado estricto** | Cada columna tiene su tipo fijo | Sin tipado — cualquier estructura es válida |
 
-El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo mañana — audiolibro, por ejemplo — no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 3.1.
+El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo mañana — audiolibro, por ejemplo — no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 2.1.
 
 ---
 

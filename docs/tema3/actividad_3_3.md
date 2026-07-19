@@ -1,138 +1,106 @@
-# 🧪 Actividad 3.3: Pruebas de integración sobre JSONB
+# 🧪 Actividad 3.3: PUT de reseñas con control de autoría
 
 !!! info "Práctica guiada"
-    Hoy escribes un test de integración real, con Testcontainers, que verifica de verdad el comportamiento de la columna JSONB y el filtro `jsonb_exists` que construiste en las dos actividades anteriores.
+    Hoy añades el `PUT` que falta en tu módulo `reviews`, con control de autoría: solo quien escribió una reseña puede modificarla.
 
 ## Qué vas a practicar
 
-- Configurar un test con Testcontainers y `@ServiceConnection`.
-- Escribir un test de integración completo, vía la API, sobre JSONB.
-- Entender qué detecta un test así que un test con mocks nunca detectaría.
+- Añadir un endpoint `PUT` que compruebe la identidad del solicitante.
+- Aplicar el patrón cargar → comprobar autoría → modificar → guardar.
+- Verificar con dos usuarios distintos que el control de acceso funciona de verdad.
 
 ---
 
 ## Requisitos previos
 
-Tu columna `detallesPlataforma` (Actividad 3.1) y el filtro `disponibleEnPlataforma` (Actividad 3.2), ambos funcionando.
+Tu módulo `reviews` (Actividades 3.1-3.2) y tu login JWT de PSP ya funcionando — vas a necesitar dos usuarios de prueba distintos.
 
 ---
 
-## Paso 1 — Configuración del test, guiada al completo
-
-!!! tip "Por qué esto funciona dentro de tu Dev Container"
-    Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, montaste el socket de Docker del host dentro de `app` y añadiste la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
-
-Añade las dependencias de Testcontainers a tu `pom.xml` (si no las tienes ya de otra actividad):
-
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-testcontainers</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
-    <scope>test</scope>
-</dependency>
-```
-
-Crea la clase de test:
+## Paso 1 — El endpoint, guiado al completo
 
 ```java
-package com.tunombre.gamevault.integration;
+// En ReviewService
+public ReviewResponseDTO update(String reviewId, ReviewRequestDTO dto, String usuarioActual) {
+    Review review = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reseña no encontrada"));
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+    if (!review.getAutor().equals(usuarioActual)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo el autor puede modificar esta reseña");
+    }
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+    review.setPuntuacion(dto.puntuacion());
+    review.setComentario(dto.comentario());
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Testcontainers
-class JsonbIntegrationTest {
-
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    // los tests van aquí
+    return mapToDTO(reviewRepository.save(review));
 }
 ```
 
-`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yaml` — Spring Boot lo resuelve por ti. Fíjate en que la imagen es `postgres:16-alpine`, no la `18-alpine` de tu `docker-compose.yaml` de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto. `@ActiveProfiles("test")` activa un perfil de test (créalo si no lo tienes, con `ddl-auto: create-drop` — aquí sí conviene, porque cada ejecución del test parte de una base de datos limpia).
-
----
-
-## Paso 2 — Primer test, guiado al completo
-
 ```java
-@Test
-void filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene() throws Exception {
-    mockMvc.perform(post("/api/v1/videojuegos")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("""
-                            {
-                              "titulo": "Hades",
-                              "precio": 24.99,
-                              "fechaLanzamiento": "2020-09-17",
-                              "estudioId": 1,
-                              "detallesPlataforma": {"steam": {"idApp": 123}}
-                            }
-                            """))
-            .andExpect(status().isCreated());
-
-    mockMvc.perform(get("/api/v1/videojuegos?plataforma=steam"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content[0].titulo").value("Hades"));
+// En VideojuegoReviewController
+@PutMapping("/{reviewId}")
+public ResponseEntity<ReviewResponseDTO> update(
+        @PathVariable Long videojuegoId,
+        @PathVariable String reviewId,
+        @Valid @RequestBody ReviewRequestDTO dto,
+        Principal principal
+) {
+    return ResponseEntity.ok(reviewService.update(reviewId, dto, principal.getName()));
 }
 ```
 
-(ajusta `estudioId: 1` a un estudio que exista de verdad en tu base de datos de test — puede que necesites crearlo primero con otro `POST`, o cargar datos de prueba antes del test).
-
-Línea a línea: primero un `POST` real, vía MockMvc, que crea un videojuego con una plataforma concreta en su `detallesPlataforma`; después un `GET` filtrado por esa misma plataforma, comprobando con `jsonPath` que el videojuego creado aparece en el resultado. Todo esto ocurre contra el PostgreSQL **real** del contenedor — no hay ningún mock de por medio.
+Igual que ya hace el `POST`, recibes `Principal principal` y le pasas `principal.getName()` al service — la comparación de autoría ocurre dentro de `update()`, no en el controller.
 
 ---
 
-## Mini-reto — el test negativo
+## Paso 2 — Probar con dos usuarios: el caso correcto
 
-Repite el mismo patrón del Paso 2, pero esta vez filtrando por una plataforma que el videojuego creado **no tiene** (por ejemplo, `?plataforma=xbox`), y comprueba que la lista de resultados **no** incluye ese videojuego. Solo se indica el objetivo — la estructura es idéntica a la del Paso 2.
+Crea una reseña con el usuario `user` (o el que uses habitualmente) y anota el `id` que te devuelve MongoDB:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
+  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 7, "comentario": "Buena, pero corta"}'
+```
+
+Modifícala con el **mismo** usuario:
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
+  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'
+```
+
+**Comprueba**: `200 OK`, con los datos actualizados en la respuesta.
+
+---
+
+## Paso 3 — Probar con dos usuarios: el caso denegado
+
+Consigue un token de un **segundo** usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:
+
+```bash
+curl -i -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
+  -H "Authorization: Bearer $TOKEN_OTRO_USUARIO" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'
+```
+
+**Comprueba**: `403 Forbidden`. **Documenta** ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.
 
 ---
 
 ## Pregunta de comprensión
 
-¿Qué detectaría este test con Testcontainers que **no** detectaría un test equivalente con el repositorio mockeado? Piensa en un error concreto: por ejemplo, si escribieras mal el nombre de la función SQL en `criteriaBuilder.function("jsonb_exists", ...)` (una errata tipográfica), o si el tipo de columna generado no fuera realmente `jsonb`. ¿Un mock del repositorio detectaría ese error? ¿Por qué sí o por qué no?
+¿Por qué la comprobación de autoría devuelve `403 Forbidden` y no `404 Not Found`, sabiendo que la reseña sí existe? ¿Cambiaría tu respuesta si, en vez de una reseña, estuvieras protegiendo un recurso donde no quieres ni confirmar que existe a alguien sin permiso? (No hace falta que cambies el código — solo que razones la diferencia).
 
 ---
 
-## Resumen de tu evolución
+## Resumen del tema
 
-Escribe un resumen propio (5-6 líneas) de cómo tu GameVault ha evolucionado a lo largo de las tres actividades de este tema: desde la columna JSONB básica (Actividad 3.1) hasta una consulta filtrada y probada de verdad con Testcontainers (esta actividad).
-
-Incluye, como parte explícita de este entregable, 2-3 líneas explicando por qué JSONB no abre ni cierra una conexión propia: reutiliza la misma conexión JDBC/JPA ya gestionada por el framework desde el Tema 1.
+Escribe un resumen propio (5-6 líneas) del recorrido completo de este tema: conectar y consultar MongoDB por primera vez (Actividad 3.1) → entender colecciones y el borrado en cascada vía eventos (Actividad 3.2) → modificar documentos con control de acceso real (esta actividad). ¿Qué diferencia concreta has notado entre trabajar con PostgreSQL (Temas 1-2) y con MongoDB (este tema) — en qué momento has echado en falta las garantías del modelo relacional, y en qué momento has agradecido la flexibilidad del documental?
 
 ---
 
 ## ✅ Cierre
 
-En el Tema 4 das el salto a MongoDB: la primera base de datos NoSQL distinta de PostgreSQL de todo el curso, con un modelo documental nativo, sin tablas de ningún tipo.
+Con esto termina todo el bloque de bases de datos del módulo. En el Tema 4, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, con `CatalogoConsultaService` (ya usado aquí mismo) como ejemplo central.

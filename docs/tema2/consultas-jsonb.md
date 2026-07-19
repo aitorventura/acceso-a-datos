@@ -51,7 +51,7 @@ public static Specification<Libro> disponibleEnFormato(String formato) {
 }
 ```
 
-Compárala con las Specifications "normales" que ya conoces del Tema 2 (`tituloContiene`, `precioMayorOIgualA`), que usan métodos directos de `criteriaBuilder` como `like` o `greaterThanOrEqualTo` — funcionan porque operan sobre una columna con su propio tipo simple. Aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función **específica del motor** (PostgreSQL), no parte del estándar JPA. Por eso hace falta `criteriaBuilder.function("jsonb_exists", ...)`: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (`Boolean.class`), y sus argumentos (la columna, y un literal con la clave a buscar).
+Compárala con las Specifications "normales" que ya conoces del Tema 1 (`tituloContiene`, `precioMayorOIgualA`), que usan métodos directos de `criteriaBuilder` como `like` o `greaterThanOrEqualTo` — funcionan porque operan sobre una columna con su propio tipo simple. Aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función **específica del motor** (PostgreSQL), no parte del estándar JPA. Por eso hace falta `criteriaBuilder.function("jsonb_exists", ...)`: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (`Boolean.class`), y sus argumentos (la columna, y un literal con la clave a buscar).
 
 ### Combinada con el resto, de forma transparente
 
@@ -68,7 +68,7 @@ Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una
 
 ## ✏️ Modificar objetos JSONB: reemplazo, no *merge*
 
-Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `detallesEdicion`, no combina el nuevo contenido con el anterior — como comprobaste tú mismo en la Actividad 3.1.
+Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `detallesEdicion`, no combina el nuevo contenido con el anterior — como comprobaste tú mismo en la Actividad 2.1.
 
 ```java
 libro.setDetallesEdicion(dto.detallesEdicion()); // sustituye el Map entero

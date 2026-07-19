@@ -74,7 +74,7 @@ class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
 }
 ```
 
-¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en un paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). El módulo de reseñas del Tema 4 usa `CatalogoConsultaService.existeLibro(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos. Es, formalizado, el mismo patrón de integridad referencial manual que ya usaste allí.
+¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en un paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). El módulo de reseñas del Tema 3 usa `CatalogoConsultaService.existeLibro(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos. Es, formalizado, el mismo patrón de integridad referencial manual que ya usaste allí.
 
 ### El contraste que ilustra el desacoplamiento
 

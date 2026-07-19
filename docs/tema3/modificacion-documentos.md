@@ -68,7 +68,7 @@ El patrón, en tres pasos: cargar el documento por id, comprobar que el campo `a
 
 ### `save()` sirve para crear y para actualizar — otra vez
 
-`ResenaRepository` (que extiende `MongoRepository<Resena, String>`) ya tiene `save()` heredado, y sirve tanto para crear un documento nuevo como para actualizar uno existente — basta con que el objeto que le pases tenga el mismo `id` que ya existe en la colección. No es un concepto nuevo: es exactamente lo mismo que ya viste con `JpaRepository` en el Tema 2 — solo cambia el motor de base de datos por debajo, el comportamiento de `save()` es idéntico en la forma de razonar sobre él.
+`ResenaRepository` (que extiende `MongoRepository<Resena, String>`) ya tiene `save()` heredado, y sirve tanto para crear un documento nuevo como para actualizar uno existente — basta con que el objeto que le pases tenga el mismo `id` que ya existe en la colección. No es un concepto nuevo: es exactamente lo mismo que ya viste con `JpaRepository` en el Tema 1 — solo cambia el motor de base de datos por debajo, el comportamiento de `save()` es idéntico en la forma de razonar sobre él.
 
 ---
 

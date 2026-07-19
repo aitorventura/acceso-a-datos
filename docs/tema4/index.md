@@ -1,34 +1,42 @@
-# 🧩 Tema 4: Bases de datos documentales
+# 🧩 Tema 4: Programación de componentes de acceso a datos
 
-> **RA5**: Desarrolla aplicaciones que gestionan la información almacenada en bases de datos documentales nativas evaluando y utilizando clases específicas.
+> **RA6**: Programa componentes de acceso a datos identificando las características que debe poseer un componente y utilizando herramientas de desarrollo.
 
 ---
 
 ## 🎯 Criterios de evaluación
 
-✅ Se han valorado las ventajas e inconvenientes de utilizar bases de datos documentales nativas.
+✅ Se han valorado las ventajas e inconvenientes de utilizar programación orientada a componentes.
 
-✅ Se ha establecido la conexión con la base de datos.
+✅ Se han identificado herramientas de desarrollo de componentes.
 
-✅ Se han desarrollado aplicaciones que efectúan consultas sobre el contenido de la base de datos.
+✅ Se han programado componentes que gestionan información almacenada en ficheros.
 
-✅ Se han añadido y eliminado colecciones de la base de datos.
+✅ Se han programado componentes que gestionan mediante conectores información almacenada en bases de datos.
 
-✅ Se han desarrollado aplicaciones para añadir, modificar y eliminar documentos de la base de datos.
+✅ Se han programado componentes que gestionan información usando mapeo objeto relacional.
+
+✅ Se han programado componentes que gestionan información almacenada en bases de datos objeto relacionales y orientadas a objetos.
+
+✅ Se han programado componentes que gestionan información almacenada en una base de datos documental nativa.
+
+✅ Se han probado y documentado los componentes desarrollados.
+
+✅ Se han integrado los componentes desarrollados en aplicaciones.
 
 ---
 
 ## 📘 Índice de contenidos
 
-1. [Conexión a MongoDB y consultas sobre reseñas](conexion-mongodb.md)
-2. [Colecciones documentales: relacional vs. documental](colecciones-documentales.md)
-3. [Modificación de documentos](modificacion-documentos.md)
+1. [Componentes con conectores y ORM](componentes-conectores-orm.md)
+2. [Componentes con BD objeto-relacional y documental](componentes-bd-objeto-doc.md)
+3. [Integración y pruebas](integracion-y-pruebas.md)
 
 **Actividades:**
 
-- [Actividad 4.1 — Reseñas de videojuegos en MongoDB](actividad_4_1.md)
-- [Actividad 4.2 — Tu propia colección documental](actividad_4_2.md)
-- [Actividad 4.3 — PUT de reseñas con control de autoría](actividad_4_3.md)
+- [Actividad 4.1 — `CatalogoConsultaService`: un componente reutilizable](actividad_4_1.md)
+- [Actividad 4.2 — Repaso integrador: un componente sobre el módulo documental](actividad_4_2.md)
+- [Actividad 4.3 — Integración final del proyecto](actividad_4_3.md)
 
 ---
 

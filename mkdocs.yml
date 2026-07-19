@@ -51,7 +51,7 @@ nav:
           - Dev Containers:
               - Dev Containers: tema0/dev-containers.md
               - Actividad 0.7 - Tu primer Dev Container: tema0/actividad_0_7.md
-  - Tema 1 - Manejo de conectores:
+  - Tema 1 - Manejo de conectores y herramientas ORM:
       - Tema 1 - Introducción: tema1/index.md
       - Fundamentos de Spring Boot: tema1/spring-boot-fundamentos.md
       - Conectores y protocolos:
@@ -66,50 +66,46 @@ nav:
       - Procedimientos almacenados:
           - Procedimientos almacenados: tema1/procedimientos-almacenados.md
           - Actividad 1.4 - Procedimiento con JdbcTemplate: tema1/actividad_1_4.md
-  - Tema 2 - Herramientas ORM:
-      - Tema 2 - Introducción: tema2/index.md
-      - Instalación y configuración de Hibernate:
-          - Instalación y configuración de Hibernate: tema2/instalacion-configuracion-orm.md
-          - Actividad 2.1 - De JDBC puro a Hibernate: tema2/actividad_2_1.md
+      - Hibernate a fondo - decisiones de mapeo y ciclo de vida: tema1/hibernate-a-fondo.md
       - Persistencia de objetos:
-          - Persistencia de objetos: tema2/persistencia-objetos.md
-          - Actividad 2.2 - Consultas con Specifications: tema2/actividad_2_2.md
+          - Persistencia de objetos: tema1/persistencia-objetos.md
+          - Actividad 1.5 - Consultas con Specifications: tema1/actividad_1_5.md
       - Consultas JPQL y transacciones:
-          - Consultas JPQL y transacciones: tema2/consultas-jpql-transacciones.md
-          - Actividad 2.3 - Ranking con @Query JPQL: tema2/actividad_2_3.md
-  - Tema 3 - BD objeto-relacionales:
-      - Tema 3 - Introducción: tema3/index.md
+          - Consultas JPQL y transacciones: tema1/consultas-jpql-transacciones.md
+          - Actividad 1.6 - Ranking con @Query JPQL: tema1/actividad_1_6.md
+  - Tema 2 - BD objeto-relacionales:
+      - Tema 2 - Introducción: tema2/index.md
       - Persistencia de objetos con JSONB:
-          - Persistencia de objetos con JSONB: tema3/persistencia-objetos-jsonb.md
-          - Actividad 3.1 - La columna detallesPlataforma: tema3/actividad_3_1.md
+          - Persistencia de objetos con JSONB: tema2/persistencia-objetos-jsonb.md
+          - Actividad 2.1 - La columna detallesPlataforma: tema2/actividad_2_1.md
       - Consultas sobre JSONB:
-          - Consultas sobre JSONB: tema3/consultas-jsonb.md
-          - Actividad 3.2 - Filtrar con jsonb_exists: tema3/actividad_3_2.md
+          - Consultas sobre JSONB: tema2/consultas-jsonb.md
+          - Actividad 2.2 - Filtrar con jsonb_exists: tema2/actividad_2_2.md
       - BD orientadas a objetos:
-          - BD orientadas a objetos: tema3/bd-orientadas-a-objetos.md
-          - Actividad 3.3 - Pruebas de integración JSONB: tema3/actividad_3_3.md
-  - Tema 4 - BD documentales:
-      - Tema 4 - Introducción: tema4/index.md
+          - BD orientadas a objetos: tema2/bd-orientadas-a-objetos.md
+          - Actividad 2.3 - Pruebas de integración JSONB: tema2/actividad_2_3.md
+  - Tema 3 - BD documentales:
+      - Tema 3 - Introducción: tema3/index.md
       - Conexión a MongoDB:
-          - Conexión a MongoDB: tema4/conexion-mongodb.md
-          - Actividad 4.1 - Reseñas en MongoDB: tema4/actividad_4_1.md
+          - Conexión a MongoDB: tema3/conexion-mongodb.md
+          - Actividad 3.1 - Reseñas en MongoDB: tema3/actividad_3_1.md
       - Colecciones documentales:
-          - Colecciones documentales: tema4/colecciones-documentales.md
-          - Actividad 4.2 - Tu propia colección documental: tema4/actividad_4_2.md
+          - Colecciones documentales: tema3/colecciones-documentales.md
+          - Actividad 3.2 - Tu propia colección documental: tema3/actividad_3_2.md
       - Modificación de documentos:
-          - Modificación de documentos: tema4/modificacion-documentos.md
-          - Actividad 4.3 - PUT de reseñas con autoría: tema4/actividad_4_3.md
-  - Tema 5 - Componentes de acceso a datos:
-      - Tema 5 - Introducción: tema5/index.md
+          - Modificación de documentos: tema3/modificacion-documentos.md
+          - Actividad 3.3 - PUT de reseñas con autoría: tema3/actividad_3_3.md
+  - Tema 4 - Componentes de acceso a datos:
+      - Tema 4 - Introducción: tema4/index.md
       - Componentes con conectores y ORM:
-          - Componentes con conectores y ORM: tema5/componentes-conectores-orm.md
-          - Actividad 5.1 - CatalogoConsultaService: tema5/actividad_5_1.md
+          - Componentes con conectores y ORM: tema4/componentes-conectores-orm.md
+          - Actividad 4.1 - CatalogoConsultaService: tema4/actividad_4_1.md
       - Componentes con BD objeto-rel. y documental:
-          - Componentes con BD objeto-rel. y documental: tema5/componentes-bd-objeto-doc.md
-          - Actividad 5.2 - Repaso integrador: tema5/actividad_5_2.md
+          - Componentes con BD objeto-rel. y documental: tema4/componentes-bd-objeto-doc.md
+          - Actividad 4.2 - Repaso integrador: tema4/actividad_4_2.md
       - Integración y pruebas:
-          - Integración y pruebas: tema5/integracion-y-pruebas.md
-          - Actividad 5.3 - Integración final del proyecto: tema5/actividad_5_3.md
+          - Integración y pruebas: tema4/integracion-y-pruebas.md
+          - Actividad 4.3 - Integración final del proyecto: tema4/actividad_4_3.md
 
 markdown_extensions:
   - md_in_html
