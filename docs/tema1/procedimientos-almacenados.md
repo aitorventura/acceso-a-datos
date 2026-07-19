@@ -150,12 +150,6 @@ List<Libro> findByTituloContainingIgnoreCaseOrderByPrecioAsc(String fragmento);
 
 ---
 
-## 🧭 Recapitulación del tema
-
-Con esto se completa el recorrido: por qué existen los conectores y cómo se define la estructura de la base de datos (apartado 2) → CRUD completo y transacciones gestionadas por Spring (apartado 3) → la misma fontanería, pero a mano, con JDBC puro (apartado 4) → código que vive dentro del propio motor, invocado desde Java, y las consultas derivadas por nombre, con más detalle del que viste en el apartado 3 (este apartado). El Tema 2 retoma exactamente donde empezó todo: el desfase objeto-relacional, ahora resuelto con una herramienta ORM completa (Hibernate) en vez de conectores manuales.
-
----
-
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"

@@ -72,12 +72,6 @@ El patrón, en tres pasos: cargar el documento por id, comprobar que el campo `a
 
 ---
 
-## 🧭 Recapitulación del tema
-
-Con esto se completa el recorrido: conexión y consultas sobre MongoDB (apartado 1) → comparación relacional/documental y gestión de colecciones (apartado 2) → modificación de documentos con control de acceso (este apartado). El Tema 5 retoma una idea que ya has usado aquí sin nombrarla — un servicio de consulta reutilizable que otros módulos usan para comprobar el catálogo — como el ejemplo central de qué es un **componente** de acceso a datos.
-
----
-
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"

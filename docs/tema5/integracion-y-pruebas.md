@@ -75,12 +75,6 @@ Documentar un componente no es sobre todo escribir un documento externo aparte �
 
 ---
 
-## 🧭 Recapitulación de todo el módulo
-
-Con esto se completa el recorrido entero de Acceso a Datos: conectores (JDBC, CRUD, transacciones, procedimientos almacenados) → ORM (Hibernate, Specifications, JPQL) → objeto-relacional (JSONB, `jsonb_exists`) → documental (MongoDB, integridad referencial manual, control de autoría) → componentes que envuelven y desacoplan todo lo anterior, sea cual sea el motor por debajo. La Actividad 5.3, la entrega final del módulo, te pide reunir todo esto en un único test de integración de extremo a extremo.
-
----
-
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"

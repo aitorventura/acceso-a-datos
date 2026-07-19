@@ -55,7 +55,7 @@ spring:
 
 Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
 
-Levanta el servicio nuevo (`docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer up -d mongodb`, desde la terminal integrada — el `-p` es el nombre de proyecto que usa la extensión de Dev Containers, el mismo que ya usaste en la Actividad 1.1) y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
+Levanta el servicio nuevo desde la terminal integrada — comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`, depende de tu editor) y sustitúyelo en `docker compose -f .devcontainer/docker-compose.yml -p <proyecto> up -d mongodb` — y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
 
 ---
 
@@ -247,10 +247,10 @@ Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal
 curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
 ```
 
-Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1):
+Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1). Comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`) y sustitúyelo por `<proyecto>`:
 
 ```bash
-docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer ps
+docker compose -f .devcontainer/docker-compose.yml -p <proyecto> ps
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
 ```
 

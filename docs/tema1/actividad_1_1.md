@@ -172,7 +172,17 @@ docker version
 
 ## Paso 2 — Configurar la conexión a PostgreSQL
 
-Crea `src/main/resources/application-dev.yaml` con la configuración de conexión:
+Antes de crear el fichero de perfil, deja también en YAML la configuración común: Spring Initializr te ha generado `src/main/resources/application.properties` con una única línea (`spring.application.name=gamevault`). Bórralo y crea `src/main/resources/application.yml` con el mismo contenido, en formato YAML:
+
+```yaml
+spring:
+  application:
+    name: gamevault
+```
+
+Así todo el proyecto queda en YAML desde el principio, sin mezclar formatos entre la configuración común y la de perfil.
+
+Ahora sí, crea `src/main/resources/application-dev.yaml` con la configuración de conexión:
 
 ```yaml
 spring:
@@ -317,11 +327,15 @@ Mira la consola: con `show-sql: true` deberías ver sentencias `create table` (o
 Ahora conéctate a PostgreSQL para comprobarlo tú mismo. Tienes dos vías, y las dos funcionan igual de bien:
 
 - **Herramienta gráfica desde tu equipo** (pgAdmin, DBeaver): como el Paso 1 ha publicado el puerto `5432` hacia tu máquina, apunta a `localhost:5432` con las credenciales del Paso 1.
-- **`psql` desde la propia terminal integrada de tu editor**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Pero ojo: `docker compose`, a secas, busca un `docker-compose.yml` en la carpeta donde estés (`/workspace`) y no lo encuentra — el tuyo vive en `.devcontainer/`. Indícaselo con `-f`, y añade también `-p` con el nombre de proyecto que ha usado tu editor para crear los contenedores (combina el nombre de tu carpeta con `_devcontainer`; si la llamaste `gamevault` como se sugería en el Paso 0, es `gamevault_devcontainer` — ajusta el prefijo si le pusiste otro nombre):
+- **`psql` desde la propia terminal integrada de tu editor**: gracias al `docker-outside-of-docker` del Paso 1, puedes usar `docker` normalmente aunque esa terminal esté dentro del contenedor `app`. Pero ojo: `docker compose`, a secas, busca un `docker-compose.yml` en la carpeta donde estés (`/workspace`) y no lo encuentra — el tuyo vive en `.devcontainer/`. Indícaselo con `-f`; y como `docker compose` no adivina solo qué contenedores son "los tuyos", indícale también el proyecto con `-p`. No des por hecho el nombre del proyecto (VS Code e IntelliJ no siempre lo nombran igual): averígualo primero con
     ```bash
-    docker compose -f .devcontainer/docker-compose.yml -p gamevault_devcontainer ps
+    docker compose ls
     ```
-    Localiza ahí el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de tu editor. A partir de aquí, cualquier `docker compose` que ejecutes desde dentro del contenedor va a necesitar esos mismos `-f`/`-p`.
+    y copia el nombre que aparezca en la columna `NAME`. Con ese nombre real (llámalo aquí `<proyecto>`):
+    ```bash
+    docker compose -f .devcontainer/docker-compose.yml -p <proyecto> ps
+    ```
+    Localiza ahí el nombre del contenedor de `postgres`, y luego `docker exec -it <ese-nombre> psql -U gamevault_user -d gamevault_db -c "\d videojuego"` — sin salir de tu editor. A partir de aquí, cualquier `docker compose` que ejecutes desde dentro del contenedor va a necesitar esos mismos `-f`/`-p` — con el nombre de proyecto real que acabas de averiguar, no necesariamente `gamevault_devcontainer`.
 
 **Comprueba**:
 

@@ -54,12 +54,6 @@ class LibreriaApiTest {
 
 ---
 
-## 🧭 Recapitulación del tema
-
-Con esto se completa el recorrido: JSONB como persistencia de objetos estructurados dentro de PostgreSQL (apartado 1) → consultas sobre ese contenido con `jsonb_exists` (apartado 2) → bases de datos orientadas a objetos puras, en teoría → pruebas de integración reales con Testcontainers (este apartado). El Tema 4 da un salto real: de un modelo objeto-relacional (JSONB dentro de PostgreSQL) a un modelo **documental nativo completo**, con MongoDB — la primera base de datos NoSQL distinta de PostgreSQL que vas a usar en el curso.
-
----
-
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"

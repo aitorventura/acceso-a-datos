@@ -76,12 +76,6 @@ public List<EditorialRankingDTO> obtenerRanking() {
 
 ---
 
-## 🧭 Recapitulación del tema
-
-Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en `spring-boot-starter-data-jpa`) → mapeo con anotaciones (`@Entity`, `@Column`, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. En el Tema 3 aparece un tipo de columna que todavía no has visto — JSONB, capaz de guardar objetos completos dentro de una celda — y con él, las bases de datos objeto-relacionales.
-
----
-
 ## ✅ Ideas clave
 
 ??? tip "Abrir resumen"

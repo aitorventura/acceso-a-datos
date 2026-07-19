@@ -17,7 +17,7 @@
 
 ## Requisitos previos
 
-Tu CRUD completo de `Videojuego` y de `Estudio` de la Actividad 1.2, algún dato de prueba (un estudio con varios videojuegos asociados), y haber leído la teoría de este apartado — en concreto el ejemplo completo `ajustar_precio_editorial`/`EditorialService`, que vas a adaptar paso a paso.
+Tu CRUD completo de `Videojuego` y de `Estudio` de la Actividad 1.2, algún dato de prueba (un estudio con varios videojuegos asociados), haber leído la teoría de este apartado — en concreto el ejemplo completo `ajustar_precio_editorial`/`EditorialService`, que vas a adaptar paso a paso — y tener ya hecha la Actividad 1.2 de Programación de Servicios y Procesos, donde documentaste tus endpoints con `@Operation`/`@ApiResponses`: el Paso 2 de esta actividad da por hecho ese patrón.
 
 ---
 
@@ -84,7 +84,7 @@ curl -X POST http://localhost:8080/api/v1/estudios/1/ajustar-precio \
 
 **Pregunta**: compara tu `AjustePrecioDTO`, tu `EstudioService.ajustarPrecio` y tu endpoint con `ajustar_precio_editorial`/`EditorialService` de la teoría. ¿Qué has tenido que cambiar y qué se mantiene exactamente igual?
 
-**Pregunta**: prueba a enviar el DTO con `porcentaje` vacío, y después con un valor de más de 8 dígitos enteros (por ejemplo `123456789`). ¿Qué código de estado obtienes en cada caso? ¿Por qué esos dos casos concretos disparan la validación y no otros?
+**Segunda pregunta**: prueba a enviar el DTO con `porcentaje` vacío, y después con un valor de más de 8 dígitos enteros (por ejemplo `123456789`). ¿Qué código de estado obtienes en cada caso? ¿Por qué esos dos casos concretos disparan la validación y no otros?
 
 !!! note "Esta actividad no pide tests para este endpoint"
     No forma parte de esta actividad, pero en un proyecto real lo ideal sería completar `ajustarPrecio` con un test de controller (con MockMvc) que compruebe tanto el caso correcto como los dos casos de validación fallida que acabas de probar a mano — el mismo tipo de test que trabajarás en profundidad en Programación de Servicios y Procesos.
@@ -121,8 +121,8 @@ Expón cada uno con un endpoint `GET` nuevo en `VideojuegoController`, siguiendo
 
 No hay código dado para el service ni el controller — ya sabes escribir ese patrón desde la Actividad 1.2.
 
-!!! warning "El orden de las rutas importa"
-    Declara `@GetMapping("/buscar")` y `@GetMapping("/por-estudio/{estudioId}")` **antes** que `@GetMapping("/{id}")` en la clase — si no, Spring intenta interpretar `buscar` como un `id` y falla al convertirlo a `Long`.
+!!! tip "¿Y si `/buscar` choca con `/{id}`?"
+    Podría parecer un problema: `GET /api/v1/videojuegos/buscar` encaja tanto con `@GetMapping("/buscar")` como con `@GetMapping("/{id}")` (que aceptaría, literalmente, cualquier texto en esa posición, incluida la palabra `buscar`). Pero Spring no decide por el orden en que declares los métodos en la clase: prioriza automáticamente la ruta más específica —una ruta literal, sin variables, como `/buscar` o `/por-estudio/{estudioId}`— sobre la que solo tiene un `{parámetro}` genérico. Declara los métodos en el orden que te resulte más cómodo de leer.
 
 **Comprueba** con `curl` ambos endpoints contra datos reales de tu proyecto.
 
