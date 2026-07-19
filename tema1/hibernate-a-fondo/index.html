@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../tema4/actividad_4_3/">
+        <link rel="prev" href="../actividad_1_4/">
       
       
-        <link rel="next" href="componentes-conectores-orm/">
+        <link rel="next" href="../persistencia-objetos/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
     
     
       
-        <title>Tema 5 - Introducción - Acceso a Datos</title>
+        <title>Hibernate a fondo - decisiones de mapeo y ciclo de vida - Acceso a Datos</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../css/extra.css">
+      <link rel="stylesheet" href="../../css/extra.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tema-5-programacion-de-componentes-de-acceso-a-datos" class="md-skip">
+        <a href="#6-hibernate-a-fondo-decisiones-de-mapeo-y-ciclo-de-vida" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -90,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href=".." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+    <a href="../.." title="Acceso a Datos" class="md-header__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Tema 5 - Introducción
+              Hibernate a fondo - decisiones de mapeo y ciclo de vida
             
           </span>
         </div>
@@ -214,7 +214,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
+    <a href="../.." title="Acceso a Datos" class="md-nav__button md-logo" aria-label="Acceso a Datos" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -232,7 +232,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -292,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/" class="md-nav__link">
+      <a href="../../tema0/" class="md-nav__link">
         
   
   
@@ -391,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/introduccion-git/" class="md-nav__link">
+      <a href="../../tema0/introduccion-git/" class="md-nav__link">
         
   
   
@@ -414,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_1/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_1/" class="md-nav__link">
         
   
   
@@ -483,7 +483,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/ramas/" class="md-nav__link">
+      <a href="../../tema0/ramas/" class="md-nav__link">
         
   
   
@@ -506,7 +506,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_2/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_2/" class="md-nav__link">
         
   
   
@@ -575,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/github/" class="md-nav__link">
+      <a href="../../tema0/github/" class="md-nav__link">
         
   
   
@@ -598,7 +598,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_3/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_3/" class="md-nav__link">
         
   
   
@@ -667,7 +667,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/colaboracion/" class="md-nav__link">
+      <a href="../../tema0/colaboracion/" class="md-nav__link">
         
   
   
@@ -690,7 +690,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_4/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_4/" class="md-nav__link">
         
   
   
@@ -759,7 +759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/github-actions/" class="md-nav__link">
+      <a href="../../tema0/github-actions/" class="md-nav__link">
         
   
   
@@ -782,7 +782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_5/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_5/" class="md-nav__link">
         
   
   
@@ -897,7 +897,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/introduccion-docker/" class="md-nav__link">
+      <a href="../../tema0/introduccion-docker/" class="md-nav__link">
         
   
   
@@ -920,7 +920,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_6/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_6/" class="md-nav__link">
         
   
   
@@ -989,7 +989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/dev-containers/" class="md-nav__link">
+      <a href="../../tema0/dev-containers/" class="md-nav__link">
         
   
   
@@ -1012,7 +1012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema0/actividad_0_7/" class="md-nav__link">
+      <a href="../../tema0/actividad_0_7/" class="md-nav__link">
         
   
   
@@ -1055,18 +1055,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -1074,7 +1076,7 @@
   
   
   <span class="md-ellipsis">
-    Tema 1 - Manejo de conectores
+    Tema 1 - Manejo de conectores y herramientas ORM
     
   </span>
   
@@ -1082,10 +1084,10 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Tema 1 - Manejo de conectores
+            Tema 1 - Manejo de conectores y herramientas ORM
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1096,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -1119,7 +1121,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/spring-boot-fundamentos/" class="md-nav__link">
+      <a href="../spring-boot-fundamentos/" class="md-nav__link">
         
   
   
@@ -1180,7 +1182,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/conectores-y-protocolos/" class="md-nav__link">
+      <a href="../conectores-y-protocolos/" class="md-nav__link">
         
   
   
@@ -1203,7 +1205,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/actividad_1_1/" class="md-nav__link">
+      <a href="../actividad_1_1/" class="md-nav__link">
         
   
   
@@ -1272,7 +1274,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/operaciones-crud-transacciones/" class="md-nav__link">
+      <a href="../operaciones-crud-transacciones/" class="md-nav__link">
         
   
   
@@ -1295,7 +1297,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/actividad_1_2/" class="md-nav__link">
+      <a href="../actividad_1_2/" class="md-nav__link">
         
   
   
@@ -1364,7 +1366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/jdbc-puro/" class="md-nav__link">
+      <a href="../jdbc-puro/" class="md-nav__link">
         
   
   
@@ -1387,7 +1389,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/actividad_1_3/" class="md-nav__link">
+      <a href="../actividad_1_3/" class="md-nav__link">
         
   
   
@@ -1456,7 +1458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/procedimientos-almacenados/" class="md-nav__link">
+      <a href="../procedimientos-almacenados/" class="md-nav__link">
         
   
   
@@ -1479,12 +1481,348 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema1/actividad_1_4/" class="md-nav__link">
+      <a href="../actividad_1_4/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Actividad 1.4 - Procedimiento con JdbcTemplate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Hibernate a fondo - decisiones de mapeo y ciclo de vida
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Hibernate a fondo - decisiones de mapeo y ciclo de vida
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#clase-persistente-y-formas-de-declarar-el-mapeo" class="md-nav__link">
+    <span class="md-ellipsis">
+      📐 Clase persistente y formas de declarar el mapeo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#los-estados-de-un-objeto-en-el-orm" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Los estados de un objeto en el ORM
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hibernate-en-un-proyecto-spring-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗄️ Hibernate en un proyecto Spring Boot
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗄️ Hibernate en un proyecto Spring Boot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalar-hibernate-no-es-un-paso-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Instalar" Hibernate no es un paso manual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisiones de mapeo que ya tomaste, explicadas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración avanzada: cuando el mapeo no es directo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ddl-auto-configuracion-del-orm-no-del-conector" class="md-nav__link">
+    <span class="md-ellipsis">
+      ddl-auto: configuración del ORM, no del conector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Los estados, ahora con Libro
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Persistencia de objetos
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            Persistencia de objetos
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../persistencia-objetos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Persistencia de objetos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_1_5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.5 - Consultas con Specifications
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Consultas JPQL y transacciones
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_9">
+            <span class="md-nav__icon md-icon"></span>
+            Consultas JPQL y transacciones
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consultas-jpql-transacciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Consultas JPQL y transacciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actividad_1_6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Actividad 1.6 - Ranking con @Query JPQL
     
   </span>
   
@@ -1533,7 +1871,7 @@
   
   
   <span class="md-ellipsis">
-    Tema 2 - Herramientas ORM
+    Tema 2 - BD objeto-relacionales
     
   </span>
   
@@ -1544,7 +1882,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
-            Tema 2 - Herramientas ORM
+            Tema 2 - BD objeto-relacionales
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1555,7 +1893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/" class="md-nav__link">
+      <a href="../../tema2/" class="md-nav__link">
         
   
   
@@ -1594,7 +1932,7 @@
   
   
   <span class="md-ellipsis">
-    Instalación y configuración de Hibernate
+    Persistencia de objetos con JSONB
     
   </span>
   
@@ -1605,7 +1943,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_2">
             <span class="md-nav__icon md-icon"></span>
-            Instalación y configuración de Hibernate
+            Persistencia de objetos con JSONB
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1616,12 +1954,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/instalacion-configuracion-orm/" class="md-nav__link">
+      <a href="../../tema2/persistencia-objetos-jsonb/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Instalación y configuración de Hibernate
+    Persistencia de objetos con JSONB
     
   </span>
   
@@ -1639,12 +1977,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/actividad_2_1/" class="md-nav__link">
+      <a href="../../tema2/actividad_2_1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 2.1 - De JDBC puro a Hibernate
+    Actividad 2.1 - La columna detallesPlataforma
     
   </span>
   
@@ -1686,7 +2024,7 @@
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas sobre JSONB
     
   </span>
   
@@ -1697,7 +2035,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_3">
             <span class="md-nav__icon md-icon"></span>
-            Persistencia de objetos
+            Consultas sobre JSONB
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1708,12 +2046,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/persistencia-objetos/" class="md-nav__link">
+      <a href="../../tema2/consultas-jsonb/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas sobre JSONB
     
   </span>
   
@@ -1731,12 +2069,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/actividad_2_2/" class="md-nav__link">
+      <a href="../../tema2/actividad_2_2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 2.2 - Consultas con Specifications
+    Actividad 2.2 - Filtrar con jsonb_exists
     
   </span>
   
@@ -1778,7 +2116,7 @@
   
   
   <span class="md-ellipsis">
-    Consultas JPQL y transacciones
+    BD orientadas a objetos
     
   </span>
   
@@ -1789,7 +2127,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_4">
             <span class="md-nav__icon md-icon"></span>
-            Consultas JPQL y transacciones
+            BD orientadas a objetos
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1800,12 +2138,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/consultas-jpql-transacciones/" class="md-nav__link">
+      <a href="../../tema2/bd-orientadas-a-objetos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Consultas JPQL y transacciones
+    BD orientadas a objetos
     
   </span>
   
@@ -1823,12 +2161,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema2/actividad_2_3/" class="md-nav__link">
+      <a href="../../tema2/actividad_2_3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Ranking con @Query JPQL
+    Actividad 2.3 - Pruebas de integración JSONB
     
   </span>
   
@@ -1877,7 +2215,7 @@
   
   
   <span class="md-ellipsis">
-    Tema 3 - BD objeto-relacionales
+    Tema 3 - BD documentales
     
   </span>
   
@@ -1888,7 +2226,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
-            Tema 3 - BD objeto-relacionales
+            Tema 3 - BD documentales
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1899,7 +2237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/" class="md-nav__link">
+      <a href="../../tema3/" class="md-nav__link">
         
   
   
@@ -1938,7 +2276,7 @@
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos con JSONB
+    Conexión a MongoDB
     
   </span>
   
@@ -1949,7 +2287,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
-            Persistencia de objetos con JSONB
+            Conexión a MongoDB
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1960,12 +2298,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/persistencia-objetos-jsonb/" class="md-nav__link">
+      <a href="../../tema3/conexion-mongodb/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos con JSONB
+    Conexión a MongoDB
     
   </span>
   
@@ -1983,12 +2321,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/actividad_3_1/" class="md-nav__link">
+      <a href="../../tema3/actividad_3_1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 3.1 - La columna detallesPlataforma
+    Actividad 3.1 - Reseñas en MongoDB
     
   </span>
   
@@ -2030,7 +2368,7 @@
   
   
   <span class="md-ellipsis">
-    Consultas sobre JSONB
+    Colecciones documentales
     
   </span>
   
@@ -2041,7 +2379,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_3">
             <span class="md-nav__icon md-icon"></span>
-            Consultas sobre JSONB
+            Colecciones documentales
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2052,12 +2390,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/consultas-jsonb/" class="md-nav__link">
+      <a href="../../tema3/colecciones-documentales/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Consultas sobre JSONB
+    Colecciones documentales
     
   </span>
   
@@ -2075,12 +2413,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/actividad_3_2/" class="md-nav__link">
+      <a href="../../tema3/actividad_3_2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 3.2 - Filtrar con jsonb_exists
+    Actividad 3.2 - Tu propia colección documental
     
   </span>
   
@@ -2122,7 +2460,7 @@
   
   
   <span class="md-ellipsis">
-    BD orientadas a objetos
+    Modificación de documentos
     
   </span>
   
@@ -2133,7 +2471,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_4">
             <span class="md-nav__icon md-icon"></span>
-            BD orientadas a objetos
+            Modificación de documentos
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2144,12 +2482,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/bd-orientadas-a-objetos/" class="md-nav__link">
+      <a href="../../tema3/modificacion-documentos/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    BD orientadas a objetos
+    Modificación de documentos
     
   </span>
   
@@ -2167,12 +2505,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema3/actividad_3_3/" class="md-nav__link">
+      <a href="../../tema3/actividad_3_3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 3.3 - Pruebas de integración JSONB
+    Actividad 3.3 - PUT de reseñas con autoría
     
   </span>
   
@@ -2221,7 +2559,7 @@
   
   
   <span class="md-ellipsis">
-    Tema 4 - BD documentales
+    Tema 4 - Componentes de acceso a datos
     
   </span>
   
@@ -2232,7 +2570,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
-            Tema 4 - BD documentales
+            Tema 4 - Componentes de acceso a datos
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2243,7 +2581,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema4/" class="md-nav__link">
+      <a href="../../tema4/" class="md-nav__link">
         
   
   
@@ -2282,7 +2620,7 @@
   
   
   <span class="md-ellipsis">
-    Conexión a MongoDB
+    Componentes con conectores y ORM
     
   </span>
   
@@ -2293,7 +2631,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_2">
             <span class="md-nav__icon md-icon"></span>
-            Conexión a MongoDB
+            Componentes con conectores y ORM
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2304,12 +2642,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema4/conexion-mongodb/" class="md-nav__link">
+      <a href="../../tema4/componentes-conectores-orm/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Conexión a MongoDB
+    Componentes con conectores y ORM
     
   </span>
   
@@ -2327,12 +2665,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema4/actividad_4_1/" class="md-nav__link">
+      <a href="../../tema4/actividad_4_1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 4.1 - Reseñas en MongoDB
+    Actividad 4.1 - CatalogoConsultaService
     
   </span>
   
@@ -2374,7 +2712,7 @@
   
   
   <span class="md-ellipsis">
-    Colecciones documentales
+    Componentes con BD objeto-rel. y documental
     
   </span>
   
@@ -2385,7 +2723,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_3">
             <span class="md-nav__icon md-icon"></span>
-            Colecciones documentales
+            Componentes con BD objeto-rel. y documental
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2396,12 +2734,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema4/colecciones-documentales/" class="md-nav__link">
+      <a href="../../tema4/componentes-bd-objeto-doc/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Colecciones documentales
+    Componentes con BD objeto-rel. y documental
     
   </span>
   
@@ -2419,12 +2757,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../tema4/actividad_4_2/" class="md-nav__link">
+      <a href="../../tema4/actividad_4_2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 4.2 - Tu propia colección documental
+    Actividad 4.2 - Repaso integrador
     
   </span>
   
@@ -2466,7 +2804,7 @@
   
   
   <span class="md-ellipsis">
-    Modificación de documentos
+    Integración y pruebas
     
   </span>
   
@@ -2476,412 +2814,6 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_4">
-            <span class="md-nav__icon md-icon"></span>
-            Modificación de documentos
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tema4/modificacion-documentos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Modificación de documentos
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tema4/actividad_4_3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Actividad 4.3 - PUT de reseñas con autoría
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Tema 5 - Componentes de acceso a datos
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            Tema 5 - Componentes de acceso a datos
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Tema 5 - Introducción
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Tema 5 - Introducción
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#criterios-de-evaluacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Criterios de evaluación
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#indice-de-contenidos" class="md-nav__link">
-    <span class="md-ellipsis">
-      📘 Índice de contenidos
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Componentes con conectores y ORM
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7_2">
-            <span class="md-nav__icon md-icon"></span>
-            Componentes con conectores y ORM
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="componentes-conectores-orm/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Componentes con conectores y ORM
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="actividad_5_1/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Actividad 5.1 - CatalogoConsultaService
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Componentes con BD objeto-rel. y documental
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7_3">
-            <span class="md-nav__icon md-icon"></span>
-            Componentes con BD objeto-rel. y documental
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="componentes-bd-objeto-doc/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Componentes con BD objeto-rel. y documental
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="actividad_5_2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Actividad 5.2 - Repaso integrador
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Integración y pruebas
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7_4">
             <span class="md-nav__icon md-icon"></span>
             Integración y pruebas
           </label>
@@ -2894,7 +2826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="integracion-y-pruebas/" class="md-nav__link">
+      <a href="../../tema4/integracion-y-pruebas/" class="md-nav__link">
         
   
   
@@ -2917,12 +2849,12 @@
   
   
     <li class="md-nav__item">
-      <a href="actividad_5_3/" class="md-nav__link">
+      <a href="../../tema4/actividad_4_3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Actividad 5.3 - Integración final del proyecto
+    Actividad 4.3 - Integración final del proyecto
     
   </span>
   
@@ -2975,18 +2907,87 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#criterios-de-evaluacion" class="md-nav__link">
+  <a href="#clase-persistente-y-formas-de-declarar-el-mapeo" class="md-nav__link">
     <span class="md-ellipsis">
-      🎯 Criterios de evaluación
+      📐 Clase persistente y formas de declarar el mapeo
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#indice-de-contenidos" class="md-nav__link">
+  <a href="#los-estados-de-un-objeto-en-el-orm" class="md-nav__link">
     <span class="md-ellipsis">
-      📘 Índice de contenidos
+      🔄 Los estados de un objeto en el ORM
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hibernate-en-un-proyecto-spring-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗄️ Hibernate en un proyecto Spring Boot
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗄️ Hibernate en un proyecto Spring Boot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalar-hibernate-no-es-un-paso-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Instalar" Hibernate no es un paso manual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisiones de mapeo que ya tomaste, explicadas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuración avanzada: cuando el mapeo no es directo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ddl-auto-configuracion-del-orm-no-del-conector" class="md-nav__link">
+    <span class="md-ellipsis">
+      ddl-auto: configuración del ORM, no del conector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔁 Los estados, ahora con Libro
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ideas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Ideas clave
     </span>
   </a>
   
@@ -3008,39 +3009,169 @@
 
 
 
-<div><h1 id="tema-5-programacion-de-componentes-de-acceso-a-datos">🧩 Tema 5: Programación de componentes de acceso a datos<a class="headerlink" href="#tema-5-programacion-de-componentes-de-acceso-a-datos" title="Permanent link">¶</a></h1>
-<blockquote>
-<p><strong>RA6</strong>: Programa componentes de acceso a datos identificando las características que debe poseer un componente y utilizando herramientas de desarrollo.</p>
-</blockquote>
+<div><p><a id="hibernate-a-fondo"></a></p>
+<h1 id="6-hibernate-a-fondo-decisiones-de-mapeo-y-ciclo-de-vida">🧩 6. Hibernate a fondo: decisiones de mapeo y ciclo de vida<a class="headerlink" href="#6-hibernate-a-fondo-decisiones-de-mapeo-y-ciclo-de-vida" title="Permanent link">¶</a></h1>
+<p>Ya sabes qué es un ORM, y por qué existe (lo viste al principio de este tema, con <code>Libro</code>/<code>Editorial</code>) — llevas usando sus anotaciones desde la primera actividad. Toca ahora profundizar en lo que hasta ahora dabas por sentado: que esas anotaciones se podrían haber declarado de una forma completamente distinta, qué estados atraviesa un objeto mientras el ORM lo gestiona, y — ya sobre tu propio proyecto — cómo se instala y configura Hibernate de verdad, y por qué tomaste ciertas decisiones de mapeo (<code>IDENTITY</code>, <code>LAZY</code>, <code>cascade</code>...) que hasta ahora no habías cuestionado.</p>
 <hr>
-<h2 id="criterios-de-evaluacion">🎯 Criterios de evaluación<a class="headerlink" href="#criterios-de-evaluacion" title="Permanent link">¶</a></h2>
-<p>✅ Se han valorado las ventajas e inconvenientes de utilizar programación orientada a componentes.</p>
-<p>✅ Se han identificado herramientas de desarrollo de componentes.</p>
-<p>✅ Se han programado componentes que gestionan información almacenada en ficheros.</p>
-<p>✅ Se han programado componentes que gestionan mediante conectores información almacenada en bases de datos.</p>
-<p>✅ Se han programado componentes que gestionan información usando mapeo objeto relacional.</p>
-<p>✅ Se han programado componentes que gestionan información almacenada en bases de datos objeto relacionales y orientadas a objetos.</p>
-<p>✅ Se han programado componentes que gestionan información almacenada en una base de datos documental nativa.</p>
-<p>✅ Se han probado y documentado los componentes desarrollados.</p>
-<p>✅ Se han integrado los componentes desarrollados en aplicaciones.</p>
+<h2 id="clase-persistente-y-formas-de-declarar-el-mapeo">📐 Clase persistente y formas de declarar el mapeo<a class="headerlink" href="#clase-persistente-y-formas-de-declarar-el-mapeo" title="Permanent link">¶</a></h2>
+<p>Una <strong>clase persistente</strong> (o entidad) es una clase Java cuyos objetos el ORM sabe guardar y recuperar de la base de datos. Existen dos formas históricas de declarar el mapeo entre una clase y una tabla — la que usas tú, y la que la precedió:</p>
+<table>
+<thead>
+<tr>
+<th>Forma de mapeo</th>
+<th>Cómo se declara</th>
+<th>Estado hoy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fichero XML</strong></td>
+<td>Documento aparte (<code>&lt;hibernate-mapping&gt;</code> como raíz, un <code>&lt;class&gt;</code> por entidad, un <code>&lt;property&gt;</code> por campo)</td>
+<td>Legado — apenas se usa en proyectos nuevos</td>
+</tr>
+<tr>
+<td><strong>Anotaciones</strong></td>
+<td>Directamente sobre la propia clase (<code>@Entity</code>, <code>@Column</code>...)</td>
+<td>El que usas tú desde la Actividad 1.1, y el estándar actual</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<h2 id="indice-de-contenidos">📘 Índice de contenidos<a class="headerlink" href="#indice-de-contenidos" title="Permanent link">¶</a></h2>
-<ol>
-<li><a href="componentes-conectores-orm/">Componentes con conectores y ORM</a></li>
-<li><a href="componentes-bd-objeto-doc/">Componentes con BD objeto-relacional y documental</a></li>
-<li><a href="integracion-y-pruebas/">Integración y pruebas</a></li>
-</ol>
-<p><strong>Actividades:</strong></p>
+<h2 id="los-estados-de-un-objeto-en-el-orm">🔄 Los estados de un objeto en el ORM<a class="headerlink" href="#los-estados-de-un-objeto-en-el-orm" title="Permanent link">¶</a></h2>
+<p>Un objeto gestionado por un ORM pasa por distintos estados a lo largo de su vida:</p>
+<pre class="mermaid"><code>flowchart LR
+    T["🆕 Transient&lt;br/&gt;objeto Java normal,&lt;br/&gt;sin relación con la BD"] --&gt;|"persist() / save()"| M["✅ Managed&lt;br/&gt;gestionado por el ORM,&lt;br/&gt;sus cambios se sincronizan"]
+    M --&gt;|"cerrar la sesión"| D["🔌 Detached&lt;br/&gt;ya no se sincroniza,&lt;br/&gt;pero conserva sus datos"]
+    M --&gt;|"delete() / remove()"| R["🗑️ Removed&lt;br/&gt;marcado para borrar"]
+    D --&gt;|"merge()"| M</code></pre>
 <ul>
-<li><a href="actividad_5_1/">Actividad 5.1 — <code>CatalogoConsultaService</code>: un componente reutilizable</a></li>
-<li><a href="actividad_5_2/">Actividad 5.2 — Repaso integrador: un componente sobre el módulo documental</a></li>
-<li><a href="actividad_5_3/">Actividad 5.3 — Integración final del proyecto</a></li>
+<li><strong>Transient</strong>: un objeto Java recién creado con <code>new</code>, sin ninguna relación todavía con la base de datos — el ORM no sabe que existe.</li>
+<li><strong>Managed</strong> (o <em>persistent</em>): el ORM lo está gestionando activamente; cualquier cambio que hagas sobre sus campos se sincroniza automáticamente con la base de datos.</li>
+<li><strong>Detached</strong>: el objeto existió como managed, pero la sesión que lo gestionaba se ha cerrado — conserva sus datos, pero ya no se sincroniza solo.</li>
+<li><strong>Removed</strong>: marcado para eliminarse de la base de datos.</li>
 </ul>
 <hr>
-<div class="admonition info">
-<p class="admonition-title">¿Cómo avanzar por el contenido?</p>
-<p>Utiliza el índice o las flechas de navegación al final de cada página para desplazarte por los distintos apartados de este tema.</p>
-</div></div>
+<h2 id="hibernate-en-un-proyecto-spring-boot">🗄️ Hibernate en un proyecto Spring Boot<a class="headerlink" href="#hibernate-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
+<h3 id="instalar-hibernate-no-es-un-paso-manual">"Instalar" Hibernate no es un paso manual<a class="headerlink" href="#instalar-hibernate-no-es-un-paso-manual" title="Permanent link">¶</a></h3>
+<p>A diferencia de lo que sugiere la palabra "instalar", en un proyecto Spring Boot no descargas ni configuras Hibernate por separado: viene incluido en la dependencia que ya conoces del Tema 1.</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p><code>spring-boot-starter-data-jpa</code> trae Hibernate como implementación de JPA por defecto, además de Spring Data JPA. Con solo esa dependencia (que ya tienes en tu <code>pom.xml</code> desde la Actividad 1.1), Hibernate está "instalado y configurado" en lo esencial.</p>
+<h3 id="decisiones-de-mapeo-que-ya-tomaste-explicadas">Decisiones de mapeo que ya tomaste, explicadas<a class="headerlink" href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" title="Permanent link">¶</a></h3>
+<p>Tu <code>Videojuego</code> y tu <code>Estudio</code> de la Actividad 1.1 ya llevan varias anotaciones concretas — las escribiste siguiendo el patrón de la teoría, sin que se justificara todavía cada elección. Toca cerrar ese hueco.</p>
+<p><strong><code>GenerationType.IDENTITY</code>, ¿por qué esa estrategia?</strong> Existen otras (<code>SEQUENCE</code>, <code>AUTO</code>, <code>TABLE</code>), y cada una resuelve el mismo problema — generar un id único — de una forma distinta:</p>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>Cómo genera el id</th>
+<th>Cuándo conviene</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>IDENTITY</code></strong></td>
+<td>Delega en una columna autoincremental de la propia base de datos (en PostgreSQL, un <code>serial</code>/<code>identity</code> nativo)</td>
+<td>Caso general — la que ya usas en <code>Videojuego</code>/<code>Estudio</code></td>
+</tr>
+<tr>
+<td><strong><code>SEQUENCE</code></strong></td>
+<td>Usa un objeto secuencia independiente que Hibernate puede consultar por adelantado</td>
+<td>Cuando necesitas reservar varios ids antes de insertar — algo que <code>IDENTITY</code> no permite</td>
+</tr>
+</tbody>
+</table>
+<p>Con PostgreSQL, que soporta columnas identity de forma nativa y eficiente, <code>IDENTITY</code> es la opción más directa cuando no necesitas esa reserva anticipada.</p>
+<p><strong><code>@Column(precision, scale)</code>, y por qué importa en una columna de dinero.</strong> Puedes comprobarlo tú mismo: quita temporalmente <code>@Column(precision = 10, scale = 2)</code> de <code>precio</code>, borra la tabla y reinicia con <code>show-sql: true</code> activo — verás que el <code>create table</code> genera un tipo de columna distinto (sin la precisión exacta que sí tenía antes). En una columna que guarda dinero, esa precisión no es un detalle decorativo: sin ella, el cálculo podría dejar más decimales de los que tiene sentido guardar.</p>
+<p><strong><code>FetchType.LAZY</code> frente a <code>EAGER</code>, en número real de consultas.</strong> Puedes comprobarlo activando el log de SQL (<code>logging.level.org.hibernate.SQL: DEBUG</code>) y contando cuántas consultas distintas aparecen al llamar a <code>GET /api/v1/videojuegos</code>:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Cliente
+    participant S as VideojuegoService
+    participant DB as PostgreSQL
+
+    Note over C,DB: LAZY (la que ya tienes en Videojuego.estudio)
+    C-&gt;&gt;S: GET /videojuegos
+    S-&gt;&gt;DB: SELECT * FROM videojuego
+    Note over S: El Estudio asociado NO se pide&lt;br/&gt;hasta que se llama a getEstudio()
+
+    Note over C,DB: EAGER
+    C-&gt;&gt;S: GET /videojuegos
+    S-&gt;&gt;DB: SELECT videojuego + JOIN/consulta extra por estudio
+    Note over S: El Estudio se trae siempre,&lt;br/&gt;se use o no en esa petición</code></pre>
+<p>Con <code>LAZY</code>, Hibernate no trae el <code>Estudio</code> asociado hasta que de verdad lo pides. Con <code>EAGER</code>, lo trae siempre en la misma consulta o en una adicional inmediata — más consultas (o <em>joins</em> más pesados) por cada petición, incluso cuando el cliente nunca llega a mirar ese dato.</p>
+<p><strong><code>cascade</code>/<code>orphanRemoval</code>, y qué pasa si los quitas.</strong> Con tu configuración actual (<code>cascade = CascadeType.ALL, orphanRemoval = true</code> en <code>Estudio.videojuegos</code>), borrar un estudio borra en cascada sus videojuegos:</p>
+<table>
+<thead>
+<tr>
+<th>Si quitas...</th>
+<th>Qué pasa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cascade</code></td>
+<td>Borrar un <code>Estudio</code> falla por la clave foránea que sigue apuntando a sus <code>Videojuego</code> — tendrías que borrarlos tú, uno a uno, antes</td>
+</tr>
+<tr>
+<td><code>orphanRemoval</code></td>
+<td>Quitar un <code>Videojuego</code> de la lista <code>videojuegos</code> sin borrar el <code>Estudio</code> entero lo deja huérfano en la base de datos, sin que Hibernate lo elimine por su cuenta</td>
+</tr>
+</tbody>
+</table>
+<p>La cascada se declara en el lado <code>Estudio → Videojuego</code> (el lado "uno" de la relación) porque no tendría sentido al revés: borrar un solo videojuego no debería llevarse por delante el estudio entero.</p>
+<h3 id="configuracion-avanzada-cuando-el-mapeo-no-es-directo">Configuración avanzada: cuando el mapeo no es directo<a class="headerlink" href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" title="Permanent link">¶</a></h3>
+<p>Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 3). Esa ayuda se declara con un <code>@Converter</code> (una clase que implementa <code>AttributeConverter</code>, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.</p>
+<h3 id="ddl-auto-configuracion-del-orm-no-del-conector"><code>ddl-auto</code>: configuración del ORM, no del conector<a class="headerlink" href="#ddl-auto-configuracion-del-orm-no-del-conector" title="Permanent link">¶</a></h3>
+<p>Ya usaste <code>spring.jpa.hibernate.ddl-auto: update</code> desde la Actividad 1.1, pero desde el ángulo de "cómo se crea la tabla". Con la distinción entre conector y ORM que ya conoces, es el momento de precisarlo: la conexión (usuario, contraseña, URL) es configuración del <strong>conector</strong>; qué hace Hibernate con las entidades que declaras (crear tablas, validarlas, no tocar nada) es configuración del <strong>ORM</strong> — y vive en esa misma propiedad, <code>ddl-auto</code>.</p>
+<p><code>ddl-auto</code> no es la única propiedad de configuración del ORM — estas son las que más vas a usar:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Qué controla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>spring.jpa.hibernate.ddl-auto</code></td>
+<td>Si Hibernate crea, actualiza o solo valida las tablas al arrancar.</td>
+</tr>
+<tr>
+<td><code>spring.jpa.show-sql</code></td>
+<td>Si Hibernate imprime en consola el SQL real que ejecuta por debajo (ya la usaste en la Actividad 1.1, sin que se explicara todavía qué hacía).</td>
+</tr>
+<tr>
+<td><code>spring.jpa.properties.hibernate.format_sql</code></td>
+<td>Si ese SQL impreso se formatea legible, en varias líneas, en vez de aparecer todo seguido.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">El otro lado de lo automático: <code>data.sql</code></p>
+<p><code>ddl-auto</code> resuelve la estructura (crear las tablas), pero no mete ni una fila de datos. Si colocas un fichero <code>src/main/resources/data.sql</code> con sentencias <code>INSERT</code>, Spring Boot lo ejecuta automáticamente justo después de crear el esquema, cada vez que arranca la aplicación — útil para tener datos de prueba consistentes sin sembrarlos a mano por <code>psql</code> o por <code>curl</code> cada vez. No lo has necesitado hasta ahora porque las actividades sembraban los datos explícitamente para que quedara claro qué se estaba probando, pero conviene que sepas que existe esta vía automática.</p>
+</div>
+<hr>
+<h2 id="los-estados-ahora-con-libro">🔁 Los estados, ahora con <code>Libro</code><a class="headerlink" href="#los-estados-ahora-con-libro" title="Permanent link">¶</a></h2>
+<p>Retoma el ciclo de estados que acabas de ver ("Los estados de un objeto en el ORM") con un ejemplo concreto: un <code>new Libro()</code> recién creado en Java es <strong>transient</strong> — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a <strong>managed</strong>: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a <strong>detached</strong> — sigue teniendo sus datos, pero ya no se sincroniza solo.</p>
+<hr>
+<h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
+<details class="tip">
+<summary>Abrir resumen</summary>
+<ul>
+<li>El mapeo se declara con <strong>anotaciones</strong> sobre la propia entidad (el XML de mapeo, con <code>&lt;class&gt;</code>/<code>&lt;property&gt;</code>, es el enfoque legado).</li>
+<li>Los estados de un objeto en el ORM: <strong>transient</strong> (sin relación con la BD) → <strong>managed</strong> (gestionado, se sincroniza solo) → <strong>detached</strong> (ya no se sincroniza) / <strong>removed</strong> (marcado para borrar).</li>
+<li>"Instalar" Hibernate en Spring Boot es, en la práctica, añadir <code>spring-boot-starter-data-jpa</code>.</li>
+<li><code>IDENTITY</code> delega la generación del id en la propia base de datos; <code>SEQUENCE</code> permite reservar ids por adelantado. <code>precision</code>/<code>scale</code> fijan el tipo exacto de columna (importa en dinero). <code>LAZY</code> difiere la carga de una relación hasta que se pide de verdad; <code>EAGER</code> la trae siempre. <code>cascade</code>/<code>orphanRemoval</code> propagan borrados y limpian huérfanos automáticamente.</li>
+<li><code>ddl-auto</code> es configuración del <strong>ORM</strong> (qué hace Hibernate con tus entidades), distinta de la configuración del <strong>conector</strong> (cómo se conecta); <code>show-sql</code>/<code>format_sql</code> muestran el SQL real generado.</li>
+<li><code>ddl-auto</code> crea el esquema automáticamente; <code>data.sql</code> (si existe en <code>resources</code>) siembra datos automáticamente justo después, en cada arranque.</li>
+</ul>
+</details></div>
 
 
 
@@ -3076,7 +3207,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Pie" >
         
           
-          <a href="../tema4/actividad_4_3/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 4.3 - PUT de reseñas con autoría">
+          <a href="../actividad_1_4/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Actividad 1.4 - Procedimiento con JdbcTemplate">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3086,20 +3217,20 @@
                 Anterior
               </span>
               <div class="md-ellipsis">
-                Actividad 4.3 - PUT de reseñas con autoría
+                Actividad 1.4 - Procedimiento con JdbcTemplate
               </div>
             </div>
           </a>
         
         
           
-          <a href="componentes-conectores-orm/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Componentes con conectores y ORM">
+          <a href="../persistencia-objetos/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Persistencia de objetos">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Siguiente
               </span>
               <div class="md-ellipsis">
-                Componentes con conectores y ORM
+                Persistencia de objetos
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3133,10 +3264,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tracking", "navigation.footer", "content.code.copy", "content.code.select"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
       
     
   </body>
