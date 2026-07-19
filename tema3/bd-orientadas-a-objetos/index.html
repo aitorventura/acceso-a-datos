@@ -2249,15 +2249,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3079,15 +3070,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3157,9 +3139,6 @@
 <p>¿Por qué esto da más confianza que mockear el repositorio? Porque prueba el mapeo JSONB <strong>real</strong> contra un PostgreSQL <strong>real</strong> — una base de datos en memoria genérica (como H2) podría no soportar <code>jsonb_exists</code> exactamente igual, o ni siquiera soportar el tipo <code>jsonb</code> de PostgreSQL. Un test con Testcontainers detectaría un error de mapeo que un test con mocks jamás vería, porque el mock nunca ejecuta SQL de verdad contra ningún motor.</p>
 <h3 id="documentar-en-el-sentido-de-este-ra">Documentar, en el sentido de este RA<a class="headerlink" href="#documentar-en-el-sentido-de-este-ra" title="Permanent link">¶</a></h3>
 <p>"Documentar" aquí no significa escribir un documento externo aparte — significa que el propio código de test, con nombres de método descriptivos (<code>crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido</code>, por ejemplo) y comentarios donde haga falta, deja claro <strong>qué</strong> comportamiento se está verificando y <strong>por qué</strong>. El test bien escrito es, en sí mismo, la documentación de qué se espera que haga el sistema.</p>
-<hr>
-<h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
-<p>Con esto se completa el recorrido: JSONB como persistencia de objetos estructurados dentro de PostgreSQL (apartado 1) → consultas sobre ese contenido con <code>jsonb_exists</code> (apartado 2) → bases de datos orientadas a objetos puras, en teoría → pruebas de integración reales con Testcontainers (este apartado). El Tema 4 da un salto real: de un modelo objeto-relacional (JSONB dentro de PostgreSQL) a un modelo <strong>documental nativo completo</strong>, con MongoDB — la primera base de datos NoSQL distinta de PostgreSQL que vas a usar en el curso.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">

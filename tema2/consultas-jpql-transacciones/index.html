@@ -1905,15 +1905,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3079,15 +3070,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3193,9 +3175,6 @@
 <a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@Transactional(readOnly = true)</code> en operaciones de solo lectura no es solo un matiz estilístico: es una optimización real — le indica al framework y al gestor de base de datos que esta operación no va a modificar nada, lo que permite evitar bloqueos (<em>locks</em>) innecesarios que sí harían falta en una escritura. En operaciones de escritura, sigues usando <code>@Transactional</code> a secas, exactamente como en el <code>create()</code>/<code>update()</code> del Tema 1.</p>
-<hr>
-<h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
-<p>Con este apartado se completa el recorrido: instalación y configuración del ORM (Hibernate, incluido en <code>spring-boot-starter-data-jpa</code>) → mapeo con anotaciones (<code>@Entity</code>, <code>@Column</code>, relaciones) → persistencia con Specifications dinámicas y paginación → consultas JPQL para lo que las otras vías no cubren. En el Tema 3 aparece un tipo de columna que todavía no has visto — JSONB, capaz de guardar objetos completos dentro de una celda — y con él, las bases de datos objeto-relacionales.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">

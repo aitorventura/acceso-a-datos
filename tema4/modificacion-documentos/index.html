@@ -2593,15 +2593,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3079,15 +3070,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3193,9 +3175,6 @@
 <p>El patrón, en tres pasos: cargar el documento por id, comprobar que el campo <code>autor</code> guardado coincide con <code>usuarioActual</code> (el <code>principal.getName()</code> de la petición), y solo entonces aplicar los cambios y guardar. Si no coincide, <code>403 Forbidden</code> — el usuario está autenticado (sabemos quién es), pero no tiene permiso para esta acción concreta sobre este recurso. Si la reseña no existe, <code>404 Not Found</code>, como ya conoces.</p>
 <h3 id="save-sirve-para-crear-y-para-actualizar-otra-vez"><code>save()</code> sirve para crear y para actualizar — otra vez<a class="headerlink" href="#save-sirve-para-crear-y-para-actualizar-otra-vez" title="Permanent link">¶</a></h3>
 <p><code>ResenaRepository</code> (que extiende <code>MongoRepository&lt;Resena, String&gt;</code>) ya tiene <code>save()</code> heredado, y sirve tanto para crear un documento nuevo como para actualizar uno existente — basta con que el objeto que le pases tenga el mismo <code>id</code> que ya existe en la colección. No es un concepto nuevo: es exactamente lo mismo que ya viste con <code>JpaRepository</code> en el Tema 2 — solo cambia el motor de base de datos por debajo, el comportamiento de <code>save()</code> es idéntico en la forma de razonar sobre él.</p>
-<hr>
-<h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
-<p>Con esto se completa el recorrido: conexión y consultas sobre MongoDB (apartado 1) → comparación relacional/documental y gestión de colecciones (apartado 2) → modificación de documentos con control de acceso (este apartado). El Tema 5 retoma una idea que ya has usado aquí sin nombrarla — un servicio de consulta reutilizable que otros módulos usan para comprobar el catálogo — como el ejemplo central de qué es un <strong>componente</strong> de acceso a datos.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">

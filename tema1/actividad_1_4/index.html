@@ -3118,7 +3118,7 @@
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Tu CRUD completo de <code>Videojuego</code> y de <code>Estudio</code> de la Actividad 1.2, algún dato de prueba (un estudio con varios videojuegos asociados), y haber leído la teoría de este apartado — en concreto el ejemplo completo <code>ajustar_precio_editorial</code>/<code>EditorialService</code>, que vas a adaptar paso a paso.</p>
+<p>Tu CRUD completo de <code>Videojuego</code> y de <code>Estudio</code> de la Actividad 1.2, algún dato de prueba (un estudio con varios videojuegos asociados), haber leído la teoría de este apartado — en concreto el ejemplo completo <code>ajustar_precio_editorial</code>/<code>EditorialService</code>, que vas a adaptar paso a paso — y tener ya hecha la Actividad 1.2 de Programación de Servicios y Procesos, donde documentaste tus endpoints con <code>@Operation</code>/<code>@ApiResponses</code>: el Paso 2 de esta actividad da por hecho ese patrón.</p>
 <hr>
 <h2 id="paso-1-el-procedimiento-almacenado-con-la-teoria-delante">Paso 1 — El procedimiento almacenado, con la teoría delante<a class="headerlink" href="#paso-1-el-procedimiento-almacenado-con-la-teoria-delante" title="Permanent link">¶</a></h2>
 <p>En la teoría de este apartado tienes <code>ajustar_precio_editorial</code>: un procedimiento que sube o baja el precio de todos los libros de una editorial, en un porcentaje. Escribe tú mismo el equivalente para tu catálogo:</p>
@@ -3178,7 +3178,7 @@
 <p><strong>Comprueba</strong>: con un <code>GET /api/v1/videojuegos</code> (o consultando directamente en <code>psql</code>), que los precios de los videojuegos de ese estudio han bajado un 15%.</p>
 <p><strong>Captura</strong>: la petición y su respuesta, junto con el <code>GET</code> posterior que confirma el cambio de precio.</p>
 <p><strong>Pregunta</strong>: compara tu <code>AjustePrecioDTO</code>, tu <code>EstudioService.ajustarPrecio</code> y tu endpoint con <code>ajustar_precio_editorial</code>/<code>EditorialService</code> de la teoría. ¿Qué has tenido que cambiar y qué se mantiene exactamente igual?</p>
-<p><strong>Pregunta</strong>: prueba a enviar el DTO con <code>porcentaje</code> vacío, y después con un valor de más de 8 dígitos enteros (por ejemplo <code>123456789</code>). ¿Qué código de estado obtienes en cada caso? ¿Por qué esos dos casos concretos disparan la validación y no otros?</p>
+<p><strong>Segunda pregunta</strong>: prueba a enviar el DTO con <code>porcentaje</code> vacío, y después con un valor de más de 8 dígitos enteros (por ejemplo <code>123456789</code>). ¿Qué código de estado obtienes en cada caso? ¿Por qué esos dos casos concretos disparan la validación y no otros?</p>
 <div class="admonition note">
 <p class="admonition-title">Esta actividad no pide tests para este endpoint</p>
 <p>No forma parte de esta actividad, pero en un proyecto real lo ideal sería completar <code>ajustarPrecio</code> con un test de controller (con MockMvc) que compruebe tanto el caso correcto como los dos casos de validación fallida que acabas de probar a mano — el mismo tipo de test que trabajarás en profundidad en Programación de Servicios y Procesos.</p>
@@ -3203,9 +3203,9 @@
 <li><code>GET /api/v1/videojuegos/buscar?titulo=...</code> — usa <code>findByTituloContainingIgnoreCase</code>. Aquí el dato no identifica un recurso (no encaja como <code>@PathVariable</code>), es un filtro opcional sobre una búsqueda — para eso está <code>@RequestParam</code>, que captura un parámetro de la <em>query string</em> de la URL: <code>@RequestParam String titulo</code> recoge el valor de <code>?titulo=...</code>.</li>
 </ul>
 <p>No hay código dado para el service ni el controller — ya sabes escribir ese patrón desde la Actividad 1.2.</p>
-<div class="admonition warning">
-<p class="admonition-title">El orden de las rutas importa</p>
-<p>Declara <code>@GetMapping("/buscar")</code> y <code>@GetMapping("/por-estudio/{estudioId}")</code> <strong>antes</strong> que <code>@GetMapping("/{id}")</code> en la clase — si no, Spring intenta interpretar <code>buscar</code> como un <code>id</code> y falla al convertirlo a <code>Long</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">¿Y si <code>/buscar</code> choca con <code>/{id}</code>?</p>
+<p>Podría parecer un problema: <code>GET /api/v1/videojuegos/buscar</code> encaja tanto con <code>@GetMapping("/buscar")</code> como con <code>@GetMapping("/{id}")</code> (que aceptaría, literalmente, cualquier texto en esa posición, incluida la palabra <code>buscar</code>). Pero Spring no decide por el orden en que declares los métodos en la clase: prioriza automáticamente la ruta más específica —una ruta literal, sin variables, como <code>/buscar</code> o <code>/por-estudio/{estudioId}</code>— sobre la que solo tiene un <code>{parámetro}</code> genérico. Declara los métodos en el orden que te resulte más cómodo de leer.</p>
 </div>
 <p><strong>Comprueba</strong> con <code>curl</code> ambos endpoints contra datos reales de tu proyecto.</p>
 <p><strong>Captura</strong>: la respuesta de ambos endpoints (<code>/por-estudio/{estudioId}</code> y <code>/buscar?titulo=...</code>) con datos reales de tu catálogo.</p>

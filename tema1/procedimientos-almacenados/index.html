@@ -1594,15 +1594,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3145,15 +3136,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recapitulacion-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧭 Recapitulación del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -3354,9 +3336,6 @@
 <p class="admonition-title">Un nombre mal escrito no falla al llamarlo — falla al arrancar la aplicación</p>
 <p>Spring Data JPA valida el nombre de cada método derivado contra los campos reales de la entidad <strong>al arrancar la aplicación</strong>, no la primera vez que lo llamas. Si te equivocas — por ejemplo, <code>findByTitle</code> en vez de <code>findByTitulo</code>, o <code>findByEditorial</code> cuando el campo se llama <code>editorial</code> pero tú quieres filtrar por su <code>id</code> y falta el <code>Id</code> al final — la aplicación ni siquiera llega a arrancar: falla con un <code>PropertyReferenceException</code> que señala exactamente qué parte del nombre no ha sabido interpretar. Es una de las pocas veces en que un error de "nombre mal escrito" se detecta antes de ejecutar nada, no en mitad de una petición real.</p>
 </div>
-<hr>
-<h2 id="recapitulacion-del-tema">🧭 Recapitulación del tema<a class="headerlink" href="#recapitulacion-del-tema" title="Permanent link">¶</a></h2>
-<p>Con esto se completa el recorrido: por qué existen los conectores y cómo se define la estructura de la base de datos (apartado 2) → CRUD completo y transacciones gestionadas por Spring (apartado 3) → la misma fontanería, pero a mano, con JDBC puro (apartado 4) → código que vive dentro del propio motor, invocado desde Java, y las consultas derivadas por nombre, con más detalle del que viste en el apartado 3 (este apartado). El Tema 2 retoma exactamente donde empezó todo: el desfase objeto-relacional, ahora resuelto con una herramienta ORM completa (Hibernate) en vez de conectores manuales.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
