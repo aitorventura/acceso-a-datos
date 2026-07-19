@@ -112,7 +112,7 @@ Y `.devcontainer/devcontainer.json`:
 }
 ```
 
-Abre la carpeta `jdbc-practica` en una ventana nueva de tu editor y reábrela en el Dev Container: en VS Code, elige **"Reopen in Container"**; en IntelliJ IDEA, usa el icono **"Create Dev Container"** sobre `devcontainer.json` (igual que en la Actividad 0.7). No hace falta `docker-outside-of-docker` esta vez — este proyecto no va a lanzar contenedores desde dentro de sí mismo, a diferencia de lo que harás en el Tema 3 con Testcontainers en GameVault.
+Abre la carpeta `jdbc-practica` en una ventana nueva de tu editor y reábrela en el Dev Container: en VS Code, elige **"Reopen in Container"**; en IntelliJ IDEA, usa el icono **"Create Dev Container"** sobre `devcontainer.json` (igual que en la Actividad 0.7). No hace falta `docker-outside-of-docker` esta vez — este proyecto no va a lanzar contenedores desde dentro de sí mismo, a diferencia de lo que harás en el Tema 3 con Testcontainers en GameVault. No hace falta `docker-outside-of-docker` esta vez — este proyecto no va a lanzar contenedores desde dentro de sí mismo, a diferencia de lo que harás en el Tema 3 con Testcontainers en GameVault.
 
 **Captura**: el indicativo de Dev Container activo (la esquina inferior izquierda en VS Code; el indicativo de conexión remota en IntelliJ IDEA), con la etiqueta de este Dev Container (distinto del de GameVault).
 

@@ -83,7 +83,7 @@ Ahora, **sin cerrar el editor**, abre una terminal de tu propio sistema operativ
 
 ## Paso 5 — Volver a tu entorno local
 
-En VS Code, desde la paleta de comandos, busca **"Dev Containers: Reopen Folder Locally"**. En IntelliJ IDEA, cierra la conexión remota desde la ventana **Services** (o *File → Close Remote Connection*) para volver a trabajar sobre la carpeta local.
+En VS Code, desde la paleta de comandos, busca **"Dev Containers: Reopen Folder Locally"**. En IntelliJ IDEA, cierra la conexión remota desde la ventana **Services** para volver a trabajar sobre la carpeta local.
 
 **Captura**: el indicativo de conexión, mostrando que ya no aparece el Dev Container activo.
 

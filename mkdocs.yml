@@ -29,64 +29,87 @@ nav:
   - Tema 0 - Introducción:
       - Tema 0 - Introducción: tema0/index.md
       - Git y GitHub:
-          - Introducción a Git: tema0/introduccion-git.md
-          - Actividad 0.1 - Git local: tema0/actividad_0_1.md
-          - Ramas en Git: tema0/ramas.md
-          - Actividad 0.2 - Ramas en Git: tema0/actividad_0_2.md
-          - GitHub y repositorios remotos: tema0/github.md
-          - Actividad 0.3 - Tu portafolio en GitHub: tema0/actividad_0_3.md
-          - Colaboración en GitHub: tema0/colaboracion.md
-          - Actividad 0.4 - Contribuir a un portafolio: tema0/actividad_0_4.md
-          - Integración continua con GitHub Actions: tema0/github-actions.md
-          - Actividad 0.5 - Pipeline de CI: tema0/actividad_0_5.md
+          - Introducción a Git:
+              - Introducción a Git: tema0/introduccion-git.md
+              - Actividad 0.1 - Git local: tema0/actividad_0_1.md
+          - Ramas en Git:
+              - Ramas en Git: tema0/ramas.md
+              - Actividad 0.2 - Ramas en Git: tema0/actividad_0_2.md
+          - GitHub y repositorios remotos:
+              - GitHub y repositorios remotos: tema0/github.md
+              - Actividad 0.3 - Tu portafolio en GitHub: tema0/actividad_0_3.md
+          - Colaboración en GitHub:
+              - Colaboración en GitHub: tema0/colaboracion.md
+              - Actividad 0.4 - Contribuir a un portafolio: tema0/actividad_0_4.md
+          - Integración continua con GitHub Actions:
+              - Integración continua con GitHub Actions: tema0/github-actions.md
+              - Actividad 0.5 - Pipeline de CI: tema0/actividad_0_5.md
       - Docker y Dev Container:
-          - Introducción a Docker: tema0/introduccion-docker.md
-          - Actividad 0.6 - WordPress con Docker Compose: tema0/actividad_0_6.md
-          - Dev Containers: tema0/dev-containers.md
-          - Actividad 0.7 - Tu primer Dev Container: tema0/actividad_0_7.md
+          - Introducción a Docker:
+              - Introducción a Docker: tema0/introduccion-docker.md
+              - Actividad 0.6 - WordPress con Docker Compose: tema0/actividad_0_6.md
+          - Dev Containers:
+              - Dev Containers: tema0/dev-containers.md
+              - Actividad 0.7 - Tu primer Dev Container: tema0/actividad_0_7.md
   - Tema 1 - Manejo de conectores:
       - Tema 1 - Introducción: tema1/index.md
       - Fundamentos de Spring Boot: tema1/spring-boot-fundamentos.md
-      - Conectores y protocolos: tema1/conectores-y-protocolos.md
-      - Actividad 1.1 - Docker Compose + PostgreSQL: tema1/actividad_1_1.md
-      - CRUD y transacciones: tema1/operaciones-crud-transacciones.md
-      - Actividad 1.2 - CRUD completo y DTOs: tema1/actividad_1_2.md
-      - JDBC puro: tema1/jdbc-puro.md
-      - Actividad 1.3 - Acceso con JDBC puro: tema1/actividad_1_3.md
-      - Procedimientos almacenados: tema1/procedimientos-almacenados.md
-      - Actividad 1.4 - Procedimiento con JdbcTemplate: tema1/actividad_1_4.md
+      - Conectores y protocolos:
+          - Conectores y protocolos: tema1/conectores-y-protocolos.md
+          - Actividad 1.1 - Docker Compose + PostgreSQL: tema1/actividad_1_1.md
+      - CRUD y transacciones:
+          - CRUD y transacciones: tema1/operaciones-crud-transacciones.md
+          - Actividad 1.2 - CRUD completo y DTOs: tema1/actividad_1_2.md
+      - JDBC puro:
+          - JDBC puro: tema1/jdbc-puro.md
+          - Actividad 1.3 - Acceso con JDBC puro: tema1/actividad_1_3.md
+      - Procedimientos almacenados:
+          - Procedimientos almacenados: tema1/procedimientos-almacenados.md
+          - Actividad 1.4 - Procedimiento con JdbcTemplate: tema1/actividad_1_4.md
   - Tema 2 - Herramientas ORM:
       - Tema 2 - Introducción: tema2/index.md
-      - Instalación y configuración de Hibernate: tema2/instalacion-configuracion-orm.md
-      - Actividad 2.1 - De JDBC puro a Hibernate: tema2/actividad_2_1.md
-      - Persistencia de objetos: tema2/persistencia-objetos.md
-      - Actividad 2.2 - Consultas con Specifications: tema2/actividad_2_2.md
-      - Consultas JPQL y transacciones: tema2/consultas-jpql-transacciones.md
-      - Actividad 2.3 - Ranking con @Query JPQL: tema2/actividad_2_3.md
+      - Instalación y configuración de Hibernate:
+          - Instalación y configuración de Hibernate: tema2/instalacion-configuracion-orm.md
+          - Actividad 2.1 - De JDBC puro a Hibernate: tema2/actividad_2_1.md
+      - Persistencia de objetos:
+          - Persistencia de objetos: tema2/persistencia-objetos.md
+          - Actividad 2.2 - Consultas con Specifications: tema2/actividad_2_2.md
+      - Consultas JPQL y transacciones:
+          - Consultas JPQL y transacciones: tema2/consultas-jpql-transacciones.md
+          - Actividad 2.3 - Ranking con @Query JPQL: tema2/actividad_2_3.md
   - Tema 3 - BD objeto-relacionales:
       - Tema 3 - Introducción: tema3/index.md
-      - Persistencia de objetos con JSONB: tema3/persistencia-objetos-jsonb.md
-      - Actividad 3.1 - La columna detallesPlataforma: tema3/actividad_3_1.md
-      - Consultas sobre JSONB: tema3/consultas-jsonb.md
-      - Actividad 3.2 - Filtrar con jsonb_exists: tema3/actividad_3_2.md
-      - BD orientadas a objetos: tema3/bd-orientadas-a-objetos.md
-      - Actividad 3.3 - Pruebas de integración JSONB: tema3/actividad_3_3.md
+      - Persistencia de objetos con JSONB:
+          - Persistencia de objetos con JSONB: tema3/persistencia-objetos-jsonb.md
+          - Actividad 3.1 - La columna detallesPlataforma: tema3/actividad_3_1.md
+      - Consultas sobre JSONB:
+          - Consultas sobre JSONB: tema3/consultas-jsonb.md
+          - Actividad 3.2 - Filtrar con jsonb_exists: tema3/actividad_3_2.md
+      - BD orientadas a objetos:
+          - BD orientadas a objetos: tema3/bd-orientadas-a-objetos.md
+          - Actividad 3.3 - Pruebas de integración JSONB: tema3/actividad_3_3.md
   - Tema 4 - BD documentales:
       - Tema 4 - Introducción: tema4/index.md
-      - Conexión a MongoDB: tema4/conexion-mongodb.md
-      - Actividad 4.1 - Reseñas en MongoDB: tema4/actividad_4_1.md
-      - Colecciones documentales: tema4/colecciones-documentales.md
-      - Actividad 4.2 - Tu propia colección documental: tema4/actividad_4_2.md
-      - Modificación de documentos: tema4/modificacion-documentos.md
-      - Actividad 4.3 - PUT de reseñas con autoría: tema4/actividad_4_3.md
+      - Conexión a MongoDB:
+          - Conexión a MongoDB: tema4/conexion-mongodb.md
+          - Actividad 4.1 - Reseñas en MongoDB: tema4/actividad_4_1.md
+      - Colecciones documentales:
+          - Colecciones documentales: tema4/colecciones-documentales.md
+          - Actividad 4.2 - Tu propia colección documental: tema4/actividad_4_2.md
+      - Modificación de documentos:
+          - Modificación de documentos: tema4/modificacion-documentos.md
+          - Actividad 4.3 - PUT de reseñas con autoría: tema4/actividad_4_3.md
   - Tema 5 - Componentes de acceso a datos:
       - Tema 5 - Introducción: tema5/index.md
-      - Componentes con conectores y ORM: tema5/componentes-conectores-orm.md
-      - Actividad 5.1 - CatalogoConsultaService: tema5/actividad_5_1.md
-      - Componentes con BD objeto-rel. y documental: tema5/componentes-bd-objeto-doc.md
-      - Actividad 5.2 - Repaso integrador: tema5/actividad_5_2.md
-      - Integración y pruebas: tema5/integracion-y-pruebas.md
-      - Actividad 5.3 - Integración final del proyecto: tema5/actividad_5_3.md
+      - Componentes con conectores y ORM:
+          - Componentes con conectores y ORM: tema5/componentes-conectores-orm.md
+          - Actividad 5.1 - CatalogoConsultaService: tema5/actividad_5_1.md
+      - Componentes con BD objeto-rel. y documental:
+          - Componentes con BD objeto-rel. y documental: tema5/componentes-bd-objeto-doc.md
+          - Actividad 5.2 - Repaso integrador: tema5/actividad_5_2.md
+      - Integración y pruebas:
+          - Integración y pruebas: tema5/integracion-y-pruebas.md
+          - Actividad 5.3 - Integración final del proyecto: tema5/actividad_5_3.md
 
 markdown_extensions:
   - md_in_html
