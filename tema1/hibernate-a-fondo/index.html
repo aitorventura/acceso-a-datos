@@ -12,7 +12,7 @@
         <link rel="prev" href="../actividad_1_4/">
       
       
-        <link rel="next" href="../persistencia-objetos/">
+        <link rel="next" href="../consultas-dinamicas/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -1605,6 +1605,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Decisiones de mapeo que ya tomaste, explicadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generationtypeidentity-por-que-esa-estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      GenerationType.IDENTITY, ¿por qué esa estrategia?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#columnprecision-scale-y-por-que-importa-en-una-columna-de-dinero" class="md-nav__link">
+    <span class="md-ellipsis">
+      @Column(precision, scale), y por qué importa en una columna de dinero
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetchtypelazy-frente-a-eager-en-numero-real-de-consultas" class="md-nav__link">
+    <span class="md-ellipsis">
+      FetchType.LAZY frente a EAGER, en número real de consultas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cascadeorphanremoval-y-que-otras-opciones-habia" class="md-nav__link">
+    <span class="md-ellipsis">
+      cascade/orphanRemoval, y qué otras opciones había
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1627,15 +1669,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔁 Los estados, ahora con Libro
-    </span>
-  </a>
   
 </li>
       
@@ -1680,7 +1713,7 @@
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas dinámicas - Specifications y paginación
     
   </span>
   
@@ -1691,7 +1724,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
-            Persistencia de objetos
+            Consultas dinámicas - Specifications y paginación
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1702,12 +1735,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../persistencia-objetos/" class="md-nav__link">
+      <a href="../consultas-dinamicas/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas dinámicas - Specifications y paginación
     
   </span>
   
@@ -2950,6 +2983,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Decisiones de mapeo que ya tomaste, explicadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generationtypeidentity-por-que-esa-estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      GenerationType.IDENTITY, ¿por qué esa estrategia?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#columnprecision-scale-y-por-que-importa-en-una-columna-de-dinero" class="md-nav__link">
+    <span class="md-ellipsis">
+      @Column(precision, scale), y por qué importa en una columna de dinero
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetchtypelazy-frente-a-eager-en-numero-real-de-consultas" class="md-nav__link">
+    <span class="md-ellipsis">
+      FetchType.LAZY frente a EAGER, en número real de consultas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cascadeorphanremoval-y-que-otras-opciones-habia" class="md-nav__link">
+    <span class="md-ellipsis">
+      cascade/orphanRemoval, y qué otras opciones había
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2972,15 +3047,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#los-estados-ahora-con-libro" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔁 Los estados, ahora con Libro
-    </span>
-  </a>
   
 </li>
       
@@ -3036,36 +3102,83 @@
 </tr>
 </tbody>
 </table>
+<p>Las anotaciones ganaron terreno porque viven pegadas al propio código: cambias un campo y su mapeo a la vez, en el mismo fichero, sin mantener sincronizados un <code>.java</code> y un <code>.xml</code> por separado.</p>
 <hr>
 <h2 id="los-estados-de-un-objeto-en-el-orm">🔄 Los estados de un objeto en el ORM<a class="headerlink" href="#los-estados-de-un-objeto-en-el-orm" title="Permanent link">¶</a></h2>
 <p>Un objeto gestionado por un ORM pasa por distintos estados a lo largo de su vida:</p>
-<pre class="mermaid"><code>flowchart LR
-    T["🆕 Transient&lt;br/&gt;objeto Java normal,&lt;br/&gt;sin relación con la BD"] --&gt;|"persist() / save()"| M["✅ Managed&lt;br/&gt;gestionado por el ORM,&lt;br/&gt;sus cambios se sincronizan"]
-    M --&gt;|"cerrar la sesión"| D["🔌 Detached&lt;br/&gt;ya no se sincroniza,&lt;br/&gt;pero conserva sus datos"]
-    M --&gt;|"delete() / remove()"| R["🗑️ Removed&lt;br/&gt;marcado para borrar"]
-    D --&gt;|"merge()"| M</code></pre>
 <ul>
-<li><strong>Transient</strong>: un objeto Java recién creado con <code>new</code>, sin ninguna relación todavía con la base de datos — el ORM no sabe que existe.</li>
-<li><strong>Managed</strong> (o <em>persistent</em>): el ORM lo está gestionando activamente; cualquier cambio que hagas sobre sus campos se sincroniza automáticamente con la base de datos.</li>
-<li><strong>Detached</strong>: el objeto existió como managed, pero la sesión que lo gestionaba se ha cerrado — conserva sus datos, pero ya no se sincroniza solo.</li>
+<li><strong>Transient</strong>: objeto Java recién creado, sin relación todavía con la base de datos — Hibernate no sabe que existe.</li>
+<li><strong>Managed</strong> (o <em>persistent</em>): Hibernate lo gestiona activamente — cambiar un campo se sincroniza solo con la base de datos.</li>
+<li><strong>Detached</strong>: la sesión que lo gestionaba se ha cerrado — conserva sus datos, pero ya no se sincroniza.</li>
 <li><strong>Removed</strong>: marcado para eliminarse de la base de datos.</li>
 </ul>
+<p>Estos nombres no son abstractos: nombran en qué momento exacto del código que ya escribes está cada objeto. Sigue este recorrido con tu propio <code>Videojuego</code>, línea a línea:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Videojuego</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Videojuego</span><span class="p">();</span><span class="w">       </span><span class="c1">// 1. TRANSIENT: objeto Java normal, Hibernate no sabe que existe</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">v</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="s">"Celeste"</span><span class="p">);</span><span class="w">                </span><span class="c1">//    (puedes tocar sus campos libremente, nada se guarda todavía)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w">          </span><span class="c1">// 2. Al llamar a save(), pasa a MANAGED: Hibernate ya lo controla</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">                                        </span><span class="c1">//    y lo ha insertado en la base de datos</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1">// ... en otra petición, más tarde ...</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">Videojuego</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="mi">1L</span><span class="p">).</span><span class="na">get</span><span class="p">();</span><span class="w"> </span><span class="c1">// 3. MANAGED: recién cargado desde la BD</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="n">v2</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">nuevoPrecio</span><span class="p">);</span><span class="w">              </span><span class="c1">// 4. Cambiar un campo aquí, MIENTRAS v2 sigue siendo managed,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">                                         </span><span class="c1">//    ya se sincroniza solo con la base de datos</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c1">// cuando el método/transacción termina y Spring cierra la sesión...</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">                                         </span><span class="c1">// 5. v2 pasa a DETACHED: conserva sus datos, pero ya no se sincroniza</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">v2</span><span class="p">);</span><span class="w">        </span><span class="c1">// 6. REMOVED: marcado para borrar (y borrado de verdad al terminar)</span>
+</code></pre></div></td></tr></table></div>
+<pre class="mermaid"><code>flowchart LR
+    T["🆕 Transient&lt;br/&gt;new Videojuego()"] --&gt;|"repository.save(v)"| M["✅ Managed&lt;br/&gt;Hibernate lo controla"]
+    M --&gt;|"termina el método/transacción"| D["🔌 Detached&lt;br/&gt;conserva sus datos,&lt;br/&gt;ya no se sincroniza"]
+    M --&gt;|"repository.delete(v)"| R["🗑️ Removed&lt;br/&gt;marcado para borrar"]
+    D --&gt;|"repository.save(v) de nuevo"| M</code></pre>
+<div class="admonition question">
+<p class="admonition-title">¿Cuándo haces <code>new</code>, y cuándo intervienen los métodos del ORM?</p>
+<p><code>new Videojuego()</code> lo escribes tú, en tu propio código (normalmente en un service) — es un objeto Java corriente, igual que cualquier otro que hayas creado en cualquier clase. Hibernate no se entera de que existe hasta que se lo pasas explícitamente a un método de tu repository. <code>save()</code> es precisamente ese momento de transición: convierte un objeto transient en managed (si es la primera vez) o sincroniza uno ya existente (si venía de un <code>findById</code>).</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">¿Por qué el diagrama no dice <code>persist()</code>/<code>merge()</code>, si son los nombres 'oficiales' de JPA?</p>
+<p>En JPA "puro" (sin Spring Data), tendrías que llamar tú mismo a <code>entityManager.persist(v)</code> la primera vez que guardas un objeto, y a <code>entityManager.merge(v)</code> para sincronizar uno que ya existía — dos métodos distintos según el caso, y tendrías que saber cuál tocaba en cada momento. <code>save()</code> de Spring Data JPA es una capa de comodidad por encima: mira si el objeto ya tiene id y decide por ti si hace falta un <code>persist</code> o un <code>merge</code>, sin que tengas que distinguirlo tú.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">¿Y por qué se vuelve detached automáticamente, sin que llames a nada?</p>
+<p>Cada método de tu service (gestionado por Spring, típicamente con <code>@Transactional</code> de por medio) abre su propia sesión de Hibernate y la cierra al terminar. Mientras el método sigue en marcha, cualquier objeto que hayas cargado o guardado está managed; en cuanto el método devuelve su resultado y la transacción se cierra, ese mismo objeto pasa a detached sin que hagas nada explícito — es una consecuencia del final del método, no una acción que tú invoques.</p>
+</div>
 <hr>
 <h2 id="hibernate-en-un-proyecto-spring-boot">🗄️ Hibernate en un proyecto Spring Boot<a class="headerlink" href="#hibernate-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
 <h3 id="instalar-hibernate-no-es-un-paso-manual">"Instalar" Hibernate no es un paso manual<a class="headerlink" href="#instalar-hibernate-no-es-un-paso-manual" title="Permanent link">¶</a></h3>
 <p>A diferencia de lo que sugiere la palabra "instalar", en un proyecto Spring Boot no descargas ni configuras Hibernate por separado: viene incluido en la dependencia que ya conoces del Tema 1.</p>
-<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
 <p><code>spring-boot-starter-data-jpa</code> trae Hibernate como implementación de JPA por defecto, además de Spring Data JPA. Con solo esa dependencia (que ya tienes en tu <code>pom.xml</code> desde la Actividad 1.1), Hibernate está "instalado y configurado" en lo esencial.</p>
 <h3 id="decisiones-de-mapeo-que-ya-tomaste-explicadas">Decisiones de mapeo que ya tomaste, explicadas<a class="headerlink" href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" title="Permanent link">¶</a></h3>
 <p>Tu <code>Videojuego</code> y tu <code>Estudio</code> de la Actividad 1.1 ya llevan varias anotaciones concretas — las escribiste siguiendo el patrón de la teoría, sin que se justificara todavía cada elección. Toca cerrar ese hueco.</p>
-<p><strong><code>GenerationType.IDENTITY</code>, ¿por qué esa estrategia?</strong> Existen otras (<code>SEQUENCE</code>, <code>AUTO</code>, <code>TABLE</code>), y cada una resuelve el mismo problema — generar un id único — de una forma distinta:</p>
+<h4 id="generationtypeidentity-por-que-esa-estrategia"><code>GenerationType.IDENTITY</code>, ¿por qué esa estrategia?<a class="headerlink" href="#generationtypeidentity-por-que-esa-estrategia" title="Permanent link">¶</a></h4>
+<p><code>GenerationType</code> tiene cuatro valores, y cada uno resuelve el mismo problema — generar un id único — de una forma distinta:</p>
 <table>
 <thead>
 <tr>
@@ -3085,11 +3198,73 @@
 <td>Usa un objeto secuencia independiente que Hibernate puede consultar por adelantado</td>
 <td>Cuando necesitas reservar varios ids antes de insertar — algo que <code>IDENTITY</code> no permite</td>
 </tr>
+<tr>
+<td><strong><code>TABLE</code></strong></td>
+<td>Simula una secuencia con una tabla auxiliar propia que Hibernate gestiona a mano</td>
+<td>La más lenta de las cuatro — solo tiene sentido si el motor no soporta ni <code>IDENTITY</code> ni <code>SEQUENCE</code></td>
+</tr>
+<tr>
+<td><strong><code>AUTO</code></strong></td>
+<td>Deja que el propio Hibernate elija una de las anteriores según el motor de base de datos configurado</td>
+<td>Cuando quieres que el mismo código funcione igual si cambias de motor, sin decidir tú la estrategia</td>
+</tr>
 </tbody>
 </table>
-<p>Con PostgreSQL, que soporta columnas identity de forma nativa y eficiente, <code>IDENTITY</code> es la opción más directa cuando no necesitas esa reserva anticipada.</p>
-<p><strong><code>@Column(precision, scale)</code>, y por qué importa en una columna de dinero.</strong> Puedes comprobarlo tú mismo: quita temporalmente <code>@Column(precision = 10, scale = 2)</code> de <code>precio</code>, borra la tabla y reinicia con <code>show-sql: true</code> activo — verás que el <code>create table</code> genera un tipo de columna distinto (sin la precisión exacta que sí tenía antes). En una columna que guarda dinero, esa precisión no es un detalle decorativo: sin ella, el cálculo podría dejar más decimales de los que tiene sentido guardar.</p>
-<p><strong><code>FetchType.LAZY</code> frente a <code>EAGER</code>, en número real de consultas.</strong> Puedes comprobarlo activando el log de SQL (<code>logging.level.org.hibernate.SQL: DEBUG</code>) y contando cuántas consultas distintas aparecen al llamar a <code>GET /api/v1/videojuegos</code>:</p>
+<p>Con PostgreSQL, que soporta columnas identity de forma nativa y eficiente, <code>IDENTITY</code> es la opción más directa cuando no necesitas la reserva anticipada de <code>SEQUENCE</code> ni la portabilidad de <code>AUTO</code>.</p>
+<div class="admonition example">
+<p class="admonition-title"><code>TABLE</code>, en concreto: así es la tabla auxiliar que crea Hibernate</p>
+<p><code>TABLE</code> es la más difícil de visualizar de las cuatro, porque no usa ninguna función nativa del motor — Hibernate crea una tabla normal y corriente, con una fila por cada entidad que la use, y cada vez que necesita un id nuevo hace, dentro de una transacción, un <code>SELECT</code> para leer el valor actual y un <code>UPDATE</code> para incrementarlo:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span>
+<span class="normal"><a href="#__codelineno-2-7">7</a></span>
+<span class="normal"><a href="#__codelineno-2-8">8</a></span>
+<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1">-- la tabla auxiliar que crea y gestiona Hibernate</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">hibernate_sequence</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="n">entidad</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="n">valor_actual</span><span class="w"> </span><span class="nb">BIGINT</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="c1">-- cada vez que hace falta un id nuevo para Videojuego:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">valor_actual</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">hibernate_sequence</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">entidad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'videojuego'</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 1. lee el valor</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="k">UPDATE</span><span class="w"> </span><span class="n">hibernate_sequence</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">valor_actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">valor_actual</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">entidad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'videojuego'</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 2. lo incrementa</span>
+</code></pre></div></td></tr></table></div>
+<p>Es literalmente lo mismo que hace <code>SEQUENCE</code> por dentro — la diferencia es que <code>SEQUENCE</code> es un objeto del motor, optimizado por el propio PostgreSQL para que muchas inserciones a la vez no se bloqueen entre sí; <code>TABLE</code> es una tabla corriente, y ese <code>SELECT</code>/<code>UPDATE</code> se bloquea como cualquier otra fila. Con pocas inserciones no se nota, pero con muchas simultáneas se convierte en un cuello de botella — de ahí que sea la opción más lenta de las cuatro.</p>
+</div>
+<h4 id="columnprecision-scale-y-por-que-importa-en-una-columna-de-dinero"><code>@Column(precision, scale)</code>, y por qué importa en una columna de dinero<a class="headerlink" href="#columnprecision-scale-y-por-que-importa-en-una-columna-de-dinero" title="Permanent link">¶</a></h4>
+<p>Para guardar dinero tenías, en realidad, tres alternativas — no solo "poner precision/scale o no":</p>
+<table>
+<thead>
+<tr>
+<th>Alternativa</th>
+<th>Cómo funciona</th>
+<th>Por qué no se usó (o sí)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>BigDecimal</code> sin <code>precision</code>/<code>scale</code></strong></td>
+<td>Hibernate elige un tipo de columna genérico, sin límite exacto de decimales</td>
+<td>Deja que el motor decida el tipo — puede admitir más decimales de los que tiene sentido para un precio</td>
+</tr>
+<tr>
+<td><strong><code>BigDecimal</code> con <code>precision</code>/<code>scale</code></strong> (la elegida)</td>
+<td>Tú fijas exactamente cuántos dígitos y decimales admite la columna</td>
+<td>Precisión explícita y controlada, sin depender del valor por defecto del motor</td>
+</tr>
+<tr>
+<td><strong>Entero en céntimos</strong> (<code>Long precioEnCentimos</code>)</td>
+<td>El dinero se guarda como un entero (250099 = 2500,99€), sin ningún decimal que redondear</td>
+<td>Elimina el problema de raíz, a cambio de tener que multiplicar/dividir por 100 en cada conversión a euros — más código, menos intuitivo de leer</td>
+</tr>
+</tbody>
+</table>
+<p>Puedes comprobar la diferencia entre las dos primeras tú mismo: quita temporalmente <code>@Column(precision = 10, scale = 2)</code> de <code>precio</code>, borra la tabla y reinicia con <code>show-sql: true</code> activo — verás que el <code>create table</code> genera un tipo de columna distinto (sin la precisión exacta que sí tenía antes). En una columna que guarda dinero, esa precisión no es un detalle decorativo: sin ella, el cálculo podría dejar más decimales de los que tiene sentido guardar.</p>
+<h4 id="fetchtypelazy-frente-a-eager-en-numero-real-de-consultas"><code>FetchType.LAZY</code> frente a <code>EAGER</code>, en número real de consultas<a class="headerlink" href="#fetchtypelazy-frente-a-eager-en-numero-real-de-consultas" title="Permanent link">¶</a></h4>
+<p>Puedes comprobarlo activando el log de SQL (<code>logging.level.org.hibernate.SQL: DEBUG</code>) y contando cuántas consultas distintas aparecen al llamar a <code>GET /api/v1/videojuegos</code>:</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant C as Cliente
     participant S as VideojuegoService
@@ -3105,28 +3280,65 @@
     S-&gt;&gt;DB: SELECT videojuego + JOIN/consulta extra por estudio
     Note over S: El Estudio se trae siempre,&lt;br/&gt;se use o no en esa petición</code></pre>
 <p>Con <code>LAZY</code>, Hibernate no trae el <code>Estudio</code> asociado hasta que de verdad lo pides. Con <code>EAGER</code>, lo trae siempre en la misma consulta o en una adicional inmediata — más consultas (o <em>joins</em> más pesados) por cada petición, incluso cuando el cliente nunca llega a mirar ese dato.</p>
-<p><strong><code>cascade</code>/<code>orphanRemoval</code>, y qué pasa si los quitas.</strong> Con tu configuración actual (<code>cascade = CascadeType.ALL, orphanRemoval = true</code> en <code>Estudio.videojuegos</code>), borrar un estudio borra en cascada sus videojuegos:</p>
+<h4 id="cascadeorphanremoval-y-que-otras-opciones-habia"><code>cascade</code>/<code>orphanRemoval</code>, y qué otras opciones había<a class="headerlink" href="#cascadeorphanremoval-y-que-otras-opciones-habia" title="Permanent link">¶</a></h4>
+<p><code>CascadeType.ALL</code> no es la única opción — es, de hecho, un atajo que combina otras cinco por separado. Podrías haber elegido propagar solo algunas operaciones, o ninguna:</p>
 <table>
 <thead>
 <tr>
-<th>Si quitas...</th>
-<th>Qué pasa</th>
+<th>Valor de <code>cascade</code></th>
+<th>Qué propaga de <code>Estudio</code> hacia sus <code>Videojuego</code></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>cascade</code></td>
-<td>Borrar un <code>Estudio</code> falla por la clave foránea que sigue apuntando a sus <code>Videojuego</code> — tendrías que borrarlos tú, uno a uno, antes</td>
+<td><em>(sin <code>cascade</code>)</em></td>
+<td>Nada — cada operación sobre un <code>Videojuego</code> la harías tú mismo, uno a uno</td>
 </tr>
 <tr>
-<td><code>orphanRemoval</code></td>
-<td>Quitar un <code>Videojuego</code> de la lista <code>videojuegos</code> sin borrar el <code>Estudio</code> entero lo deja huérfano en la base de datos, sin que Hibernate lo elimine por su cuenta</td>
+<td><code>PERSIST</code></td>
+<td>Guardar el <code>Estudio</code> guarda también los videojuegos nuevos que le hayas añadido</td>
+</tr>
+<tr>
+<td><code>MERGE</code></td>
+<td>Actualizar el <code>Estudio</code> sincroniza también los cambios de sus videojuegos ya existentes</td>
+</tr>
+<tr>
+<td><code>REMOVE</code></td>
+<td>Borrar el <code>Estudio</code> borra también todos sus videojuegos</td>
+</tr>
+<tr>
+<td><code>REFRESH</code> / <code>DETACH</code></td>
+<td>Recargar o desvincular el <code>Estudio</code> hace lo mismo con sus videojuegos</td>
+</tr>
+<tr>
+<td><strong><code>ALL</code></strong> (la elegida)</td>
+<td>Las cinco anteriores combinadas, en una sola palabra</td>
+</tr>
+</tbody>
+</table>
+<p>Con tu configuración actual (<code>cascade = CascadeType.ALL, orphanRemoval = true</code> en <code>Estudio.videojuegos</code>), borrar un estudio borra en cascada sus videojuegos. Pero podrías haber elegido, por ejemplo, <code>cascade = {PERSIST, MERGE}</code> sin <code>REMOVE</code>: guardar y actualizar se propagarían igual, pero borrar un <code>Estudio</code> con videojuegos asociados fallaría por la clave foránea — obligándote a decidir explícitamente qué hacer con ellos, en vez de arrastrarlos en silencio. Se eligió <code>ALL</code> porque, en este proyecto, un videojuego sin su estudio no tiene sentido de negocio: no hay ningún caso en que interese conservarlo huérfano.</p>
+<p><code>orphanRemoval</code> es una decisión aparte, binaria — <code>true</code> (la elegida) o <code>false</code> (el valor por defecto si no lo escribes):</p>
+<table>
+<thead>
+<tr>
+<th>Si <code>orphanRemoval</code> es...</th>
+<th>Qué pasa al quitar un <code>Videojuego</code> de la lista <code>videojuegos</code> (sin borrar el <code>Estudio</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code> (la elegida)</td>
+<td>Hibernate lo detecta como huérfano y lo elimina de la base de datos por su cuenta</td>
+</tr>
+<tr>
+<td><code>false</code> (por defecto)</td>
+<td>El videojuego se queda en la base de datos, sin ningún <code>Estudio</code> que lo referencie desde la lista</td>
 </tr>
 </tbody>
 </table>
 <p>La cascada se declara en el lado <code>Estudio → Videojuego</code> (el lado "uno" de la relación) porque no tendría sentido al revés: borrar un solo videojuego no debería llevarse por delante el estudio entero.</p>
 <h3 id="configuracion-avanzada-cuando-el-mapeo-no-es-directo">Configuración avanzada: cuando el mapeo no es directo<a class="headerlink" href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" title="Permanent link">¶</a></h3>
-<p>Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 3). Esa ayuda se declara con un <code>@Converter</code> (una clase que implementa <code>AttributeConverter</code>, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.</p>
+<p>Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 2). Esa ayuda se declara con un <code>@Converter</code> (una clase que implementa <code>AttributeConverter</code>, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.</p>
 <h3 id="ddl-auto-configuracion-del-orm-no-del-conector"><code>ddl-auto</code>: configuración del ORM, no del conector<a class="headerlink" href="#ddl-auto-configuracion-del-orm-no-del-conector" title="Permanent link">¶</a></h3>
 <p>Ya usaste <code>spring.jpa.hibernate.ddl-auto: update</code> desde la Actividad 1.1, pero desde el ángulo de "cómo se crea la tabla". Con la distinción entre conector y ORM que ya conoces, es el momento de precisarlo: la conexión (usuario, contraseña, URL) es configuración del <strong>conector</strong>; qué hace Hibernate con las entidades que declaras (crear tablas, validarlas, no tocar nada) es configuración del <strong>ORM</strong> — y vive en esa misma propiedad, <code>ddl-auto</code>.</p>
 <p><code>ddl-auto</code> no es la única propiedad de configuración del ORM — estas son las que más vas a usar:</p>
@@ -3154,11 +3366,8 @@
 </table>
 <div class="admonition tip">
 <p class="admonition-title">El otro lado de lo automático: <code>data.sql</code></p>
-<p><code>ddl-auto</code> resuelve la estructura (crear las tablas), pero no mete ni una fila de datos. Si colocas un fichero <code>src/main/resources/data.sql</code> con sentencias <code>INSERT</code>, Spring Boot lo ejecuta automáticamente justo después de crear el esquema, cada vez que arranca la aplicación — útil para tener datos de prueba consistentes sin sembrarlos a mano por <code>psql</code> o por <code>curl</code> cada vez. No lo has necesitado hasta ahora porque las actividades sembraban los datos explícitamente para que quedara claro qué se estaba probando, pero conviene que sepas que existe esta vía automática.</p>
+<p><code>ddl-auto</code> resuelve la estructura (crear las tablas), pero no mete ni una fila de datos. Si colocas un fichero <code>src/main/resources/data.sql</code> con sentencias <code>INSERT</code>, Spring Boot lo ejecuta automáticamente justo después de crear el esquema, cada vez que arranca la aplicación — útil para tener datos de prueba consistentes sin sembrarlos a mano por <code>psql</code> o por <code>curl</code> cada vez. No lo has necesitado hasta ahora porque las actividades sembraban los datos explícitamente para que quedara claro qué se estaba probando; en la Actividad 1.5 sí lo vas a usar, para tener de golpe suficiente catálogo con el que probar la paginación.</p>
 </div>
-<hr>
-<h2 id="los-estados-ahora-con-libro">🔁 Los estados, ahora con <code>Libro</code><a class="headerlink" href="#los-estados-ahora-con-libro" title="Permanent link">¶</a></h2>
-<p>Retoma el ciclo de estados que acabas de ver ("Los estados de un objeto en el ORM") con un ejemplo concreto: un <code>new Libro()</code> recién creado en Java es <strong>transient</strong> — el ORM no sabe nada de él. En cuanto lo guardas (lo verás en el siguiente apartado), pasa a <strong>managed</strong>: mientras la operación está en curso, cualquier cambio sobre sus campos se sincroniza con la base de datos. Si la transacción termina y la sesión se cierra, ese mismo objeto pasa a <strong>detached</strong> — sigue teniendo sus datos, pero ya no se sincroniza solo.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -3224,13 +3433,13 @@
         
         
           
-          <a href="../persistencia-objetos/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Persistencia de objetos">
+          <a href="../consultas-dinamicas/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Consultas dinámicas - Specifications y paginación">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Siguiente
               </span>
               <div class="md-ellipsis">
-                Persistencia de objetos
+                Consultas dinámicas - Specifications y paginación
               </div>
             </div>
             <div class="md-footer__button md-icon">

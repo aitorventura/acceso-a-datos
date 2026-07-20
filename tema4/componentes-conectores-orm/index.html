@@ -1549,7 +1549,7 @@
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas dinámicas - Specifications y paginación
     
   </span>
   
@@ -1560,7 +1560,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_8">
             <span class="md-nav__icon md-icon"></span>
-            Persistencia de objetos
+            Consultas dinámicas - Specifications y paginación
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1571,12 +1571,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tema1/persistencia-objetos/" class="md-nav__link">
+      <a href="../../tema1/consultas-dinamicas/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Persistencia de objetos
+    Consultas dinámicas - Specifications y paginación
     
   </span>
   
@@ -3089,10 +3089,6 @@
 <h2 id="la-progresion-de-componente-con-la-libreria">📚 La progresión de "componente", con la librería<a class="headerlink" href="#la-progresion-de-componente-con-la-libreria" title="Permanent link">¶</a></h2>
 <h3 id="herramientas-de-desarrollo-de-componentes">Herramientas de desarrollo de componentes<a class="headerlink" href="#herramientas-de-desarrollo-de-componentes" title="Permanent link">¶</a></h3>
 <p>Aquí no aplica una herramienta visual de arrastrar y soltar — sería un anacronismo en un proyecto backend. La "herramienta" en este contexto es <strong>Spring</strong> en sí mismo: vía <code>@Service</code>, <code>@Repository</code>, <code>@Component</code> y la inyección con <code>@RequiredArgsConstructor</code>, es Spring quien gestiona el ciclo de vida y el ensamblado de los componentes de tu aplicación.</p>
-<div class="admonition info">
-<p class="admonition-title">Sobre componentes con ficheros</p>
-<p>El currículo también menciona "componentes que gestionan información almacenada en ficheros" — ese contenido se trabaja en la FCT, en la empresa, no en este módulo, ya que corresponde a la gestión de ficheros. Lo mencionamos aquí solo para que sepas que existe, sin profundizar.</p>
-</div>
 <h3 id="nivel-1-un-repositorio-ya-es-un-componente">Nivel 1: un repositorio, ya es un componente<a class="headerlink" href="#nivel-1-un-repositorio-ya-es-un-componente" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
