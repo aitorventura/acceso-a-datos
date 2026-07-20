@@ -52,7 +52,7 @@
 4. [JDBC puro: conexión manual sin ORM](jdbc-puro.md)
 5. [Procedimientos almacenados](procedimientos-almacenados.md)
 6. [Hibernate a fondo: decisiones de mapeo y ciclo de vida](hibernate-a-fondo.md)
-7. [Persistencia y recuperación de objetos](persistencia-objetos.md)
+7. [Consultas dinámicas: Specifications y paginación](consultas-dinamicas.md)
 8. [Consultas JPQL y transacciones](consultas-jpql-transacciones.md)
 
 **Actividades:**

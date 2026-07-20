@@ -8,7 +8,6 @@ En este módulo aprendes a que tus programas guarden y recuperen información de
 
 ## 🎯 Qué vas a aprender
 
-- 📁 Gestión de ficheros: leer, escribir, recorrer y convertir datos entre formatos (texto, binario, XML, JSON), controlando las excepciones que puedan surgir.
 - 🗄️ Acceso a bases de datos relacionales mediante conectores: conexiones, consultas, procedimientos almacenados y transacciones.
 - 🧬 Persistencia con herramientas ORM: mapear clases a tablas y trabajar con objetos persistentes en lugar de sentencias SQL sueltas.
 - 🧱 Bases de datos objeto-relacionales y orientadas a objetos: cuándo tiene sentido usarlas y cómo acceder a ellas.
@@ -31,3 +30,6 @@ En este módulo aprendes a que tus programas guarden y recuperen información de
 
 !!! tip "Cómo navegar"
     Haz clic en cualquier tema de arriba para empezar. Dentro de cada tema encontrarás los apuntes y las actividades en orden. Puedes usar las **flechas al pie de cada página** para avanzar o retroceder.
+
+!!! note "Gestión de ficheros (RA1)"
+    El RA1 de este módulo — gestión de ficheros de texto y binarios — no se trabaja en estos apuntes: se cubre durante la Formación en Empresa (FE).

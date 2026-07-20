@@ -42,9 +42,6 @@ En un proyecto Spring Boot moderno, el equivalente conceptual de aquellos JavaBe
 
 Aquí no aplica una herramienta visual de arrastrar y soltar — sería un anacronismo en un proyecto backend. La "herramienta" en este contexto es **Spring** en sí mismo: vía `@Service`, `@Repository`, `@Component` y la inyección con `@RequiredArgsConstructor`, es Spring quien gestiona el ciclo de vida y el ensamblado de los componentes de tu aplicación.
 
-!!! info "Sobre componentes con ficheros"
-    El currículo también menciona "componentes que gestionan información almacenada en ficheros" — ese contenido se trabaja en la FCT, en la empresa, no en este módulo, ya que corresponde a la gestión de ficheros. Lo mencionamos aquí solo para que sepas que existe, sin profundizar.
-
 ### Nivel 1: un repositorio, ya es un componente
 
 ```java

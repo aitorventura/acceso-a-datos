@@ -67,8 +67,8 @@ nav:
           - Procedimientos almacenados: tema1/procedimientos-almacenados.md
           - Actividad 1.4 - Procedimiento con JdbcTemplate: tema1/actividad_1_4.md
       - Hibernate a fondo - decisiones de mapeo y ciclo de vida: tema1/hibernate-a-fondo.md
-      - Persistencia de objetos:
-          - Persistencia de objetos: tema1/persistencia-objetos.md
+      - Consultas dinámicas - Specifications y paginación:
+          - Consultas dinámicas - Specifications y paginación: tema1/consultas-dinamicas.md
           - Actividad 1.5 - Consultas con Specifications: tema1/actividad_1_5.md
       - Consultas JPQL y transacciones:
           - Consultas JPQL y transacciones: tema1/consultas-jpql-transacciones.md
