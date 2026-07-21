@@ -1785,18 +1785,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-criterio-de-desempate" class="md-nav__link">
+  <a href="#paso-4-criterio-de-desempate" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — criterio de desempate
+      Paso 4 — criterio de desempate
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-2-la-posicion-exacta-con-sql-nativo" class="md-nav__link">
+  <a href="#paso-5-la-posicion-exacta-con-sql-nativo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto 2 — la posición exacta, con SQL nativo
+      Paso 5 — la posición exacta, con SQL nativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-busca-por-nombre-de-estudio-con-param" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — busca por nombre de estudio, con @Param
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-un-descuento-en-bloque-con-modifying" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — un descuento en bloque, con @Modifying
     </span>
   </a>
   
@@ -2948,18 +2966,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-criterio-de-desempate" class="md-nav__link">
+  <a href="#paso-4-criterio-de-desempate" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — criterio de desempate
+      Paso 4 — criterio de desempate
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-2-la-posicion-exacta-con-sql-nativo" class="md-nav__link">
+  <a href="#paso-5-la-posicion-exacta-con-sql-nativo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto 2 — la posición exacta, con SQL nativo
+      Paso 5 — la posición exacta, con SQL nativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-busca-por-nombre-de-estudio-con-param" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — busca por nombre de estudio, con @Param
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-7-un-descuento-en-bloque-con-modifying" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 — un descuento en bloque, con @Modifying
     </span>
   </a>
   
@@ -3000,6 +3036,10 @@
 
 
 <div><h1 id="actividad-16-ranking-con-query-jpql">🧪 Actividad 1.6: Ranking con <code>@Query</code> JPQL<a class="headerlink" href="#actividad-16-ranking-con-query-jpql" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_1_6_AD_Plantilla.docx" rel="noopener" target="_blank">Plantilla 1.6 — Ranking con @Query JPQL</a></p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
 <p>Hoy añades a tu GameVault un ranking de estudios por número de videojuegos publicados, usando <code>@Query</code> con JPQL.</p>
@@ -3007,9 +3047,10 @@
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
 <li>Escribir una consulta JPQL con <code>@Query</code> sobre un repositorio.</li>
+<li>Filtrar con una consulta JPQL parametrizada, usando <code>@Param</code>.</li>
 <li>Diseñar un DTO de respuesta que no exponga más de lo necesario.</li>
-<li>Aplicar <code>@Transactional(readOnly = true)</code> correctamente.</li>
 <li>Escribir una consulta con <code>@Query(nativeQuery = true)</code> para lo que JPQL no puede expresar.</li>
+<li>Modificar datos en bloque con <code>@Modifying</code>, en una transacción de escritura.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
@@ -3071,27 +3112,160 @@
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
 <span class="normal"><a href="#__codelineno-4-3">3</a></span>
 <span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1">// En EstudioController</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/ranking"</span><span class="p">)</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">EstudioRankingDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getRanking</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">estudioService</span><span class="p">.</span><span class="na">obtenerRanking</span><span class="p">());</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span>
+<span class="normal"><a href="#__codelineno-4-8">8</a></span>
+<span class="normal"><a href="#__codelineno-4-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1">// En EstudioController</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Ranking de estudios por número de videojuegos publicados"</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Ranking completo, ordenado de más a menos videojuegos"</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">})</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/ranking"</span><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">EstudioRankingDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getRanking</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">estudioService</span><span class="p">.</span><span class="na">obtenerRanking</span><span class="p">());</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Prueba:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>http://localhost:8080/api/v1/estudios/ranking
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: que el orden de los estudios en la respuesta coincide con el número real de videojuegos que tiene cada uno en tu base de datos.</p>
-<p><strong>Pregunta de comprensión</strong>: ¿qué ventaja concreta aporta <code>readOnly = true</code> en este método, frente a dejarlo con <code>@Transactional</code> a secas? (Ya la viste en la teoría — enúnciala con tus propias palabras).</p>
+<p><strong>Pregunta de comprensión</strong>: ¿qué ventaja concreta aporta <code>readOnly = true</code> en este método, frente a dejarlo con <code>@Transactional</code> a secas? (Ya la has visto en la teoría de "Operaciones CRUD y gestión de transacciones" — enúnciala con tus propias palabras).</p>
 <hr>
-<h2 id="mini-reto-criterio-de-desempate">Mini-reto — criterio de desempate<a class="headerlink" href="#mini-reto-criterio-de-desempate" title="Permanent link">¶</a></h2>
+<h2 id="paso-4-criterio-de-desempate">Paso 4 — criterio de desempate<a class="headerlink" href="#paso-4-criterio-de-desempate" title="Permanent link">¶</a></h2>
 <p>Ahora mismo, si dos estudios tienen exactamente el mismo número de videojuegos, su orden relativo en el ranking no está garantizado de forma predecible. Añade al <code>ORDER BY</code> de tu consulta JPQL un segundo criterio: nombre alfabético (<code>e.nombre ASC</code>) como desempate.</p>
 <p>Para comprobarlo de verdad, crea (o ajusta) dos estudios con exactamente el mismo número de videojuegos y verifica que aparecen ordenados alfabéticamente entre sí, no en un orden arbitrario.</p>
 <hr>
-<h2 id="mini-reto-2-la-posicion-exacta-con-sql-nativo">Mini-reto 2 — la posición exacta, con SQL nativo<a class="headerlink" href="#mini-reto-2-la-posicion-exacta-con-sql-nativo" title="Permanent link">¶</a></h2>
+<h2 id="paso-5-la-posicion-exacta-con-sql-nativo">Paso 5 — la posición exacta, con SQL nativo<a class="headerlink" href="#paso-5-la-posicion-exacta-con-sql-nativo" title="Permanent link">¶</a></h2>
 <p>Tu ranking ordena bien, pero no incluye la posición (1º, 2º, 3º...) como un dato explícito — para saberla, alguien tendría que contar el índice de cada elemento en la lista. Pídesela directamente a la base de datos con una función de ventana, igual que en el ejemplo de la teoría.</p>
-<p>Escribe un nuevo método en <code>EstudioRepository</code>, con <code>@Query(nativeQuery = true)</code>, que use <code>ROW_NUMBER() OVER (ORDER BY COUNT(v.id) DESC)</code> sobre las tablas <code>estudio</code>/<code>videojuego</code> (mismo patrón que el ejemplo de <code>Editorial</code>/<code>Libro</code> de la teoría, adaptado a tus tablas) para devolver, por cada estudio, su nombre, su número de videojuegos y su posición en el ranking.</p>
-<p><strong>Pista</strong>: el resultado será <code>List&lt;Object[]&gt;</code>, no <code>List&lt;Estudio&gt;</code> — vas a necesitar un DTO nuevo (por ejemplo <code>EstudioRankingConPosicionDTO</code>, con nombre, número de videojuegos y posición) y mapear cada <code>Object[]</code> a mano en el service, accediendo a cada columna por su índice (<code>fila[0]</code>, <code>fila[1]</code>...).</p>
+<p>Añade a <code>EstudioRepository</code> un método <code>List&lt;Object[]&gt; rankingConPosicion()</code>, con <code>@Query(nativeQuery = true)</code>, que use <code>ROW_NUMBER() OVER (ORDER BY COUNT(v.id) DESC)</code> sobre las tablas <code>estudio</code>/<code>videojuego</code> (mismo patrón que el ejemplo de <code>Editorial</code>/<code>Libro</code> de la teoría, adaptado a tus tablas) para devolver, por cada estudio, su nombre, su número de videojuegos y su posición en el ranking.</p>
+<p><strong>Pista</strong>: el resultado será <code>List&lt;Object[]&gt;</code>, no <code>List&lt;Estudio&gt;</code> — vas a necesitar un DTO nuevo, y seleccionar esas mismas tres columnas explícitamente en tu <code>SELECT</code> (no <code>e.*</code>), para saber en qué posición del <code>Object[]</code> viene cada una:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">EstudioRankingConPosicionDTO</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">nombreEstudio</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">numeroDeVideojuegos</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">posicion</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<p>Construir el service y el controller no es el objetivo de este paso —eso ya lo has practicado— así que aquí tienes los dos enteros. Solo te falta rellenar el mapeo de <code>Object[]</code> a DTO, según el orden de columnas que hayas elegido en tu propia consulta:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span>
+<span class="normal"><a href="#__codelineno-7-6">6</a></span>
+<span class="normal"><a href="#__codelineno-7-7">7</a></span>
+<span class="normal"><a href="#__codelineno-7-8">8</a></span>
+<span class="normal"><a href="#__codelineno-7-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">// En EstudioService</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">EstudioRankingConPosicionDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">obtenerRankingConPosicion</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">estudioRepository</span><span class="p">.</span><span class="na">rankingConPosicion</span><span class="p">().</span><span class="na">stream</span><span class="p">()</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">fila</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EstudioRankingConPosicionDTO</span><span class="p">(</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">                    </span><span class="cm">/* rellena aquí el mapeo, según el orden de tu SELECT */</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">            </span><span class="p">))</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">            </span><span class="p">.</span><span class="na">toList</span><span class="p">();</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span>
+<span class="normal"><a href="#__codelineno-8-7">7</a></span>
+<span class="normal"><a href="#__codelineno-8-8">8</a></span>
+<span class="normal"><a href="#__codelineno-8-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// En EstudioController</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Ranking de estudios con su posición numérica"</span><span class="p">)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Ranking completo, con la posición de cada estudio ya calculada"</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="p">})</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/ranking-con-posicion"</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">EstudioRankingConPosicionDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getRankingConPosicion</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">estudioService</span><span class="p">.</span><span class="na">obtenerRankingConPosicion</span><span class="p">());</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: la petición y la respuesta de <code>GET /api/v1/estudios/ranking-con-posicion</code> desde Swagger UI, con la posición ya calculada en cada fila.</p>
 <p><strong>Pregunta</strong>: ¿por qué esta consulta ya no es JPQL, aunque se parezca tanto? ¿Qué parte concreta de la sintaxis es la que JPQL no podría expresar?</p>
+<hr>
+<h2 id="paso-6-busca-por-nombre-de-estudio-con-param">Paso 6 — busca por nombre de estudio, con <code>@Param</code><a class="headerlink" href="#paso-6-busca-por-nombre-de-estudio-con-param" title="Permanent link">¶</a></h2>
+<p>Añade a <code>VideojuegoRepository</code> un método <code>List&lt;Videojuego&gt; buscarPorNombreDeEstudio(String nombreEstudio)</code>, que busque todos los videojuegos publicados por el estudio cuyo nombre exacto le pases (no su <code>id</code>) — mismo patrón que el ejemplo de <code>Libro</code>/<code>Editorial</code> de la teoría ("JPQL con parámetros"), adaptado a tus entidades.</p>
+<p><strong>Pista</strong>: la consulta navega la relación <code>v.estudio.nombre</code>, y el parámetro se conecta con <code>@Param</code>.</p>
+<p>Construir el service y el controller no es el objetivo de este paso, así que aquí tienes los dos enteros:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span>
+<span class="normal"><a href="#__codelineno-9-6">6</a></span>
+<span class="normal"><a href="#__codelineno-9-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1">// En VideojuegoService</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">VideojuegoResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorEstudio</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">nombreEstudio</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">buscarPorNombreDeEstudio</span><span class="p">(</span><span class="n">nombreEstudio</span><span class="p">).</span><span class="na">stream</span><span class="p">()</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">            </span><span class="p">.</span><span class="na">toList</span><span class="p">();</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span>
+<span class="normal"><a href="#__codelineno-10-7">7</a></span>
+<span class="normal"><a href="#__codelineno-10-8">8</a></span>
+<span class="normal"><a href="#__codelineno-10-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1">// En VideojuegoController</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Listar los videojuegos publicados por un estudio, buscando por su nombre exacto"</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Videojuegos del estudio indicado (vacía si no tiene ninguno, o si el nombre no existe)"</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">})</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/por-nombre-de-estudio/{nombre}"</span><span class="p">)</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">VideojuegoResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getPorEstudio</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">nombre</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">videojuegoService</span><span class="p">.</span><span class="na">buscarPorEstudio</span><span class="p">(</span><span class="n">nombre</span><span class="p">));</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: la petición y la respuesta de <code>GET /api/v1/videojuegos/por-nombre-de-estudio/{nombre}</code> desde Swagger UI, con el nombre exacto de uno de tus estudios sembrados.</p>
+<p><strong>Pregunta</strong>: si escribieras mal el nombre del parámetro en <code>@Param(...)</code> —que no coincidiera con el <code>:parámetro</code> del JPQL—, ¿en qué momento te enterarías del error: al arrancar la aplicación, o al ejecutar la consulta? Relaciónalo con lo que dice la teoría sobre cuándo valida Spring la sintaxis de un <code>@Query</code>.</p>
+<hr>
+<h2 id="paso-7-un-descuento-en-bloque-con-modifying">Paso 7 — un descuento en bloque, con <code>@Modifying</code><a class="headerlink" href="#paso-7-un-descuento-en-bloque-con-modifying" title="Permanent link">¶</a></h2>
+<p>Añade a <code>VideojuegoRepository</code> un método <code>int aplicarDescuento(Long estudioId)</code>, que aplique un descuento del 10% a todos los videojuegos del estudio cuyo <code>id</code> le pases, en una sola consulta — mismo patrón que el ejemplo de <code>Libro</code>/<code>Editorial</code> de la teoría ("Transacciones al escribir con JPQL").</p>
+<p><strong>Pista</strong>: necesitas <code>@Modifying</code> además de <code>@Query</code>, una transacción de escritura (no <code>readOnly</code>), y el método devuelve un <code>int</code>, no una lista.</p>
+<p>Construir el service y el controller no es el objetivo de este paso, así que aquí tienes los dos enteros:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span>
+<span class="normal"><a href="#__codelineno-11-4">4</a></span>
+<span class="normal"><a href="#__codelineno-11-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="c1">// En VideojuegoService</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="nd">@Transactional</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">aplicarDescuento</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">aplicarDescuento</span><span class="p">(</span><span class="n">estudioId</span><span class="p">);</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="c1">// En VideojuegoController</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Aplicar un descuento del 10% a todos los videojuegos de un estudio"</span><span class="p">)</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Descuento aplicado; el cuerpo indica cuántos videojuegos se han visto afectados"</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="p">})</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="nd">@PostMapping</span><span class="p">(</span><span class="s">"/descuento/{estudioId}"</span><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">aplicarDescuento</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">actualizados</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">videojuegoService</span><span class="p">.</span><span class="na">aplicarDescuento</span><span class="p">(</span><span class="n">estudioId</span><span class="p">);</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">"videojuegosActualizados"</span><span class="p">,</span><span class="w"> </span><span class="n">actualizados</span><span class="p">));</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: la petición y la respuesta de <code>POST /api/v1/videojuegos/descuento/{estudioId}</code> desde Swagger UI, sobre un estudio con varios videojuegos sembrados.</p>
+<p>Comprueba, con una consulta normal después, que los precios han cambiado de verdad.</p>
+<p><strong>Pregunta</strong>: ¿por qué este método no puede devolver <code>List&lt;Videojuego&gt;</code> con los videojuegos ya actualizados, aunque quisieras mostrárselos al usuario justo después de aplicar el descuento?</p>
 <hr>
 <h2 id="sintesis-propia">Síntesis propia<a class="headerlink" href="#sintesis-propia" title="Permanent link">¶</a></h2>
 <p>Con tus propias palabras (2-3 frases, no copiadas del enunciado ni de la teoría), explica cómo esta actividad, junto con las dos anteriores del tema (mapeo con anotaciones, Specifications dinámicas), te ha permitido consultar tu catálogo de formas muy distintas. ¿Qué tipo de consulta usarías para cada una de las tres situaciones siguientes, y por qué: "buscar un videojuego por su id exacto", "listar videojuegos filtrando por hasta cuatro criterios opcionales", "calcular cuántos videojuegos ha publicado cada estudio"?</p>
