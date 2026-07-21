@@ -88,7 +88,7 @@ flowchart LR
     S --> R["🗄️ Repository<br/>acceso a datos"]
 ```
 
-Imagina una aplicación que gestiona el catálogo de una librería:
+Imagina una aplicación que gestiona el catálogo de una librería (el ejemplo que va a usar toda la teoría del curso; tu proyecto real, GameVault, lo trabajas en las actividades):
 
 - El **controller** (`LibroController`) recibe la petición HTTP y la traduce a una llamada Java — no contiene lógica de negocio, solo enruta.
 - El **service** (`LibroService`) contiene la lógica: qué hay que comprobar, qué hay que calcular, en qué orden se hacen las cosas.
