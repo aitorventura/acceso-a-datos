@@ -1933,36 +1933,39 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Paso 2 — Crear un videojuego con una plataforma">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mini-reto-varias-plataformas-anidadas" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mini-reto — varias plataformas anidadas
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-verificacion-en-la-base-de-datos" class="md-nav__link">
+  <a href="#paso-3-varias-plataformas-anidadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Verificación en la base de datos
+      Paso 3 — Varias plataformas anidadas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-actualizar-y-observar-el-reemplazo-total" class="md-nav__link">
+  <a href="#paso-4-verificacion-en-la-base-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Actualizar y observar el reemplazo total
+      Paso 4 — Verificación en la base de datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-indexar-con-gin-antes-y-despues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Indexar con GIN, antes y después
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-actualizar-y-observar-el-reemplazo-total" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — Actualizar y observar el reemplazo total
     </span>
   </a>
   
@@ -2942,36 +2945,39 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Paso 2 — Crear un videojuego con una plataforma">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mini-reto-varias-plataformas-anidadas" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mini-reto — varias plataformas anidadas
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-verificacion-en-la-base-de-datos" class="md-nav__link">
+  <a href="#paso-3-varias-plataformas-anidadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Verificación en la base de datos
+      Paso 3 — Varias plataformas anidadas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-actualizar-y-observar-el-reemplazo-total" class="md-nav__link">
+  <a href="#paso-4-verificacion-en-la-base-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Actualizar y observar el reemplazo total
+      Paso 4 — Verificación en la base de datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-indexar-con-gin-antes-y-despues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Indexar con GIN, antes y después
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-6-actualizar-y-observar-el-reemplazo-total" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 — Actualizar y observar el reemplazo total
     </span>
   </a>
   
@@ -3012,6 +3018,10 @@
 
 
 <div><h1 id="actividad-21-la-columna-detallesplataforma-persistiendo-objetos-estructurados">🧪 Actividad 2.1: La columna <code>detallesPlataforma</code> — persistiendo objetos estructurados<a class="headerlink" href="#actividad-21-la-columna-detallesplataforma-persistiendo-objetos-estructurados" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_2_1_AD_Plantilla.docx" rel="noopener" target="_blank">Plantilla 2.1 — La columna detallesPlataforma</a></p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
 <p>Añades a tu <code>Videojuego</code> una columna JSONB real, la expones en tu API, y comprueba con tus propios ojos que PostgreSQL la guarda como JSON de verdad, no como texto plano.</p>
@@ -3021,11 +3031,16 @@
 <li>Añadir un campo JSONB a una entidad ya existente.</li>
 <li>Ampliar DTOs para exponer ese campo en la API.</li>
 <li>Verificar en la base de datos que el tipo de columna es realmente <code>jsonb</code>.</li>
+<li>Poblar una tabla con datos de prueba a gran escala, y comparar el plan de una consulta antes y después de crear un índice GIN.</li>
 <li>Entender el comportamiento de reemplazo total al actualizar.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
 <p>Tu entidad <code>Videojuego</code> y su CRUD completo (Tema 1).</p>
+<div class="admonition warning">
+<p class="admonition-title">Tu API ya pide credenciales — usa <code>curl</code>, no Swagger</p>
+<p>Si has seguido también Programación de Servicios y Procesos hasta la Actividad 2.3, tu GameVault ya tiene Spring Security activo: el <code>POST</code> y el <code>PUT</code> de esta actividad necesitan credenciales (<code>-u admin:admin123</code>, el mismo usuario que ya tienes sembrado). Swagger UI todavía no es cómodo de usar para esto —no hay JWT ni botón "Authorize" hasta la Actividad 2.4 de PSP—, así que para toda esta actividad usa <code>curl</code> con <code>-u</code>, tal y como aparece en cada paso.</p>
+</div>
 <hr>
 <h2 id="paso-1-el-campo-en-la-entidad-y-en-los-dtos">Paso 1 — El campo en la entidad, y en los DTOs<a class="headerlink" href="#paso-1-el-campo-en-la-entidad-y-en-los-dtos" title="Permanent link">¶</a></h2>
 <p>En <code>Videojuego.java</code>:</p>
@@ -3054,75 +3069,229 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">detallesPlataforma</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
+<p>Fíjate en que, a diferencia del resto de campos del DTO, <code>detallesPlataforma</code> no lleva ninguna anotación de validación. No es un descuido: <code>@NotNull</code> estaría mal aquí, porque un videojuego sin esta información (o creado antes de que existiera la columna) queda con <code>detallesPlataforma = null</code>, un estado válido. Y validar la forma interna del <code>Map</code> —qué claves debe tener, qué tipo debe llevar cada valor— necesitaría un validador a medida, no una anotación estándar de Bean Validation. Es, literalmente, el trade-off de "sin tipado" que ya viste en la teoría, aquí en tu propio código.</p>
 <p>Y en el <code>mapToDTO</code>/<code>create</code>/<code>update</code> de tu <code>VideojuegoService</code>, asegúrate de que este campo se propaga igual que los demás (<code>v.setDetallesPlataforma(dto.detallesPlataforma())</code>, y en el DTO de respuesta).</p>
-<p>Borra la tabla <code>videojuego</code> (o usa una base de datos de prueba) para que Hibernate la recree con la columna nueva, y reinicia tu aplicación.</p>
+<p>Reinicia tu aplicación. Con <code>ddl-auto: update</code> no hace falta borrar nada: Hibernate detecta el campo nuevo y ejecuta un <code>ALTER TABLE</code> que añade la columna a tu tabla <code>videojuego</code> ya existente, sin tocar las filas que ya tenías — simplemente quedan con <code>detalles_plataforma</code> a <code>NULL</code>, un estado válido, no un error.</p>
 <div class="admonition warning">
 <p class="admonition-title">Esto rompe el test MockMvc que ya tienes de PSP</p>
-<p><code>VideojuegoControllerTest</code> (Programación de Servicios y Procesos, Actividad 1.3) construye un <code>VideojuegoResponseDTO</code> con el constructor de los campos antiguos — al añadir <code>detallesPlataforma</code> como sexto campo, ese <code>new VideojuegoResponseDTO(...)</code> deja de compilar. Actualiza esa llamada en el test, añadiendo un último argumento (por ejemplo, <code>Map.of()</code> para un videojuego sin plataformas).</p>
-</div>
-<hr>
-<h2 id="paso-2-crear-un-videojuego-con-una-plataforma">Paso 2 — Crear un videojuego con una plataforma<a class="headerlink" href="#paso-2-crear-un-videojuego-con-una-plataforma" title="Permanent link">¶</a></h2>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<p><code>VideojuegoControllerTest</code> (Programación de Servicios y Procesos, Actividad 1.3) construye <code>VideojuegoResponseDTO</code> con el constructor de los campos antiguos — al añadir <code>detallesPlataforma</code> como sexto campo, cualquier <code>new VideojuegoResponseDTO(...)</code> con solo cinco argumentos deja de compilar. Hay <strong>tres</strong> sitios donde aparece esa llamada, uno por cada test que construye el DTO a mano — añade <code>, Map.of()</code> al final de los tres:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
 <span class="normal"><a href="#__codelineno-2-4">4</a></span>
 <span class="normal"><a href="#__codelineno-2-5">5</a></span>
 <span class="normal"><a href="#__codelineno-2-6">6</a></span>
 <span class="normal"><a href="#__codelineno-2-7">7</a></span>
-<span class="normal"><a href="#__codelineno-2-8">8</a></span>
-<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="s1">    "titulo": "Celeste",</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="s1">    "precio": 19.99,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="s1">    "fechaLanzamiento": "2018-01-25",</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="s1">    "estudioId": 1,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="s1">    "detallesPlataforma": {"steam": {"idApp": 504230, "logros": 45}}</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="s1">  }'</span>
+<span class="normal"><a href="#__codelineno-2-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1">// en getAll_DebeDevolverVideojuegosPaginados()</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kd">var</span><span class="w"> </span><span class="n">dto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="p">(</span><span class="mi">1L</span><span class="p">,</span><span class="w"> </span><span class="s">"Hades"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BigDecimal</span><span class="p">(</span><span class="s">"24.99"</span><span class="p">),</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">),</span><span class="w"> </span><span class="s">"Supergiant Games"</span><span class="p">,</span><span class="w"> </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">());</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1">// en create_DebeDevolver201_CuandoElDtoEsValido()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="kd">var</span><span class="w"> </span><span class="n">dto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="p">(</span><span class="mi">2L</span><span class="p">,</span><span class="w"> </span><span class="s">"Celeste"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BigDecimal</span><span class="p">(</span><span class="s">"19.99"</span><span class="p">),</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">),</span><span class="w"> </span><span class="s">"Extremely OK Games"</span><span class="p">,</span><span class="w"> </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">());</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="c1">// en update_DebeDevolver200_CuandoElDtoEsValido()</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="kd">var</span><span class="w"> </span><span class="n">dto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VideojuegoResponseDTO</span><span class="p">(</span><span class="mi">1L</span><span class="p">,</span><span class="w"> </span><span class="s">"Hades"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BigDecimal</span><span class="p">(</span><span class="s">"14.99"</span><span class="p">),</span><span class="w"> </span><span class="n">LocalDate</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">),</span><span class="w"> </span><span class="s">"Supergiant Games"</span><span class="p">,</span><span class="w"> </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">());</span>
+</code></pre></div></td></tr></table></div>
+<p>Y añade el import que falta, junto a los de <code>BigDecimal</code>/<code>LocalDate</code>/<code>List</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Map</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<p><code>Map.of()</code> es un mapa vacío e inmutable — le basta al test, porque estos casos no comprueban nada sobre <code>detallesPlataforma</code> en concreto, solo necesitan que el DTO compile y construya un objeto válido.</p>
+</div>
+<hr>
+<h2 id="paso-2-crear-un-videojuego-con-una-plataforma">Paso 2 — Crear un videojuego con una plataforma<a class="headerlink" href="#paso-2-crear-un-videojuego-con-una-plataforma" title="Permanent link">¶</a></h2>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-u<span class="w"> </span>admin:admin123<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="s1">    "titulo": "Celeste",</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="s1">    "precio": 19.99,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="s1">    "fechaLanzamiento": "2018-01-25",</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="s1">    "estudioId": 1,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="s1">    "detallesPlataforma": {"steam": {"idApp": 504230, "logros": 45}}</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="s1">  }'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: que la respuesta incluye <code>detallesPlataforma</code> con exactamente esa estructura.</p>
-<h3 id="mini-reto-varias-plataformas-anidadas">Mini-reto — varias plataformas anidadas<a class="headerlink" href="#mini-reto-varias-plataformas-anidadas" title="Permanent link">¶</a></h3>
+<p><strong>Anota</strong> el <code>id</code> que te devuelve la respuesta — lo necesitarás más adelante, en el Paso 6.</p>
+<p><strong>Captura</strong>: la respuesta completa de este <code>curl</code>.</p>
+<hr>
+<h2 id="paso-3-varias-plataformas-anidadas">Paso 3 — Varias plataformas anidadas<a class="headerlink" href="#paso-3-varias-plataformas-anidadas" title="Permanent link">¶</a></h2>
 <p>Sin más indicaciones, crea un segundo videojuego, esta vez con <code>detallesPlataforma</code> conteniendo <strong>al menos dos</strong> plataformas distintas, con las claves que tú elijas dentro de cada una (id de la app, número de logros, o lo que consideres relevante). Verifica igual que en el paso anterior.</p>
+<p><strong>Captura</strong>: la respuesta de este segundo <code>curl</code>, con las dos plataformas a la vista.</p>
 <hr>
-<h2 id="paso-3-verificacion-en-la-base-de-datos">Paso 3 — Verificación en la base de datos<a class="headerlink" href="#paso-3-verificacion-en-la-base-de-datos" title="Permanent link">¶</a></h2>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"\d videojuego"</span>
+<h2 id="paso-4-verificacion-en-la-base-de-datos">Paso 4 — Verificación en la base de datos<a class="headerlink" href="#paso-4-verificacion-en-la-base-de-datos" title="Permanent link">¶</a></h2>
+<p>A partir de aquí tienes dos vías para ejecutar SQL contra tu base de datos, igual que en el Tema 1 — usa la que prefieras en este paso y en los siguientes:</p>
+<ul>
+<li><strong>Herramienta gráfica</strong> (pgAdmin, DBeaver): conecta a <code>localhost:5432</code> con las credenciales de tu <code>docker-compose.yml</code>.</li>
+<li><strong><code>psql</code> desde terminal</strong>, como en los comandos de abajo.</li>
+</ul>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"\d videojuego"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong> que la columna <code>detallesplataforma</code> (Postgres normaliza a minúsculas) aparece con tipo <code>jsonb</code>, no <code>text</code> ni <code>character varying</code>.</p>
+<div class="admonition note">
+<p class="admonition-title"><code>\d</code> es solo de <code>psql</code>, no SQL de verdad</p>
+<p>Si estás en pgAdmin/DBeaver, <code>\d videojuego</code> no funciona en el panel de consultas — es un atajo propio del cliente <code>psql</code>, no llega al servidor como SQL. Con herramienta gráfica, navega el árbol (<code>Databases → gamevault_db → Schemas → public → Tables → videojuego → Columns</code>), o ejecuta esta consulta equivalente, que sí es SQL estándar:
+</p><div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">column_name</span><span class="p">,</span><span class="w"> </span><span class="n">data_type</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'videojuego'</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+La misma consulta, si prefieres lanzarla por <code>psql</code> en vez de escribir <code>\d</code>:
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'videojuego';"</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<p><strong>Comprueba</strong> que la columna <code>detalles_plataforma</code> (Postgres normaliza a minúsculas) aparece con tipo <code>jsonb</code>, no <code>text</code> ni <code>character varying</code>.</p>
+<p><strong>Captura</strong>: la salida de <code>\d videojuego</code> en tu terminal, o la vista de columnas equivalente si has usado pgAdmin/DBeaver — con el tipo de la columna a la vista en cualquiera de los dos casos.</p>
 <p>Consulta el contenido directamente en SQL:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"SELECT titulo, detallesplataforma FROM videojuego;"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"SELECT titulo, detalles_plataforma FROM videojuego;"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Anota</strong>: ¿el JSON que ves en la consola de PostgreSQL coincide exactamente con el que mandaste por la API?</p>
+<p><strong>Anota</strong>: ¿el JSON que ves (en <code>psql</code> o en pgAdmin/DBeaver) coincide exactamente con el que mandaste por la API?</p>
 <hr>
-<h2 id="paso-4-actualizar-y-observar-el-reemplazo-total">Paso 4 — Actualizar y observar el reemplazo total<a class="headerlink" href="#paso-4-actualizar-y-observar-el-reemplazo-total" title="Permanent link">¶</a></h2>
-<p>Actualiza el primer videojuego con un <code>PUT</code>, cambiando <code>detallesPlataforma</code> a una estructura <strong>distinta</strong> (por ejemplo, solo con la clave <code>"switch"</code>, sin <code>"steam"</code>):</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span>
-<span class="normal"><a href="#__codelineno-5-6">6</a></span>
-<span class="normal"><a href="#__codelineno-5-7">7</a></span>
-<span class="normal"><a href="#__codelineno-5-8">8</a></span>
-<span class="normal"><a href="#__codelineno-5-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="s1">    "titulo": "Celeste",</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="s1">    "precio": 19.99,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="s1">    "fechaLanzamiento": "2018-01-25",</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="s1">    "estudioId": 1,</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="s1">    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="s1">  }'</span>
+<h2 id="paso-5-indexar-con-gin-antes-y-despues">Paso 5 — Indexar con GIN, antes y después<a class="headerlink" href="#paso-5-indexar-con-gin-antes-y-despues" title="Permanent link">¶</a></h2>
+<p>Con un puñado de filas de prueba nunca vas a ver un índice ganar, por poco que cueste usarlo: recorrer una tabla pequeña entera es más barato que consultar cualquier índice. Antes de crear nada, genera un volumen de datos realista con una sola sentencia:</p>
+<div class="admonition tip">
+<p class="admonition-title">El volumen no basta — hace falta que la consulta sea selectiva</p>
+<p>Además de muchas filas, la consulta tiene que devolver <strong>pocas</strong> de ellas en proporción. Si la mitad de la tabla tuviera <code>"steam"</code>, seguiría ganando el <code>Seq Scan</code> aunque hubiera un millón de filas: recorrer la tabla entera sale más barato que saltar de una en una por el índice cuando te vas a quedar con la mitad de todas formas. Por eso el <code>INSERT</code> de abajo reparte <code>"steam"</code> en solo <strong>1 de cada 100</strong> filas (<code>i % 100 = 0</code>) — una consulta que de verdad descarta la inmensa mayoría de la tabla, el caso donde un índice aporta algo real.</p>
+</div>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="s2">INSERT INTO videojuego (titulo, precio, fecha_lanzamiento, estudio_id, detalles_plataforma)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="s2">SELECT</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="s2">    'Videojuego de prueba ' || i,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="s2">    (random() * 60 + 5)::numeric(10,2),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="s2">    DATE '2000-01-01' + (i % 9000),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="s2">    1,</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="s2">    CASE WHEN i % 100 = 0</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="s2">        THEN '{\"steam\": {\"idApp\": 1000}}'::jsonb</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="s2">        ELSE '{\"switch\": {\"idApp\": 2000}}'::jsonb</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="s2">    END</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="s2">FROM generate_series(1, 100000) AS i;</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="s2">"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: consultando de nuevo en <code>psql</code>, ¿sigue estando <code>"steam"</code> en el JSON guardado, o ha desaparecido por completo?</p>
+<p><code>generate_series(1, 100000)</code> genera 100.000 números de golpe, dentro del propio motor, y el <code>SELECT</code> construye una fila por cada uno — nada de round-trips fila a fila desde fuera.</p>
+<div class="admonition tip">
+<p class="admonition-title">Si usas pgAdmin/DBeaver en vez de terminal</p>
+<p>Pega esto directamente en el panel de consultas — es el mismo <code>INSERT</code> de arriba, sin el envoltorio de <code>docker exec</code>/<code>psql</code> ni las comillas escapadas:
+</p><div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">videojuego</span><span class="w"> </span><span class="p">(</span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">precio</span><span class="p">,</span><span class="w"> </span><span class="n">fecha_lanzamiento</span><span class="p">,</span><span class="w"> </span><span class="n">estudio_id</span><span class="p">,</span><span class="w"> </span><span class="n">detalles_plataforma</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="k">SELECT</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="s1">'Videojuego de prueba '</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">i</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">)::</span><span class="nb">numeric</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="nb">DATE</span><span class="w"> </span><span class="s1">'2000-01-01'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">9000</span><span class="p">),</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">        </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'{"steam": {"idApp": 1000}}'</span><span class="p">::</span><span class="n">jsonb</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'{"switch": {"idApp": 2000}}'</span><span class="p">::</span><span class="n">jsonb</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">    </span><span class="k">END</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="k">FROM</span><span class="w"> </span><span class="n">generate_series</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<p>Con los datos ya cargados, comprueba el plan <strong>antes</strong> de tener ningún índice (<code>ANALYZE</code> actualiza las estadísticas que usa el planificador, para que la comparación sea justa):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"ANALYZE videojuego; EXPLAIN SELECT * FROM videojuego WHERE detalles_plataforma ? 'steam';"</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">El operador <code>?</code> lo trabajarás a fondo en el próximo apartado</p>
+<p>Por ahora, úsalo tal cual, sin más explicación — aquí solo te sirve para tener una consulta real con la que comparar planes. En "Consultas sobre columnas JSONB" verás qué hace exactamente, junto con <code>jsonb_exists</code> y cómo integrarlo en una Specification.</p>
+</div>
+<p><strong>Anota</strong>: con 100.000 filas y sin índice todavía, el plan debería decir <code>Seq Scan</code> — es la única opción real que tiene el motor.</p>
+<p>Ahora crea el índice:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_videojuego_detalles_plataforma ON videojuego USING GIN (detalles_plataforma);"</span>
+</code></pre></div></td></tr></table></div>
+<p>Y repite exactamente el mismo <code>EXPLAIN</code>:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"EXPLAIN SELECT * FROM videojuego WHERE detalles_plataforma ? 'steam';"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong>: el plan debería cambiar — en vez de <code>Seq Scan</code>, ahora debería aparecer una combinación de <code>Bitmap Heap Scan</code> y <code>Bitmap Index Scan</code> sobre <code>idx_videojuego_detalles_plataforma</code>. Con 100.000 filas de por medio, esta vez la diferencia no es cuestión de suerte.</p>
+<div class="admonition example">
+<p class="admonition-title">Cómo leer y comparar los dos planes</p>
+<p>Cada línea de <code>EXPLAIN</code> trae <code>cost=X..Y</code>: <code>X</code> es el coste de arrancar (devolver la primera fila), <code>Y</code> es el coste <strong>total</strong> estimado para terminar la consulta. Para comparar planes, el número que importa es <code>Y</code>.</p>
+<p><strong>Antes</strong> (una sola línea): <code>Seq Scan on videojuego (cost=0.00..4699.19 rows=997 ...)</code> — recorre la tabla entera, fila a fila, comprobando el filtro en cada una. Coste total: <code>4699.19</code>.</p>
+<p><strong>Después</strong> (dos líneas anidadas, de dentro hacia fuera):
+</p><div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>Bitmap Heap Scan on videojuego (cost=26.13..2211.22 rows=997 ...)
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a>  Recheck Cond: (detalles_plataforma ? 'steam'::text)
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a>  -&gt;  Bitmap Index Scan on idx_videojuego_detalles_plataforma (cost=0.00..25.88 rows=997 ...)
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a>        Index Cond: (detalles_plataforma ? 'steam'::text)
+</code></pre></div></td></tr></table></div>
+Ahora son <strong>dos pasos</strong>, no uno. Primero, el <code>Bitmap Index Scan</code> (la línea de dentro, con la flecha <code>-&gt;</code>) consulta tu índice GIN para averiguar <strong>dónde</strong> están las filas que cumplen la condición, sin tocar la tabla todavía — coste <code>25.88</code>, prácticamente gratis, porque el índice ya sabe la respuesta. Después, el <code>Bitmap Heap Scan</code> (la línea de fuera, que envuelve a la anterior) usa esa lista de ubicaciones para ir <strong>directamente</strong> a esas filas concretas de la tabla, sin mirar el resto — coste total (ya incluye el paso anterior): <code>2211.22</code>.
+<p>La comparación que importa es <code>4699.19</code> (antes) frente a <code>2211.22</code> (después): la consulta pasa a costar menos de la mitad. En vez de mirar 100.000 filas para descartar el 99%, el motor va directo a las ~1.000 que sí importan.</p>
+</div>
+<p><strong>Captura</strong>: los dos planes, el de antes y el de después, uno junto al otro — desde tu terminal con <code>psql</code>, o desde la pestaña "Explain" si usas pgAdmin/DBeaver.</p>
+<hr>
+<h2 id="paso-6-actualizar-y-observar-el-reemplazo-total">Paso 6 — Actualizar y observar el reemplazo total<a class="headerlink" href="#paso-6-actualizar-y-observar-el-reemplazo-total" title="Permanent link">¶</a></h2>
+<p>Actualiza tu "Celeste" del Paso 2 con un <code>PUT</code>, cambiando <code>detallesPlataforma</code> a una estructura <strong>distinta</strong> (por ejemplo, solo con la clave <code>"switch"</code>, sin <code>"steam"</code>). Sustituye <code>&lt;id-de-celeste&gt;</code> por el <code>id</code> que anotaste en el Paso 2 — <strong>no</strong> des por hecho que es <code>1</code>: si ya tenías videojuegos de temas anteriores, el tuyo tendrá otro número:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-15-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-15-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-15-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-15-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-15-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-15-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-15-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-15-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-15-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/&lt;id-de-celeste&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">  </span>-u<span class="w"> </span>admin:admin123<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="s1">    "titulo": "Celeste",</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="s1">    "precio": 19.99,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="s1">    "fechaLanzamiento": "2018-01-25",</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="s1">    "estudioId": 1,</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="s1">    "detallesPlataforma": {"switch": {"idApp": "ABCD"}}</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10"></a><span class="s1">  }'</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong> consultando de nuevo — ahora con la tabla llena de las 100.000 filas de prueba del Paso 5, filtra explícitamente por este videojuego en vez de listar la tabla entera (de nuevo, con tu <code>id</code> real, no necesariamente <code>1</code>):</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
+<span class="normal"><a href="#__codelineno-16-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"SELECT titulo, detalles_plataforma FROM videojuego WHERE id = &lt;id-de-celeste&gt;;"</span>
+</code></pre></div></td></tr></table></div>
+<p>¿Sigue estando <code>"steam"</code> en el JSON guardado, o ha desaparecido por completo?</p>
+<p><strong>Captura</strong>: el resultado de esta consulta, ya con <code>detallesPlataforma</code> actualizado — desde <code>psql</code> o desde pgAdmin/DBeaver, la que hayas usado.</p>
 <p><strong>Pregunta de comprensión</strong>: ¿por qué el <code>PUT</code> reemplaza el objeto JSON completo en vez de combinar (<em>merge</em>) el nuevo contenido con el anterior? Relaciona tu respuesta con cómo funciona el mapeo <code>Map</code> → <code>jsonb</code>: ¿en qué punto del proceso Hibernate tendría que decidir "combinar" en vez de "sustituir", y por qué no lo hace por defecto?</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
 <p>¿Qué ventaja concreta tiene JSONB frente a crear una tabla <code>plataforma_videojuego</code> (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Tu <code>Videojuego</code> ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando <code>jsonb_exists</code>.</p></div>
+<p>Tu <code>Videojuego</code> ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando <code>jsonb_exists</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">¿Quieres quitar las 100.000 filas de prueba del Paso 5?</p>
+<p>Se quedan en tu base de datos de desarrollo sin causar ningún problema, pero si prefieres limpiarlas: si sigues teniendo un <code>data.sql</code> que reinicializa tus tablas (PSP, Actividad 2.3), pon temporalmente <code>spring.sql.init.mode</code> de nuevo en <code>always</code> en tu <code>application-dev.yaml</code> y reinicia — se ejecutará y dejará la base de datos como la tenías. Vuelve a ponerlo en <code>never</code> después, o volverás a perder cualquier dato nuevo en cada arranque, que es justo el problema que evitaste en su momento.</p>
+</div></div>
 
 
 

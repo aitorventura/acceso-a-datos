@@ -2020,15 +2020,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transacciones-nada-especial-que-gestionar" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔄 Transacciones: nada especial que gestionar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -2942,15 +2933,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#transacciones-nada-especial-que-gestionar" class="md-nav__link">
-    <span class="md-ellipsis">
-      🔄 Transacciones: nada especial que gestionar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ideas-clave" class="md-nav__link">
     <span class="md-ellipsis">
       ✅ Ideas clave
@@ -2989,13 +2971,13 @@
 <span class="normal"><a href="#__codelineno-0-6">6</a></span>
 <span class="normal"><a href="#__codelineno-0-7">7</a></span>
 <span class="normal"><a href="#__codelineno-0-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">-- ¿Existe la clave "ebook" de primer nivel en el JSON?</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">jsonb_exists</span><span class="p">(</span><span class="n">detallesedicion</span><span class="p">,</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">jsonb_exists</span><span class="p">(</span><span class="n">detalles_edicion</span><span class="p">,</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">);</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="c1">-- equivalente con el operador ?</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1">-- Extraer el valor de una clave</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detallesedicion</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
 </code></pre></div></td></tr></table></div>
 <p><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. <code>-&gt;</code> extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); <code>-&gt;&gt;</code> lo extrae como texto plano.</p>
 <p>Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.</p>
@@ -3049,10 +3031,7 @@
 <p>Un <code>update()</code> que recibe un <code>Map</code> nuevo reemplaza el contenido completo de <code>detallesEdicion</code>, no combina el nuevo contenido con el anterior — como comprobaste tú mismo en la Actividad 2.1.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">libro</span><span class="p">.</span><span class="na">setDetallesEdicion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesEdicion</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
 </code></pre></div></td></tr></table></div>
-<p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesEdicion</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.</p>
-<hr>
-<h2 id="transacciones-nada-especial-que-gestionar">🔄 Transacciones: nada especial que gestionar<a class="headerlink" href="#transacciones-nada-especial-que-gestionar" title="Permanent link">¶</a></h2>
-<p>Merece la pena decirlo explícitamente para no generar expectativas de complejidad añadida — <code>@Transactional</code> funciona <strong>exactamente igual</strong> sobre una entidad con columnas JSONB que sobre cualquier otra entidad. No hay ningún matiz especial de transacciones que gestionar por tener una columna JSONB; sigue siendo la misma anotación, el mismo comportamiento, que ya conoces desde el Tema 1.</p>
+<p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesEdicion</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM. Y la transacción que envuelve ese guardado no cambia en nada por tratarse de JSONB: <code>@Transactional</code> se comporta exactamente igual que sobre cualquier otra entidad, la misma anotación y el mismo comportamiento que ya conoces del Tema 1.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
