@@ -30,7 +30,7 @@ Se ha convertido en el formato universal de intercambio de datos porque es legib
 
 ## 🐘 Qué ofrece PostgreSQL: el tipo `jsonb`
 
-PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que permite que una fila normal, de una tabla normal, lleve dentro un objeto JSON completo — con estructura que puede variar de una fila a otra — conviviendo con las columnas y claves foráneas de siempre. No hace falta una base de datos documental aparte (eso lo verás en el Tema 3) para tener esta flexibilidad en casos puntuales.
+PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que permite que una fila normal, de una tabla normal, lleve dentro un objeto JSON completo — con estructura que puede variar de una fila a otra — conviviendo con las columnas y claves foráneas de siempre. No hace falta una base de datos documental aparte (eso lo verás en el Tema 3) para tener esta flexibilidad en casos puntuales, ni tampoco una conexión distinta: sigue siendo el mismo PostgreSQL, el mismo `DataSource` que configuraste en el Tema 1, gestionado exactamente igual — una columna `jsonb` no abre ni cierra nada por su cuenta.
 
 !!! tip "`json` vs. `jsonb`, en una frase"
     PostgreSQL tiene dos tipos: `json` guarda el texto tal cual, sin analizarlo; `jsonb` lo analiza y lo guarda en un formato binario indexable y más rápido de consultar — por eso `jsonb` es casi siempre la opción preferida, salvo que necesites preservar el texto original exacto (espacios, orden de claves).
@@ -70,7 +70,7 @@ todo dentro de una única columna, sin que hayas tenido que crear una tabla nuev
 
 ### Cómo Hibernate serializa el `Map` a JSON
 
-Hibernate no sabe por sí solo convertir un `Map<String, Object>` Java a JSON (y de vuelta): necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring, y esa ayuda se declara en una pequeña clase de configuración — el caso de "mapeo no directo" que se anticipó en el Tema 1. No necesitas el detalle exacto todavía; lo montarás paso a paso en las actividades de este tema.
+Hibernate no convierte un `Map<String, Object>` Java a JSON (y de vuelta) por sí solo — necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring. La buena noticia es que no tienes que configurar nada de eso a mano: Spring Boot incluye Jackson en el classpath por defecto, y en cuanto Hibernate 6 detecta un campo anotado con `@JdbcTypeCode(SqlTypes.JSON)`, lo conecta automáticamente — ni una clase de configuración que escribir, ni ninguna dependencia nueva que añadir.
 
 ---
 
@@ -86,11 +86,41 @@ Con lo que ya sabes del Tema 1, podrías haber modelado esto como una tabla `det
 
 El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo mañana — audiolibro, por ejemplo — no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 2.1.
 
+!!! example "La pérdida de tipado, en la práctica"
+    Con una tabla relacional, escribir `detalleEdicion.getPaginas()` que no existe da un error de compilación — no hay forma de que el código llegue a ejecutarse así. Con `Map<String, Object>`, en cambio, `detallesEdicion.get("paginas")` compila sin problema aunque hayas escrito `"pagina"` por error: el fallo no aparece hasta que ejecutas el código y te encuentras con un `null` inesperado (o un `ClassCastException`, si además asumías un tipo concreto). El compilador ya no te cubre las espaldas — pasa a ser responsabilidad tuya, en tiempo de ejecución.
+
 ---
 
-## 🔗 Sobre "establecer y cerrar conexiones" con JSONB
+## 📇 Indexar el contenido de una columna JSONB
 
-Conviene ser explícito sobre el establecimiento y cierre de conexiones: JSONB **no abre ninguna conexión nueva**. Es el mismo PostgreSQL, el mismo `DataSource` configurado desde el Tema 1, gestionado exactamente igual por el framework. No hay nada especial que conectar o cerrar para trabajar con una columna JSONB — es una columna más de una tabla que ya conocías.
+Un **índice** es una estructura auxiliar que el motor de base de datos mantiene aparte de la tabla, pensada para encontrar filas rápido sin tener que recorrerlas todas una a una — la misma idea que el índice de un libro: en vez de leer página por página buscando un tema, vas directo a la página que el índice te señala. Sin ningún índice, cualquier búsqueda por una columna implica recorrer la tabla entera, fila a fila.
+
+El tipo de índice más habitual es el **B-tree**, y acelera búsquedas por el valor completo de una columna — perfecto para `WHERE titulo = 'Celeste'`. Pero JSONB no tiene "un valor": tiene un objeto con claves dentro, y lo que sueles necesitar filtrar es "¿existe esta clave?" o "¿contiene este valor concreto?" — algo que un índice B-tree normal no sabe acelerar, porque no entiende la estructura interna del JSON.
+
+PostgreSQL resuelve esto con un tipo de índice distinto: **GIN** (*Generalized Inverted Index*), pensado precisamente para tipos de datos "compuestos" como JSONB, arrays, o búsqueda de texto completo. Se crea así:
+
+```sql
+CREATE INDEX idx_libro_detalles_edicion ON libro USING GIN (detalles_edicion);
+```
+
+Con este índice, una consulta que filtre por el contenido del JSON (como `jsonb_exists`, que verás en el próximo apartado) deja de recorrer la tabla entera fila a fila — PostgreSQL consulta el índice directamente. Pero eso solo pasa si de verdad compensa: hacen falta **dos** condiciones a la vez, no solo una. Necesitas volumen (con pocas filas, cualquier plan es rápido) **y** que la consulta sea selectiva — que descarte la mayoría de la tabla, no la mitad. Si una consulta devuelve, por ejemplo, el 50% de las filas, recorrerlas todas seguidas sigue siendo más barato que saltar de una en una por el índice, por muchas filas que tenga la tabla. Es exactamente el tipo de decisión que separa una consulta que escala de una que no.
+
+!!! tip "Con pocas filas no se nota — por eso en la actividad generas muchas"
+    Con una tabla de prueba de un puñado de filas no verías ninguna diferencia real: el motor decide el plan por coste estimado, y con pocos datos un recorrido completo de la tabla ya es barato de por sí. En la Actividad 2.1 vas a generar 100.000 filas de golpe y comparar el plan de la misma consulta antes y después de crear el índice — con ese volumen, la diferencia deja de ser cuestión de suerte.
+
+---
+
+## ⚠️ `NULL` de la columna vs. `null` dentro del JSON
+
+Con JSONB hay tres estados distintos que se confunden con facilidad:
+
+| Caso | Qué significa |
+|---|---|
+| La columna `detalles_edicion` es `NULL` | El libro no tiene ningún dato de edición guardado — ni siquiera un objeto vacío. |
+| `{"ebook": null}` | Hay un objeto JSON guardado, con la clave `"ebook"` presente, pero su valor es el `null` de JSON — no confundir con el `NULL` de SQL de arriba. |
+| `{}` (objeto vacío) | Hay un objeto JSON guardado, sin ninguna clave dentro. |
+
+Comprobar "¿existe la clave `ebook`?" da resultados distintos en cada caso: en el primero, la consulta ni siquiera tiene sobre qué mirar; en el segundo, la clave existe, aunque su valor sea `null`; en el tercero, la clave directamente no existe. Tenerlo claro desde ahora te ahorra un bug real: "el libro no tiene ebook" no es lo mismo que "la clave `ebook` no existe" — podrías tener la clave con valor `null` a propósito, para indicar "hay edición ebook prevista, pero sin detalles todavía".
 
 ---
 
@@ -104,3 +134,5 @@ Conviene ser explícito sobre el establecimiento y cierre de conexiones: JSONB *
     - **Objeto simple** = valor escalar; **objeto estructurado** = objeto anidado con posibles colecciones dentro.
     - JSONB gana en flexibilidad de esquema, pierde integridad referencial y tipado estricto frente a una tabla relacional — es una decisión de diseño con trade-offs, no una opción siempre superior.
     - JSONB no abre ninguna conexión nueva: reutiliza el mismo `DataSource` del Tema 1.
+    - Un índice **GIN** acelera consultas por el contenido de una columna JSONB — un índice normal (B-tree) no sabe mirar dentro del objeto. Pero solo gana si la consulta es selectiva (descarta la mayoría de filas) además de haber volumen — con una consulta poco selectiva, el `Seq Scan` sigue siendo más barato por muchas filas que haya.
+    - `NULL` de columna, `null` dentro del JSON, y objeto vacío `{}` son tres estados distintos, y comprobar "existe la clave" da un resultado diferente en cada uno.

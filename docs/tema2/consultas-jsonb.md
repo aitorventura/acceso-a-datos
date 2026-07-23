@@ -12,13 +12,13 @@ Con una columna normal, un `WHERE` compara el valor completo de esa columna. Con
 
 ```sql
 -- ¿Existe la clave "ebook" de primer nivel en el JSON?
-SELECT * FROM libro WHERE jsonb_exists(detallesedicion, 'ebook');
+SELECT * FROM libro WHERE jsonb_exists(detalles_edicion, 'ebook');
 -- equivalente con el operador ?
-SELECT * FROM libro WHERE detallesedicion ? 'ebook';
+SELECT * FROM libro WHERE detalles_edicion ? 'ebook';
 
 -- Extraer el valor de una clave
-SELECT detallesedicion -> 'ebook' FROM libro;       -- como JSON
-SELECT detallesedicion ->> 'ebook' FROM libro;      -- como texto
+SELECT detalles_edicion -> 'ebook' FROM libro;       -- como JSON
+SELECT detalles_edicion ->> 'ebook' FROM libro;      -- como texto
 ```
 
 `jsonb_exists(columna, clave)` (o el operador `?`, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. `->` extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); `->>` lo extrae como texto plano.
@@ -74,13 +74,7 @@ Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `deta
 libro.setDetallesEdicion(dto.detallesEdicion()); // sustituye el Map entero
 ```
 
-¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, `detallesEdicion` es un único valor de columna — igual que `titulo` o `precio`. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el `Map` completo como una unidad atómica que se sustituye entera. Si quisieras un *merge* parcial de verdad, tendrías que cargar el objeto, modificar el `Map` en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM.
-
----
-
-## 🔄 Transacciones: nada especial que gestionar
-
-Merece la pena decirlo explícitamente para no generar expectativas de complejidad añadida — `@Transactional` funciona **exactamente igual** sobre una entidad con columnas JSONB que sobre cualquier otra entidad. No hay ningún matiz especial de transacciones que gestionar por tener una columna JSONB; sigue siendo la misma anotación, el mismo comportamiento, que ya conoces desde el Tema 1.
+¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, `detallesEdicion` es un único valor de columna — igual que `titulo` o `precio`. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el `Map` completo como una unidad atómica que se sustituye entera. Si quisieras un *merge* parcial de verdad, tendrías que cargar el objeto, modificar el `Map` en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM. Y la transacción que envuelve ese guardado no cambia en nada por tratarse de JSONB: `@Transactional` se comporta exactamente igual que sobre cualquier otra entidad, la misma anotación y el mismo comportamiento que ya conoces del Tema 1.
 
 ---
 

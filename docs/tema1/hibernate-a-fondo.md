@@ -178,7 +178,7 @@ La cascada se declara en el lado `Estudio → Videojuego` (el lado "uno" de la r
 
 ### Configuración avanzada: cuando el mapeo no es directo
 
-Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar (como el JSON que verás en el Tema 2). Esa ayuda se declara con un `@Converter` (una clase que implementa `AttributeConverter`, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.
+Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar — por ejemplo, si quisieras guardar cifrado el contenido de un campo, o dar formato propio a un tipo que Hibernate no reconoce de fábrica. Esa ayuda se declara con un `@Converter` (una clase que implementa `AttributeConverter`, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.
 
 ### `ddl-auto`: configuración del ORM, no del conector
 
