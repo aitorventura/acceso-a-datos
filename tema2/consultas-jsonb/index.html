@@ -1988,6 +1988,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#los-datos-de-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los datos de partida
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#la-specification-con-jsonb_exists-desde-criteria-api" class="md-nav__link">
     <span class="md-ellipsis">
       La Specification, con jsonb_exists desde Criteria API
@@ -2005,8 +2014,26 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#y-si-la-clave-que-te-interesa-esta-mas-adentro" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔬 Y si la clave que te interesa está más adentro
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-alternativa-query-con-sql-nativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗄️ La alternativa: @Query con SQL nativo
+    </span>
+  </a>
   
 </li>
       
@@ -2901,6 +2928,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#los-datos-de-partida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los datos de partida
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#la-specification-con-jsonb_exists-desde-criteria-api" class="md-nav__link">
     <span class="md-ellipsis">
       La Specification, con jsonb_exists desde Criteria API
@@ -2918,8 +2954,26 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#y-si-la-clave-que-te-interesa-esta-mas-adentro" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔬 Y si la clave que te interesa está más adentro
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-alternativa-query-con-sql-nativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      🗄️ La alternativa: @Query con SQL nativo
+    </span>
+  </a>
   
 </li>
       
@@ -2979,57 +3033,262 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">       </span><span class="c1">-- como JSON</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="p">;</span><span class="w">      </span><span class="c1">-- como texto</span>
 </code></pre></div></td></tr></table></div>
-<p><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>, equivalente) comprueba si una clave de primer nivel existe en el JSON — sin importar su valor. <code>-&gt;</code> extrae el valor de una clave manteniéndolo como JSON (útil si vas a seguir navegando dentro); <code>-&gt;&gt;</code> lo extrae como texto plano.</p>
+<table>
+<thead>
+<tr>
+<th>Operador / función</th>
+<th>Qué hace</th>
+<th>Devuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jsonb_exists(columna, clave)</code> / <code>columna ? 'clave'</code></td>
+<td>Comprueba si existe una clave de primer nivel — sin importar su valor</td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>columna -&gt; 'clave'</code></td>
+<td>Extrae el valor de una clave, manteniéndolo como JSON (útil si vas a seguir navegando dentro)</td>
+<td><code>jsonb</code></td>
+</tr>
+<tr>
+<td><code>columna -&gt;&gt; 'clave'</code></td>
+<td>Extrae el valor de una clave como texto plano</td>
+<td><code>text</code></td>
+</tr>
+</tbody>
+</table>
 <p>Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.</p>
+<div class="admonition tip">
+<p class="admonition-title">El índice GIN de la Actividad 2.1 es exactamente para esto</p>
+<p>Si en la Actividad 2.1 has creado un índice GIN sobre <code>detalles_edicion</code> (<code>CREATE INDEX ... USING GIN (detalles_edicion)</code>), no era un ejercicio suelto: <code>jsonb_exists</code> y el operador <code>?</code> son precisamente las consultas que ese índice acelera. Un <code>WHERE detalles_edicion ? 'ebook'</code> sobre una tabla grande es justo el caso que pasaba de <code>Seq Scan</code> a <code>Bitmap Index Scan</code> cuando has comprobado el <code>EXPLAIN</code> antes y después de crearlo. Todo lo que veas en este apartado se beneficia de ese mismo índice, sin que tengas que hacer nada más.</p>
+</div>
 <hr>
 <h2 id="un-ejemplo-completo-disponibleenformato">📚 Un ejemplo completo: <code>disponibleEnFormato</code><a class="headerlink" href="#un-ejemplo-completo-disponibleenformato" title="Permanent link">¶</a></h2>
-<p>Siguiendo con la librería: un filtro opcional más en el buscador — "solo libros disponibles en ebook" (o en tapa dura, o en bolsillo). El dato vive dentro de la columna JSONB <code>detallesEdicion</code>, así que la Specification necesita algo más que un <code>like</code>.</p>
-<h3 id="la-specification-con-jsonb_exists-desde-criteria-api">La Specification, con <code>jsonb_exists</code> desde Criteria API<a class="headerlink" href="#la-specification-con-jsonb_exists-desde-criteria-api" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-1-10">10</a></span>
-<span class="normal"><a href="#__codelineno-1-11">11</a></span>
-<span class="normal"><a href="#__codelineno-1-12">12</a></span>
-<span class="normal"><a href="#__codelineno-1-13">13</a></span>
-<span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">disponibleEnFormato</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">formato</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">formato</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">isTrue</span><span class="p">(</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">                    </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">function</span><span class="p">(</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">                            </span><span class="s">"jsonb_exists"</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">                            </span><span class="n">Boolean</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">                            </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesEdicion"</span><span class="p">),</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">                            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="n">formato</span><span class="p">)</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">                    </span><span class="p">)</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">            </span><span class="p">);</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
+<p>Siguiendo con la librería: un filtro opcional más en el buscador — "solo libros disponibles en ebook" (o en tapa dura, o en bolsillo). El dato que hay que comprobar vive dentro de la columna JSONB <code>detallesEdicion</code>, no en una columna con su propio tipo simple. Antes de llegar al código Java, mira qué datos hay y qué debería devolver la consulta — así, cuando aparezca el código que la construye, ya sabes qué tiene que reproducir.</p>
+<h3 id="los-datos-de-partida">Los datos de partida<a class="headerlink" href="#los-datos-de-partida" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th><code>id</code></th>
+<th><code>titulo</code></th>
+<th><code>detalles_edicion</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Cien años de soledad</td>
+<td><code>{"tapaDura": {...}, "ebook": {"formato": "epub"}}</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>El nombre del viento</td>
+<td><code>{"bolsillo": {...}}</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Rayuela</td>
+<td><code>{"tapaDura": {...}}</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>1984</td>
+<td><code>{"ebook": {"formato": "mobi"}, "bolsillo": {...}}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Con estos cuatro libros, "solo los disponibles en ebook" debería devolver <strong>Cien años de soledad</strong> y <strong>1984</strong> —los únicos dos con la clave <code>"ebook"</code> presente en su <code>detalles_edicion</code>—, y descartar Rayuela y El nombre del viento, que no la tienen. En SQL puro, con lo que ya has visto arriba:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'ebook'</span><span class="p">;</span>
 </code></pre></div></td></tr></table></div>
-<p>Compárala con las Specifications "normales" que ya conoces del Tema 1 (<code>tituloContiene</code>, <code>precioMayorOIgualA</code>), que usan métodos directos de <code>criteriaBuilder</code> como <code>like</code> o <code>greaterThanOrEqualTo</code> — funcionan porque operan sobre una columna con su propio tipo simple. Aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función <strong>específica del motor</strong> (PostgreSQL), no parte del estándar JPA. Por eso hace falta <code>criteriaBuilder.function("jsonb_exists", ...)</code>: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (<code>Boolean.class</code>), y sus argumentos (la columna, y un literal con la clave a buscar).</p>
-<h3 id="combinada-con-el-resto-de-forma-transparente">Combinada con el resto, de forma transparente<a class="headerlink" href="#combinada-con-el-resto-de-forma-transparente" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">disponibleEnFormato</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">formato</span><span class="p">()));</span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>titulo
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>------------------------
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>Cien años de soledad
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>1984
+</code></pre></div></td></tr></table></div>
+<p>Esa es la respuesta que tiene que dar tu API cuando alguien busque <code>?formato=ebook</code> — pero nadie escribe SQL a mano contra tu endpoint: el cliente manda un parámetro de consulta, y tu código tiene que traducirlo a la misma condición <code>WHERE</code>, encajada con el resto de filtros del buscador (título, precio...) exactamente igual que ya haces con las Specifications del Tema 1. Así queda el recorrido completo, de la petición HTTP a las dos filas de antes:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Cliente
+    participant Controller as Controller&lt;br/&gt;(LibroFiltroDTO)
+    participant Spec as LibroSpecifications
+    participant Hibernate
+    participant Postgres as PostgreSQL
+
+    Cliente-&gt;&gt;Controller: GET /libros?formato=ebook
+    Controller-&gt;&gt;Spec: disponibleEnFormato("ebook")
+    Spec-&gt;&gt;Spec: .and(...) con el resto de filtros
+    Spec-&gt;&gt;Hibernate: Specification combinada
+    Hibernate-&gt;&gt;Postgres: WHERE detalles_edicion ? 'ebook'
+    Postgres--&gt;&gt;Hibernate: filas que cumplen la condición
+    Hibernate--&gt;&gt;Controller: Cien años de soledad, 1984
+    Controller--&gt;&gt;Cliente: 200 + lista filtrada</code></pre>
+<p>Cada paso es una pieza que ya conoces por separado — el parámetro de consulta, el DTO, la Specification, <code>.and(...)</code> — la novedad de hoy es solo el tramo Hibernate→PostgreSQL: cómo <code>jsonb_exists</code>/<code>?</code> llega a formar parte de esa traducción.</p>
+<h3 id="la-specification-con-jsonb_exists-desde-criteria-api">La Specification, con <code>jsonb_exists</code> desde Criteria API<a class="headerlink" href="#la-specification-con-jsonb_exists-desde-criteria-api" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">disponibleEnFormato</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">formato</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">formato</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">isTrue</span><span class="p">(</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">                    </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">function</span><span class="p">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">                            </span><span class="s">"jsonb_exists"</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">                            </span><span class="n">Boolean</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">                            </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesEdicion"</span><span class="p">),</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">                            </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="n">formato</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">                    </span><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">            </span><span class="p">);</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Compárala con las Specifications "normales" que ya conoces del Tema 1 (<code>tituloContiene</code>, <code>precioMayorOIgualA</code>), que usan métodos directos de <code>criteriaBuilder</code> como <code>like</code> o <code>greaterThanOrEqualTo</code> — funcionan porque operan sobre una columna con su propio tipo simple.</p>
+<p><strong>Criteria API</strong> es la API de JPA para construir consultas con objetos Java (<code>CriteriaBuilder</code>, <code>Root</code>, <code>Predicate</code>...) en vez de con SQL o JPQL escrito como texto — es justo lo que hay detrás de cada <code>Specification</code> que ya has escrito. Pero aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función <strong>específica del motor</strong> (PostgreSQL), no parte del estándar JPA. Por eso hace falta <code>criteriaBuilder.function("jsonb_exists", ...)</code>: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (<code>Boolean.class</code>), y sus argumentos (la columna, y un literal con la clave a buscar).</p>
+<p>Con los cuatro libros de antes, <code>disponibleEnFormato("ebook")</code> genera —por debajo, a través de Hibernate— la misma consulta que ya has visto en SQL, y devuelve la misma pareja: Cien años de soledad y 1984. La Specification no es una forma distinta de filtrar, es la misma condición <code>WHERE</code>, solo expresada en Java para que Spring Data la combine con el resto de filtros del buscador.</p>
+<h3 id="combinada-con-el-resto-de-forma-transparente">Combinada con el resto, de forma transparente<a class="headerlink" href="#combinada-con-el-resto-de-forma-transparente" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">        </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">        </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">disponibleEnFormato</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">formato</span><span class="p">()));</span>
 </code></pre></div></td></tr></table></div>
 <p>Desde el punto de vista de quien usa el repositorio, filtrar por JSONB o por una columna relacional corriente es exactamente lo mismo — una Specification más, encadenada con <code>.and(...)</code> como cualquier otra. Toda la complejidad de "esto necesita una función nativa" queda encapsulada dentro del método <code>disponibleEnFormato</code>.</p>
+<h3 id="y-si-la-clave-que-te-interesa-esta-mas-adentro">🔬 Y si la clave que te interesa está más adentro<a class="headerlink" href="#y-si-la-clave-que-te-interesa-esta-mas-adentro" title="Permanent link">¶</a></h3>
+<p><code>jsonb_exists</code>/<code>?</code> solo comprueban si una clave de primer nivel <strong>existe</strong> — no dicen nada de lo que hay dentro de ella. Con los mismos cuatro libros de antes, "¿tiene ebook?" no es lo mismo que "¿el ebook está en formato <code>mobi</code>?": Cien años de soledad y 1984 tienen los dos la clave <code>ebook</code>, pero solo 1984 la tiene en <code>mobi</code>. Para esa pregunta más concreta hace falta bajar un nivel más:</p>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1">-- Encadenando -&gt; hasta el último nivel, y -&gt;&gt; para sacar el valor final como texto</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s1">'ebook'</span><span class="w"> </span><span class="o">-&gt;&gt;</span><span class="w"> </span><span class="s1">'formato'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'mobi'</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1">-- Equivalente con el operador de ruta #&gt;&gt;, dando la ruta completa de una vez</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">detalles_edicion</span><span class="w"> </span><span class="o">#&gt;&gt;</span><span class="w"> </span><span class="s1">'{ebook,formato}'</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'mobi'</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<p>Esta vez el resultado es solo <strong>1984</strong> — <code>jsonb_exists(..., 'ebook')</code> no distinguiría entre los dos libros, porque nunca mira el valor de la clave, solo si está presente.</p>
+<p>Desde Criteria API el patrón es el mismo que acabas de ver con <code>jsonb_exists</code>: otra función nativa de PostgreSQL —<code>jsonb_extract_path_text</code>, en este caso—, envuelta en <code>criteriaBuilder.function(...)</code> y comparada con <code>criteriaBuilder.equal(...)</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">equal</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">        </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">function</span><span class="p">(</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">                </span><span class="s">"jsonb_extract_path_text"</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">                </span><span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">                </span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"detallesEdicion"</span><span class="p">),</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="s">"ebook"</span><span class="p">),</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">literal</span><span class="p">(</span><span class="s">"formato"</span><span class="p">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">        </span><span class="s">"mobi"</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>La técnica es idéntica a la de <code>disponibleEnFormato</code>: nombre de la función nativa, tipo de retorno, argumentos — solo cambia la función y qué haces con el resultado. La construyes tú mismo en la Actividad 2.2, con tus propios datos de plataforma.</p>
+<div class="admonition warning">
+<p class="admonition-title">El índice GIN no acelera esto igual</p>
+<p>El índice de la Actividad 2.1 está pensado para <code>?</code>/<code>jsonb_exists</code> (existencia de claves), no para comparaciones de un valor anidado como esta. Una consulta así, sobre una tabla grande, volvería a hacer <code>Seq Scan</code> — necesitaría un índice distinto (por ejemplo, uno de expresión sobre <code>(detalles_edicion -&gt; 'ebook' -&gt;&gt; 'formato')</code>) si de verdad se usara mucho en producción. Queda fuera del alcance de este apartado, pero conviene no dar por hecho que "ya tienes un índice JSONB, así que todo va rápido" — depende de qué consulta exacta hagas.</p>
+</div>
+<hr>
+<h2 id="la-alternativa-query-con-sql-nativo">🗄️ La alternativa: <code>@Query</code> con SQL nativo<a class="headerlink" href="#la-alternativa-query-con-sql-nativo" title="Permanent link">¶</a></h2>
+<p>Retoma el Tema 1: cuando JPQL no llegaba a algo —allí fueron las funciones de ventana—, la solución era <code>@Query(nativeQuery = true)</code>, SQL literal sin traducir. <code>jsonb_exists</code> y <code>?</code> son exactamente ese mismo caso: no existen en JPQL, porque JPQL solo conoce el vocabulario común de JPA, no las funciones propias de PostgreSQL.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="nd">@Query</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT * FROM libro WHERE jsonb_exists(detalles_edicion, :formato)"</span><span class="p">,</span><span class="w"> </span><span class="n">nativeQuery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorFormato</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">"formato"</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">);</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Usa la función, no el operador <code>?</code>, dentro de una <code>@Query</code> nativa</p>
+<p>El operador <code>?</code> de JSONB choca con el <code>?</code> que JDBC usa como marcador de parámetro posicional — Hibernate lo interpretaría mal, y la consulta fallaría o se comportaría de forma inesperada. <code>jsonb_exists(columna, clave)</code> hace exactamente lo mismo que <code>?</code>, sin ese conflicto: dentro de una <code>@Query</code> nativa, usa siempre la función.</p>
+</div>
+<p>Fíjate en el tipo de retorno: a diferencia del ranking con <code>ROW_NUMBER()</code> del Tema 1 (que necesitaba <code>List&lt;Object[]&gt;</code>, porque añadía una columna calculada que ninguna entidad tiene), aquí <code>SELECT *</code> selecciona exactamente las columnas de <code>Libro</code> — Spring Data mapea el resultado de vuelta a <code>List&lt;Libro&gt;</code> sin problema, como si fuera una consulta derivada normal.</p>
+<p>La misma alternativa nativa sirve también para la ruta anidada de antes —el ejemplo de <code>ebook.formato = "mobi"</code>—, y aquí sin ningún conflicto de por medio:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="nd">@Query</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT * FROM libro WHERE detalles_edicion -&gt; 'ebook' -&gt;&gt; 'formato' = :formato"</span><span class="p">,</span><span class="w"> </span><span class="n">nativeQuery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorFormatoEbook</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">"formato"</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p><code>buscarPorFormatoEbook("mobi")</code> devuelve solo <em>1984</em>, el mismo resultado que ya has visto con <code>jsonb_extract_path_text</code> desde Criteria API. Como aquí no interviene el operador <code>?</code>, no hay ningún conflicto con el marcador de parámetro de JDBC — puedes escribir la ruta con <code>-&gt;</code>/<code>-&gt;&gt;</code> tal cual, igual que la escribirías directamente en <code>psql</code>.</p>
+<p>¿Y entonces, <code>criteriaBuilder.function(...)</code> o <code>@Query(nativeQuery = true)</code>? La misma pregunta que ya te has hecho en el Tema 1 entre Specifications y <code>@Query</code> con JPQL, con la misma respuesta:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Specification + <code>criteriaBuilder.function</code></th>
+<th><code>@Query(nativeQuery = true)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Se combina con <code>.and(...)</code> con otros filtros opcionales</td>
+<td>Sí, de forma natural</td>
+<td>No — es una consulta fija, con sus propios parámetros</td>
+</tr>
+<tr>
+<td>Sintaxis</td>
+<td>Más verbosa (función, tipo, argumentos)</td>
+<td>SQL directo, más legible</td>
+</tr>
+<tr>
+<td>Cuándo usarla</td>
+<td>Un filtro más dentro de un buscador con varias condiciones opcionales</td>
+<td>Una consulta propia y fija, pensada solo para esto</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="modificar-objetos-jsonb-reemplazo-no-merge">✏️ Modificar objetos JSONB: reemplazo, no <em>merge</em><a class="headerlink" href="#modificar-objetos-jsonb-reemplazo-no-merge" title="Permanent link">¶</a></h2>
-<p>Un <code>update()</code> que recibe un <code>Map</code> nuevo reemplaza el contenido completo de <code>detallesEdicion</code>, no combina el nuevo contenido con el anterior — como comprobaste tú mismo en la Actividad 2.1.</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">libro</span><span class="p">.</span><span class="na">setDetallesEdicion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesEdicion</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
+<p>Un <code>update()</code> que recibe un <code>Map</code> nuevo reemplaza el contenido completo de <code>detallesEdicion</code>, no combina el nuevo contenido con el anterior — como has comprobado tú mismo en la Actividad 2.1. Con "Cien años de soledad" (<code>{"tapaDura": {...}, "ebook": {"formato": "epub"}}</code>) y un <code>PUT</code> que solo manda <code>{"ebook": {"formato": "mobi"}}</code>, la diferencia entre lo que realmente pasa y lo que alguien podría esperar es esta:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Valor guardado antes</th>
+<th><code>PUT</code> manda</th>
+<th>Valor final</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lo que ocurre de verdad (reemplazo)</strong></td>
+<td><code>{tapaDura, ebook}</code></td>
+<td><code>{ebook}</code></td>
+<td><code>{ebook}</code> — <code>tapaDura</code> ha desaparecido</td>
+</tr>
+<tr>
+<td><strong>Lo que alguien podría esperar (<em>merge</em>, y no pasa)</strong></td>
+<td><code>{tapaDura, ebook}</code></td>
+<td><code>{ebook}</code></td>
+<td><code>{tapaDura, ebook}</code> combinados</td>
+</tr>
+</tbody>
+</table>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">libro</span><span class="p">.</span><span class="na">setDetallesEdicion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">detallesEdicion</span><span class="p">());</span><span class="w"> </span><span class="c1">// sustituye el Map entero</span>
 </code></pre></div></td></tr></table></div>
 <p>¿Por qué no existe, en Hibernate/JPA estándar, una forma directa de hacer un "merge parcial" del JSON sin traer el objeto completo primero? Porque, desde el punto de vista de Hibernate, <code>detallesEdicion</code> es un único valor de columna — igual que <code>titulo</code> o <code>precio</code>. JPA no sabe "mirar dentro" de ese valor para combinar solo una parte; trata el <code>Map</code> completo como una unidad atómica que se sustituye entera. Si quisieras un <em>merge</em> parcial de verdad, tendrías que cargar el objeto, modificar el <code>Map</code> en memoria en Java (añadiendo o quitando claves tú mismo) y luego guardar el resultado completo — la combinación ocurre en tu código, no en el ORM. Y la transacción que envuelve ese guardado no cambia en nada por tratarse de JSONB: <code>@Transactional</code> se comporta exactamente igual que sobre cualquier otra entidad, la misma anotación y el mismo comportamiento que ya conoces del Tema 1.</p>
 <hr>
@@ -3038,7 +3297,10 @@
 <summary>Abrir resumen</summary>
 <ul>
 <li><code>jsonb_exists(columna, clave)</code> (o el operador <code>?</code>) comprueba si una clave existe en el JSON; <code>-&gt;</code>/<code>-&gt;&gt;</code> extraen valores (como JSON o como texto).</li>
+<li>El índice GIN de la Actividad 2.1 acelera exactamente estas consultas — <code>jsonb_exists</code>/<code>?</code> son el caso de uso para el que se creó.</li>
+<li>Para comparar un valor anidado (no solo comprobar que una clave existe), se encadena <code>-&gt;</code>/<code>-&gt;&gt;</code> o se usa el operador de ruta <code>#&gt;&gt;</code> — y ahí el índice GIN de <code>?</code> ya no ayuda igual.</li>
 <li>Consultar el contenido de una columna JSONB desde Criteria API requiere <code>criteriaBuilder.function(...)</code>, porque son funciones específicas del motor, no parte del estándar JPA.</li>
+<li><code>@Query(nativeQuery = true)</code> es la alternativa cuando la consulta JSONB no necesita combinarse con otros filtros — más simple de leer, pero fija; usa <code>jsonb_exists(...)</code> en vez de <code>?</code>, que choca con el marcador de parámetro de JDBC.</li>
 <li>Combinada con <code>.and(...)</code>, una Specification sobre JSONB se usa exactamente igual que una sobre una columna normal — transparente para quien consume el repositorio.</li>
 <li>Actualizar un campo JSONB <strong>reemplaza</strong> el objeto completo — JPA no sabe hacer <em>merge</em> parcial de un valor de columna; si lo necesitas, lo haces tú en memoria antes de guardar.</li>
 <li><code>@Transactional</code> no cambia en nada por tener columnas JSONB de por medio.</li>
