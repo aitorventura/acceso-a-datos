@@ -23,22 +23,30 @@ Tu columna `detallesPlataforma` (Actividad 2.1) y el filtro `disponibleEnPlatafo
 
 ## Paso 1 — Configuración del test, guiada al completo
 
-!!! tip "Por qué esto funciona dentro de tu Dev Container (y qué hacer si Ryuk da `Connection refused`)"
-    Tienes la explicación completa en la teoría de este apartado — resumen rápido: si al arrancar el test ves un `Connection refused` hacia una IP tipo `172.17.0.1`, es el contenedor auxiliar Ryuk, inalcanzable desde `app`. Añade `environment: - TESTCONTAINERS_RYUK_DISABLED=true` al servicio `app` de tu `.devcontainer/docker-compose.yml` (junto a `volumes` y `command`, no en `postgres`) y reconstruye el contenedor:
-    ```yaml
-    services:
-      app:
-        image: mcr.microsoft.com/devcontainers/base:bookworm
-        volumes:
-          - ..:/workspace:cached
-          - /var/run/docker.sock:/var/run/docker.sock
-        environment:
-          - TESTCONTAINERS_RYUK_DISABLED=true
-        command: sleep infinity
+!!! tip "Por qué esto funciona dentro de tu Dev Container (y qué hacer si Docker da problemas)"
+    Tu JVM, dentro de `app`, le pide contenedores nuevos al Docker del *host* — y eso puede fallar de dos maneras distintas: primero, que ni siquiera pueda hablar con ese Docker; segundo, que hable con él pero no alcance por red los contenedores que acaba de crear. Tienes la explicación completa en la teoría de este apartado — resumen rápido de los dos:
 
-      postgres:
-        # ... tu servicio postgres, sin cambios
-    ```
+    - **Primero: `Permission denied` sobre `/var/run/docker.sock`**. Añade a `devcontainer.json`:
+      ```json
+      "postStartCommand": "sudo chmod 666 /var/run/docker.sock || true"
+      ```
+    - **Segundo: `Connection refused` hacia una IP tipo `172.17.0.1`** (Ryuk, o el propio contenedor de Postgres de Testcontainers, ya arrancados pero inalcanzables). Añade al servicio `app` de tu `.devcontainer/docker-compose.yml` (junto a `volumes` y `command`, no en `postgres`):
+      ```yaml
+      services:
+        app:
+          image: mcr.microsoft.com/devcontainers/base:bookworm
+          volumes:
+            - ..:/workspace:cached
+            - /var/run/docker.sock:/var/run/docker.sock
+          environment:
+            - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+          command: sleep infinity
+
+        postgres:
+          # ... tu servicio postgres, sin cambios
+      ```
+
+    En los dos casos, reconstruye el contenedor (**"Dev Containers: Rebuild Container"**) después de editar.
 
 Añade las dependencias de Testcontainers a tu `pom.xml` — las mismas que acabas de ver en la teoría de este apartado, **incluido el BOM** en `dependencyManagement` (junto al `<parent>`, no dentro de `<dependencies>`): sin él, Maven falla con `'dependencies.dependency.version' ... is missing` antes de compilar nada, porque `org.testcontainers:junit-jupiter` y `org.testcontainers:postgresql` no traen versión gestionada por `spring-boot-starter-parent`.
 

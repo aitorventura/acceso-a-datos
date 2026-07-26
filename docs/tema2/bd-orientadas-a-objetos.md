@@ -91,13 +91,22 @@ Esto también deja el terreno preparado para el resto del curso: cuando más ade
 !!! tip "Por qué esto funciona dentro de tu Dev Container"
     Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, has montado el socket de Docker del host dentro de `app` y has añadido la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
 
-!!! warning "`Connection refused` al conectar con Ryuk"
-    Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado **Ryuk** que limpia automáticamente los contenedores al terminar. Ryuk arranca como contenedor hermano en la red del host, y tu `app` no siempre puede alcanzarlo por red desde su propia red aislada — el síntoma es un `Connection refused` hacia una IP tipo `172.17.0.1`, antes incluso de llegar a tu primer test. La solución es desactivar Ryuk en este escenario (contenedor con acceso al Docker del host, no un Docker propio): añade a `.devcontainer/docker-compose.yml`, en el servicio `app`:
+Esa misma idea —tu JVM, dentro de `app`, pidiéndole contenedores al Docker del *host*, no a uno propio— es justo lo que puede fallar de dos maneras distintas, cada una en un momento distinto del proceso. Primero, antes de nada: ¿tiene tu JVM permiso siquiera para *hablar* con ese Docker? Y si lo tiene: una vez que Docker crea un contenedor nuevo (Ryuk, tu Postgres de test...), ¿puede tu JVM *alcanzarlo por red* desde dentro de `app`? Ninguno de los dos es un fallo en tu código — son fricciones conocidas de mezclar Docker Desktop con un Dev Container que monta el socket del host, y las dos tienen arreglo fijo:
+
+!!! warning "Primer fallo posible: `Permission denied` al conectar con `/var/run/docker.sock`"
+    Este es el de "ni siquiera puede hablar con Docker": un `java.io.IOException` / `Permission denied` sobre el propio socket, antes de llegar a crear ningún contenedor. En Docker Desktop (a diferencia de un Docker nativo en Linux), ese socket pertenece al grupo `root`, no a un grupo `docker` — y la *feature* `docker-outside-of-docker` no puede añadirte automáticamente a `root` por seguridad, así que el usuario del contenedor se queda sin permiso para usarlo. La solución es forzar los permisos del socket cada vez que arranca el contenedor: añade a `devcontainer.json` (no a `docker-compose.yml`, esto es una clave propia de `devcontainer.json`):
+    ```json
+    "postStartCommand": "sudo chmod 666 /var/run/docker.sock || true"
+    ```
+    El `|| true` evita que el propio arranque del contenedor falle si el comando no puede ejecutarse por algún motivo. Tras añadirlo, reconstruye el contenedor — a partir de ahí se aplica solo, en cada arranque, sin que tengas que repetirlo a mano.
+
+!!! warning "Segundo fallo posible: `Connection refused` al conectar con Ryuk (o con tu propio contenedor de Postgres)"
+    Este es el de "habla con Docker, pero no alcanza lo que Docker acaba de crear". Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado **Ryuk** que limpia automáticamente los contenedores al terminar — y tanto Ryuk como tu propio Postgres de test arrancan como contenedores hermanos en la red del *host*, no en la de `app`. Tu `app` no siempre puede alcanzarlos por red desde su propia red aislada: el síntoma es un `Connection refused` hacia una IP tipo `172.17.0.1`, ya sea al arrancar (Ryuk) o al intentar la primera conexión JDBC (tu Postgres de test). La solución es indicarle a Testcontainers una dirección que `app` sí pueda alcanzar: añade a `.devcontainer/docker-compose.yml`, en el servicio `app`:
     ```yaml
     environment:
-      - TESTCONTAINERS_RYUK_DISABLED=true
+      - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
     ```
-    y reconstruye el contenedor (**"Dev Containers: Rebuild Container"**). Sin Ryuk, Testcontainers sigue limpiando los contenedores al final de cada ejecución normal de la JVM — solo pierdes la limpieza extra ante una caída abrupta, algo asumible en desarrollo.
+    y reconstruye el contenedor (**"Dev Containers: Rebuild Container"**). `host.docker.internal` es el nombre especial que Docker Desktop sí resuelve correctamente desde cualquier contenedor hacia los puertos publicados — con esto, tanto Ryuk como el resto de contenedores que levante Testcontainers (tu PostgreSQL de test incluido) quedan alcanzables.
 
 Con las dependencias ya resueltas, así queda la clase de test en sí:
 
