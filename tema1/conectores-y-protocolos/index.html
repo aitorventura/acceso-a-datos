@@ -1252,9 +1252,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#protocolos-de-acceso-y-conectores" class="md-nav__link">
+  <a href="#jdbc-y-los-conectores-de-bases-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      🔌 Protocolos de acceso y conectores
+      🔌 JDBC y los conectores de bases de datos
     </span>
   </a>
   
@@ -2978,9 +2978,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#protocolos-de-acceso-y-conectores" class="md-nav__link">
+  <a href="#jdbc-y-los-conectores-de-bases-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      🔌 Protocolos de acceso y conectores
+      🔌 JDBC y los conectores de bases de datos
     </span>
   </a>
   
@@ -3177,17 +3177,15 @@
 </div>
 <p>Las anotaciones que vas a ver más abajo (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>...) son, literalmente, cómo se declara ese mapeo — hoy las vas a leer como "así defines la estructura de la base de datos", pero por debajo es la propia herramienta ORM en funcionamiento.</p>
 <hr>
-<h2 id="protocolos-de-acceso-y-conectores">🔌 Protocolos de acceso y conectores<a class="headerlink" href="#protocolos-de-acceso-y-conectores" title="Permanent link">¶</a></h2>
-<p>Para que tu programa Java hable con un gestor de base de datos necesita dos cosas: un <strong>protocolo</strong> de acceso (las reglas de esa conversación — el mismo concepto que ya viste con HTTP en el apartado 1, un formato de mensaje acordado de antemano, aplicado ahora a bases de datos en vez de a un servidor web) y un <strong>conector</strong> (o <em>driver</em>) que las implemente para un gestor concreto.</p>
-<p>En Java, ese protocolo estándar es <strong>JDBC</strong> (<em>Java Database Connectivity</em>): una interfaz común que cualquier gestor puede implementar. Tu código programa contra esa interfaz común (<code>Connection</code>, <code>Statement</code>, <code>ResultSet</code> — los verás en detalle en el apartado de JDBC puro, más adelante en este tema), y es el <strong>driver</strong> concreto — una librería distinta para cada gestor (PostgreSQL, MySQL, SQL Server...) — quien traduce esas llamadas al protocolo de red real de ese gestor.</p>
+<h2 id="jdbc-y-los-conectores-de-bases-de-datos">🔌 JDBC y los conectores de bases de datos<a class="headerlink" href="#jdbc-y-los-conectores-de-bases-de-datos" title="Permanent link">¶</a></h2>
+<p>Para que tu programa Java pueda comunicarse con una base de datos necesita un <strong>conector</strong> —también llamado <em>driver</em>— preparado para ese gestor concreto. PostgreSQL tiene su propio driver, MySQL tiene otro y SQL Server tiene el suyo.</p>
+<p>Sin embargo, no tendría sentido aprender una forma completamente distinta de programar para cada base de datos. Java resuelve este problema mediante <strong>JDBC</strong> (<em>Java Database Connectivity</em>): una API estándar que define una forma común de acceder a bases de datos relacionales desde una aplicación Java.</p>
+<p>Tu aplicación utiliza JDBC, y el driver concreto se encarga de traducir esas operaciones para que las entienda el gestor que estés usando:</p>
 <pre class="mermaid"><code>flowchart LR
     A["☕ Tu código Java&lt;br/&gt;(programa contra JDBC)"] --&gt; B["🔌 Driver JDBC&lt;br/&gt;(uno por gestor)"]
     B --&gt; C[("🐘 PostgreSQL")]</code></pre>
-<p>Esto tiene una ventaja concreta y un inconveniente concreto, y merece la pena nombrarlos los dos: la ventaja es que tu código queda desacoplado del gestor exacto — programas contra <code>Connection</code>/<code>Statement</code>, no contra PostgreSQL directamente. El inconveniente es que dependes de que exista un driver JDBC para tu gestor: si eligieras un motor muy nuevo o poco extendido, podrías encontrarte sin esa pieza todavía.</p>
-<div class="admonition tip">
-<p class="admonition-title">La ventaja de programar contra una interfaz común</p>
-<p>Si mañana tu proyecto cambiara de PostgreSQL a MySQL, tu código Java (el que usa <code>Connection</code>/<code>Statement</code>) apenas cambiaría — cambiarías el driver y la cadena de conexión, no la forma de escribir las consultas. Ese es el valor de un protocolo estándar: desacopla tu código del gestor concreto.</p>
-</div>
+<p>La ventaja es que <strong>la forma general de programar el acceso a los datos se mantiene aunque cambie el gestor</strong>. Si una aplicación pasara de PostgreSQL a MySQL, habría que utilizar el driver correspondiente y cambiar la dirección de conexión, pero no aprender una API Java completamente nueva ni reconstruir desde cero toda la capa de acceso a datos.</p>
+<p>Más adelante trabajarás directamente con las piezas que ofrece JDBC para abrir conexiones, enviar sentencias SQL y recoger sus resultados. </p>
 <hr>
 <h2 id="gestor-embebido-vs-independiente">🗄️ Gestor embebido vs. independiente<a class="headerlink" href="#gestor-embebido-vs-independiente" title="Permanent link">¶</a></h2>
 <p>Los gestores de bases de datos se dividen en dos familias según cómo se ejecutan:</p>

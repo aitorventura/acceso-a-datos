@@ -208,3 +208,9 @@ body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input
 body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(4):checked + label + .tabbed-content{ background:#241b04!important; border-color:#c17817!important; }
 body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(5):checked + label + .tabbed-content{ background:#260f0a!important; border-color:#a13d2e!important; }
 body[data-md-color-scheme="slate"] .md-typeset .tabs-colored .tabbed-set > input:nth-of-type(6):checked + label + .tabbed-content{ background:#241313!important; border-color:#9c4f4f!important; }
+
+/* Añadidos estéticos
+.md-typeset td code,
+.md-typeset th code {
+    white-space: nowrap;
+} */

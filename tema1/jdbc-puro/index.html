@@ -1505,6 +1505,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#transacciones-manuales-con-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      💳 Transacciones manuales con JDBC
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lo-que-spring-data-jpa-te-estaba-ahorrando" class="md-nav__link">
     <span class="md-ellipsis">
       🆚 Lo que Spring Data JPA te estaba ahorrando
@@ -3014,6 +3023,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#transacciones-manuales-con-jdbc" class="md-nav__link">
+    <span class="md-ellipsis">
+      💳 Transacciones manuales con JDBC
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lo-que-spring-data-jpa-te-estaba-ahorrando" class="md-nav__link">
     <span class="md-ellipsis">
       🆚 Lo que Spring Data JPA te estaba ahorrando
@@ -3049,10 +3067,11 @@
 
 <div><p><a id="jdbc-puro"></a></p>
 <h1 id="4-jdbc-puro-conexion-manual-sin-orm">🧩 4. JDBC puro: conexión manual sin ORM<a class="headerlink" href="#4-jdbc-puro-conexion-manual-sin-orm" title="Permanent link">¶</a></h1>
-<p>Todo lo que has hecho hasta ahora con la base de datos ha pasado por Spring Data JPA: declaras una entidad, extiendes <code>JpaRepository</code>, y <code>save()</code>/<code>findAll()</code> funcionan sin que escribas una sola línea de SQL. Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apoya <strong>todo</strong> lo demás, incluido Hibernate: <strong>JDBC</strong>.</p>
+<p>Todo lo que has hecho hasta ahora con la base de datos ha pasado por Spring Data JPA: declaras una entidad, extiendes <code>JpaRepository</code>, y <code>save()</code> o <code>findAll()</code> funcionan sin que escribas una sola línea de SQL ni gestiones conexiones directamente. </p>
+<p>Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apoya <strong>todo</strong> lo demás, incluido Hibernate: <strong>JDBC</strong>.</p>
 <hr>
 <h2 id="las-cuatro-piezas-de-jdbc">🧱 Las cuatro piezas de JDBC<a class="headerlink" href="#las-cuatro-piezas-de-jdbc" title="Permanent link">¶</a></h2>
-<p><strong>JDBC</strong> (<em>Java Database Connectivity</em>) es la API estándar de Java (<code>java.sql</code>) para hablar con bases de datos relacionales — ya la mencionaste en el apartado 2 como el protocolo que implementa cada driver. Se apoya en cuatro piezas, cada una con un papel concreto:</p>
+<p><strong>JDBC</strong> (<em>Java Database Connectivity</em>) es la API estándar de Java para hablar con bases de datos relacionales. Se apoya en cuatro piezas, cada una con un papel concreto:</p>
 <table>
 <thead>
 <tr>
@@ -3167,7 +3186,9 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="s">"password123"</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
-<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yaml</code> — solo que aquí los pasas directamente en Java, sin que Spring medie. En un proyecto real, en vez de <code>DriverManager</code> se usaría casi siempre un <code>DataSource</code> con <em>pooling</em> (como el HikariCP que Spring configura automáticamente por ti) — <code>DriverManager</code> abre una conexión nueva cada vez, sin reutilizar nada.</p>
+<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yaml</code>, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.</p>
+<p>Cada llamada a <code>getConnection()</code> abre una nueva conexión con la base de datos. Por eso, cuando termines de utilizarla, debes cerrarla correctamente.</p>
+<p>En las aplicaciones Spring Boot se suele trabajar de otra manera: Spring configura un <code>DataSource</code> y utiliza HikariCP para mantener un conjunto de conexiones abiertas y reutilizarlas entre distintas operaciones. En esta actividad, sin embargo, utilizarás <code>DriverManager</code> para observar el funcionamiento básico de JDBC sin que un pool gestione las conexiones por ti.</p>
 <h3 id="2-preparar-la-sentencia-y-por-que-nunca-con">2. Preparar la sentencia — y por qué nunca con <code>+</code><a class="headerlink" href="#2-preparar-la-sentencia-y-por-que-nunca-con" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
@@ -3216,7 +3237,9 @@
 <a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>try-with-resources</code> cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un <code>finally</code> con cada <code>close()</code> a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el <em>pool</em> de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos", y la aplicación deja de poder conectarse a la base de datos.</p>
+<p><code>try-with-resources</code> cierra automáticamente cada recurso al salir del bloque, en orden inverso a como se abrió. También lo hace cuando se produce una excepción, por lo que evita tener que escribir manualmente un bloque <code>finally</code> con varias llamadas a <code>close()</code>.</p>
+<p>En este ejemplo, cada <code>Connection</code> se ha abierto directamente mediante <code>DriverManager</code>. Si olvidas cerrarla, la sesión con PostgreSQL permanece ocupada y continúa consumiendo recursos. Si el problema se repite muchas veces, la base de datos puede alcanzar su límite de conexiones y dejar de aceptar nuevas peticiones.</p>
+<p>Cerrar correctamente los recursos no es, por tanto, una tarea opcional: forma parte del funcionamiento básico de cualquier operación JDBC.</p>
 <hr>
 <h2 id="y-para-escribir-insert-con-jdbc-puro">✍️ ¿Y para escribir? INSERT, con JDBC puro<a class="headerlink" href="#y-para-escribir-insert-con-jdbc-puro" title="Permanent link">¶</a></h2>
 <p>La lectura ya cuesta quince líneas. Escribir es, si cabe, más delicado — porque además del <code>INSERT</code> en sí, normalmente necesitas recuperar el <code>id</code> que la base de datos acaba de generar para esa fila nueva.</p>
@@ -3269,19 +3292,105 @@
 </div>
 </div>
 <hr>
+<h2 id="transacciones-manuales-con-jdbc">💳 Transacciones manuales con JDBC<a class="headerlink" href="#transacciones-manuales-con-jdbc" title="Permanent link">¶</a></h2>
+<p>Hasta ahora, cada ejemplo ejecutaba una única sentencia SQL. Pero algunas operaciones necesitan realizar varios cambios que deben comportarse como una sola unidad: o se completan todos, o no se conserva ninguno.</p>
+<p>Imagina una promoción que debe aplicar un descuento a dos libros. No tendría sentido que el primero cambiara de precio y el segundo no porque se produjera un error a mitad del proceso.</p>
+<p>Con JDBC, las conexiones utilizan por defecto el modo <strong>autocommit</strong>: cada sentencia se confirma automáticamente en cuanto termina. Para agrupar varias operaciones en una misma transacción, primero tienes que desactivar ese comportamiento:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="n">conn</span><span class="p">.</span><span class="na">setAutoCommit</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>A partir de ese momento, eres tú quien decide cuándo confirmar o deshacer los cambios:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span>
+<span class="normal"><a href="#__codelineno-9-21">21</a></span>
+<span class="normal"><a href="#__codelineno-9-22">22</a></span>
+<span class="normal"><a href="#__codelineno-9-23">23</a></span>
+<span class="normal"><a href="#__codelineno-9-24">24</a></span>
+<span class="normal"><a href="#__codelineno-9-25">25</a></span>
+<span class="normal"><a href="#__codelineno-9-26">26</a></span>
+<span class="normal"><a href="#__codelineno-9-27">27</a></span>
+<span class="normal"><a href="#__codelineno-9-28">28</a></span>
+<span class="normal"><a href="#__codelineno-9-29">29</a></span>
+<span class="normal"><a href="#__codelineno-9-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"UPDATE libro SET precio = precio * ? WHERE id = ?"</span><span class="p">;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">pass</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="n">conn</span><span class="p">.</span><span class="na">setAutoCommit</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">        </span><span class="c1">// Primer libro</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">        </span><span class="n">stmt</span><span class="p">.</span><span class="na">setBigDecimal</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BigDecimal</span><span class="p">(</span><span class="s">"0.90"</span><span class="p">));</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">        </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1L</span><span class="p">);</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SQLException</span><span class="p">(</span><span class="s">"No se ha encontrado el primer libro"</span><span class="p">);</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">        </span><span class="c1">// Segundo libro</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="w">        </span><span class="n">stmt</span><span class="p">.</span><span class="na">setBigDecimal</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BigDecimal</span><span class="p">(</span><span class="s">"0.90"</span><span class="p">));</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">        </span><span class="n">stmt</span><span class="p">.</span><span class="na">setLong</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2L</span><span class="p">);</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18"></a>
+<a id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stmt</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SQLException</span><span class="p">(</span><span class="s">"No se ha encontrado el segundo libro"</span><span class="p">);</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22"></a>
+<a id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">commit</span><span class="p">();</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25"></a><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">rollback</span><span class="p">();</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">e</span><span class="p">;</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SQLException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">"No se ha podido aplicar la promoción"</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>El recorrido es este:</p>
+<ol>
+<li><code>setAutoCommit(false)</code> inicia el control manual de la transacción.</li>
+<li>Se ejecutan las dos actualizaciones.</li>
+<li>Si ambas terminan correctamente, <code>commit()</code> confirma los cambios.</li>
+<li>Si alguna falla, <code>rollback()</code> deshace también las operaciones anteriores de esa misma transacción.</li>
+</ol>
+<pre class="mermaid"><code>flowchart LR
+    A["setAutoCommit(false)"] --&gt; B["UPDATE libro 1"]
+    B --&gt; C["UPDATE libro 2"]
+    C --&gt;|"todo correcto"| D["✅ commit()"]
+    B -.-&gt;|"error"| E["↩️ rollback()"]
+    C -.-&gt;|"error"| E</code></pre>
+<p>Fíjate en la diferencia con Spring Data JPA. En un método anotado con <code>@Transactional</code>, Spring abre la transacción, hace el <code>commit</code> y ejecuta el <code>rollback</code> por ti. Con JDBC puro, todas esas decisiones forman parte de tu propio código.</p>
+<div class="admonition tip">
+<p class="admonition-title">Comprobar las filas afectadas</p>
+<p>Un <code>UPDATE</code> que no encuentra ninguna fila no siempre lanza una excepción: <code>executeUpdate()</code> devuelve <code>0</code>. Por eso el ejemplo comprueba que cada sentencia haya modificado exactamente una fila y lanza una excepción cuando el libro no existe.</p>
+</div>
+<hr>
 <h2 id="lo-que-spring-data-jpa-te-estaba-ahorrando">🆚 Lo que Spring Data JPA te estaba ahorrando<a class="headerlink" href="#lo-que-spring-data-jpa-te-estaba-ahorrando" title="Permanent link">¶</a></h2>
 <p>Con las dos comparaciones ya delante, esto es lo que cambia de fondo entre un enfoque y otro:</p>
 <table>
 <thead>
 <tr>
-<th>Con JDBC puro, tienes que...</th>
-<th>Con Spring Data JPA, lo gestiona por ti...</th>
+<th>En este ejemplo con JDBC puro, tienes que...</th>
+<th>En la aplicación con Spring Data JPA...</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Abrir y cerrar cada <code>Connection</code> a mano</td>
-<td>HikariCP (el <em>pool</em> que ya conoces)</td>
+<td>Solicitar una <code>Connection</code> mediante <code>DriverManager</code> y cerrarla correctamente al terminar</td>
+<td>Spring obtiene una conexión del pool de HikariCP y la devuelve al pool cuando termina la operación</td>
 </tr>
 <tr>
 <td>Escribir el SQL como texto, tú mismo</td>
@@ -3296,8 +3405,8 @@
 <td>Spring la convierte en excepciones <em>unchecked</em>, más cómodas de propagar</td>
 </tr>
 <tr>
-<td>Controlar manualmente cuándo hacer <code>commit()</code>/<code>rollback()</code></td>
-<td><code>@Transactional</code>, que ya viste en el apartado anterior</td>
+<td>Desactivar el autocommit y decidir cuándo ejecutar <code>commit()</code> o <code>rollback()</code></td>
+<td><code>@Transactional</code>, que abre, confirma o deshace la transacción automáticamente</td>
 </tr>
 </tbody>
 </table>

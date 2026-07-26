@@ -1625,9 +1625,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#el-punto-de-partida-recuperar-y-modificar-por-id" class="md-nav__link">
+  <a href="#el-punto-de-partida-buscar-por-un-identificador" class="md-nav__link">
     <span class="md-ellipsis">
-      🔁 El punto de partida: recuperar y modificar por id
+      🔁 El punto de partida: buscar por un identificador
     </span>
   </a>
   
@@ -2975,9 +2975,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#el-punto-de-partida-recuperar-y-modificar-por-id" class="md-nav__link">
+  <a href="#el-punto-de-partida-buscar-por-un-identificador" class="md-nav__link">
     <span class="md-ellipsis">
-      🔁 El punto de partida: recuperar y modificar por id
+      🔁 El punto de partida: buscar por un identificador
     </span>
   </a>
   
@@ -3153,32 +3153,16 @@
     C --&gt; D
     D --&gt; E["Page&amp;lt;Libro&amp;gt;&lt;br/&gt;contenido + metadatos"]</code></pre>
 <p>Este diagrama es el destino final del apartado — pero llegarás a él en tres pasos: primero resuelves los filtros solos, luego la paginación sola, y al final las combinas. No hace falta entenderlo todavía; vuelve a mirarlo cuando llegues a la última sección.</p>
+<div class="admonition note">
+<p class="admonition-title">¿Y el método <code>QUERY</code>?</p>
+<p>Como viste al estudiar HTTP, <code>QUERY</code> está pensado para consultas complejas con cuerpo, pero Spring MVC todavía no permite mapearlo directamente. Por eso, en este apartado los filtros llegarán mediante un <code>GET</code> con parámetros en la URL.</p>
+</div>
 <hr>
-<h2 id="el-punto-de-partida-recuperar-y-modificar-por-id">🔁 El punto de partida: recuperar y modificar por id<a class="headerlink" href="#el-punto-de-partida-recuperar-y-modificar-por-id" title="Permanent link">¶</a></h2>
-<p>Esto ya lo conoces, y funciona bien mientras sepas el id exacto del objeto que quieres:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@Transactional</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>findById</code> localiza el objeto (pasa a estado <em>managed</em>, como viste en el apartado anterior), modificas sus campos directamente sobre el objeto Java, y <code>save()</code> lo sincroniza — Hibernate genera el <code>UPDATE</code> por ti, a partir de qué campos han cambiado realmente. Compáralo con lo que habrías escrito a mano en JDBC puro: un <code>UPDATE ... SET ... WHERE id = ?</code> completo, con cada columna nombrada explícitamente.</p>
-<p>Pero fíjate en la condición: <strong>conoces el id</strong>. En un listado de verdad, el usuario no busca "el libro número 42" — busca "libros de menos de 20€ de esta editorial", sin saber ni le importa qué id tienen. Ahí es donde <code>findById</code> deja de servir.</p>
-<p>La primera idea que se te podría ocurrir: un método derivado por nombre para cada filtro, como <code>findByPrecioLessThan(BigDecimal precio)</code>. Y funciona bien — <strong>mientras todos los usuarios busquen siempre por lo mismo</strong>. El problema real es que cada usuario puede querer una combinación distinta: uno busca solo por precio máximo, otro solo por título, otro por precio mínimo y máximo a la vez, otro por título y precio mínimo juntos... y no sabes de antemano cuál de esas combinaciones va a pedir cada uno.</p>
+<h2 id="el-punto-de-partida-buscar-por-un-identificador">🔁 El punto de partida: buscar por un identificador<a class="headerlink" href="#el-punto-de-partida-buscar-por-un-identificador" title="Permanent link">¶</a></h2>
+<p>Hasta ahora has trabajado con operaciones en las que conoces el identificador exacto del objeto. Para recuperar o modificar un libro, el service utiliza <code>findById(id)</code>, obtiene una entidad concreta y trabaja directamente con ella.</p>
+<p>Eso funciona perfectamente cuando la petición se refiere a «el libro número 42». El problema cambia cuando el usuario no conoce ningún identificador y quiere buscar, por ejemplo, «libros de menos de 20 € publicados por una editorial concreta».</p>
+<p>Ahí es donde <code>findById</code> deja de servir. En un listado real, el usuario no busca normalmente un objeto concreto: busca todos los que cumplan unos criterios determinados, sin saber ni necesitar conocer sus identificadores.</p>
+<p>La primera idea que se te podría ocurrir es declarar un método derivado por nombre para cada filtro, como <code>findByPrecioLessThan(BigDecimal precio)</code>. Y funciona bien mientras todos los usuarios busquen siempre por lo mismo. El problema real es que cada usuario puede querer una combinación distinta: uno busca solo por precio máximo, otro solo por título, otro por precio mínimo y máximo a la vez, otro por título y precio mínimo juntos... y no sabes de antemano cuál de esas combinaciones va a pedir cada uno.</p>
 <hr>
 <h2 id="problema-a-los-filtros-fijos-no-escalan">🔍 Problema A: los filtros fijos no escalan<a class="headerlink" href="#problema-a-los-filtros-fijos-no-escalan" title="Permanent link">¶</a></h2>
 <p>Y el problema no es solo teórico: en cuanto el buscador tiene varios filtros opcionales de verdad — título, precio mínimo, precio máximo, editorial — cubrir cada combinación con un método derivado distinto crece exponencialmente:</p>
@@ -3243,71 +3227,71 @@
 <h2 id="resolviendo-el-problema-a-specifications-sin-paginacion-todavia">✅ Resolviendo el problema A: Specifications, sin paginación todavía<a class="headerlink" href="#resolviendo-el-problema-a-specifications-sin-paginacion-todavia" title="Permanent link">¶</a></h2>
 <p>Vas a construir la solución <strong>completa</strong> a este problema, de principio a fin, antes de complicarla con nada más.</p>
 <h3 id="1-habilitar-specifications-en-el-repositorio">1. Habilitar Specifications en el repositorio<a class="headerlink" href="#1-habilitar-specifications-en-el-repositorio" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span>
-<span class="normal"><a href="#__codelineno-1-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">        </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">        </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">        </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">        </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>JpaSpecificationExecutor</code> añade la capacidad de ejecutar Specifications sobre este repositorio, junto al <code>save</code>/<code>findById</code>/<code>findAll</code> que ya tenías.</p>
 <h3 id="2-tu-primera-specification-condicion-por-condicion">2. Tu primera Specification, condición por condición<a class="headerlink" href="#2-tu-primera-specification-condicion-por-condicion" title="Permanent link">¶</a></h3>
 <p>Empieza por la parte que construye el <code>Predicate</code>, sin la parte del filtro opcional todavía:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">like</span><span class="p">(</span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">lower</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">)),</span><span class="w"> </span><span class="s">"%"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"%"</span><span class="p">);</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">        </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">like</span><span class="p">(</span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">lower</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">)),</span><span class="w"> </span><span class="s">"%"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"%"</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <p>Línea a línea, con la tabla de arriba delante: <code>root.get("titulo")</code> es la columna <code>titulo</code>; <code>criteriaBuilder.lower(...)</code> pasa esa columna a minúsculas antes de comparar (para que la búsqueda no distinga mayúsculas); <code>criteriaBuilder.like(..., "%valor%")</code> construye el <code>Predicate</code> — la condición <code>LIKE '%valor%'</code>, pero escrita con métodos Java en vez de texto SQL. El tercer parámetro, <code>query</code>, no lo necesitas para filtros simples como este — está ahí porque la forma de la función lo exige, pero lo dejas sin usar.</p>
 <h3 id="3-el-filtro-es-opcional-specificationunrestricted">3. El filtro es opcional: <code>Specification.unrestricted()</code><a class="headerlink" href="#3-el-filtro-es-opcional-specificationunrestricted" title="Permanent link">¶</a></h3>
 <p>Aquí es donde entra el problema de antes: este filtro puede no venir. Una Specification puede decidir, en tiempo de ejecución, si su condición entra o no en la consulta final — algo que un método derivado no podía hacer. Crea la clase <code>LibroSpecifications</code>, con un método estático por filtro:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-3-10">10</a></span>
-<span class="normal"><a href="#__codelineno-3-11">11</a></span>
-<span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span>
-<span class="normal"><a href="#__codelineno-3-15">15</a></span>
-<span class="normal"><a href="#__codelineno-3-16">16</a></span>
-<span class="normal"><a href="#__codelineno-3-17">17</a></span>
-<span class="normal"><a href="#__codelineno-3-18">18</a></span>
-<span class="normal"><a href="#__codelineno-3-19">19</a></span>
-<span class="normal"><a href="#__codelineno-3-20">20</a></span>
-<span class="normal"><a href="#__codelineno-3-21">21</a></span>
-<span class="normal"><a href="#__codelineno-3-22">22</a></span>
-<span class="normal"><a href="#__codelineno-3-23">23</a></span>
-<span class="normal"><a href="#__codelineno-3-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroSpecifications</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">LibroSpecifications</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">tituloContiene</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">titulo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">like</span><span class="p">(</span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">lower</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">)),</span><span class="w"> </span><span class="s">"%"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"%"</span><span class="p">);</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">precioMayorOIgualA</span><span class="p">(</span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">precioMin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">greaterThanOrEqualTo</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"precio"</span><span class="p">),</span><span class="w"> </span><span class="n">precioMin</span><span class="p">);</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20"></a>
-<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="w">    </span><span class="c1">// Resto de filtros (precioMenorOIgualA, perteneceAEditorial...) — mismo patrón,</span>
-<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">    </span><span class="c1">// uno por cada campo por el que quieras poder filtrar. Al final se usan más</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="w">    </span><span class="c1">// de los que se han creado aquí, pero todos siguen esta misma estructura.</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span>
+<span class="normal"><a href="#__codelineno-2-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroSpecifications</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">LibroSpecifications</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">tituloContiene</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">titulo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">like</span><span class="p">(</span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">lower</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"titulo"</span><span class="p">)),</span><span class="w"> </span><span class="s">"%"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">titulo</span><span class="p">.</span><span class="na">toLowerCase</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"%"</span><span class="p">);</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">precioMayorOIgualA</span><span class="p">(</span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">precioMin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Specification</span><span class="p">.</span><span class="na">unrestricted</span><span class="p">();</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">criteriaBuilder</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">                </span><span class="n">criteriaBuilder</span><span class="p">.</span><span class="na">greaterThanOrEqualTo</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"precio"</span><span class="p">),</span><span class="w"> </span><span class="n">precioMin</span><span class="p">);</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">    </span><span class="c1">// Resto de filtros (precioMenorOIgualA, perteneceAEditorial...) — mismo patrón,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="w">    </span><span class="c1">// uno por cada campo por el que quieras poder filtrar. Al final se usan más</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="w">    </span><span class="c1">// de los que se han creado aquí, pero todos siguen esta misma estructura.</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>Specification.unrestricted()</code> es una Specification especial que ya trae Spring Data: su <code>Predicate</code> no impone ninguna condición real, así que al combinarla con las demás es como si no existiera. El patrón se repite en cada método:</p>
 <table>
@@ -3332,39 +3316,39 @@
 </tbody>
 </table>
 <h3 id="4-el-dto-de-filtro-y-el-service-el-listado-completo-en-list">4. El DTO de filtro y el service — el listado completo, en <code>List</code><a class="headerlink" href="#4-el-dto-de-filtro-y-el-service-el-listado-completo-en-list" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroFiltroDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMax</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">LibroFiltroDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">titulo</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMin</span><span class="p">,</span><span class="w"> </span><span class="n">BigDecimal</span><span class="w"> </span><span class="n">precioMax</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">editorialId</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByFiltro</span><span class="p">(</span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()));</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">            </span><span class="p">.</span><span class="na">stream</span><span class="p">()</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">)</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">            </span><span class="p">.</span><span class="na">toList</span><span class="p">();</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByFiltro</span><span class="p">(</span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()));</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">            </span><span class="p">.</span><span class="na">stream</span><span class="p">()</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">            </span><span class="p">.</span><span class="na">toList</span><span class="p">();</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>Specification.where(...).and(...)</code> encadena las piezas en una sola consulta final — las que son <code>unrestricted()</code> no añaden nada. <code>libroRepository.findAll(spec)</code> es el <code>findAll</code> de siempre, pero con una Specification como argumento: sigue devolviendo todos los libros que cumplan la condición, <strong>sin ningún límite de página todavía</strong>.</p>
 <h3 id="5-el-controller">5. El controller<a class="headerlink" href="#5-el-controller" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@GetMapping</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findByFiltro</span><span class="p">(</span><span class="n">filtro</span><span class="p">));</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@GetMapping</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findByFiltro</span><span class="p">(</span><span class="n">filtro</span><span class="p">));</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@ModelAttribute</code> mapea automáticamente los parámetros de query string (<code>?titulo=...&amp;precioMin=...</code>) a los campos del DTO. Con esto, el problema A está resuelto de verdad — pero si tu tabla tiene miles de filas, esta respuesta seguiría devolviéndolas todas de golpe. Ese es el problema B.</p>
 <hr>
@@ -3418,55 +3402,71 @@
 </table>
 <h3 id="por-debajo-sigue-siendo-sql-de-toda-la-vida">Por debajo, sigue siendo SQL de toda la vida<a class="headerlink" href="#por-debajo-sigue-siendo-sql-de-toda-la-vida" title="Permanent link">¶</a></h3>
 <p>Nada de esto es magia nueva: Hibernate traduce cada <code>Pageable</code> en las cláusulas <code>LIMIT</code>/<code>OFFSET</code> que ya conoces de SQL. Pedir la página 2 (la tercera) con tamaño 20 genera, por debajo, algo como:</p>
-<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span>
+<div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">titulo</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span>
 </code></pre></div></td></tr></table></div>
 <p><code>LIMIT 20</code> dice "tráeme como mucho 20 filas"; <code>OFFSET 40</code> dice "sáltate las primeras 40" — las que ya salieron en las páginas 0 y 1. Spring Data calcula ese <code>OFFSET</code> por ti, multiplicando el número de página por el tamaño (<code>2 × 20 = 40</code>); tú solo indicas cuál página quieres.</p>
 <p>Fíjate en que el parámetro <code>Pageable pageable</code> del controller no lleva ninguna anotación delante — a diferencia del <code>@ModelAttribute LibroFiltroDTO filtro</code> de antes. No hace falta: en cuanto Spring ve un parámetro de tipo <code>Pageable</code> en un método de un controller, busca automáticamente en la query string tres nombres muy concretos — <code>page</code>, <code>size</code> y <code>sort</code> — y construye el <code>Pageable</code> él solo, sin que tengas que declarar nada explícito para activarlo.</p>
 <div class="admonition example">
 <p class="admonition-title">Lo que ve el cliente por HTTP</p>
 <p>Con esos tres nombres reservados, una petición como esta ya te da un <code>Pageable</code> completo, sin escribir un solo <code>@RequestParam</code>:</p>
-<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>GET /api/v1/libros?page=0&amp;size=3&amp;sort=titulo,asc
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>GET /api/v1/libros?page=0&amp;size=3&amp;sort=titulo,asc
 </code></pre></div></td></tr></table></div>
 <p>Y la respuesta trae, además del contenido de esa página, todos los metadatos de <code>Page</code> — son más de los que parece a primera vista:</p>
-<div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-9-10">10</a></span>
-<span class="normal"><a href="#__codelineno-9-11">11</a></span>
-<span class="normal"><a href="#__codelineno-9-12">12</a></span>
-<span class="normal"><a href="#__codelineno-9-13">13</a></span>
-<span class="normal"><a href="#__codelineno-9-14">14</a></span>
-<span class="normal"><a href="#__codelineno-9-15">15</a></span>
-<span class="normal"><a href="#__codelineno-9-16">16</a></span>
-<span class="normal"><a href="#__codelineno-9-17">17</a></span>
-<span class="normal"><a href="#__codelineno-9-18">18</a></span>
-<span class="normal"><a href="#__codelineno-9-19">19</a></span>
-<span class="normal"><a href="#__codelineno-9-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">  </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="cm">/* los libros de esta página */</span><span class="w"> </span><span class="p">],</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">  </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">  </span><span class="nt">"first"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">  </span><span class="nt">"last"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">  </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">  </span><span class="nt">"numberOfElements"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">  </span><span class="nt">"pageable"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span><span class="nt">"offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">    </span><span class="nt">"pageNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">    </span><span class="nt">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">    </span><span class="nt">"paged"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">    </span><span class="nt">"sort"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"sorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"unsorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="w">    </span><span class="nt">"unpaged"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">  </span><span class="p">},</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="w">  </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">  </span><span class="nt">"sort"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"sorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"unsorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
-<a id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="w">  </span><span class="nt">"totalElements"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
-<a id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="w">  </span><span class="nt">"totalPages"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
-<a id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="p">}</span>
+<div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">    </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="cm">/* los libros de esta página */</span><span class="w"> </span><span class="p">],</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">    </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="nt">"first"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">    </span><span class="nt">"last"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">    </span><span class="nt">"numberOfElements"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">    </span><span class="nt">"pageable"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="w">        </span><span class="nt">"offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="w">        </span><span class="nt">"pageNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">        </span><span class="nt">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">        </span><span class="nt">"paged"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">        </span><span class="nt">"sort"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="w">            </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">            </span><span class="nt">"sorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="w">            </span><span class="nt">"unsorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="w">        </span><span class="p">},</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="w">        </span><span class="nt">"unpaged"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="w">    </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a><span class="w">    </span><span class="nt">"sort"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a><span class="w">        </span><span class="nt">"empty"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-8-23" name="__codelineno-8-23"></a><span class="w">        </span><span class="nt">"sorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span>
+<a id="__codelineno-8-24" name="__codelineno-8-24"></a><span class="w">        </span><span class="nt">"unsorted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span>
+<a id="__codelineno-8-25" name="__codelineno-8-25"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26"></a><span class="w">    </span><span class="nt">"totalElements"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27"></a><span class="w">    </span><span class="nt">"totalPages"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <table>
 <thead>
@@ -3514,7 +3514,7 @@
 </tr>
 <tr>
 <td><code>sort</code></td>
-<td>El criterio de orden aplicado — aparece dos veces (aquí y dentro de <code>pageable.sort</code>); es el mismo dato repetido</td>
+<td>Indica si se ha aplicado algún criterio de ordenación. En este ejemplo aparece como <code>sorted: true</code> porque la petición incluye <code>sort=titulo,asc</code>. Se muestra tanto en la página como dentro de <code>pageable</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -3525,23 +3525,23 @@
 <p>Pide, por ejemplo, <code>sort=noExiste,asc</code> y la aplicación responde con un <code>500 Internal Server Error</code>, no con un <code>400</code> — un error de entrada del cliente disfrazado de fallo del servidor. Se resolverá más adelante, en Programación de Servicios y Procesos, cuando gestiones las excepciones con <code>GlobalExceptionHandler</code>.</p>
 </div>
 <p>Igual que antes, la solución completa y aislada, <strong>sin ningún filtro de por medio</strong> — un <code>findAll</code> paginado sobre todo el catálogo. Ni siquiera hace falta <code>JpaSpecificationExecutor</code> para esto: <code>findAll(Pageable)</code> ya viene incluido en el <code>JpaRepository</code> de siempre.</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">pageable</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">);</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
 <span class="normal"><a href="#__codelineno-10-2">2</a></span>
 <span class="normal"><a href="#__codelineno-10-3">3</a></span>
-<span class="normal"><a href="#__codelineno-10-4">4</a></span>
-<span class="normal"><a href="#__codelineno-10-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">pageable</span><span class="p">)</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">);</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
-<span class="normal"><a href="#__codelineno-11-2">2</a></span>
-<span class="normal"><a href="#__codelineno-11-3">3</a></span>
-<span class="normal"><a href="#__codelineno-11-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nd">@GetMapping</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAllPaginated</span><span class="p">(</span><span class="n">pageable</span><span class="p">));</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@GetMapping</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAllPaginated</span><span class="p">(</span><span class="n">pageable</span><span class="p">));</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@PageableDefault(size = 20)</code> fija un tamaño de página por defecto si el cliente no especifica ninguno. Fíjate en que este <code>getAll()</code> ya no devuelve <code>List</code>, sino <code>Page</code> — ese cambio de forma en la respuesta es justo lo que vas a tener en cuenta al combinarlo con los filtros.</p>
 <hr>
@@ -3590,29 +3590,47 @@
 </tbody>
 </table>
 <p>Con esto, el service queda así — la misma Specification combinada de antes, más el <code>Pageable</code> que ya conoces:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-12-10">10</a></span>
-<span class="normal"><a href="#__codelineno-12-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMenorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMax</span><span class="p">()))</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">perteneceAEditorial</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">editorialId</span><span class="p">()));</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8"></a>
-<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span>
-<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">);</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAllPaginated</span><span class="p">(</span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">    </span><span class="n">Specification</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="n">spec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Specification</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">            </span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">tituloContiene</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">titulo</span><span class="p">()))</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMayorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMin</span><span class="p">()))</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">precioMenorOIgualA</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">precioMax</span><span class="p">()))</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="w">            </span><span class="p">.</span><span class="na">and</span><span class="p">(</span><span class="n">LibroSpecifications</span><span class="p">.</span><span class="na">perteneceAEditorial</span><span class="p">(</span><span class="n">filtro</span><span class="p">.</span><span class="na">editorialId</span><span class="p">()));</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="w">            </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">);</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Y el controller combina los dos parámetros en un único endpoint:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span>
+<span class="normal"><a href="#__codelineno-12-5">5</a></span>
+<span class="normal"><a href="#__codelineno-12-6">6</a></span>
+<span class="normal"><a href="#__codelineno-12-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nd">@GetMapping</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">        </span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">        </span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAllPaginated</span><span class="p">(</span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">));</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>libroRepository.findAll(spec, pageable)</code> es el <code>findAll</code> con los dos argumentos a la vez: aplica la Specification combinada (las piezas <code>unrestricted()</code> no añaden nada, así que sin ningún filtro es "todo el catálogo") y, de paso, trocea el resultado en la página pedida. Una sola llamada resuelve los dos problemas del apartado — exactamente lo que mostraba el diagrama del principio.</p>
+<h3 id="para-que-swagger-ui-lo-documente-bien-parameterobject">Para que Swagger UI lo documente bien: <code>@ParameterObject</code><a class="headerlink" href="#para-que-swagger-ui-lo-documente-bien-parameterobject" title="Permanent link">¶</a></h3>
+<p>Si pruebas este endpoint desde Swagger UI, puede que el formulario no te muestre un campo por cada filtro y cada parámetro de paginación por separado — en su lugar, un único cuadro de texto con un JSON para <code>filtro</code> y otro para <code>pageable</code>. Pasa porque, por defecto, <code>springdoc-openapi</code> no siempre "explota" un objeto recibido por <code>@ModelAttribute</code> (ni siempre <code>Pageable</code>) en parámetros de query independientes — lo trata como un objeto más, casi como si fuera el cuerpo de un <code>POST</code>.</p>
+<p>La solución es añadir <code>@ParameterObject</code> (de <code>org.springdoc.core.annotations.ParameterObject</code>) a los dos parámetros, junto a las anotaciones que ya tenían:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
 <span class="normal"><a href="#__codelineno-13-2">2</a></span>
 <span class="normal"><a href="#__codelineno-13-3">3</a></span>
@@ -3621,29 +3639,11 @@
 <span class="normal"><a href="#__codelineno-13-6">6</a></span>
 <span class="normal"><a href="#__codelineno-13-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nd">@GetMapping</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">        </span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">        </span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">        </span><span class="nd">@ParameterObject</span><span class="w"> </span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">        </span><span class="nd">@ParameterObject</span><span class="w"> </span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span>
 <a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAllPaginated</span><span class="p">(</span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">));</span>
 <a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>libroRepository.findAll(spec, pageable)</code> es el <code>findAll</code> con los dos argumentos a la vez: aplica la Specification combinada (las piezas <code>unrestricted()</code> no añaden nada, así que sin ningún filtro es "todo el catálogo") y, de paso, trocea el resultado en la página pedida. Una sola llamada resuelve los dos problemas del apartado — exactamente lo que mostraba el diagrama del principio.</p>
-<h3 id="para-que-swagger-ui-lo-documente-bien-parameterobject">Para que Swagger UI lo documente bien: <code>@ParameterObject</code><a class="headerlink" href="#para-que-swagger-ui-lo-documente-bien-parameterobject" title="Permanent link">¶</a></h3>
-<p>Si pruebas este endpoint desde Swagger UI, puede que el formulario no te muestre un campo por cada filtro y cada parámetro de paginación por separado — en su lugar, un único cuadro de texto con un JSON para <code>filtro</code> y otro para <code>pageable</code>. Pasa porque, por defecto, <code>springdoc-openapi</code> no siempre "explota" un objeto recibido por <code>@ModelAttribute</code> (ni siempre <code>Pageable</code>) en parámetros de query independientes — lo trata como un objeto más, casi como si fuera el cuerpo de un <code>POST</code>.</p>
-<p>La solución es añadir <code>@ParameterObject</code> (de <code>org.springdoc.core.annotations.ParameterObject</code>) a los dos parámetros, junto a las anotaciones que ya tenían:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span>
-<span class="normal"><a href="#__codelineno-14-3">3</a></span>
-<span class="normal"><a href="#__codelineno-14-4">4</a></span>
-<span class="normal"><a href="#__codelineno-14-5">5</a></span>
-<span class="normal"><a href="#__codelineno-14-6">6</a></span>
-<span class="normal"><a href="#__codelineno-14-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="nd">@GetMapping</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Page</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">(</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="w">        </span><span class="nd">@ParameterObject</span><span class="w"> </span><span class="nd">@ModelAttribute</span><span class="w"> </span><span class="n">LibroFiltroDTO</span><span class="w"> </span><span class="n">filtro</span><span class="p">,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="w">        </span><span class="nd">@ParameterObject</span><span class="w"> </span><span class="nd">@PageableDefault</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">Pageable</span><span class="w"> </span><span class="n">pageable</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAllPaginated</span><span class="p">(</span><span class="n">filtro</span><span class="p">,</span><span class="w"> </span><span class="n">pageable</span><span class="p">));</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Con <code>@ParameterObject</code>, Swagger UI genera un campo de formulario por cada atributo (<code>titulo</code>, <code>precioMin</code>... y <code>page</code>, <code>size</code>, <code>sort</code>), en vez de un cuadro con JSON — que además, si lo rellenas a mano, no se traduce en la petición real que espera Spring: esa sigue siendo <code>?titulo=...&amp;precioMin=...</code>, no un JSON metido en un único parámetro de la URL.</p>
 <hr>

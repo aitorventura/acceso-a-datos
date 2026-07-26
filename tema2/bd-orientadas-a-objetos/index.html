@@ -3106,51 +3106,25 @@
 <p class="admonition-title">Por qué esto funciona dentro de tu Dev Container</p>
 <p>Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (<code>app</code>) desde la Actividad 1.1. Funciona porque, ya desde entonces, has montado el socket de Docker del host dentro de <code>app</code> y has añadido la <em>feature</em> <code>docker-outside-of-docker</code>: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.</p>
 </div>
+<p>Esa misma idea —tu JVM, dentro de <code>app</code>, pidiéndole contenedores al Docker del <em>host</em>, no a uno propio— es justo lo que puede fallar de dos maneras distintas, cada una en un momento distinto del proceso. Primero, antes de nada: ¿tiene tu JVM permiso siquiera para <em>hablar</em> con ese Docker? Y si lo tiene: una vez que Docker crea un contenedor nuevo (Ryuk, tu Postgres de test...), ¿puede tu JVM <em>alcanzarlo por red</em> desde dentro de <code>app</code>? Ninguno de los dos es un fallo en tu código — son fricciones conocidas de mezclar Docker Desktop con un Dev Container que monta el socket del host, y las dos tienen arreglo fijo:</p>
 <div class="admonition warning">
-<p class="admonition-title"><code>Connection refused</code> al conectar con Ryuk</p>
-<p>Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado <strong>Ryuk</strong> que limpia automáticamente los contenedores al terminar. Ryuk arranca como contenedor hermano en la red del host, y tu <code>app</code> no siempre puede alcanzarlo por red desde su propia red aislada — el síntoma es un <code>Connection refused</code> hacia una IP tipo <code>172.17.0.1</code>, antes incluso de llegar a tu primer test. La solución es desactivar Ryuk en este escenario (contenedor con acceso al Docker del host, no un Docker propio): añade a <code>.devcontainer/docker-compose.yml</code>, en el servicio <code>app</code>:
-</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TESTCONTAINERS_RYUK_DISABLED=true</span>
+<p class="admonition-title">Primer fallo posible: <code>Permission denied</code> al conectar con <code>/var/run/docker.sock</code></p>
+<p>Este es el de "ni siquiera puede hablar con Docker": un <code>java.io.IOException</code> / <code>Permission denied</code> sobre el propio socket, antes de llegar a crear ningún contenedor. En Docker Desktop (a diferencia de un Docker nativo en Linux), ese socket pertenece al grupo <code>root</code>, no a un grupo <code>docker</code> — y la <em>feature</em> <code>docker-outside-of-docker</code> no puede añadirte automáticamente a <code>root</code> por seguridad, así que el usuario del contenedor se queda sin permiso para usarlo. La solución es forzar los permisos del socket cada vez que arranca el contenedor: añade a <code>devcontainer.json</code> (no a <code>docker-compose.yml</code>, esto es una clave propia de <code>devcontainer.json</code>):
+</p><div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">"postStartCommand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sudo chmod 666 /var/run/docker.sock || true"</span>
 </code></pre></div></td></tr></table></div>
-y reconstruye el contenedor (<strong>"Dev Containers: Rebuild Container"</strong>). Sin Ryuk, Testcontainers sigue limpiando los contenedores al final de cada ejecución normal de la JVM — solo pierdes la limpieza extra ante una caída abrupta, algo asumible en desarrollo.
+El <code>|| true</code> evita que el propio arranque del contenedor falle si el comando no puede ejecutarse por algún motivo. Tras añadirlo, reconstruye el contenedor — a partir de ahí se aplica solo, en cada arranque, sin que tengas que repetirlo a mano.
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Segundo fallo posible: <code>Connection refused</code> al conectar con Ryuk (o con tu propio contenedor de Postgres)</p>
+<p>Este es el de "habla con Docker, pero no alcanza lo que Docker acaba de crear". Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado <strong>Ryuk</strong> que limpia automáticamente los contenedores al terminar — y tanto Ryuk como tu propio Postgres de test arrancan como contenedores hermanos en la red del <em>host</em>, no en la de <code>app</code>. Tu <code>app</code> no siempre puede alcanzarlos por red desde su propia red aislada: el síntoma es un <code>Connection refused</code> hacia una IP tipo <code>172.17.0.1</code>, ya sea al arrancar (Ryuk) o al intentar la primera conexión JDBC (tu Postgres de test). La solución es indicarle a Testcontainers una dirección que <code>app</code> sí pueda alcanzar: añade a <code>.devcontainer/docker-compose.yml</code>, en el servicio <code>app</code>:
+</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal</span>
+</code></pre></div></td></tr></table></div>
+y reconstruye el contenedor (<strong>"Dev Containers: Rebuild Container"</strong>). <code>host.docker.internal</code> es el nombre especial que Docker Desktop sí resuelve correctamente desde cualquier contenedor hacia los puertos publicados — con esto, tanto Ryuk como el resto de contenedores que levante Testcontainers (tu PostgreSQL de test incluido) quedan alcanzables.
 </div>
 <p>Con las dependencias ya resueltas, así queda la clase de test en sí:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-3-10">10</a></span>
-<span class="normal"><a href="#__codelineno-3-11">11</a></span>
-<span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span>
-<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@SpringBootTest</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nd">@AutoConfigureMockMvc</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nd">@Testcontainers</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="kd">class</span> <span class="nc">LibreriaApiTest</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="nd">@Container</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="nd">@Autowired</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">    </span><span class="c1">// ...</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>@Testcontainers</code> + <code>@Container</code> levantan un <strong>PostgreSQL real</strong> dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. <code>@ServiceConnection</code> conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión. <code>@ActiveProfiles("test")</code> activa un perfil propio, distinto del <code>dev</code> de siempre — así puedes usar <code>ddl-auto: create-drop</code> (cada ejecución parte de una base de datos limpia) sin tocar la configuración con la que trabajas a diario.</p>
-<div class="admonition warning">
-<p class="admonition-title">La anotación sola no basta: el perfil <code>test</code> tiene que existir</p>
-<p><code>@ActiveProfiles("test")</code> le dice a Spring qué perfil activar, pero no crea nada por sí sola — igual que te pasó con <code>dev</code> al depurar <code>GamevaultApplicationTests</code> (PSP, Actividad 1.3). Y aquí hay tres propiedades que, sin valor, impiden arrancar del todo: <code>@Value("${gamevault.admin.password}")</code> (el <code>ApplicationRunner</code> que siembra el <code>admin</code>), <code>@Value("${gamevault.jwt.secret}")</code> (los beans <code>JwtEncoder</code>/<code>JwtDecoder</code>) y <code>@Value("${gamevault.jwt.expiration-minutes}")</code> (<code>JwtService</code>, para construir cualquier token) — ninguna de las tres lleva un valor por defecto, así que sin ellas el contexto ni siquiera llega a levantarse, y ningún test de la clase se ejecuta. <code>spring.datasource</code> no hace falta escribirlo: eso ya lo resuelve <code>@ServiceConnection</code> en tiempo de ejecución. Crea <code>src/test/resources/application-test.yml</code>:
-</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
@@ -3164,21 +3138,55 @@ y reconstruye el contenedor (<strong>"Dev Containers: Rebuild Container"</strong
 <span class="normal"><a href="#__codelineno-4-12">12</a></span>
 <span class="normal"><a href="#__codelineno-4-13">13</a></span>
 <span class="normal"><a href="#__codelineno-4-14">14</a></span>
-<span class="normal"><a href="#__codelineno-4-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">spring</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create-drop</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nt">gamevault</span><span class="p">:</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">  </span><span class="nt">admin</span><span class="p">:</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admintest123</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">  </span><span class="nt">jwt</span><span class="p">:</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">un-secreto-de-test-de-al-menos-32-caracteres-largo</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<span class="normal"><a href="#__codelineno-4-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@SpringBootTest</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nd">@AutoConfigureMockMvc</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nd">@Testcontainers</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="kd">class</span> <span class="nc">LibreriaApiTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">    </span><span class="nd">@Autowired</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>@Testcontainers</code> + <code>@Container</code> levantan un <strong>PostgreSQL real</strong> dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. <code>@ServiceConnection</code> conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión. <code>@ActiveProfiles("test")</code> activa un perfil propio, distinto del <code>dev</code> de siempre — así puedes usar <code>ddl-auto: create-drop</code> (cada ejecución parte de una base de datos limpia) sin tocar la configuración con la que trabajas a diario.</p>
+<div class="admonition warning">
+<p class="admonition-title">La anotación sola no basta: el perfil <code>test</code> tiene que existir</p>
+<p><code>@ActiveProfiles("test")</code> le dice a Spring qué perfil activar, pero no crea nada por sí sola — igual que te pasó con <code>dev</code> al depurar <code>GamevaultApplicationTests</code> (PSP, Actividad 1.3). Y aquí hay tres propiedades que, sin valor, impiden arrancar del todo: <code>@Value("${gamevault.admin.password}")</code> (el <code>ApplicationRunner</code> que siembra el <code>admin</code>), <code>@Value("${gamevault.jwt.secret}")</code> (los beans <code>JwtEncoder</code>/<code>JwtDecoder</code>) y <code>@Value("${gamevault.jwt.expiration-minutes}")</code> (<code>JwtService</code>, para construir cualquier token) — ninguna de las tres lleva un valor por defecto, así que sin ellas el contexto ni siquiera llega a levantarse, y ningún test de la clase se ejecuta. <code>spring.datasource</code> no hace falta escribirlo: eso ya lo resuelve <code>@ServiceConnection</code> en tiempo de ejecución. Crea <code>src/test/resources/application-test.yml</code>:
+</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create-drop</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="nt">gamevault</span><span class="p">:</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">  </span><span class="nt">admin</span><span class="p">:</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admintest123</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">  </span><span class="nt">jwt</span><span class="p">:</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">un-secreto-de-test-de-al-menos-32-caracteres-largo</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div></td></tr></table></div>
 La contraseña que pongas aquí tiene que ser exactamente la misma que envíe <code>loginComoAdmin()</code> en su petición de login, más abajo — los dos viven dentro del mismo mundo de test, aislado del perfil <code>dev</code> (que ni siquiera se carga con <code>@ActiveProfiles("test")</code> activo). De ahí el nombre <code>admintest123</code>: dice de un vistazo que es una credencial solo de test, sin que tengas que recordar que no tiene relación con la de <code>dev</code>. El valor de <code>expiration-minutes</code>, en cambio, no importa para el test — <code>60</code> (el mismo de <code>dev</code>) sirve igual que cualquier otro.
 Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml</code>: las credenciales que lleva dentro no son reales, solo existen dentro del contenedor Postgres desechable que Testcontainers destruye al terminar el test — no hay nada que proteger.
@@ -3203,73 +3211,73 @@ Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml<
     MockMvc--&gt;&gt;Test: respuesta
     Test-&gt;&gt;Test: andExpect(jsonPath(...))</code></pre>
 <p>Así se traduce a código: primero el ayudante que hace login y devuelve el token, después el test que lo usa:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span>
-<span class="normal"><a href="#__codelineno-5-11">11</a></span>
-<span class="normal"><a href="#__codelineno-5-12">12</a></span>
-<span class="normal"><a href="#__codelineno-5-13">13</a></span>
-<span class="normal"><a href="#__codelineno-5-14">14</a></span>
-<span class="normal"><a href="#__codelineno-5-15">15</a></span>
-<span class="normal"><a href="#__codelineno-5-16">16</a></span>
-<span class="normal"><a href="#__codelineno-5-17">17</a></span>
-<span class="normal"><a href="#__codelineno-5-18">18</a></span>
-<span class="normal"><a href="#__codelineno-5-19">19</a></span>
-<span class="normal"><a href="#__codelineno-5-20">20</a></span>
-<span class="normal"><a href="#__codelineno-5-21">21</a></span>
-<span class="normal"><a href="#__codelineno-5-22">22</a></span>
-<span class="normal"><a href="#__codelineno-5-23">23</a></span>
-<span class="normal"><a href="#__codelineno-5-24">24</a></span>
-<span class="normal"><a href="#__codelineno-5-25">25</a></span>
-<span class="normal"><a href="#__codelineno-5-26">26</a></span>
-<span class="normal"><a href="#__codelineno-5-27">27</a></span>
-<span class="normal"><a href="#__codelineno-5-28">28</a></span>
-<span class="normal"><a href="#__codelineno-5-29">29</a></span>
-<span class="normal"><a href="#__codelineno-5-30">30</a></span>
-<span class="normal"><a href="#__codelineno-5-31">31</a></span>
-<span class="normal"><a href="#__codelineno-5-32">32</a></span>
-<span class="normal"><a href="#__codelineno-5-33">33</a></span>
-<span class="normal"><a href="#__codelineno-5-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="s">                            {</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="s">                              "username": "admin",</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="s">                              "password": "admintest123"</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="s">                            }</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="s">                            """</span><span class="p">))</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">            </span><span class="p">.</span><span class="na">andReturn</span><span class="p">()</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">            </span><span class="p">.</span><span class="na">getResponse</span><span class="p">()</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">            </span><span class="p">.</span><span class="na">getContentAsString</span><span class="p">();</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14"></a>
-<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="p">}</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17"></a>
-<a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="nd">@Test</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21"></a>
-<a id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
-<a id="__codelineno-5-23" name="__codelineno-5-23"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
-<a id="__codelineno-5-24" name="__codelineno-5-24"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-5-25" name="__codelineno-5-25"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-5-26" name="__codelineno-5-26"></a><span class="s">                            {</span>
-<a id="__codelineno-5-27" name="__codelineno-5-27"></a><span class="s">                              "titulo": "Rayuela",</span>
-<a id="__codelineno-5-28" name="__codelineno-5-28"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
-<a id="__codelineno-5-29" name="__codelineno-5-29"></a><span class="s">                            }</span>
-<a id="__codelineno-5-30" name="__codelineno-5-30"></a><span class="s">                            """</span><span class="p">))</span>
-<a id="__codelineno-5-31" name="__codelineno-5-31"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.titulo"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Rayuela"</span><span class="p">))</span>
-<a id="__codelineno-5-33" name="__codelineno-5-33"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.detallesEdicion.editorial"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Sudamericana"</span><span class="p">));</span>
-<a id="__codelineno-5-34" name="__codelineno-5-34"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span>
+<span class="normal"><a href="#__codelineno-6-14">14</a></span>
+<span class="normal"><a href="#__codelineno-6-15">15</a></span>
+<span class="normal"><a href="#__codelineno-6-16">16</a></span>
+<span class="normal"><a href="#__codelineno-6-17">17</a></span>
+<span class="normal"><a href="#__codelineno-6-18">18</a></span>
+<span class="normal"><a href="#__codelineno-6-19">19</a></span>
+<span class="normal"><a href="#__codelineno-6-20">20</a></span>
+<span class="normal"><a href="#__codelineno-6-21">21</a></span>
+<span class="normal"><a href="#__codelineno-6-22">22</a></span>
+<span class="normal"><a href="#__codelineno-6-23">23</a></span>
+<span class="normal"><a href="#__codelineno-6-24">24</a></span>
+<span class="normal"><a href="#__codelineno-6-25">25</a></span>
+<span class="normal"><a href="#__codelineno-6-26">26</a></span>
+<span class="normal"><a href="#__codelineno-6-27">27</a></span>
+<span class="normal"><a href="#__codelineno-6-28">28</a></span>
+<span class="normal"><a href="#__codelineno-6-29">29</a></span>
+<span class="normal"><a href="#__codelineno-6-30">30</a></span>
+<span class="normal"><a href="#__codelineno-6-31">31</a></span>
+<span class="normal"><a href="#__codelineno-6-32">32</a></span>
+<span class="normal"><a href="#__codelineno-6-33">33</a></span>
+<span class="normal"><a href="#__codelineno-6-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="s">                            {</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="s">                              "username": "admin",</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="s">                              "password": "admintest123"</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="s">                            }</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">            </span><span class="p">.</span><span class="na">andReturn</span><span class="p">()</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="w">            </span><span class="p">.</span><span class="na">getResponse</span><span class="p">()</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="w">            </span><span class="p">.</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="p">}</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17"></a>
+<a id="__codelineno-6-18" name="__codelineno-6-18"></a><span class="nd">@Test</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21"></a>
+<a id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26"></a><span class="s">                            {</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="s">                              "titulo": "Rayuela",</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29"></a><span class="s">                            }</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.titulo"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Rayuela"</span><span class="p">))</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.detallesEdicion.editorial"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Sudamericana"</span><span class="p">));</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>loginComoAdmin()</code> no lleva <code>@Test</code>: es un método ayudante, no un test en sí mismo, que cualquier otro test de la clase puede llamar cuando necesite un token válido (necesita <code>import com.jayway.jsonpath.JsonPath;</code>, ya incluida en <code>spring-boot-starter-test</code>). El test de arriba es un <code>POST</code> normal con la cabecera <code>Authorization</code> añadida, y sus aserciones finales no se quedan en el código de estado: comprueban también el cuerpo devuelto campo a campo con <code>jsonPath</code>, incluida la parte anidada dentro del propio JSONB (<code>detallesEdicion.editorial</code>) — confirmando que el objeto estructurado se ha guardado y se ha devuelto tal cual, no solo que "algo" se ha creado.</p>
 <h3 id="comprobar-tambien-los-casos-de-error">Comprobar también los casos de error<a class="headerlink" href="#comprobar-tambien-los-casos-de-error" title="Permanent link">¶</a></h3>
@@ -3294,39 +3302,39 @@ Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml<
     MockMvc--&gt;&gt;Test: respuesta
     Test-&gt;&gt;Test: andExpect(jsonPath($.status, $.error))</code></pre>
 <p>El test que reproduce ese flujo, con las aserciones sobre el cuerpo del error:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-6-10">10</a></span>
-<span class="normal"><a href="#__codelineno-6-11">11</a></span>
-<span class="normal"><a href="#__codelineno-6-12">12</a></span>
-<span class="normal"><a href="#__codelineno-6-13">13</a></span>
-<span class="normal"><a href="#__codelineno-6-14">14</a></span>
-<span class="normal"><a href="#__codelineno-6-15">15</a></span>
-<span class="normal"><a href="#__codelineno-6-16">16</a></span>
-<span class="normal"><a href="#__codelineno-6-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Test</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">userToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoUsuario</span><span class="p">();</span><span class="w"> </span><span class="c1">// igual que loginComoAdmin(), con credenciales sin rol ADMIN</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">userToken</span><span class="p">)</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="s">                            {</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="s">                              "titulo": "Rayuela",</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="s">                            }</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="s">                            """</span><span class="p">))</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isForbidden</span><span class="p">())</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.status"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="mi">403</span><span class="p">))</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.error"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"No autorizado"</span><span class="p">));</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">userToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoUsuario</span><span class="p">();</span><span class="w"> </span><span class="c1">// igual que loginComoAdmin(), con credenciales sin rol ADMIN</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">userToken</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="s">                            {</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="s">                              "titulo": "Rayuela",</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="s">                            }</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isForbidden</span><span class="p">())</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.status"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="mi">403</span><span class="p">))</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.error"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"No autorizado"</span><span class="p">));</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>No es casualidad que este test compruebe el cuerpo del error, no solo el código <code>403</code>: dos errores distintos pueden compartir el mismo código de estado, y solo el cuerpo —con tu propio <code>ErrorResponse</code>, no el genérico de Spring— dice cuál de los dos ha ocurrido de verdad. Quedarte solo con <code>status().isForbidden()</code> dejaría pasar una regresión real: por ejemplo, que el <code>403</code> siga llegando pero con el formato por defecto de Spring Security en vez del tuyo, porque alguien ha desconectado sin querer tu <code>AccessDeniedHandler</code>.</p>
 <div class="admonition tip">

@@ -1571,9 +1571,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-por-que-procedimiento-y-no-un-bucle-en-java" class="md-nav__link">
+  <a href="#3-por-que-un-procedimiento-y-no-un-bucle-en-java" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Por qué procedimiento y no un bucle en Java
+      3. ¿Por qué un procedimiento y no un bucle en Java?
     </span>
   </a>
   
@@ -2976,9 +2976,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-por-que-procedimiento-y-no-un-bucle-en-java" class="md-nav__link">
+  <a href="#3-por-que-un-procedimiento-y-no-un-bucle-en-java" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Por qué procedimiento y no un bucle en Java
+      3. ¿Por qué un procedimiento y no un bucle en Java?
     </span>
   </a>
   
@@ -3147,8 +3147,25 @@
 <p><code>JdbcTemplate</code> se inyecta exactamente igual que cualquier otro bean — junto al <code>EditorialRepository</code>, con <code>@RequiredArgsConstructor</code>, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un <code>DataSource</code> en el classpath, que ya tienes desde el Tema 1). La comprobación de "editorial no encontrada" la sigues haciendo con Spring Data JPA (<code>existsById</code>) antes de invocar el procedimiento — no hace falta que todo pase por <code>JdbcTemplate</code>, solo la parte que de verdad conviene ejecutar cerca de los datos.</p>
 <p>El <code>@Transactional</code> de arriba es el mismo que ya viste en <code>update()</code>/<code>delete()</code> del apartado anterior: aquí también hay una lectura (<code>existsById</code>) seguida de una escritura (la llamada al procedimiento), así que el método entero se trata como una sola unidad todo-o-nada.</p>
 <p>Con el procedimiento y el método del service ya tienes la lógica completa — pero, igual que con cualquier otra operación de tu API, todavía no es alcanzable desde fuera. Falta el último paso de siempre: un endpoint en el controller correspondiente que llame a <code>ajustarPrecio(...)</code> y lo exponga por HTTP. Sin ese endpoint, el procedimiento solo podría invocarse desde dentro de la propia aplicación Java, nunca desde un cliente externo.</p>
-<h3 id="3-por-que-procedimiento-y-no-un-bucle-en-java">3. Por qué procedimiento y no un bucle en Java<a class="headerlink" href="#3-por-que-procedimiento-y-no-un-bucle-en-java" title="Permanent link">¶</a></h3>
-<p>Podrías haber escrito esto en Java: cargar todos los libros de la editorial, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en <strong>una sola operación atómica</strong> dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada libro. Para una actualización masiva como esta, es la opción más directa. En la Actividad 1.4 construirás un procedimiento como este en tu propio proyecto.</p>
+<h3 id="3-por-que-un-procedimiento-y-no-un-bucle-en-java">3. ¿Por qué un procedimiento y no un bucle en Java?<a class="headerlink" href="#3-por-que-un-procedimiento-y-no-un-bucle-en-java" title="Permanent link">¶</a></h3>
+<p>También podrías resolver esta operación desde Java:</p>
+<ol>
+<li>Recuperar todos los libros de una editorial.</li>
+<li>Recorrerlos con un bucle.</li>
+<li>Actualizar su precio uno por uno.</li>
+</ol>
+<p>El procedimiento almacenado sigue otro enfoque: la lógica ya está guardada dentro de PostgreSQL y la aplicación simplemente la invoca mediante <code>CALL</code>.</p>
+<p>Así, el gestor actualiza todos los libros sin tener que enviarlos primero a Java ni recorrerlos individualmente.</p>
+<div class="admonition info">
+<p class="admonition-title">La idea importante</p>
+<p>En un procedimiento almacenado, <strong>la aplicación solicita una operación</strong>, pero <strong>la lógica que la ejecuta está almacenada dentro de la propia base de datos</strong>.</p>
+</div>
+<p>Más adelante conocerás otras formas de realizar actualizaciones masivas desde Spring Data. En este apartado el objetivo es aprender a:</p>
+<ul>
+<li>crear un procedimiento almacenado;</li>
+<li>pasarle parámetros;</li>
+<li>invocarlo desde Java mediante <code>JdbcTemplate</code>.</li>
+</ul>
 <hr>
 <h2 id="antes-de-cerrar-el-tema-profundizando-en-las-consultas-derivadas-por-nombre">🔍 Antes de cerrar el tema: profundizando en las consultas derivadas por nombre<a class="headerlink" href="#antes-de-cerrar-el-tema-profundizando-en-las-consultas-derivadas-por-nombre" title="Permanent link">¶</a></h2>
 <p>Este apartado es más corto que los anteriores, así que aprovechamos para volver a algo que quedó solo apuntado: en "Operaciones CRUD y gestión de transacciones" viste que puedes declarar una consulta propia en tu repository sin escribir SQL, con un método sin cuerpo — como <code>findByEditorialId</code>. Ahí quedó como una idea suelta; aquí ves la convención completa, con más ejemplos reales.</p>
@@ -3207,7 +3224,7 @@
 <li>Un <strong>procedimiento almacenado</strong> es código con lógica que vive y se ejecuta dentro del gestor de base de datos, no en la aplicación.</li>
 <li>PostgreSQL usa <strong>PL/pgSQL</strong> como lenguaje procedural; un procedimiento se invoca con <code>CALL</code>, una función se puede usar dentro de un <code>SELECT</code>.</li>
 <li>Sus parámetros se pasan <strong>por posición</strong> y son de entrada (<code>IN</code>) por defecto — invertir el orden al invocarlo no da error, asigna mal los valores.</li>
-<li>Conviene usarlos para operaciones que deben ocurrir atómicamente y cerca de los datos (ajustes masivos, sin ida y vuelta por fila); tienen el coste de repartir la lógica entre dos sitios.</li>
+<li>Un procedimiento permite guardar y ejecutar una operación dentro de la propia base de datos. En este apartado se utiliza para actualizar varias filas sin cargarlas y recorrerlas una a una desde Java.</li>
 <li><strong><code>JdbcTemplate</code></strong> es el ayudante de Spring sobre JDBC puro — invoca procedimientos con parámetros seguros (<code>jdbcTemplate.update("CALL ...", ...)</code>) sin la fontanería manual de abrir/cerrar recursos.</li>
 <li>Se inyecta como cualquier otro bean, junto a los repositorios de Spring Data JPA — ambos enfoques conviven en el mismo service.</li>
 <li>Las <strong>consultas derivadas por nombre</strong> (<code>findByX</code>, <code>existsByX</code>, <code>countByX</code>, <code>deleteByX</code>, combinables con <code>And</code>/<code>OrderBy</code>/<code>ContainingIgnoreCase</code>...) generan SQL sin que escribas ninguna consulta — pero un nombre mal escrito falla al <strong>arrancar</strong> la aplicación (<code>PropertyReferenceException</code>), no al llamarlo.</li>

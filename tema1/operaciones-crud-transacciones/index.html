@@ -1428,6 +1428,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="💳 Qué garantiza que estas escrituras no dejen la base de datos a medias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transacciones-de-solo-lectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transacciones de solo lectura
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3056,6 +3071,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="💳 Qué garantiza que estas escrituras no dejen la base de datos a medias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transacciones-de-solo-lectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transacciones de solo lectura
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3106,7 +3136,7 @@
 <p>Ya sabes por qué hacen falta conectores y cómo se declara la estructura de una base de datos desde Java. Toca el paso siguiente: cómo se modifican y consultan los datos desde una aplicación real. Vas a construir el CRUD de <code>Libro</code> igual que lo harías tú solo — empezando por la versión más simple, tropezando con sus problemas, y resolviéndolos uno a uno — hasta llegar al mismo código que vas a escribir en la Actividad 1.2.</p>
 <hr>
 <h2 id="que-es-crud">🔤 Qué es CRUD<a class="headerlink" href="#que-es-crud" title="Permanent link">¶</a></h2>
-<p><strong>CRUD</strong> son las siglas de las cuatro operaciones universales sobre datos: <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete. Ya conoces su versión en SQL. También tiene una versión en verbos HTTP (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>), que trabajas en Programación de Servicios y Procesos — son la misma idea repetida en dos sitios distintos, y no por casualidad:</p>
+<p><strong>CRUD</strong> son las siglas de las cuatro operaciones universales sobre datos: <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete. Ya conoces su versión en SQL. HTTP expresa esas mismas intenciones sobre recursos, tal y como se vió en PSP:</p>
 <table>
 <thead>
 <tr>
@@ -3129,7 +3159,7 @@
 <tr>
 <td>Update</td>
 <td><code>UPDATE</code></td>
-<td><code>PUT</code></td>
+<td><code>PUT</code> para reemplazo completo; <code>PATCH</code> para actualización parcial</td>
 </tr>
 <tr>
 <td>Delete</td>
@@ -3138,7 +3168,7 @@
 </tr>
 </tbody>
 </table>
-<p>REST está pensado precisamente para eso: modelar operaciones CRUD sobre recursos usando los verbos que HTTP ya trae de fábrica, en vez de inventar una ruta o un verbo distinto para cada acción (algo como <code>/libros/crear</code> sería el estilo antiguo, no REST). Casi cualquier funcionalidad de una aplicación real, por compleja que parezca, se reduce en el fondo a combinar estas cuatro operaciones sobre distintos datos.</p>
+<p>REST está pensado precisamente para modelar estas operaciones sobre recursos utilizando los verbos que HTTP ya trae de fábrica, en vez de inventar una ruta distinta para cada acción —algo como <code>/libros/crear</code> sería el estilo antiguo, no REST—.</p>
 <hr>
 <h2 id="la-primera-pieza-el-repository">🗄️ La primera pieza: el repository<a class="headerlink" href="#la-primera-pieza-el-repository" title="Permanent link">¶</a></h2>
 <p>Antes de leer nada necesitas la pieza de la arquitectura en capas (Controller → Service → Repository) que todavía no has visto declarada: el <strong>repository</strong>, quien de verdad habla con la base de datos.</p>
@@ -3315,7 +3345,8 @@
 <a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Ignora por un momento el <code>@Transactional(readOnly = true)</code> — vuelves a él más abajo. Fíjate en la forma: el controller no toca el repository directamente, solo habla con el service; el service es quien de verdad llama a <code>libroRepository.findById(...)</code>. Ese orden (Controller → Service → Repository, cada uno hablando solo con el siguiente) no cambia en todo lo que viene a continuación — lo único que cambia es lo que circula por esas capas.</p>
+<p>De momento, quédate con una idea sencilla sobre <code>@Transactional(readOnly = true)</code>: indica que este método trabaja con la base de datos <strong>únicamente para consultar</strong>, sin intención de modificarla. Más abajo verás qué significa exactamente una transacción y qué aporta la opción <code>readOnly</code>.</p>
+<p>Ahora fíjate en la forma: el controller no toca el repository directamente, solo habla con el service; el service es quien de verdad llama a <code>libroRepository.findById(...)</code>. Ese orden (Controller → Service → Repository, cada uno hablando solo con el siguiente) no cambia en todo lo que viene a continuación — lo único que cambia es lo que circula por esas capas.</p>
 <p>Compila, funciona, y <code>GET /api/v1/libros/3</code> te devuelve algo así:</p>
 <div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
 <span class="normal"><a href="#__codelineno-8-2">2</a></span>
@@ -3493,7 +3524,7 @@
 <p><strong>La solución</strong>: anotaciones de <strong>Bean Validation</strong> (<code>jakarta.validation</code>) sobre el propio DTO, declarando la restricción justo donde vive el dato:</p>
 <div class="admonition warning">
 <p class="admonition-title">Falta una dependencia en el <code>pom.xml</code></p>
-<p><code>spring-boot-starter-webmvc</code> no trae Bean Validation incluido — es un starter aparte. Si usas <code>@NotBlank</code> y compañero sin haberlo añadido, el propio IDE no reconoce la anotación (no la encuentra para importar) o el proyecto falla al compilar. Añade esto al <code>pom.xml</code>:</p>
+<p><code>spring-boot-starter-webmvc</code> no trae Bean Validation incluido — es un starter aparte. Si usas <code>@NotBlank</code> y otras anotaciones de Bean Validation sin haber añadido esa dependencia, el propio IDE no reconoce la anotación (no la encuentra para importar) o el proyecto falla al compilar. Añade esto al <code>pom.xml</code>:</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
 <span class="normal"><a href="#__codelineno-15-2">2</a></span>
 <span class="normal"><a href="#__codelineno-15-3">3</a></span>
@@ -3610,7 +3641,8 @@
 <span class="normal"><a href="#__codelineno-18-11">11</a></span>
 <span class="normal"><a href="#__codelineno-18-12">12</a></span>
 <span class="normal"><a href="#__codelineno-18-13">13</a></span>
-<span class="normal"><a href="#__codelineno-18-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nd">@Transactional</span>
+<span class="normal"><a href="#__codelineno-18-14">14</a></span>
+<span class="normal"><a href="#__codelineno-18-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="nd">@Transactional</span>
 <a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="w">    </span><span class="n">Libro</span><span class="w"> </span><span class="n">libro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
 <a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
@@ -3620,12 +3652,14 @@
 <a id="__codelineno-18-8" name="__codelineno-18-8"></a>
 <a id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setTitulo</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">titulo</span><span class="p">());</span>
 <a id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setPrecio</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">precio</span><span class="p">());</span>
-<a id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
-<a id="__codelineno-18-12" name="__codelineno-18-12"></a>
-<a id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
-<a id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="p">}</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setFechaPublicacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">fechaPublicacion</span><span class="p">());</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="w">    </span><span class="n">libro</span><span class="p">.</span><span class="na">setEditorial</span><span class="p">(</span><span class="n">editorial</span><span class="p">);</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13"></a>
+<a id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>¿Qué pasaría si no comprobaras si el libro existe, y simplemente llamaras a <code>libro.setTitulo(...)</code> sobre un <code>libro</code> que nunca has cargado? No compilaría — necesitas el objeto antes de poder modificarlo, así que la comprobación de "no encontrado" no es opcional aquí, es la única forma de tener algo que modificar. El mismo <code>orElseThrow(() -&gt; new ResponseStatusException(HttpStatus.NOT_FOUND, ...))</code> que ya usaste en <code>findById</code> resuelve el caso: si no existe, la petición corta ahí mismo con un <code>404</code>, antes de tocar nada.</p>
+<p>Como ya viste en <code>findById()</code>, <code>orElseThrow(...)</code> resuelve el caso en que el <code>Optional</code> viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un <code>404 Not Found</code>.</p>
+<p>Sin esa comprobación podrías terminar intentando utilizar un valor <code>null</code>: el código compilaría, pero fallaría durante la ejecución al llamar a uno de sus métodos.</p>
 <p><code>delete()</code> no tiene nada que cargar ni modificar, así que usa la comprobación más ligera que ofrece el repository:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
 <span class="normal"><a href="#__codelineno-19-2">2</a></span>
@@ -3641,7 +3675,7 @@
 <a id="__codelineno-19-6" name="__codelineno-19-6"></a><span class="w">    </span><span class="n">libroRepository</span><span class="p">.</span><span class="na">deleteById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
 <a id="__codelineno-19-7" name="__codelineno-19-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>findAll()</code> no tiene ninguno de estos problemas (no hay "no encontrado" posible al pedir una lista completa, que puede estar vacía sin que sea un error) — es un <code>@Transactional(readOnly = true)</code> que mapea la lista entera del repository, tal como ya has visto hacer con un único libro.</p>
+<p><code>findAll()</code> no tiene ninguno de estos problemas: una lista puede estar vacía sin que eso sea un error. Como solo consulta datos, también utiliza <code>@Transactional(readOnly = true)</code> y transforma cada entidad en su DTO correspondiente.</p>
 <hr>
 <h2 id="que-garantiza-que-estas-escrituras-no-dejen-la-base-de-datos-a-medias">💳 Qué garantiza que estas escrituras no dejen la base de datos a medias<a class="headerlink" href="#que-garantiza-que-estas-escrituras-no-dejen-la-base-de-datos-a-medias" title="Permanent link">¶</a></h2>
 <p>En todos los métodos anteriores has visto aparecer la anotación <code>@Transactional</code>, sin explicar todavía qué hace exactamente — solo se te pidió que la ignoraras por un momento. Toca explicarla.</p>
@@ -3680,83 +3714,129 @@
 </tr>
 </tbody>
 </table>
-<p>Vuelve a mirar el código de <code>update()</code> y <code>delete()</code>: los dos llevan <code>@Transactional</code> encima, y <code>findById</code>/<code>findAll</code> llevan <code>@Transactional(readOnly = true)</code>. Eso es todo lo que hace falta — tú no escribes <code>connection.commit()</code> ni <code>connection.rollback()</code> en ningún sitio. Por debajo, Spring hace tres cosas:</p>
+<p>Vuelve a mirar el código de <code>update()</code> y <code>delete()</code>: los dos llevan <code>@Transactional</code> encima, y <code>findById</code>/<code>findAll</code> llevan <code>@Transactional(readOnly = true)</code>. Eso es todo lo que hace falta — tú no escribes <code>connection.commit()</code> ni <code>connection.rollback()</code> en ningún sitio. Por debajo, Spring se encarga del ciclo completo de la transacción:</p>
 <ul>
 <li>Abre la transacción <strong>antes</strong> de ejecutar el método.</li>
-<li>Hace <strong><em>commit</em> automáticamente</strong> si el método termina bien.</li>
-<li>Hace <strong><em>rollback</em></strong> si se lanza cualquier excepción por el camino — por ejemplo, el <code>ResponseStatusException</code> de "editorial no encontrada" a mitad de un <code>update()</code>: si eso pasa, el libro tampoco se guarda, aunque el <code>save()</code> esté más abajo en el método.</li>
+<li>Hace <strong><em>commit</em> automáticamente</strong> si el método termina correctamente.</li>
+<li>Hace <strong><em>rollback</em></strong> si el método termina con una excepción no comprobada —una <code>RuntimeException</code>— o con un error grave de la aplicación.</li>
 </ul>
-<p><code>readOnly = true</code>, en los métodos que solo leen, es una pista de optimización: le dice al framework y a la base de datos que esa operación no va a modificar nada.</p>
+<p>Las excepciones que estás utilizando en este CRUD, como <code>ResponseStatusException</code>, pertenecen a ese grupo. Por ejemplo, si durante <code>update()</code> no se encuentra la editorial indicada, se lanza la excepción y Spring deshace cualquier cambio realizado dentro de la transacción. La base de datos queda como estaba antes de comenzar la operación.</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Empieza @Transactional"] --&gt; B["Se ejecutan las operaciones"]
+    B --&gt;|"el método termina bien"| C["✅ COMMIT&lt;br/&gt;se confirman los cambios"]
+    B --&gt;|"se lanza RuntimeException o Error"| D["↩️ ROLLBACK&lt;br/&gt;se deshacen los cambios"]</code></pre>
+<p>Java también tiene <strong>excepciones comprobadas</strong>, que obligan a capturarlas o declararlas en la firma del método. Estas no provocan un rollback automático con la configuración habitual de Spring. Cuando necesitas que una de ellas también deshaga la transacción, puedes indicarlo expresamente:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span>
+<span class="normal"><a href="#__codelineno-20-2">2</a></span>
+<span class="normal"><a href="#__codelineno-20-3">3</a></span>
+<span class="normal"><a href="#__codelineno-20-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">rollbackFor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IOException</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">importarLibros</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>No necesitarás configurar esta opción en el CRUD del curso, pero conviene saber que el rollback depende del tipo de excepción y no simplemente de que haya ocurrido cualquier error.</p>
 <div class="admonition tip">
 <p class="admonition-title">Contraste con lo que viene después</p>
-<p>En el siguiente apartado (JDBC puro) vas a gestionar una conexión y una transacción <strong>a mano</strong>, sin Spring de por medio. Verás entonces, con código explícito, exactamente lo que <code>@Transactional</code> te está ahorrando aquí.</p>
+<p>En el siguiente apartado (JDBC puro) utilizarás JDBC directamente y gestionarás una transacción a mano: desactivarás el autocommit y decidirás cuándo ejecutar <code>commit()</code> o <code>rollback()</code>. Verás así, con código explícito, qué trabajo te está ahorrando <code>@Transactional</code>.</p>
 </div>
+<hr>
+<h3 id="transacciones-de-solo-lectura">Transacciones de solo lectura<a class="headerlink" href="#transacciones-de-solo-lectura" title="Permanent link">¶</a></h3>
+<p>Hasta ahora has visto <code>@Transactional</code> en métodos que crean, actualizan o eliminan datos. Los métodos de consulta también pueden ejecutarse dentro de una transacción, pero en ellos se añade <code>readOnly = true</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-21-1">1</a></span>
+<span class="normal"><a href="#__codelineno-21-2">2</a></span>
+<span class="normal"><a href="#__codelineno-21-3">3</a></span>
+<span class="normal"><a href="#__codelineno-21-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="nd">@Transactional</span><span class="p">(</span><span class="n">readOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">LibroResponseDTO</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Esta opción indica a Spring y a Hibernate que durante el método <strong>solo se espera consultar información</strong>. Eso permite aplicar algunas optimizaciones y, además, deja clara la intención del código para quien lo lee.</p>
+<p>Por eso, en este CRUD seguirás esta regla:</p>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Anotación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consultar datos</td>
+<td><code>@Transactional(readOnly = true)</code></td>
+</tr>
+<tr>
+<td>Crear, actualizar o eliminar</td>
+<td><code>@Transactional</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>readOnly = true</code> no significa que deje de existir una transacción: sigue habiéndola, pero está preparada para una operación que no pretende cambiar el estado de la base de datos.</p>
 <hr>
 <h2 id="las-piezas-juntas-el-librocontroller-completo">🗄️ Las piezas juntas: el <code>LibroController</code> completo<a class="headerlink" href="#las-piezas-juntas-el-librocontroller-completo" title="Permanent link">¶</a></h2>
 <p>Con el service ya resuelto, el controller completo es la traducción directa de la tabla CRUD↔HTTP del principio — cada método delega en su equivalente de <code>LibroService</code> y no hace nada más:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-20-10">10</a></span>
-<span class="normal"><a href="#__codelineno-20-11">11</a></span>
-<span class="normal"><a href="#__codelineno-20-12">12</a></span>
-<span class="normal"><a href="#__codelineno-20-13">13</a></span>
-<span class="normal"><a href="#__codelineno-20-14">14</a></span>
-<span class="normal"><a href="#__codelineno-20-15">15</a></span>
-<span class="normal"><a href="#__codelineno-20-16">16</a></span>
-<span class="normal"><a href="#__codelineno-20-17">17</a></span>
-<span class="normal"><a href="#__codelineno-20-18">18</a></span>
-<span class="normal"><a href="#__codelineno-20-19">19</a></span>
-<span class="normal"><a href="#__codelineno-20-20">20</a></span>
-<span class="normal"><a href="#__codelineno-20-21">21</a></span>
-<span class="normal"><a href="#__codelineno-20-22">22</a></span>
-<span class="normal"><a href="#__codelineno-20-23">23</a></span>
-<span class="normal"><a href="#__codelineno-20-24">24</a></span>
-<span class="normal"><a href="#__codelineno-20-25">25</a></span>
-<span class="normal"><a href="#__codelineno-20-26">26</a></span>
-<span class="normal"><a href="#__codelineno-20-27">27</a></span>
-<span class="normal"><a href="#__codelineno-20-28">28</a></span>
-<span class="normal"><a href="#__codelineno-20-29">29</a></span>
-<span class="normal"><a href="#__codelineno-20-30">30</a></span>
-<span class="normal"><a href="#__codelineno-20-31">31</a></span>
-<span class="normal"><a href="#__codelineno-20-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="nd">@RestController</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6"></a>
-<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="w">    </span><span class="nd">@GetMapping</span>
-<a id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAll</span><span class="p">());</span>
-<a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-20-11" name="__codelineno-20-11"></a>
-<a id="__codelineno-20-12" name="__codelineno-20-12"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
-<a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-20-16" name="__codelineno-20-16"></a>
-<a id="__codelineno-20-17" name="__codelineno-20-17"></a><span class="w">    </span><span class="nd">@PostMapping</span>
-<a id="__codelineno-20-18" name="__codelineno-20-18"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-19" name="__codelineno-20-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
-<a id="__codelineno-20-20" name="__codelineno-20-20"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-20-21" name="__codelineno-20-21"></a>
-<a id="__codelineno-20-22" name="__codelineno-20-22"></a><span class="w">    </span><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-20-23" name="__codelineno-20-23"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-24" name="__codelineno-20-24"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">));</span>
-<a id="__codelineno-20-25" name="__codelineno-20-25"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-20-26" name="__codelineno-20-26"></a>
-<a id="__codelineno-20-27" name="__codelineno-20-27"></a><span class="w">    </span><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
-<a id="__codelineno-20-28" name="__codelineno-20-28"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-20-29" name="__codelineno-20-29"></a><span class="w">        </span><span class="n">libroService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-<a id="__codelineno-20-30" name="__codelineno-20-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">noContent</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
-<a id="__codelineno-20-31" name="__codelineno-20-31"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-20-32" name="__codelineno-20-32"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-22-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-22-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-22-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-22-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-22-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-22-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-22-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-22-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-22-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-22-10">10</a></span>
+<span class="normal"><a href="#__codelineno-22-11">11</a></span>
+<span class="normal"><a href="#__codelineno-22-12">12</a></span>
+<span class="normal"><a href="#__codelineno-22-13">13</a></span>
+<span class="normal"><a href="#__codelineno-22-14">14</a></span>
+<span class="normal"><a href="#__codelineno-22-15">15</a></span>
+<span class="normal"><a href="#__codelineno-22-16">16</a></span>
+<span class="normal"><a href="#__codelineno-22-17">17</a></span>
+<span class="normal"><a href="#__codelineno-22-18">18</a></span>
+<span class="normal"><a href="#__codelineno-22-19">19</a></span>
+<span class="normal"><a href="#__codelineno-22-20">20</a></span>
+<span class="normal"><a href="#__codelineno-22-21">21</a></span>
+<span class="normal"><a href="#__codelineno-22-22">22</a></span>
+<span class="normal"><a href="#__codelineno-22-23">23</a></span>
+<span class="normal"><a href="#__codelineno-22-24">24</a></span>
+<span class="normal"><a href="#__codelineno-22-25">25</a></span>
+<span class="normal"><a href="#__codelineno-22-26">26</a></span>
+<span class="normal"><a href="#__codelineno-22-27">27</a></span>
+<span class="normal"><a href="#__codelineno-22-28">28</a></span>
+<span class="normal"><a href="#__codelineno-22-29">29</a></span>
+<span class="normal"><a href="#__codelineno-22-30">30</a></span>
+<span class="normal"><a href="#__codelineno-22-31">31</a></span>
+<span class="normal"><a href="#__codelineno-22-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="nd">@RestController</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LibroController</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">LibroService</span><span class="w"> </span><span class="n">libroService</span><span class="p">;</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6"></a>
+<a id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="w">    </span><span class="nd">@GetMapping</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findAll</span><span class="p">());</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11"></a>
+<a id="__codelineno-22-12" name="__codelineno-22-12"></a><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16"></a>
+<a id="__codelineno-22-17" name="__codelineno-22-17"></a><span class="w">    </span><span class="nd">@PostMapping</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">dto</span><span class="p">));</span>
+<a id="__codelineno-22-20" name="__codelineno-22-20"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-21" name="__codelineno-22-21"></a>
+<a id="__codelineno-22-22" name="__codelineno-22-22"></a><span class="w">    </span><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-22-23" name="__codelineno-22-23"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">LibroResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">LibroCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-24" name="__codelineno-22-24"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">libroService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">));</span>
+<a id="__codelineno-22-25" name="__codelineno-22-25"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-26" name="__codelineno-22-26"></a>
+<a id="__codelineno-22-27" name="__codelineno-22-27"></a><span class="w">    </span><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{id}"</span><span class="p">)</span>
+<a id="__codelineno-22-28" name="__codelineno-22-28"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-29" name="__codelineno-22-29"></a><span class="w">        </span><span class="n">libroService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<a id="__codelineno-22-30" name="__codelineno-22-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">noContent</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+<a id="__codelineno-22-31" name="__codelineno-22-31"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-32" name="__codelineno-22-32"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Fíjate en que cada método usa exactamente el código de estado que anticipaba la tabla del principio: <code>create</code> responde <code>201</code> con <code>HttpStatus.CREATED</code> explícito, <code>update</code> responde <code>200</code> con <code>ResponseEntity.ok(...)</code>, y <code>delete</code> responde <code>204</code> con <code>ResponseEntity.noContent().build()</code> — sin cuerpo, porque una vez borrado el libro no hay nada que devolver. Y en las cinco líneas de este controller se repite la misma regla que has visto todo el apartado: el controller no habla nunca con el repository, ni construye nunca SQL — solo traduce entre HTTP y una llamada a <code>LibroService</code>.</p>
 <p>Con todo esto ya puedes abordar la Actividad 1.2: construir, guiado, un CRUD completo como este en tu propio proyecto.</p>
@@ -3793,7 +3873,7 @@
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li><strong>CRUD</strong> = Create/Read/Update/Delete, equivalentes a <code>INSERT</code>/<code>SELECT</code>/<code>UPDATE</code>/<code>DELETE</code> en SQL y a <code>POST</code>/<code>GET</code>/<code>PUT</code>/<code>DELETE</code> en HTTP — las tres son la misma idea.</li>
+<li><strong>CRUD</strong> = Create/Read/Update/Delete. En HTTP, <em>Read</em> puede expresarse con <code>GET</code>, y <em>Update</em> con <code>PUT</code> o <code>PATCH</code>; siguen siendo las mismas cuatro operaciones sobre datos.</li>
 <li>Un <strong>repository</strong> (<code>interface XRepository extends JpaRepository&lt;X, Long&gt;</code>) te da <code>findAll</code>/<code>findById</code>/<code>save</code>/<code>existsById</code>/<code>deleteById</code> sin escribir SQL ni implementación propia.</li>
 <li>Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (<code>findByEditorialId</code>, <code>findByTituloAndPrecioLessThan</code>...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y <code>@Query</code> (más adelante en este tema).</li>
 <li>Devolver la entidad JPA tal cual expone campos internos que no deberías publicar (y puede arrastrar detalles de Hibernate en las relaciones <em>lazy</em>) — por eso se convierte a un <strong>DTO</strong> antes de salir.</li>
