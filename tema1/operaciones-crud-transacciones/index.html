@@ -3185,7 +3185,7 @@
 </code></pre></div></td></tr></table></div>
 <ul>
 <li><strong><code>T</code></strong>: la entidad que gestiona este repository — aquí, <code>Libro</code>.</li>
-<li><strong><code>ID</code></strong>: el tipo de la clave primaria de esa entidad — el mismo tipo que le pusiste al campo anotado con <code>@Id</code> en el apartado anterior (en este curso, siempre <code>Long</code>).</li>
+<li><strong><code>ID</code></strong>: el tipo de la clave primaria de esa entidad — el mismo tipo que le has puesto al campo anotado con <code>@Id</code> en el apartado anterior (en este curso, siempre <code>Long</code>).</li>
 </ul>
 <p><code>JpaRepository</code> <strong>no está vacía</strong>: por dentro, ya trae declarados decenas de métodos — <code>findAll()</code>, <code>findById(id)</code>, <code>save(entidad)</code>, <code>deleteById(id)</code>... Cuando escribes <code>interface LibroRepository extends JpaRepository&lt;Libro, Long&gt; {}</code>, <code>LibroRepository</code> <strong>hereda</strong> todos esos métodos automáticamente, ya especializados para <code>Libro</code>, aunque tú no escribas ni una línea dentro de las llaves.</p>
 <div class="admonition info">
@@ -3239,7 +3239,7 @@
 <span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">libroRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado"</span><span class="p">));</span>
 </code></pre></div></td></tr></table></div>
-<p><code>orElseThrow(...)</code> dice, en una línea: "si el <code>Optional</code> trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos resolviste el caso "recurso no encontrado" con un <code>if</code> explícito comprobando <code>null</code> — esto es la versión más directa de esa misma idea, apoyada en que <code>findById</code> ya te avisa con un <code>Optional</code> vacío en vez de con un <code>null</code> a pelo.</p>
+<p><code>orElseThrow(...)</code> dice, en una línea: "si el <code>Optional</code> trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos has resuelto el caso "recurso no encontrado" con un <code>if</code> explícito comprobando <code>null</code> — esto es la versión más directa de esa misma idea, apoyada en que <code>findById</code> ya te avisa con un <code>Optional</code> vacío en vez de con un <code>null</code> a pelo.</p>
 <h3 id="y-si-necesitas-una-consulta-que-no-viene-de-fabrica">Y si necesitas una consulta que no viene de fábrica<a class="headerlink" href="#y-si-necesitas-una-consulta-que-no-viene-de-fabrica" title="Permanent link">¶</a></h3>
 <p><code>findAll</code>/<code>findById</code>/<code>save</code>... cubren lo genérico, pero ¿y si necesitas "todos los libros de una editorial concreta"? No hace falta escribir SQL a mano ni implementar nada: declaras el método en la interfaz, sin cuerpo, siguiendo un patrón de nombre:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
@@ -3381,7 +3381,7 @@
 </tr>
 <tr>
 <td><code>hibernateLazyInitializer</code></td>
-<td>Un detalle interno de cómo Hibernate representa la relación <code>@ManyToOne</code> con carga <em>lazy</em> que viste en el apartado anterior, filtrado sin querer al convertir el objeto a JSON.</td>
+<td>Un detalle interno de cómo Hibernate representa la relación <code>@ManyToOne</code> con carga <em>lazy</em> que has visto en el apartado anterior, filtrado sin querer al convertir el objeto a JSON.</td>
 </tr>
 </tbody>
 </table>
@@ -3658,7 +3658,7 @@
 <a id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">libro</span><span class="p">));</span>
 <a id="__codelineno-18-15" name="__codelineno-18-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Como ya viste en <code>findById()</code>, <code>orElseThrow(...)</code> resuelve el caso en que el <code>Optional</code> viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un <code>404 Not Found</code>.</p>
+<p>Como ya has visto en <code>findById()</code>, <code>orElseThrow(...)</code> resuelve el caso en que el <code>Optional</code> viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un <code>404 Not Found</code>.</p>
 <p>Sin esa comprobación podrías terminar intentando utilizar un valor <code>null</code>: el código compilaría, pero fallaría durante la ejecución al llamar a uno de sus métodos.</p>
 <p><code>delete()</code> no tiene nada que cargar ni modificar, así que usa la comprobación más ligera que ofrece el repository:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>

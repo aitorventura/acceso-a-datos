@@ -1632,13 +1632,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" class="md-nav__link">
+  <a href="#decisiones-de-mapeo-que-ya-has-tomado-explicadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Decisiones de mapeo que ya tomaste, explicadas
+      Decisiones de mapeo que ya has tomado, explicadas
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Decisiones de mapeo que ya tomaste, explicadas">
+    <nav class="md-nav" aria-label="Decisiones de mapeo que ya has tomado, explicadas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3043,13 +3043,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" class="md-nav__link">
+  <a href="#decisiones-de-mapeo-que-ya-has-tomado-explicadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Decisiones de mapeo que ya tomaste, explicadas
+      Decisiones de mapeo que ya has tomado, explicadas
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Decisiones de mapeo que ya tomaste, explicadas">
+    <nav class="md-nav" aria-label="Decisiones de mapeo que ya has tomado, explicadas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3260,8 +3260,8 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
 <p><code>spring-boot-starter-data-jpa</code> trae Hibernate como implementación de JPA por defecto, además de Spring Data JPA. Con solo esa dependencia (que ya tienes en tu <code>pom.xml</code> desde la Actividad 1.1), Hibernate está "instalado y configurado" en lo esencial.</p>
-<h3 id="decisiones-de-mapeo-que-ya-tomaste-explicadas">Decisiones de mapeo que ya tomaste, explicadas<a class="headerlink" href="#decisiones-de-mapeo-que-ya-tomaste-explicadas" title="Permanent link">¶</a></h3>
-<p>Tu <code>Videojuego</code> y tu <code>Estudio</code> de la Actividad 1.1 ya llevan varias anotaciones concretas — las escribiste siguiendo el patrón de la teoría, sin que se justificara todavía cada elección. Toca cerrar ese hueco.</p>
+<h3 id="decisiones-de-mapeo-que-ya-has-tomado-explicadas">Decisiones de mapeo que ya has tomado, explicadas<a class="headerlink" href="#decisiones-de-mapeo-que-ya-has-tomado-explicadas" title="Permanent link">¶</a></h3>
+<p>Tu <code>Videojuego</code> y tu <code>Estudio</code> de la Actividad 1.1 ya llevan varias anotaciones concretas — las has escrito siguiendo el patrón de la teoría, sin que se justificara todavía cada elección. Toca cerrar ese hueco.</p>
 <h4 id="generationtypeidentity-por-que-esa-estrategia"><code>GenerationType.IDENTITY</code>, ¿por qué esa estrategia?<a class="headerlink" href="#generationtypeidentity-por-que-esa-estrategia" title="Permanent link">¶</a></h4>
 <p><code>GenerationType</code> tiene cinco valores. Todos resuelven el mismo problema —generar un identificador único—, pero lo hacen de formas diferentes:</p>
 <table>
@@ -3437,7 +3437,7 @@
 <h3 id="configuracion-avanzada-cuando-el-mapeo-no-es-directo">Configuración avanzada: cuando el mapeo no es directo<a class="headerlink" href="#configuracion-avanzada-cuando-el-mapeo-no-es-directo" title="Permanent link">¶</a></h3>
 <p>Hibernate necesita, a veces, ayuda extra para mapear tipos que no tienen una correspondencia directa con una columna estándar — por ejemplo, si quisieras guardar cifrado el contenido de un campo, o dar formato propio a un tipo que Hibernate no reconoce de fábrica. Esa ayuda se declara con un <code>@Converter</code> (una clase que implementa <code>AttributeConverter</code>, indicándole a Hibernate cómo convertir ese tipo concreto hacia y desde la columna) — no necesitas escribir uno todavía; basta con saber que, cuando el mapeo automático no llega, es exactamente ahí donde se completa.</p>
 <h3 id="ddl-auto-configuracion-del-orm-no-del-conector"><code>ddl-auto</code>: configuración del ORM, no del conector<a class="headerlink" href="#ddl-auto-configuracion-del-orm-no-del-conector" title="Permanent link">¶</a></h3>
-<p>Ya usaste <code>spring.jpa.hibernate.ddl-auto: update</code> desde la Actividad 1.1, pero desde el ángulo de "cómo se crea la tabla". Con la distinción entre conector y ORM que ya conoces, es el momento de precisarlo: la conexión (usuario, contraseña, URL) es configuración del <strong>conector</strong>; qué hace Hibernate con las entidades que declaras (crear tablas, validarlas, no tocar nada) es configuración del <strong>ORM</strong> — y vive en esa misma propiedad, <code>ddl-auto</code>.</p>
+<p>Ya has usado <code>spring.jpa.hibernate.ddl-auto: update</code> desde la Actividad 1.1, pero desde el ángulo de "cómo se crea la tabla". Con la distinción entre conector y ORM que ya conoces, es el momento de precisarlo: la conexión (usuario, contraseña, URL) es configuración del <strong>conector</strong>; qué hace Hibernate con las entidades que declaras (crear tablas, validarlas, no tocar nada) es configuración del <strong>ORM</strong> — y vive en esa misma propiedad, <code>ddl-auto</code>.</p>
 <p><code>ddl-auto</code> no es la única propiedad de configuración del ORM — estas son las que más vas a usar:</p>
 <table>
 <thead>
@@ -3453,7 +3453,7 @@
 </tr>
 <tr>
 <td><code>spring.jpa.show-sql</code></td>
-<td>Si Hibernate imprime en consola el SQL real que ejecuta por debajo (ya la usaste en la Actividad 1.1, sin que se explicara todavía qué hacía).</td>
+<td>Si Hibernate imprime en consola el SQL real que ejecuta por debajo (ya la has usado en la Actividad 1.1, sin que se explicara todavía qué hacía).</td>
 </tr>
 <tr>
 <td><code>spring.jpa.properties.hibernate.format_sql</code></td>

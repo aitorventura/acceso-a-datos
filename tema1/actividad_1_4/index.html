@@ -3055,7 +3055,7 @@
 <p><strong>Captura</strong>: el resultado del <code>SELECT</code> tras aplicar el porcentaje muy negativo, con los precios en <code>0</code>, no en negativo.</p>
 <hr>
 <h2 id="paso-3-consultas-derivadas-sobre-tu-propio-catalogo">Paso 3 — Consultas derivadas, sobre tu propio catálogo<a class="headerlink" href="#paso-3-consultas-derivadas-sobre-tu-propio-catalogo" title="Permanent link">¶</a></h2>
-<p>Ya viste en la teoría de este apartado la convención completa de consultas derivadas por nombre. Añade a <code>VideojuegoRepository</code> (una interfaz vacía hasta ahora) estos dos métodos, sin cuerpo:</p>
+<p>Ya has visto en la teoría de este apartado la convención completa de consultas derivadas por nombre. Añade a <code>VideojuegoRepository</code> (una interfaz vacía hasta ahora) estos dos métodos, sin cuerpo:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByEstudioIdOrderByPrecioDesc</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="p">);</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByTituloContainingIgnoreCase</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">fragmento</span><span class="p">);</span>
@@ -3079,7 +3079,7 @@
 <p><strong>Pregunta</strong>: si <code>findByTituloContainingIgnoreCase("celeste")</code> no encontrara nada aunque exista un videojuego llamado "Celeste", ¿qué comprobarías primero? El nombre del método ya cubre mayúsculas/minúsculas — piensa en qué otra cosa, más básica, podría estar fallando.</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Toca profundizar en el ORM que llevas usando desde la Actividad 1.1: instalación y configuración de Hibernate en detalle, decisiones de mapeo que ya tomaste sin cuestionarlas, y las dos vías de consulta que te faltan — Specifications dinámicas y JPQL con <code>@Query</code>. Cuando termines esos apartados, el siguiente tema da el salto a JSONB, la primera base de datos objeto-relacional del curso.</p></div>
+<p>Toca profundizar en el ORM que llevas usando desde la Actividad 1.1: instalación y configuración de Hibernate en detalle, decisiones de mapeo que ya has tomado sin cuestionarlas, y las dos vías de consulta que te faltan — Specifications dinámicas y JPQL con <code>@Query</code>. Cuando termines esos apartados, el siguiente tema da el salto a JSONB, la primera base de datos objeto-relacional del curso.</p></div>
 
 
 

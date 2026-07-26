@@ -3234,7 +3234,7 @@
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorFormatoEbook</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">"formato"</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">formato</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <p><code>buscarPorFormatoEbook("mobi")</code> devuelve solo <em>1984</em>, el mismo resultado que ya has visto con <code>jsonb_extract_path_text</code> desde Criteria API. Como aquí no interviene el operador <code>?</code>, no hay ningún conflicto con el marcador de parámetro de JDBC — puedes escribir la ruta con <code>-&gt;</code>/<code>-&gt;&gt;</code> tal cual, igual que la escribirías directamente en <code>psql</code>.</p>
-<p>¿Y entonces, <code>criteriaBuilder.function(...)</code> o <code>@Query(nativeQuery = true)</code>? La misma pregunta que ya te has hecho en el Tema 1 entre Specifications y <code>@Query</code> con JPQL, con la misma respuesta:</p>
+<p>¿Y entonces, <code>criteriaBuilder.function(...)</code> o <code>@Query(nativeQuery = true)</code>? La misma pregunta que ya te hiciste en el Tema 1 entre Specifications y <code>@Query</code> con JPQL, con la misma respuesta:</p>
 <table>
 <thead>
 <tr>

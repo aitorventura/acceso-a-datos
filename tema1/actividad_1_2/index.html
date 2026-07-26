@@ -3096,7 +3096,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada — con partes a tu cargo</p>
-<p>Vas a construir, sobre las entidades que creaste en la Actividad 1.1, el CRUD completo de <code>Videojuego</code> y de <code>Estudio</code>. En la teoría ya tienes un ejemplo completo y funcionando (<code>Libro</code>/<code>Editorial</code>) — aquí no lo vas a copiar y adaptar el nombre: unos pasos vienen guiados al completo, otros solo con la especificación y pistas, y tienes que escribir tú el código, apoyándote en el patrón que ya conoces.</p>
+<p>Vas a construir, sobre las entidades que has creado en la Actividad 1.1, el CRUD completo de <code>Videojuego</code> y de <code>Estudio</code>. En la teoría ya tienes un ejemplo completo y funcionando (<code>Libro</code>/<code>Editorial</code>) — aquí no lo vas a copiar y adaptar el nombre: unos pasos vienen guiados al completo, otros solo con la especificación y pistas, y tienes que escribir tú el código, apoyándote en el patrón que ya conoces.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
@@ -3277,7 +3277,7 @@
 <a id="__codelineno-3-27" name="__codelineno-3-27"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Añade tú <code>findAll()</code></strong> a esta misma clase: devuelve <code>List&lt;VideojuegoResponseDTO&gt;</code>, es <code>@Transactional(readOnly = true)</code> igual que <code>findById</code>, y mapea la lista completa del repository con <code>mapToDTO</code> — sin <code>orElseThrow</code>, porque una lista vacía no es un error (es exactamente el mismo caso que ya viste con <code>LibroService.findAll()</code> en la teoría).</p>
+<p><strong>Añade tú <code>findAll()</code></strong> a esta misma clase: devuelve <code>List&lt;VideojuegoResponseDTO&gt;</code>, es <code>@Transactional(readOnly = true)</code> igual que <code>findById</code>, y mapea la lista completa del repository con <code>mapToDTO</code> — sin <code>orElseThrow</code>, porque una lista vacía no es un error (es exactamente el mismo caso que ya has visto con <code>LibroService.findAll()</code> en la teoría).</p>
 <hr>
 <h2 id="paso-4-el-controller-un-metodo-guiado-el-otro-tuyo">Paso 4 — El controller: un método guiado, el otro tuyo<a class="headerlink" href="#paso-4-el-controller-un-metodo-guiado-el-otro-tuyo" title="Permanent link">¶</a></h2>
 <p>Mismo reparto que en el service — <code>getById</code> guiado, <code>getAll</code> para ti:</p>
@@ -3325,7 +3325,7 @@
 <ul>
 <li>Un método <code>create(VideojuegoCreateDTO dto)</code> que devuelve <code>VideojuegoResponseDTO</code>, anotado <code>@Transactional</code> (sin <code>readOnly</code>: es una escritura).</li>
 <li>Dentro, en este orden:<ol>
-<li>Busca el <code>Estudio</code> con <code>estudioRepository.findById(dto.estudioId())</code>. Si no existe, lanza <code>ResponseStatusException(HttpStatus.NOT_FOUND, ...)</code> — mismo patrón que ya usaste en <code>findById</code>, aplicado esta vez al estudio, no al videojuego.</li>
+<li>Busca el <code>Estudio</code> con <code>estudioRepository.findById(dto.estudioId())</code>. Si no existe, lanza <code>ResponseStatusException(HttpStatus.NOT_FOUND, ...)</code> — mismo patrón que ya has usado en <code>findById</code>, aplicado esta vez al estudio, no al videojuego.</li>
 <li>Crea un <code>Videojuego</code> nuevo (<code>new Videojuego()</code>) y rellena sus campos con los setters de Lombok — <code>titulo</code>, <code>precio</code>, <code>fechaLanzamiento</code> desde el DTO, y <code>estudio</code> con el objeto que acabas de cargar.</li>
 <li>Guarda con <code>videojuegoRepository.save(...)</code> y devuelve el resultado pasado por <code>mapToDTO</code>.</li>
 </ol>
@@ -3333,7 +3333,7 @@
 </ul>
 <p>Y en <code>VideojuegoController</code>, un método <code>create</code> anotado <code>@PostMapping</code>, que recibe <code>@Valid @RequestBody VideojuegoCreateDTO dto</code> y responde <code>201 Created</code> (<code>HttpStatus.CREATED</code>) con el resultado.</p>
 <p>Guíate por <code>LibroService.create()</code>/<code>LibroController.create()</code> de la teoría — es exactamente el mismo patrón, con otros nombres de campo.</p>
-<p>Antes de probarlo, hace falta un <code>Estudio</code> real al que asociar el videojuego — y el endpoint para crear estudios todavía no existe (lo construyes en el Paso 8). Siémbralo directamente por SQL, desde la misma terminal <code>psql</code> que ya usaste en la Actividad 1.1:</p>
+<p>Antes de probarlo, hace falta un <code>Estudio</code> real al que asociar el videojuego — y el endpoint para crear estudios todavía no existe (lo construyes en el Paso 8). Siémbralo directamente por SQL, desde la misma terminal <code>psql</code> que ya has usado en la Actividad 1.1:</p>
 <div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">estudio</span><span class="w"> </span><span class="p">(</span><span class="n">nombre</span><span class="p">,</span><span class="w"> </span><span class="n">pais</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'Supergiant Games'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Estados Unidos'</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <p>Comprueba con <code>SELECT * FROM estudio;</code> que se ha creado con <code>id = 1</code> (si es la primera fila que insertas en una tabla recién creada, lo será). Ahora sí, prueba <code>create()</code>:</p>
@@ -3442,7 +3442,7 @@
 <ul>
 <li><code>findAll()</code> y <code>findById(id)</code> — igual que en <code>Videojuego</code>, devolviendo <code>EstudioResponseDTO</code> con su propio <code>mapToDTO(Estudio e)</code> privado.</li>
 <li><code>create(EstudioCreateDTO dto)</code> — más simple que el de <code>Videojuego</code>: no hay ningún <code>findById</code> previo, solo <code>new Estudio()</code>, rellenar y guardar.</li>
-<li><code>update(Long id, EstudioCreateDTO dto)</code> y <code>delete(Long id)</code> — mismo patrón que ya usaste en <code>VideojuegoService</code>.</li>
+<li><code>update(Long id, EstudioCreateDTO dto)</code> y <code>delete(Long id)</code> — mismo patrón que ya has usado en <code>VideojuegoService</code>.</li>
 </ul>
 <p><strong><code>EstudioController</code></strong>, en <code>/api/v1/estudios</code>: las cuatro operaciones — <code>GET</code> (los dos), <code>POST</code>, <code>PUT</code> y <code>DELETE</code>, igual que en <code>VideojuegoController</code> — incluido el <code>@Valid</code> en <code>create</code>/<code>update</code>, ahora que <code>EstudioCreateDTO</code> lleva anotaciones que comprobar.</p>
 <p><strong>Comprueba</strong> con <code>curl</code> que las cuatro operaciones de <code>/api/v1/estudios</code> funcionan igual que sus equivalentes de <code>Videojuego</code>:</p>

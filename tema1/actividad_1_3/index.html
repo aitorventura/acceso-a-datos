@@ -3055,7 +3055,7 @@
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Docker funcionando y la extensión Dev Containers (las mismas que usaste en la Actividad 1.1). Haber leído la teoría de este apartado antes de empezar — la necesitas para los Pasos 3 y 4, donde no hay código dado.</p>
+<p>Docker funcionando y la extensión Dev Containers (las mismas que ya has usado en la Actividad 1.1). Haber leído la teoría de este apartado antes de empezar — la necesitas para los Pasos 3 y 4, donde no hay código dado.</p>
 <hr>
 <h2 id="paso-0-crear-el-proyecto">Paso 0 — Crear el proyecto<a class="headerlink" href="#paso-0-crear-el-proyecto" title="Permanent link">¶</a></h2>
 <p>Crea una carpeta nueva, separada de tu repositorio de GameVault — por ejemplo, <code>jdbc-practica</code>. Dentro, un <code>pom.xml</code> mínimo, sin Spring Boot:</p>
@@ -3255,7 +3255,7 @@
 <p><strong>Comprueba</strong>: que la consola imprime los alumnos del curso que hayas puesto, con el formato pedido.</p>
 <hr>
 <h2 id="paso-4-por-que-el-cierre-importa">Paso 4 — Por qué el cierre importa<a class="headerlink" href="#paso-4-por-que-el-cierre-importa" title="Permanent link">¶</a></h2>
-<p><strong>Pregunta</strong>: si conectaras con un <code>Connection conn = DriverManager.getConnection(...)</code> normal, sin <code>try-with-resources</code> y sin cerrarla nunca, ¿qué pasaría si ejecutaras tu <code>main()</code> 200 veces seguidas? Relaciona tu respuesta con el <em>pool</em> de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos" — aunque aquí no haya ningún <em>pool</em> de por medio, ¿por qué el problema seguiría siendo real?</p>
+<p><strong>Pregunta</strong>: si conectaras con un <code>Connection conn = DriverManager.getConnection(...)</code> normal, sin <code>try-with-resources</code> y sin cerrarla nunca, ¿qué pasaría si ejecutaras tu <code>main()</code> 200 veces seguidas? Relaciona tu respuesta con el <em>pool</em> de conexiones (HikariCP) que has visto en "Conectores y protocolos de acceso a bases de datos" — aunque aquí no haya ningún <em>pool</em> de por medio, ¿por qué el problema seguiría siendo real?</p>
 <hr>
 <h2 id="mini-reto-segunda-consulta">Mini-reto — segunda consulta<a class="headerlink" href="#mini-reto-segunda-consulta" title="Permanent link">¶</a></h2>
 <p>Repite el mismo patrón del Paso 3 (conexión, <code>PreparedStatement</code> parametrizado, recorrido del <code>ResultSet</code>, mapeo a un objeto, cierre con <code>try-with-resources</code>) para esta consulta nueva:</p>
