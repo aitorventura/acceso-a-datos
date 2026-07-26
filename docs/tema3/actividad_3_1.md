@@ -218,7 +218,17 @@ public class VideojuegoReviewController {
 }
 ```
 
-Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya construiste en PSP. Prueba con tu token:
+Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya has construido en PSP.
+
+!!! warning "Esta ruta todavía no existe en tu `SecurityConfig` — añádela ahora"
+    Las reseñas no existían en la Actividad 2.5 de PSP, así que no aparecen en tu política de rutas — y con `denyAll()` cerrando todo lo que no está listado explícitamente, `/api/v1/videojuegos/*/reviews` está bloqueada hasta que la añadas tú:
+    ```java
+    .requestMatchers(HttpMethod.GET, "/api/v1/videojuegos/*/reviews/**").permitAll()
+    .requestMatchers(HttpMethod.POST, "/api/v1/videojuegos/*/reviews").authenticated()
+    ```
+    `GET` queda pública, igual que el resto de lecturas del catálogo. `POST` exige estar autenticado, pero sin ningún rol concreto: quien puede escribir una reseña es cualquier usuario logueado, no solo `ADMIN` — la comprobación que de verdad importa aquí es *quién eres* (para guardarte como autor), no *qué rol tienes*.
+
+Ahora sí, prueba con tu token:
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
@@ -244,8 +254,11 @@ Sin más código dado, completa en `ReviewService` un método `getResumenByVideo
 Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal:
 
 ```bash
-curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
+curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
+  -H "Authorization: Bearer $TOKEN_ADMIN"
 ```
+
+(recuerda: `DELETE /api/v1/videojuegos/{id}` exige rol `ADMIN` desde la Actividad 2.5 de PSP)
 
 Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1). Comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`) y sustitúyelo por `<proyecto>`:
 

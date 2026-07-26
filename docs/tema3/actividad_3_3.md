@@ -51,6 +51,13 @@ public ResponseEntity<ReviewResponseDTO> update(
 
 Igual que ya hace el `POST`, recibes `Principal principal` y le pasas `principal.getName()` al service — la comparación de autoría ocurre dentro de `update()`, no en el controller.
 
+!!! warning "Añade también la regla del `PUT` a tu `SecurityConfig`"
+    Igual que has tenido que añadir la regla del `POST` en la Actividad 3.1, esta ruta nueva tampoco existe todavía en tu política:
+    ```java
+    .requestMatchers(HttpMethod.PUT, "/api/v1/videojuegos/*/reviews/*").authenticated()
+    ```
+    Otra vez basta con estar autenticado, sin rol concreto — quién puede modificar **esta** reseña en particular ya lo decide `update()` comparando el autor, no `SecurityConfig`.
+
 ---
 
 ## Paso 2 — Probar con dos usuarios: el caso correcto

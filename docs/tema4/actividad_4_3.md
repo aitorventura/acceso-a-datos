@@ -24,10 +24,13 @@ Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos 
 ```java
 package com.tunombre.gamevault.integration;
 
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -40,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @Testcontainers
 class FlujoCompletoIntegrationTest {
 
@@ -54,10 +58,28 @@ class FlujoCompletoIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private String loginComoAdmin() throws Exception {
+        String respuesta = mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "username": "admin",
+                                  "password": "admin123"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        return JsonPath.read(respuesta, "$.accessToken");
+    }
+
     @Test
     void flujoCompleto_DesdeCrearHastaBorrarConReviews() throws Exception {
+        String adminToken = loginComoAdmin();
+
         // Tramo 1: crear un estudio y un videojuego con detallesPlataforma
         mockMvc.perform(post("/api/v1/estudios")
+                        .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {"nombre": "Team Cherry", "pais": "Australia"}
@@ -65,6 +87,7 @@ class FlujoCompletoIntegrationTest {
                 .andExpect(status().isCreated());
 
         String respuestaVideojuego = mockMvc.perform(post("/api/v1/videojuegos")
+                        .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -83,15 +106,15 @@ class FlujoCompletoIntegrationTest {
 }
 ```
 
-Este primer tramo, ya completo, crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente.
+Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente. Fíjate en `loginComoAdmin()` y en `@ActiveProfiles("test")`: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio `application-test.yml`, que reutilizas tal cual) — sin login, estos `POST` devolverían `403`, no `201`, porque `/api/v1/estudios` y `/api/v1/videojuegos` exigen rol `ADMIN` desde la Actividad 2.5 de PSP.
 
 ### Tramo 2 — mini-reto: la reseña y el resumen
 
-Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña para ese videojuego (necesitarás un token JWT válido — si tu test de seguridad de PSP ya tiene un método `login(...)` reutilizable, cópialo aquí), y comprobar con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya usaste en la Actividad 2.3 (MockMvc completo, `jsonPath` sobre el cuerpo).
+Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña para ese videojuego (reutiliza el mismo `adminToken` — crear una reseña solo exige estar autenticado, no rol `ADMIN`, así que te sirve igual), y comprobar con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya has usado en la Actividad 2.3 (MockMvc completo, `jsonPath` sobre el cuerpo).
 
 ### Tramo 3 — mini-reto: el borrado en cascada
 
-Borra el videojuego, y verifica el borrado en cascada de la Actividad 3.2: la reseña que creaste en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un `Thread.sleep` breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).
+Borra el videojuego (de nuevo con `adminToken`, exige rol `ADMIN`), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un `Thread.sleep` breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).
 
 ---
 

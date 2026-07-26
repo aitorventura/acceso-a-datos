@@ -8,6 +8,8 @@
 
 ## 🧪 Probar un componente aislado — repaso
 
+<!-- TODO revisar: "Ya construiste" es pretérito indefinido, debería ser "Ya has construido" (regla de pretérito compuesto). Encontrado durante la revisión de tests de service/seguridad de 2026-07-26, fuera del alcance de esa pasada. -->
+
 Ya construiste este tipo de test en la Actividad 4.1:
 
 ```java

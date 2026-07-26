@@ -83,7 +83,7 @@ nav:
           - Actividad 2.2 - Filtrar con jsonb_exists: tema2/actividad_2_2.md
       - BD orientadas a objetos:
           - BD orientadas a objetos: tema2/bd-orientadas-a-objetos.md
-          - Actividad 2.3 - Pruebas de integración JSONB: tema2/actividad_2_3.md
+          - Actividad 2.3 - Pruebas de integración, JSONB y errores: tema2/actividad_2_3.md
   - Tema 3 - BD documentales:
       - Tema 3 - Introducción: tema3/index.md
       - Conexión a MongoDB:
