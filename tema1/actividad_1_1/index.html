@@ -2195,7 +2195,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Pruebas de integración JSONB
+    Actividad 2.3 - Pruebas de integración, JSONB y errores
     
   </span>
   
@@ -3135,7 +3135,7 @@
 </ul>
 <div class="admonition info">
 <p class="admonition-title">Por qué esta vez todo va dentro de un Dev Container</p>
-<p>A partir de hoy trabajas con tu propio proyecto, no con ejercicios sueltos — y ese proyecto tiene que arrancar igual en tu portátil, en el ordenador del aula o en el de un compañero. Instalar Java, Maven, Git o el driver de PostgreSQL a mano en cada equipo es justo lo que falla: versiones distintas, permisos de instalación limitados en los equipos del centro, media hora perdida antes de escribir una sola línea. Metiendo todo eso dentro de un Dev Container (lo viste en el Tema 0, Actividad 0.7) te aseguras de que el entorno es siempre el mismo, esté donde esté tu proyecto — y no dependes de qué tenga instalado el equipo en el que te sientes ese día.</p>
+<p>A partir de hoy trabajas con tu propio proyecto, no con ejercicios sueltos — y ese proyecto tiene que arrancar igual en tu portátil, en el ordenador del aula o en el de un compañero. Instalar Java, Maven, Git o el driver de PostgreSQL a mano en cada equipo es justo lo que falla: versiones distintas, permisos de instalación limitados en los equipos del centro, media hora perdida antes de escribir una sola línea. Metiendo todo eso dentro de un Dev Container (lo has visto en el Tema 0, Actividad 0.7) te aseguras de que el entorno es siempre el mismo, esté donde esté tu proyecto — y no dependes de qué tenga instalado el equipo en el que te sientes ese día.</p>
 </div>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
@@ -3163,11 +3163,11 @@
 <p class="admonition-title">No añadas todavía el resto de dependencias</p>
 <p>Tu GameVault terminado va a incluir también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... pero no las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.</p>
 </div>
-<p>Fíjate en que Spring Initializr ya te ha creado una clase con <code>@SpringBootApplication</code> (el equivalente a <code>LibreriaApplication</code> que has visto en la teoría) y la estructura de carpetas <code>src/main/java</code> / <code>src/main/resources</code> — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.</p>
+<p>Fíjate en que Spring Initializr ya te ha creado una clase con <code>@SpringBootApplication</code> (el equivalente a <code>LibreriaApplication</code> que has visto en la teoría) y la estructura de carpetas <code>src/main/java</code> / <code>src/main/resources</code> — es exactamente lo que has visto "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.</p>
 <p><strong>Pregunta</strong>: ¿por qué crees que Spring Initializr te deja elegir las dependencias en vez de añadirlas todas por defecto?</p>
 <hr>
 <h2 id="paso-1-el-dev-container-tu-entorno-y-postgresql-juntos">Paso 1 — El Dev Container: tu entorno y PostgreSQL, juntos<a class="headerlink" href="#paso-1-el-dev-container-tu-entorno-y-postgresql-juntos" title="Permanent link">¶</a></h2>
-<p>En la teoría del Tema 0 viste que un <code>devcontainer.json</code> puede apoyarse en un <code>docker-compose.yml</code> en vez de en una sola <code>image</code> suelta — así el mismo fichero que describe tu entorno de programación puede levantar, en otro de sus servicios, la base de datos. Es justo lo que vas a montar hoy: un servicio <code>app</code> (tu entorno Java) y un servicio <code>postgres</code> (el gestor), arrancando los dos a la vez.</p>
+<p>En la teoría del Tema 0 has visto que un <code>devcontainer.json</code> puede apoyarse en un <code>docker-compose.yml</code> en vez de en una sola <code>image</code> suelta — así el mismo fichero que describe tu entorno de programación puede levantar, en otro de sus servicios, la base de datos. Es justo lo que vas a montar hoy: un servicio <code>app</code> (tu entorno Java) y un servicio <code>postgres</code> (el gestor), arrancando los dos a la vez.</p>
 <p>En la raíz de tu proyecto, crea la carpeta <code>.devcontainer</code> y, dentro, <code>docker-compose.yml</code>:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
@@ -3215,7 +3215,7 @@
 <p class="admonition-title">Con Postgres 18, el volumen va en <code>/var/lib/postgresql</code>, no en <code>/var/lib/postgresql/data</code></p>
 <p>Desde la versión 18, la imagen organiza los datos en subcarpetas por versión mayor dentro de <code>/var/lib/postgresql</code> — si montas el volumen directamente en <code>/var/lib/postgresql/data</code> (la ruta que usaban las versiones anteriores), el contenedor se niega a arrancar y sale con error nada más crearse. Si ya te ha pasado esto, sigue las instrucciones de abajo para limpiar el volumen roto antes de continuar.</p>
 </div>
-<p><code>app</code> parte esta vez de la imagen <strong>base</strong> genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. <code>command: sleep infinity</code> mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). <code>postgres</code> es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo <code>volumes</code> de <code>app</code>, <code>/var/run/docker.sock:/var/run/docker.sock</code>, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.</p>
+<p><code>app</code> parte esta vez de la imagen <strong>base</strong> genérica (la misma familia que ya has visto en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. <code>command: sleep infinity</code> mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). <code>postgres</code> es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo <code>volumes</code> de <code>app</code>, <code>/var/run/docker.sock:/var/run/docker.sock</code>, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.</p>
 <p>Y, junto a él, <code>devcontainer.json</code>:</p>
 <div class="language-json highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JSON</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
@@ -3291,7 +3291,7 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a>git<span class="w"> </span>--version
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a>docker<span class="w"> </span>version
 </code></pre></div></td></tr></table></div>
-<p><strong>Pregunta</strong>: si estos mismos tres comandos los ejecutaras en un ordenador del aula sin Dev Container, ¿qué esperarías que pasara? Relaciónalo con lo que ya viste en la Actividad 0.7 sobre qué corre dentro del contenedor y qué no.</p>
+<p><strong>Pregunta</strong>: si estos mismos tres comandos los ejecutaras en un ordenador del aula sin Dev Container, ¿qué esperarías que pasara? Relaciónalo con lo que ya has visto en la Actividad 0.7 sobre qué corre dentro del contenedor y qué no.</p>
 <hr>
 <h2 id="paso-2-configurar-la-conexion-a-postgresql">Paso 2 — Configurar la conexión a PostgreSQL<a class="headerlink" href="#paso-2-configurar-la-conexion-a-postgresql" title="Permanent link">¶</a></h2>
 <p>Antes de crear el fichero de perfil, deja también en YAML la configuración común: Spring Initializr te ha generado <code>src/main/resources/application.properties</code> con una única línea (<code>spring.application.name=gamevault</code>). Bórralo y crea <code>src/main/resources/application.yml</code> con el mismo contenido, en formato YAML:</p>
@@ -3302,6 +3302,10 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gamevault</span>
 </code></pre></div></td></tr></table></div>
 <p>Así todo el proyecto queda en YAML desde el principio, sin mezclar formatos entre la configuración común y la de perfil.</p>
+<div class="admonition note">
+<p class="admonition-title"><code>.yml</code> o <code>.yaml</code>: da igual, son la misma extensión</p>
+<p>Spring Boot reconoce las dos sin distinción — es pura convención de quien escribe el fichero, no una regla técnica. A lo largo del curso vas a ver los dos usados indistintamente (aquí mismo, <code>application.yml</code> arriba y <code>application-dev.yaml</code> abajo); no son dos formatos distintos ni dos ficheros que tengan que coincidir en extensión entre sí.</p>
+</div>
 <p>Ahora sí, crea <code>src/main/resources/application-dev.yaml</code> con la configuración de conexión:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
@@ -3446,7 +3450,7 @@
 <a id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@ManyToOne</code> es el lado contrario de la relación: muchos videojuegos pertenecen a un estudio. <code>@JoinColumn(name = "estudio_id")</code> es la columna real, con la clave foránea, que vivirá en la tabla <code>videojuego</code>. <code>fetch = FetchType.LAZY</code> significa que Hibernate no carga el <code>Estudio</code> completo hasta que de verdad lo pidas (<code>videojuego.getEstudio()</code>), en vez de traerlo siempre aunque no lo uses.</p>
-<p><strong>Mini-reto</strong>: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en <code>Estudio</code> (atributo privado + getter/setter, que ya te genera <code>@Getter</code>/<code>@Setter</code> de Lombok).</p>
+<p><strong>Mini-reto</strong>: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que ya has usado en <code>Estudio</code> (atributo privado + getter/setter, que ya te genera <code>@Getter</code>/<code>@Setter</code> de Lombok).</p>
 <hr>
 <h2 id="paso-4-verificar-que-hibernate-ha-hecho-su-trabajo">Paso 4 — Verificar que Hibernate ha hecho su trabajo<a class="headerlink" href="#paso-4-verificar-que-hibernate-ha-hecho-su-trabajo" title="Permanent link">¶</a></h2>
 <p>Desde la terminal integrada de tu editor (la que corre <strong>dentro</strong> del Dev Container), arranca tu aplicación con el perfil <code>dev</code> activo:</p>

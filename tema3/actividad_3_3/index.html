@@ -2035,7 +2035,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Pruebas de integración JSONB
+    Actividad 2.3 - Pruebas de integración, JSONB y errores
     
   </span>
   
@@ -3046,31 +3046,38 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Igual que ya hace el <code>POST</code>, recibes <code>Principal principal</code> y le pasas <code>principal.getName()</code> al service — la comparación de autoría ocurre dentro de <code>update()</code>, no en el controller.</p>
+<div class="admonition warning">
+<p class="admonition-title">Añade también la regla del <code>PUT</code> a tu <code>SecurityConfig</code></p>
+<p>Igual que has tenido que añadir la regla del <code>POST</code> en la Actividad 3.1, esta ruta nueva tampoco existe todavía en tu política:
+</p><div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">PUT</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/*"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+Otra vez basta con estar autenticado, sin rol concreto — quién puede modificar <strong>esta</strong> reseña en particular ya lo decide <code>update()</code> comparando el autor, no <code>SecurityConfig</code>.
+</div>
 <hr>
 <h2 id="paso-2-probar-con-dos-usuarios-el-caso-correcto">Paso 2 — Probar con dos usuarios: el caso correcto<a class="headerlink" href="#paso-2-probar-con-dos-usuarios-el-caso-correcto" title="Permanent link">¶</a></h2>
 <p>Crea una reseña con el usuario <code>user</code> (o el que uses habitualmente) y anota el <code>id</code> que te devuelve MongoDB:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Buena, pero corta"}'</span>
-</code></pre></div></td></tr></table></div>
-<p>Modifícala con el <strong>mismo</strong> usuario:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Buena, pero corta"}'</span>
+</code></pre></div></td></tr></table></div>
+<p>Modifícala con el <strong>mismo</strong> usuario:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>200 OK</code>, con los datos actualizados en la respuesta.</p>
 <hr>
 <h2 id="paso-3-probar-con-dos-usuarios-el-caso-denegado">Paso 3 — Probar con dos usuarios: el caso denegado<a class="headerlink" href="#paso-3-probar-con-dos-usuarios-el-caso-denegado" title="Permanent link">¶</a></h2>
 <p>Consigue un token de un <strong>segundo</strong> usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_OTRO_USUARIO</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_OTRO_USUARIO</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>403 Forbidden</code>. <strong>Documenta</strong> ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.</p>
 <hr>

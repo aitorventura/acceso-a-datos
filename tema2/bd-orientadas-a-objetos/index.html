@@ -2080,9 +2080,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#test-de-capa-service-y-controller" class="md-nav__link">
+  <a href="#test-de-capa-controller-y-mas-adelante-service" class="md-nav__link">
     <span class="md-ellipsis">
-      Test de capa (service y controller)
+      Test de capa (controller, y más adelante service)
     </span>
   </a>
   
@@ -2098,9 +2098,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#documentar-en-el-sentido-de-este-ra" class="md-nav__link">
+  <a href="#peticiones-autenticadas-dentro-del-test" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentar, en el sentido de este RA
+      Peticiones autenticadas dentro del test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobar-tambien-los-casos-de-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobar también los casos de error
     </span>
   </a>
   
@@ -2141,7 +2150,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Pruebas de integración JSONB
+    Actividad 2.3 - Pruebas de integración, JSONB y errores
     
   </span>
   
@@ -2901,9 +2910,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#test-de-capa-service-y-controller" class="md-nav__link">
+  <a href="#test-de-capa-controller-y-mas-adelante-service" class="md-nav__link">
     <span class="md-ellipsis">
-      Test de capa (service y controller)
+      Test de capa (controller, y más adelante service)
     </span>
   </a>
   
@@ -2919,9 +2928,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#documentar-en-el-sentido-de-este-ra" class="md-nav__link">
+  <a href="#peticiones-autenticadas-dentro-del-test" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentar, en el sentido de este RA
+      Peticiones autenticadas dentro del test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobar-tambien-los-casos-de-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobar también los casos de error
     </span>
   </a>
   
@@ -2959,20 +2977,70 @@
 
 <div><p><a id="bd-orientadas-a-objetos"></a></p>
 <h1 id="3-bases-de-datos-orientadas-a-objetos-pruebas-y-documentacion">🧩 3. Bases de datos orientadas a objetos, pruebas y documentación<a class="headerlink" href="#3-bases-de-datos-orientadas-a-objetos-pruebas-y-documentacion" title="Permanent link">¶</a></h1>
-<p>Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico sobre una categoría de bases de datos que no vas a usar en las prácticas (contenido puramente conceptual, exigido por el currículo), y después las pruebas que dan por buenas todas las piezas construidas hasta ahora.</p>
+<p>Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico sobre una categoría de bases de datos que no vas a usar en las prácticas —lo ves de forma conceptual, sin instalar ni configurar nada—, y después las pruebas que dan por buenas todas las piezas construidas hasta ahora.</p>
 <hr>
 <h2 id="bases-de-datos-orientadas-a-objetos-puras">🧊 Bases de datos orientadas a objetos puras<a class="headerlink" href="#bases-de-datos-orientadas-a-objetos-puras" title="Permanent link">¶</a></h2>
-<p>Una <strong>base de datos orientada a objetos pura</strong> va un paso más allá que lo objeto-relacional que has trabajado con JSONB: los objetos se persisten <strong>tal cual</strong>, con su identidad y sus referencias intactas, sin traducirlos a filas y columnas ni siquiera parcialmente. Recuerda la diferencia con JSONB: allí, una columna de una tabla relacional normal contenía un objeto JSON — seguía siendo, en el fondo, una tabla con filas. En una BD orientada a objetos pura no hay tablas en absoluto: el propio motor entiende y almacena objetos directamente.</p>
-<p>Esto tiene una consecuencia directa: <strong>no hace falta un ORM</strong>. Un ORM (Tema 1) existe precisamente para traducir entre el mundo de objetos de tu programa y el mundo de tablas de una base de datos relacional — si el motor ya entiende objetos de forma nativa, ese puente deja de ser necesario.</p>
-<p>El lenguaje de consulta asociado a este modelo se llama <strong>OQL</strong> (<em>Object Query Language</em>) — comparado con JPQL (Tema 1), que opera sobre entidades y propiedades pero sigue traduciéndose a SQL relacional por debajo, OQL consulta directamente sobre el modelo de objetos nativo del motor, sin esa traducción intermedia.</p>
-<p>Algunos gestores históricos/conceptuales de esta categoría: <strong>db4o</strong>, <strong>ObjectDB</strong>, <strong>Versant</strong>. Los mencionas aquí solo como referencia de que existen — no vas a instalar ninguno, este bloque es puramente conceptual.</p>
+<div class="admonition info">
+<p class="admonition-title">Idea clave</p>
+<p>Una base de datos orientada a objetos <strong>pura</strong> persiste los objetos tal cual, con su identidad y sus referencias intactas, sin traducirlos a filas y columnas ni siquiera parcialmente. Es un paso más allá de lo objeto-relacional que has trabajado con JSONB: allí, una columna de una tabla normal contenía un objeto JSON, pero seguía siendo una tabla con filas. Aquí no hay tablas en absoluto — el propio motor entiende y almacena objetos directamente.</p>
+</div>
+<p>Con los tres modelos ya vistos —el relacional puro del Tema 1, el objeto-relacional con JSONB de este mismo tema, y este último— conviene verlos uno junto a otro:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Relacional (Tema 1)</th>
+<th>Objeto-relacional con JSONB (este tema)</th>
+<th>Orientada a objetos pura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Cómo se guarda un objeto?</td>
+<td>Traducido a filas y columnas</td>
+<td>Filas y columnas, con una columna JSON dentro</td>
+<td>Tal cual, con su identidad y sus referencias intactas</td>
+</tr>
+<tr>
+<td>¿Hace falta un ORM?</td>
+<td>Sí</td>
+<td>Sí</td>
+<td>No — el motor ya entiende objetos de forma nativa</td>
+</tr>
+<tr>
+<td>Lenguaje de consulta</td>
+<td>SQL</td>
+<td>SQL (+ funciones JSONB, como <code>jsonb_exists</code>)</td>
+<td>OQL</td>
+</tr>
+<tr>
+<td>Adopción real</td>
+<td>Muy extendido</td>
+<td>Extendido (PostgreSQL, MySQL...)</td>
+<td>Nicho — casi ningún proyecto nuevo lo elige hoy</td>
+</tr>
+</tbody>
+</table>
+<p>Esa última fila resume la desventaja real de este modelo: menos documentación, menos gente con experiencia a la que preguntar, y el riesgo de quedarte atado a un gestor que puede dejar de mantenerse — por eso casi nadie elige hoy una BD orientada a objetos pura para un proyecto nuevo.</p>
+<p>Como consecuencia directa de no traducir nada a tablas, <strong>no hace falta un ORM</strong>: un ORM (Tema 1) existe precisamente para hacer de puente entre el mundo de objetos de tu programa y el mundo de tablas de una base de datos relacional, y aquí ese puente sobra. El lenguaje de consulta asociado a este modelo se llama <strong>OQL</strong> (<em>Object Query Language</em>) — a diferencia de JPQL (Tema 1), que opera sobre entidades y propiedades pero sigue traduciéndose a SQL relacional por debajo, OQL consulta directamente sobre el modelo de objetos nativo del motor, sin esa traducción intermedia.</p>
+<div class="admonition note">
+<p class="admonition-title">Algunos gestores, solo como referencia</p>
+<p><strong>db4o</strong>, <strong>ObjectDB</strong>, <strong>Versant</strong> — los mencionas aquí solo para saber que existen; no vas a instalar ninguno, este bloque es puramente conceptual.</p>
+</div>
 <hr>
 <h2 id="pruebas-y-documentacion">🧪 Pruebas y documentación<a class="headerlink" href="#pruebas-y-documentacion" title="Permanent link">¶</a></h2>
 <p>De vuelta al código: cómo se prueba y documenta lo construido en este tema.</p>
-<h3 id="test-de-capa-service-y-controller">Test de capa (service y controller)<a class="headerlink" href="#test-de-capa-service-y-controller" title="Permanent link">¶</a></h3>
-<p>Ya conoces la distinción del Tema 1 de PSP (aunque aquí es Acceso a Datos, la idea es la misma): un test de <strong>service</strong> aísla la lógica de negocio, mockeando el repositorio; un test de <strong>controller</strong> (con MockMvc) prueba la capa HTTP, mockeando el service. Cada uno prueba una capa distinta, con distintos colaboradores mockeados — y ambos aplican igual cuando la entidad lleva una columna JSONB.</p>
+<h3 id="test-de-capa-controller-y-mas-adelante-service">Test de capa (controller, y más adelante service)<a class="headerlink" href="#test-de-capa-controller-y-mas-adelante-service" title="Permanent link">¶</a></h3>
+<p>Ya conoces el test de <strong>controller</strong>, del Tema 1 de PSP (aunque aquí es Acceso a Datos, la idea es la misma): con MockMvc, mockeando el service, prueba solo la capa HTTP — y aplica igual cuando la entidad lleva una columna JSONB, como aquí. Existe también el test de <strong>service</strong>, que aísla la lógica de negocio mockeando el repositorio en su lugar — pero ese lo construyes más adelante, en la Actividad 4.1 de este mismo módulo; no hace falta todavía.</p>
 <h3 id="test-de-integracion-real-con-testcontainers">Test de integración real (con Testcontainers)<a class="headerlink" href="#test-de-integracion-real-con-testcontainers" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<p>Los dos tests de arriba tienen algo en común: ninguno toca una base de datos de verdad, todo lo que hay debajo está mockeado. <strong>Testcontainers</strong> es la librería que resuelve ese hueco — levanta contenedores Docker reales (una base de datos, una cola de mensajes, lo que haga falta) solo para la duración del test, y los destruye al terminar, sin dejar nada instalado en tu máquina ni depender de ningún servicio externo compartido. No viene incluida en ningún starter que ya tengas — es la primera vez que aparece en el curso, así que hace falta añadirla.</p>
+<p>Y aquí aparece algo que no habías necesitado hasta ahora: cada <code>&lt;dependency&gt;</code> que has añadido en todo el curso ha resuelto su versión sola, porque <code>spring-boot-starter-parent</code> (tu <code>&lt;parent&gt;</code>, desde la Actividad 1.1) ya sabe qué versión de cada pieza de Spring es compatible con tu proyecto. <code>org.testcontainers:junit-jupiter</code> y <code>org.testcontainers:postgresql</code>, en cambio, no son de Spring — son del propio proyecto Testcontainers, y ese <code>&lt;parent&gt;</code> no sabe nada de ellos. Sin ayuda, Maven falla con <code>'dependencies.dependency.version' ... is missing</code> antes de compilar nada.</p>
+<div class="admonition info">
+<p class="admonition-title">Idea clave: qué es un BOM</p>
+<p>Un <strong>BOM</strong> (<em>Bill of Materials</em>, "lista de materiales") es un POM especial que no añade ningún código a tu proyecto — solo fija qué versión usar para un conjunto de artefactos que se saben compatibles entre sí. Es exactamente lo mismo que ya hace <code>spring-boot-starter-parent</code> para todo lo de Spring; aquí lo añades tú mismo, explícitamente, para lo de Testcontainers. Se declara en <code>&lt;dependencyManagement&gt;</code>, no en <code>&lt;dependencies&gt;</code>: <code>&lt;dependencyManagement&gt;</code> fija qué versión usar <strong>si</strong> algo la pide, sin añadir nada todavía a tu build; <code>&lt;dependencies&gt;</code> es lo que de verdad mete un artefacto en tu proyecto.</p>
+</div>
+<p>Va junto al <code>&lt;parent&gt;</code>, no dentro del bloque de dependencias habitual:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
@@ -2984,24 +3052,287 @@
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@Testcontainers</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nd">@AutoConfigureMockMvc</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kd">class</span> <span class="nc">LibreriaApiTest</span><span class="w"> </span><span class="p">{</span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">&lt;properties&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">&lt;testcontainers.version&gt;</span>1.20.4<span class="nt">&lt;/testcontainers.version&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nt">&lt;/properties&gt;</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nd">@Container</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nd">@Autowired</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="c1">// ...</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="p">}</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">&lt;dependencyManagement&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">&lt;dependencies&gt;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">        </span><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">            </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">            </span><span class="nt">&lt;artifactId&gt;</span>testcontainers-bom<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">            </span><span class="nt">&lt;version&gt;</span>${testcontainers.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">            </span><span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">            </span><span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">        </span><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">&lt;/dependencies&gt;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="nt">&lt;/dependencyManagement&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@Testcontainers</code> + <code>@Container</code> levantan un <strong>PostgreSQL real</strong> dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. <code>@ServiceConnection</code> conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión.</p>
+<p>Ahora sí, las tres dependencias de siempre, dentro de tu <code>&lt;dependencies&gt;</code> habitual — con el BOM ya importado, ninguna necesita <code>&lt;version&gt;</code> propia:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-testcontainers<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>junit-jupiter<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>postgresql<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>Esto también deja el terreno preparado para el resto del curso: cuando más adelante añadas otros contenedores de Testcontainers (MongoDB, RabbitMQ...), ninguno va a necesitar tampoco su propia <code>&lt;version&gt;</code> — todos quedan cubiertos por este mismo BOM, ya importado una sola vez.</p>
+<div class="admonition tip">
+<p class="admonition-title">Por qué esto funciona dentro de tu Dev Container</p>
+<p>Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (<code>app</code>) desde la Actividad 1.1. Funciona porque, ya desde entonces, has montado el socket de Docker del host dentro de <code>app</code> y has añadido la <em>feature</em> <code>docker-outside-of-docker</code>: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title"><code>Connection refused</code> al conectar con Ryuk</p>
+<p>Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado <strong>Ryuk</strong> que limpia automáticamente los contenedores al terminar. Ryuk arranca como contenedor hermano en la red del host, y tu <code>app</code> no siempre puede alcanzarlo por red desde su propia red aislada — el síntoma es un <code>Connection refused</code> hacia una IP tipo <code>172.17.0.1</code>, antes incluso de llegar a tu primer test. La solución es desactivar Ryuk en este escenario (contenedor con acceso al Docker del host, no un Docker propio): añade a <code>.devcontainer/docker-compose.yml</code>, en el servicio <code>app</code>:
+</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TESTCONTAINERS_RYUK_DISABLED=true</span>
+</code></pre></div></td></tr></table></div>
+y reconstruye el contenedor (<strong>"Dev Containers: Rebuild Container"</strong>). Sin Ryuk, Testcontainers sigue limpiando los contenedores al final de cada ejecución normal de la JVM — solo pierdes la limpieza extra ante una caída abrupta, algo asumible en desarrollo.
+</div>
+<p>Con las dependencias ya resueltas, así queda la clase de test en sí:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@SpringBootTest</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nd">@AutoConfigureMockMvc</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nd">@Testcontainers</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="kd">class</span> <span class="nc">LibreriaApiTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="nd">@Autowired</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>@Testcontainers</code> + <code>@Container</code> levantan un <strong>PostgreSQL real</strong> dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. <code>@ServiceConnection</code> conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión. <code>@ActiveProfiles("test")</code> activa un perfil propio, distinto del <code>dev</code> de siempre — así puedes usar <code>ddl-auto: create-drop</code> (cada ejecución parte de una base de datos limpia) sin tocar la configuración con la que trabajas a diario.</p>
+<div class="admonition warning">
+<p class="admonition-title">La anotación sola no basta: el perfil <code>test</code> tiene que existir</p>
+<p><code>@ActiveProfiles("test")</code> le dice a Spring qué perfil activar, pero no crea nada por sí sola — igual que te pasó con <code>dev</code> al depurar <code>GamevaultApplicationTests</code> (PSP, Actividad 1.3). Y aquí hay tres propiedades que, sin valor, impiden arrancar del todo: <code>@Value("${gamevault.admin.password}")</code> (el <code>ApplicationRunner</code> que siembra el <code>admin</code>), <code>@Value("${gamevault.jwt.secret}")</code> (los beans <code>JwtEncoder</code>/<code>JwtDecoder</code>) y <code>@Value("${gamevault.jwt.expiration-minutes}")</code> (<code>JwtService</code>, para construir cualquier token) — ninguna de las tres lleva un valor por defecto, así que sin ellas el contexto ni siquiera llega a levantarse, y ningún test de la clase se ejecuta. <code>spring.datasource</code> no hace falta escribirlo: eso ya lo resuelve <code>@ServiceConnection</code> en tiempo de ejecución. Crea <code>src/test/resources/application-test.yml</code>:
+</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span>
+<span class="normal"><a href="#__codelineno-4-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create-drop</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nt">gamevault</span><span class="p">:</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">  </span><span class="nt">admin</span><span class="p">:</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admintest123</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">  </span><span class="nt">jwt</span><span class="p">:</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">un-secreto-de-test-de-al-menos-32-caracteres-largo</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+</code></pre></div></td></tr></table></div>
+La contraseña que pongas aquí tiene que ser exactamente la misma que envíe <code>loginComoAdmin()</code> en su petición de login, más abajo — los dos viven dentro del mismo mundo de test, aislado del perfil <code>dev</code> (que ni siquiera se carga con <code>@ActiveProfiles("test")</code> activo). De ahí el nombre <code>admintest123</code>: dice de un vistazo que es una credencial solo de test, sin que tengas que recordar que no tiene relación con la de <code>dev</code>. El valor de <code>expiration-minutes</code>, en cambio, no importa para el test — <code>60</code> (el mismo de <code>dev</code>) sirve igual que cualquier otro.
+Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml</code>: las credenciales que lleva dentro no son reales, solo existen dentro del contenedor Postgres desechable que Testcontainers destruye al terminar el test — no hay nada que proteger.
+</div>
 <p>¿Por qué esto da más confianza que mockear el repositorio? Porque prueba el mapeo JSONB <strong>real</strong> contra un PostgreSQL <strong>real</strong> — una base de datos en memoria genérica (como H2) podría no soportar <code>jsonb_exists</code> exactamente igual, o ni siquiera soportar el tipo <code>jsonb</code> de PostgreSQL. Un test con Testcontainers detectaría un error de mapeo que un test con mocks jamás vería, porque el mock nunca ejecuta SQL de verdad contra ningún motor.</p>
-<h3 id="documentar-en-el-sentido-de-este-ra">Documentar, en el sentido de este RA<a class="headerlink" href="#documentar-en-el-sentido-de-este-ra" title="Permanent link">¶</a></h3>
-<p>"Documentar" aquí no significa escribir un documento externo aparte — significa que el propio código de test, con nombres de método descriptivos (<code>crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido</code>, por ejemplo) y comentarios donde haga falta, deja claro <strong>qué</strong> comportamiento se está verificando y <strong>por qué</strong>. El test bien escrito es, en sí mismo, la documentación de qué se espera que haga el sistema.</p>
+<h3 id="peticiones-autenticadas-dentro-del-test">Peticiones autenticadas dentro del test<a class="headerlink" href="#peticiones-autenticadas-dentro-del-test" title="Permanent link">¶</a></h3>
+<p>Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, con roles y todo—, un test de integración real tiene que pasar por la misma autenticación que pasaría un cliente cualquiera: no hay ningún atajo que salte la seguridad "porque es un test". <code>MockMvc</code> hace la petición de login exactamente igual que la haría un cliente HTTP real, y <code>JsonPath</code> (la misma clase que ya usas dentro de <code>jsonPath(...)</code> para comprobar respuestas) sirve también para <strong>leer</strong> un valor de una respuesta, no solo para compararlo. Son dos peticiones separadas, una detrás de otra, dentro del mismo método de test:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: JsonPath.read($.accessToken)
+
+    Test-&gt;&gt;MockMvc: perform(POST /libros,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 + cuerpo creado
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: andExpect(jsonPath(...))</code></pre>
+<p>Así se traduce a código: primero el ayudante que hace login y devuelve el token, después el test que lo usa:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span>
+<span class="normal"><a href="#__codelineno-5-20">20</a></span>
+<span class="normal"><a href="#__codelineno-5-21">21</a></span>
+<span class="normal"><a href="#__codelineno-5-22">22</a></span>
+<span class="normal"><a href="#__codelineno-5-23">23</a></span>
+<span class="normal"><a href="#__codelineno-5-24">24</a></span>
+<span class="normal"><a href="#__codelineno-5-25">25</a></span>
+<span class="normal"><a href="#__codelineno-5-26">26</a></span>
+<span class="normal"><a href="#__codelineno-5-27">27</a></span>
+<span class="normal"><a href="#__codelineno-5-28">28</a></span>
+<span class="normal"><a href="#__codelineno-5-29">29</a></span>
+<span class="normal"><a href="#__codelineno-5-30">30</a></span>
+<span class="normal"><a href="#__codelineno-5-31">31</a></span>
+<span class="normal"><a href="#__codelineno-5-32">32</a></span>
+<span class="normal"><a href="#__codelineno-5-33">33</a></span>
+<span class="normal"><a href="#__codelineno-5-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="s">                            {</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="s">                              "username": "admin",</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="s">                              "password": "admintest123"</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="s">                            }</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">            </span><span class="p">.</span><span class="na">andReturn</span><span class="p">()</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">            </span><span class="p">.</span><span class="na">getResponse</span><span class="p">()</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="w">            </span><span class="p">.</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="p">}</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="nd">@Test</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26"></a><span class="s">                            {</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27"></a><span class="s">                              "titulo": "Rayuela",</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29"></a><span class="s">                            }</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.titulo"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Rayuela"</span><span class="p">))</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.detallesEdicion.editorial"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Sudamericana"</span><span class="p">));</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>loginComoAdmin()</code> no lleva <code>@Test</code>: es un método ayudante, no un test en sí mismo, que cualquier otro test de la clase puede llamar cuando necesite un token válido (necesita <code>import com.jayway.jsonpath.JsonPath;</code>, ya incluida en <code>spring-boot-starter-test</code>). El test de arriba es un <code>POST</code> normal con la cabecera <code>Authorization</code> añadida, y sus aserciones finales no se quedan en el código de estado: comprueban también el cuerpo devuelto campo a campo con <code>jsonPath</code>, incluida la parte anidada dentro del propio JSONB (<code>detallesEdicion.editorial</code>) — confirmando que el objeto estructurado se ha guardado y se ha devuelto tal cual, no solo que "algo" se ha creado.</p>
+<h3 id="comprobar-tambien-los-casos-de-error">Comprobar también los casos de error<a class="headerlink" href="#comprobar-tambien-los-casos-de-error" title="Permanent link">¶</a></h3>
+<p>Un test de integración que solo prueba el camino feliz deja fuera la mitad del comportamiento real de tu API: qué pasa cuando la petición <strong>no</strong> debería tener éxito. Con tu <code>GlobalExceptionHandler</code> ya construido (PSP, Tema 2), cada error tiene un formato consistente — y ese formato también se comprueba con <code>jsonPath</code>, campo a campo, igual que un cuerpo de éxito. Aquí la petición sí está autenticada —el token de <code>user</code> es válido—, pero no autorizada, así que ni siquiera llega a tu controller:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant SecurityFilterChain
+    participant AccessDeniedHandler
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, user)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken (rol USER)
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /libros,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;SecurityFilterChain: petición HTTP real, ya autenticada
+    Note right of SecurityFilterChain: Token válido → autenticado.&lt;br/&gt;hasRole("ADMIN") → no coincide (rol USER)
+    SecurityFilterChain-&gt;&gt;AccessDeniedHandler: AccessDeniedException
+    AccessDeniedHandler--&gt;&gt;MockMvc: 403 + ErrorResponse
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: andExpect(jsonPath($.status, $.error))</code></pre>
+<p>El test que reproduce ese flujo, con las aserciones sobre el cuerpo del error:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span>
+<span class="normal"><a href="#__codelineno-6-14">14</a></span>
+<span class="normal"><a href="#__codelineno-6-15">15</a></span>
+<span class="normal"><a href="#__codelineno-6-16">16</a></span>
+<span class="normal"><a href="#__codelineno-6-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">userToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoUsuario</span><span class="p">();</span><span class="w"> </span><span class="c1">// igual que loginComoAdmin(), con credenciales sin rol ADMIN</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/libros"</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">userToken</span><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="s">                            {</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="s">                              "titulo": "Rayuela",</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="s">                              "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="s">                            }</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isForbidden</span><span class="p">())</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.status"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="mi">403</span><span class="p">))</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.error"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"No autorizado"</span><span class="p">));</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>No es casualidad que este test compruebe el cuerpo del error, no solo el código <code>403</code>: dos errores distintos pueden compartir el mismo código de estado, y solo el cuerpo —con tu propio <code>ErrorResponse</code>, no el genérico de Spring— dice cuál de los dos ha ocurrido de verdad. Quedarte solo con <code>status().isForbidden()</code> dejaría pasar una regresión real: por ejemplo, que el <code>403</code> siga llegando pero con el formato por defecto de Spring Security en vez del tuyo, porque alguien ha desconectado sin querer tu <code>AccessDeniedHandler</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Qué comprobar en un test de integración, en general</p>
+<p>Tres cosas, casi siempre: el código de estado (<code>status()</code>), la forma del cuerpo cuando lo hay (<code>jsonPath</code> sobre los campos que de verdad importan, no todos), y —cuando la petición debía cambiar algo— que ese cambio ha persistido de verdad, con una segunda petición (normalmente un <code>GET</code>) que lo confirme. Un test así, con un nombre que dice exactamente qué caso cubre (<code>crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin</code>), documenta ese comportamiento mejor que un README aparte — y a diferencia de un README, no puede quedarse desactualizado sin que te enteres: si el comportamiento cambia, el test falla.</p>
+</div>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -3009,9 +3340,12 @@
 <ul>
 <li>Una BD orientada a objetos <strong>pura</strong> persiste objetos tal cual, sin traducirlos a filas/columnas — por eso no necesita ORM.</li>
 <li><strong>OQL</strong> consulta directamente sobre el modelo de objetos nativo, sin traducción a SQL relacional (a diferencia de JPQL).</li>
-<li>Un test de <strong>service</strong> aísla lógica (mock del repositorio); un test de <strong>controller</strong> prueba la capa HTTP (mock del service); un test de <strong>integración</strong> con Testcontainers levanta un motor real en Docker.</li>
+<li>Comparado con relacional puro y objeto-relacional (JSONB), lo orientado a objetos puro tiene poquísima adopción real — la razón de que este bloque sea conceptual y no práctico.</li>
+<li>Un test de <strong>controller</strong> (ya conocido, PSP Tema 1) prueba la capa HTTP mockeando el service; un test de <strong>service</strong> hace lo análogo mockeando el repositorio, pero eso llega en la Actividad 4.1; un test de <strong>integración</strong> con Testcontainers levanta un motor real en Docker.</li>
 <li>Testcontainers detecta errores de mapeo real (como con <code>jsonb</code>) que un mock nunca podría detectar.</li>
-<li>"Documentar" en este RA es, sobre todo, que el propio test (nombre + estructura) deje claro qué se verifica y por qué.</li>
+<li>Contra rutas protegidas, el test hace login de verdad con <code>MockMvc</code> y extrae el token con <code>JsonPath</code>, igual que haría un cliente real — no hay atajo que salte la seguridad "por ser un test".</li>
+<li>Los casos de error también se comprueban con <code>jsonPath</code>, campo a campo del <code>ErrorResponse</code> — no basta con el código de estado, porque dos errores distintos pueden compartir el mismo.</li>
+<li>Un test bien nombrado, con esas tres comprobaciones, documenta el comportamiento mejor que un README aparte — y no se queda desactualizado sin avisar: si el comportamiento cambia, el test falla.</li>
 </ul>
 </details></div>
 
@@ -3066,13 +3400,13 @@
         
         
           
-          <a href="../actividad_2_3/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 2.3 - Pruebas de integración JSONB">
+          <a href="../actividad_2_3/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 2.3 - Pruebas de integración, JSONB y errores">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Siguiente
               </span>
               <div class="md-ellipsis">
-                Actividad 2.3 - Pruebas de integración JSONB
+                Actividad 2.3 - Pruebas de integración, JSONB y errores
               </div>
             </div>
             <div class="md-footer__button md-icon">

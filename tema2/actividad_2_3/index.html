@@ -20,7 +20,7 @@
     
     
       
-        <title>Actividad 2.3 - Pruebas de integración JSONB - Acceso a Datos</title>
+        <title>Actividad 2.3 - Pruebas de integración, JSONB y errores - Acceso a Datos</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#actividad-23-pruebas-de-integracion-sobre-jsonb" class="md-skip">
+        <a href="#actividad-23-pruebas-de-integracion-jsonb-y-manejo-de-errores" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Actividad 2.3 - Pruebas de integración JSONB
+              Actividad 2.3 - Pruebas de integración, JSONB y errores
             
           </span>
         </div>
@@ -2048,7 +2048,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Pruebas de integración JSONB
+    Actividad 2.3 - Pruebas de integración, JSONB y errores
     
   </span>
   
@@ -2061,7 +2061,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 2.3 - Pruebas de integración JSONB
+    Actividad 2.3 - Pruebas de integración, JSONB y errores
     
   </span>
   
@@ -2120,9 +2120,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-el-test-negativo" class="md-nav__link">
+  <a href="#paso-3-el-test-negativo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — el test negativo
+      Paso 3 — El test negativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-un-caso-de-error-guiado-al-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Un caso de error, guiado al completo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-otro-endpoint-con-mas-tipos-de-error-posibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Otro endpoint, con más tipos de error posibles
     </span>
   </a>
   
@@ -2132,15 +2150,6 @@
   <a href="#pregunta-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
       Pregunta de comprensión
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resumen-de-tu-evolucion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resumen de tu evolución
     </span>
   </a>
   
@@ -2930,9 +2939,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-el-test-negativo" class="md-nav__link">
+  <a href="#paso-3-el-test-negativo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — el test negativo
+      Paso 3 — El test negativo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-4-un-caso-de-error-guiado-al-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Un caso de error, guiado al completo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-otro-endpoint-con-mas-tipos-de-error-posibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — Otro endpoint, con más tipos de error posibles
     </span>
   </a>
   
@@ -2942,15 +2969,6 @@
   <a href="#pregunta-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
       Pregunta de comprensión
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resumen-de-tu-evolucion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resumen de tu evolución
     </span>
   </a>
   
@@ -2981,28 +2999,31 @@
 
 
 
-<div><h1 id="actividad-23-pruebas-de-integracion-sobre-jsonb">🧪 Actividad 2.3: Pruebas de integración sobre JSONB<a class="headerlink" href="#actividad-23-pruebas-de-integracion-sobre-jsonb" title="Permanent link">¶</a></h1>
+<div><h1 id="actividad-23-pruebas-de-integracion-jsonb-y-manejo-de-errores">🧪 Actividad 2.3: Pruebas de integración: JSONB y manejo de errores<a class="headerlink" href="#actividad-23-pruebas-de-integracion-jsonb-y-manejo-de-errores" title="Permanent link">¶</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
-<p>Hoy escribes un test de integración real, con Testcontainers, que verifica de verdad el comportamiento de la columna JSONB y el filtro <code>jsonb_exists</code> que construiste en las dos actividades anteriores.</p>
+<p>Hoy escribes un test de integración real, con Testcontainers, que verifica de verdad el comportamiento de la columna JSONB y el filtro <code>jsonb_exists</code> que has construido en las dos actividades anteriores.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
 <li>Configurar un test con Testcontainers y <code>@ServiceConnection</code>.</li>
 <li>Escribir un test de integración completo, vía la API, sobre JSONB.</li>
+<li>Probar tanto el camino feliz como los casos de error, sobre dos endpoints distintos.</li>
 <li>Entender qué detecta un test así que un test con mocks nunca detectaría.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Tu columna <code>detallesPlataforma</code> (Actividad 2.1) y el filtro <code>disponibleEnPlataforma</code> (Actividad 2.2), ambos funcionando.</p>
+<p>Tu columna <code>detallesPlataforma</code> (Actividad 2.1) y el filtro <code>disponibleEnPlataforma</code> (Actividad 2.2), ambos funcionando. También tu login JWT y tu política de rutas cerrada por defecto (Actividades 2.4 y 2.5 de PSP), ya en marcha — el <code>POST</code> de este test pasa ahora por esa misma política, así que necesitas un token de administrador antes de poder crear un videojuego.</p>
+<div class="admonition note">
+<p class="admonition-title">Esto es una muestra, no la batería de tests completa</p>
+<p>Aquí escribes seis tests sobre dos endpoints (<code>POST</code> y <code>PUT</code> de <code>/api/v1/videojuegos</code>): el camino feliz, un caso negativo, y los errores más comunes (<code>400</code> de validación, <code>404</code> de recurso inexistente, <code>403</code> de rol insuficiente). Es más de lo habitual en una actividad de este curso, precisamente porque el objetivo de hoy es la cobertura de errores — pero ni de lejos toda la API. <code>Estudio</code> tiene su propio CRUD sin ningún test todavía, y ni <code>POST</code>/<code>PUT</code> cubren aquí un <code>401</code> sin token. Decidir hasta dónde llega la cobertura de un proyecto real es una decisión de cada equipo, no algo que se enseñe de una sola actividad.</p>
+</div>
 <hr>
 <h2 id="paso-1-configuracion-del-test-guiada-al-completo">Paso 1 — Configuración del test, guiada al completo<a class="headerlink" href="#paso-1-configuracion-del-test-guiada-al-completo" title="Permanent link">¶</a></h2>
 <div class="admonition tip">
-<p class="admonition-title">Por qué esto funciona dentro de tu Dev Container</p>
-<p>Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (<code>app</code>) desde la Actividad 1.1. Funciona porque, ya desde entonces, montaste el socket de Docker del host dentro de <code>app</code> y añadiste la <em>feature</em> <code>docker-outside-of-docker</code>: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.</p>
-</div>
-<p>Añade las dependencias de Testcontainers a tu <code>pom.xml</code> (si no las tienes ya de otra actividad):</p>
-<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<p class="admonition-title">Por qué esto funciona dentro de tu Dev Container (y qué hacer si Ryuk da <code>Connection refused</code>)</p>
+<p>Tienes la explicación completa en la teoría de este apartado — resumen rápido: si al arrancar el test ves un <code>Connection refused</code> hacia una IP tipo <code>172.17.0.1</code>, es el contenedor auxiliar Ryuk, inalcanzable desde <code>app</code>. Añade <code>environment: - TESTCONTAINERS_RYUK_DISABLED=true</code> al servicio <code>app</code> de tu <code>.devcontainer/docker-compose.yml</code> (junto a <code>volumes</code> y <code>command</code>, no en <code>postgres</code>) y reconstruye el contenedor:
+</p><div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
@@ -3013,27 +3034,22 @@
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-0-10">10</a></span>
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-testcontainers<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">&lt;/dependency&gt;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>junit-jupiter<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="nt">&lt;/dependency&gt;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>postgresql<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="nt">&lt;/dependency&gt;</span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcr.microsoft.com/devcontainers/base:bookworm</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">..:/workspace:cached</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/var/run/docker.sock</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TESTCONTAINERS_RYUK_DISABLED=true</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep infinity</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="c1"># ... tu servicio postgres, sin cambios</span>
 </code></pre></div></td></tr></table></div>
-<p>Crea la clase de test:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+</div>
+<p>Añade las dependencias de Testcontainers a tu <code>pom.xml</code> — las mismas que acabas de ver en la teoría de este apartado, <strong>incluido el BOM</strong> en <code>dependencyManagement</code> (junto al <code>&lt;parent&gt;</code>, no dentro de <code>&lt;dependencies&gt;</code>): sin él, Maven falla con <code>'dependencies.dependency.version' ... is missing</code> antes de compilar nada, porque <code>org.testcontainers:junit-jupiter</code> y <code>org.testcontainers:postgresql</code> no traen versión gestionada por <code>spring-boot-starter-parent</code>.</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
@@ -3047,60 +3063,24 @@
 <span class="normal"><a href="#__codelineno-1-12">12</a></span>
 <span class="normal"><a href="#__codelineno-1-13">13</a></span>
 <span class="normal"><a href="#__codelineno-1-14">14</a></span>
-<span class="normal"><a href="#__codelineno-1-15">15</a></span>
-<span class="normal"><a href="#__codelineno-1-16">16</a></span>
-<span class="normal"><a href="#__codelineno-1-17">17</a></span>
-<span class="normal"><a href="#__codelineno-1-18">18</a></span>
-<span class="normal"><a href="#__codelineno-1-19">19</a></span>
-<span class="normal"><a href="#__codelineno-1-20">20</a></span>
-<span class="normal"><a href="#__codelineno-1-21">21</a></span>
-<span class="normal"><a href="#__codelineno-1-22">22</a></span>
-<span class="normal"><a href="#__codelineno-1-23">23</a></span>
-<span class="normal"><a href="#__codelineno-1-24">24</a></span>
-<span class="normal"><a href="#__codelineno-1-25">25</a></span>
-<span class="normal"><a href="#__codelineno-1-26">26</a></span>
-<span class="normal"><a href="#__codelineno-1-27">27</a></span>
-<span class="normal"><a href="#__codelineno-1-28">28</a></span>
-<span class="normal"><a href="#__codelineno-1-29">29</a></span>
-<span class="normal"><a href="#__codelineno-1-30">30</a></span>
-<span class="normal"><a href="#__codelineno-1-31">31</a></span>
-<span class="normal"><a href="#__codelineno-1-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.integration</span><span class="p">;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.testcontainers.service.connection.ServiceConnection</span><span class="p">;</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.MediaType</span><span class="p">;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.ActiveProfiles</span><span class="p">;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.MockMvc</span><span class="p">;</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc</span><span class="p">;</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.containers.PostgreSQLContainer</span><span class="p">;</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Container</span><span class="p">;</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Testcontainers</span><span class="p">;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*</span><span class="p">;</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.result.MockMvcResultMatchers.*</span><span class="p">;</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17"></a>
-<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="nd">@SpringBootTest</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="nd">@AutoConfigureMockMvc</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="nd">@Testcontainers</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="kd">class</span> <span class="nc">JsonbIntegrationTest</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23"></a>
-<a id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">    </span><span class="nd">@Container</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27"></a>
-<a id="__codelineno-1-28" name="__codelineno-1-28"></a><span class="w">    </span><span class="nd">@Autowired</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
-<a id="__codelineno-1-30" name="__codelineno-1-30"></a>
-<a id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="w">    </span><span class="c1">// los tests van aquí</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">&lt;properties&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="nt">&lt;testcontainers.version&gt;</span>1.20.4<span class="nt">&lt;/testcontainers.version&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="nt">&lt;/properties&gt;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nt">&lt;dependencyManagement&gt;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">&lt;dependencies&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">        </span><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">            </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">            </span><span class="nt">&lt;artifactId&gt;</span>testcontainers-bom<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">            </span><span class="nt">&lt;version&gt;</span>${testcontainers.version}<span class="nt">&lt;/version&gt;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">            </span><span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">            </span><span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">        </span><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">    </span><span class="nt">&lt;/dependencies&gt;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="nt">&lt;/dependencyManagement&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@ServiceConnection</code> es la pieza clave: conecta automáticamente el <code>PostgreSQLContainer</code> a tu aplicación de test, sin que tengas que configurar manualmente <code>spring.datasource.url</code> en ningún <code>application-test.yaml</code> — Spring Boot lo resuelve por ti. Fíjate en que la imagen es <code>postgres:16-alpine</code>, no la <code>18-alpine</code> de tu <code>docker-compose.yaml</code> de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto. <code>@ActiveProfiles("test")</code> activa un perfil de test (créalo si no lo tienes, con <code>ddl-auto: create-drop</code> — aquí sí conviene, porque cada ejecución del test parte de una base de datos limpia).</p>
-<hr>
-<h2 id="paso-2-primer-test-guiado-al-completo">Paso 2 — Primer test, guiado al completo<a class="headerlink" href="#paso-2-primer-test-guiado-al-completo" title="Permanent link">¶</a></h2>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<p>Y, dentro de tu <code>&lt;dependencies&gt;</code> habitual, las tres de siempre — ya sin necesitar <code>&lt;version&gt;</code> propia:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
@@ -3114,42 +3094,517 @@
 <span class="normal"><a href="#__codelineno-2-12">12</a></span>
 <span class="normal"><a href="#__codelineno-2-13">13</a></span>
 <span class="normal"><a href="#__codelineno-2-14">14</a></span>
-<span class="normal"><a href="#__codelineno-2-15">15</a></span>
-<span class="normal"><a href="#__codelineno-2-16">16</a></span>
-<span class="normal"><a href="#__codelineno-2-17">17</a></span>
-<span class="normal"><a href="#__codelineno-2-18">18</a></span>
-<span class="normal"><a href="#__codelineno-2-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Test</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="s">                            {</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="s">                              "titulo": "Hades",</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="s">                              "precio": 24.99,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="s">                              "fechaLanzamiento": "2020-09-17",</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="s">                              "estudioId": 1,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="s">                              "detallesPlataforma": {"steam": {"idApp": 123}}</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="s">                            }</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="s">                            """</span><span class="p">))</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">());</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15"></a>
-<a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s">"/api/v1/videojuegos?plataforma=steam"</span><span class="p">))</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.content[0].titulo"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Hades"</span><span class="p">));</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-testcontainers<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>junit-jupiter<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>postgresql<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>(ajusta <code>estudioId: 1</code> a un estudio que exista de verdad en tu base de datos de test — puede que necesites crearlo primero con otro <code>POST</code>, o cargar datos de prueba antes del test).</p>
-<p>Línea a línea: primero un <code>POST</code> real, vía MockMvc, que crea un videojuego con una plataforma concreta en su <code>detallesPlataforma</code>; después un <code>GET</code> filtrado por esa misma plataforma, comprobando con <code>jsonPath</code> que el videojuego creado aparece en el resultado. Todo esto ocurre contra el PostgreSQL <strong>real</strong> del contenedor — no hay ningún mock de por medio.</p>
+<p>Crea la clase <code>VideojuegoApiIntegrationTest</code> en <code>src/test/java/com/tunombre/gamevault/integration/VideojuegoApiIntegrationTest.java</code> (paquete nuevo, <code>integration</code> — créalo si no existe todavía):</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span>
+<span class="normal"><a href="#__codelineno-3-27">27</a></span>
+<span class="normal"><a href="#__codelineno-3-28">28</a></span>
+<span class="normal"><a href="#__codelineno-3-29">29</a></span>
+<span class="normal"><a href="#__codelineno-3-30">30</a></span>
+<span class="normal"><a href="#__codelineno-3-31">31</a></span>
+<span class="normal"><a href="#__codelineno-3-32">32</a></span>
+<span class="normal"><a href="#__codelineno-3-33">33</a></span>
+<span class="normal"><a href="#__codelineno-3-34">34</a></span>
+<span class="normal"><a href="#__codelineno-3-35">35</a></span>
+<span class="normal"><a href="#__codelineno-3-36">36</a></span>
+<span class="normal"><a href="#__codelineno-3-37">37</a></span>
+<span class="normal"><a href="#__codelineno-3-38">38</a></span>
+<span class="normal"><a href="#__codelineno-3-39">39</a></span>
+<span class="normal"><a href="#__codelineno-3-40">40</a></span>
+<span class="normal"><a href="#__codelineno-3-41">41</a></span>
+<span class="normal"><a href="#__codelineno-3-42">42</a></span>
+<span class="normal"><a href="#__codelineno-3-43">43</a></span>
+<span class="normal"><a href="#__codelineno-3-44">44</a></span>
+<span class="normal"><a href="#__codelineno-3-45">45</a></span>
+<span class="normal"><a href="#__codelineno-3-46">46</a></span>
+<span class="normal"><a href="#__codelineno-3-47">47</a></span>
+<span class="normal"><a href="#__codelineno-3-48">48</a></span>
+<span class="normal"><a href="#__codelineno-3-49">49</a></span>
+<span class="normal"><a href="#__codelineno-3-50">50</a></span>
+<span class="normal"><a href="#__codelineno-3-51">51</a></span>
+<span class="normal"><a href="#__codelineno-3-52">52</a></span>
+<span class="normal"><a href="#__codelineno-3-53">53</a></span>
+<span class="normal"><a href="#__codelineno-3-54">54</a></span>
+<span class="normal"><a href="#__codelineno-3-55">55</a></span>
+<span class="normal"><a href="#__codelineno-3-56">56</a></span>
+<span class="normal"><a href="#__codelineno-3-57">57</a></span>
+<span class="normal"><a href="#__codelineno-3-58">58</a></span>
+<span class="normal"><a href="#__codelineno-3-59">59</a></span>
+<span class="normal"><a href="#__codelineno-3-60">60</a></span>
+<span class="normal"><a href="#__codelineno-3-61">61</a></span>
+<span class="normal"><a href="#__codelineno-3-62">62</a></span>
+<span class="normal"><a href="#__codelineno-3-63">63</a></span>
+<span class="normal"><a href="#__codelineno-3-64">64</a></span>
+<span class="normal"><a href="#__codelineno-3-65">65</a></span>
+<span class="normal"><a href="#__codelineno-3-66">66</a></span>
+<span class="normal"><a href="#__codelineno-3-67">67</a></span>
+<span class="normal"><a href="#__codelineno-3-68">68</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.integration</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.jayway.jsonpath.JsonPath</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.testcontainers.service.connection.ServiceConnection</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.MediaType</span><span class="p">;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.ActiveProfiles</span><span class="p">;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.MockMvc</span><span class="p">;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc</span><span class="p">;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.containers.PostgreSQLContainer</span><span class="p">;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Container</span><span class="p">;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Testcontainers</span><span class="p">;</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*</span><span class="p">;</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.result.MockMvcResultMatchers.*</span><span class="p">;</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="nd">@SpringBootTest</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="nd">@AutoConfigureMockMvc</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="nd">@Testcontainers</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="kd">class</span> <span class="nc">VideojuegoApiIntegrationTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29"></a><span class="w">    </span><span class="nd">@Autowired</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31"></a>
+<a id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36"></a><span class="s">                                {</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37"></a><span class="s">                                  "username": "admin",</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38"></a><span class="s">                                  "password": "admintest123"</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39"></a><span class="s">                                }</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40"></a><span class="s">                                """</span><span class="p">))</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
+<a id="__codelineno-3-42" name="__codelineno-3-42"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">()</span>
+<a id="__codelineno-3-43" name="__codelineno-3-43"></a><span class="w">                </span><span class="p">.</span><span class="na">getResponse</span><span class="p">()</span>
+<a id="__codelineno-3-44" name="__codelineno-3-44"></a><span class="w">                </span><span class="p">.</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45"></a>
+<a id="__codelineno-3-46" name="__codelineno-3-46"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
+<a id="__codelineno-3-47" name="__codelineno-3-47"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-48" name="__codelineno-3-48"></a>
+<a id="__codelineno-3-49" name="__codelineno-3-49"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="nf">crearEstudio</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/estudios"</span><span class="p">)</span>
+<a id="__codelineno-3-51" name="__codelineno-3-51"></a><span class="w">                        </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-3-53" name="__codelineno-3-53"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-3-54" name="__codelineno-3-54"></a><span class="s">                                {</span>
+<a id="__codelineno-3-55" name="__codelineno-3-55"></a><span class="s">                                  "nombre": "Team Cherry",</span>
+<a id="__codelineno-3-56" name="__codelineno-3-56"></a><span class="s">                                  "pais": "Australia"</span>
+<a id="__codelineno-3-57" name="__codelineno-3-57"></a><span class="s">                                }</span>
+<a id="__codelineno-3-58" name="__codelineno-3-58"></a><span class="s">                                """</span><span class="p">))</span>
+<a id="__codelineno-3-59" name="__codelineno-3-59"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">()</span>
+<a id="__codelineno-3-61" name="__codelineno-3-61"></a><span class="w">                </span><span class="p">.</span><span class="na">getResponse</span><span class="p">()</span>
+<a id="__codelineno-3-62" name="__codelineno-3-62"></a><span class="w">                </span><span class="p">.</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-3-63" name="__codelineno-3-63"></a>
+<a id="__codelineno-3-64" name="__codelineno-3-64"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Long</span><span class="p">.</span><span class="na">parseLong</span><span class="p">(</span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.id"</span><span class="p">).</span><span class="na">toString</span><span class="p">());</span>
+<a id="__codelineno-3-65" name="__codelineno-3-65"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-66" name="__codelineno-3-66"></a>
+<a id="__codelineno-3-67" name="__codelineno-3-67"></a><span class="w">    </span><span class="c1">// los tests van aquí</span>
+<a id="__codelineno-3-68" name="__codelineno-3-68"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>@ServiceConnection</code> es la pieza clave: conecta automáticamente el <code>PostgreSQLContainer</code> a tu aplicación de test, sin que tengas que configurar manualmente <code>spring.datasource.url</code> en ningún <code>application-test.yml</code> — Spring Boot lo resuelve por ti. Fíjate en que la imagen es <code>postgres:16-alpine</code>, no la <code>18-alpine</code> de tu <code>docker-compose.yaml</code> de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.</p>
+<p><code>@ActiveProfiles("test")</code> activa un perfil que todavía no existe en tu proyecto. Sin él, el contexto de Spring no arranca y ningún test se ejecuta — así que antes de nada, crea <code>src/test/resources/application-test.yml</code>:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span>
+<span class="normal"><a href="#__codelineno-4-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nt">activate</span><span class="p">:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">      </span><span class="nt">on-profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">      </span><span class="nt">ddl-auto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create-drop</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="nt">show-sql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nt">gamevault</span><span class="p">:</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">  </span><span class="nt">admin</span><span class="p">:</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admintest123</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">  </span><span class="nt">jwt</span><span class="p">:</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">un-secreto-de-test-de-al-menos-32-caracteres-largo</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+</code></pre></div></td></tr></table></div>
+<p><code>ddl-auto: create-drop</code> deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior.</p>
+<div class="admonition warning">
+<p class="admonition-title">Sin <code>admin.password</code>, <code>jwt.secret</code> y <code>jwt.expiration-minutes</code>, el contexto ni arranca</p>
+<p>Ninguna de las tres tiene valor por defecto en el código (<code>@Value</code> sin <em>fallback</em>) — sin ellas, ningún test de la clase llega a ejecutarse. La contraseña que pongas aquí tiene que coincidir con la que envíe <code>loginComoAdmin()</code> en su petición de login (más arriba, dentro de la misma clase) — de ahí el nombre <code>admintest123</code>, para que quede claro de un vistazo que es una credencial solo de test, sin relación con la de <code>dev</code>. El valor de <code>expiration-minutes</code> no importa para el test — <code>60</code> (el mismo de <code>dev</code>) sirve igual que cualquier otro. Este fichero sí se sube a Git: las credenciales de dentro no son reales, solo existen en el contenedor Postgres desechable que Testcontainers destruye al terminar el test.</p>
+</div>
+<p><code>loginComoAdmin()</code> es nuevo respecto a lo que tenías hasta ahora: hace un login real contra <code>/api/v1/auth/login</code> (el mismo endpoint que has construido en PSP, Actividad 2.4) y extrae el <code>accessToken</code> de la respuesta con <code>JsonPath</code>, la misma clase que ya conoces de otros tests con MockMvc. Lo necesitas porque, desde que tu política de rutas quedó cerrada por defecto (PSP, Actividad 2.5), crear un videojuego exige un token de <code>ADMIN</code> — antes de esa actividad, el <code>POST</code> de más abajo habría funcionado sin credenciales; ahora ya no.</p>
+<p><code>crearEstudio()</code> resuelve otro problema: <code>ddl-auto: create-drop</code> deja tu base de datos de test completamente vacía en cada ejecución, así que ningún <code>estudioId</code> fijo (como <code>1</code>) existe todavía cuando el test arranca. Este ayudante crea un <code>Estudio</code> de verdad, autenticado igual que el resto, y devuelve su <code>id</code> real — que es justo lo que necesitas para crear un videojuego que apunte a un estudio que sí existe.</p>
 <hr>
-<h2 id="mini-reto-el-test-negativo">Mini-reto — el test negativo<a class="headerlink" href="#mini-reto-el-test-negativo" title="Permanent link">¶</a></h2>
-<p>Repite el mismo patrón del Paso 2, pero esta vez filtrando por una plataforma que el videojuego creado <strong>no tiene</strong> (por ejemplo, <code>?plataforma=xbox</code>), y comprueba que la lista de resultados <strong>no</strong> incluye ese videojuego. Solo se indica el objetivo — la estructura es idéntica a la del Paso 2.</p>
+<h2 id="paso-2-primer-test-guiado-al-completo">Paso 2 — Primer test, guiado al completo<a class="headerlink" href="#paso-2-primer-test-guiado-al-completo" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /estudios,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 + id del estudio
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /videojuegos,&lt;br/&gt;Authorization: Bearer token,&lt;br/&gt;estudioId real,&lt;br/&gt;detallesPlataforma: steam)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 Created
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(GET /videojuegos?plataforma=steam)
+    MockMvc-&gt;&gt;App: petición pública, sin token
+    App--&gt;&gt;MockMvc: 200 + lista con el videojuego
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: andExpect(jsonPath($.content[0].titulo))</code></pre>
+<p>Así se traduce a código:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span>
+<span class="normal"><a href="#__codelineno-5-20">20</a></span>
+<span class="normal"><a href="#__codelineno-5-21">21</a></span>
+<span class="normal"><a href="#__codelineno-5-22">22</a></span>
+<span class="normal"><a href="#__codelineno-5-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="n">Long</span><span class="w"> </span><span class="n">estudioId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">crearEstudio</span><span class="p">(</span><span class="n">adminToken</span><span class="p">);</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="s">                            {</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="s">                              "titulo": "Hades",</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="s">                              "precio": 24.99,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="s">                              "fechaLanzamiento": "2020-09-17",</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="s">                              "estudioId": %d,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="s">                              "detallesPlataforma": {"steam": {"idApp": 123}}</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="s">                            }</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="s">                            """</span><span class="p">.</span><span class="na">formatted</span><span class="p">(</span><span class="n">estudioId</span><span class="p">)))</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">());</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s">"/api/v1/videojuegos?plataforma=steam"</span><span class="p">))</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.content[0].titulo"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Hades"</span><span class="p">));</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>.formatted(estudioId)</code> sustituye el marcador <code>%d</code> del texto por el id real, antes de que el bloque se convierta en el JSON que se envía — el mismo patrón <code>String.formatted(...)</code> que ya conoces, aplicado sobre un bloque de texto en vez de una única línea.</p>
+<p>Línea a línea: primero el login como <code>admin</code>, para obtener el token; luego un <code>POST</code> real, vía MockMvc y ya autenticado, que crea un videojuego con una plataforma concreta en su <code>detallesPlataforma</code>; después un <code>GET</code> filtrado por esa misma plataforma, sin token porque la lectura del catálogo sigue siendo pública, comprobando con <code>jsonPath</code> que el videojuego creado aparece en el resultado. Todo esto ocurre contra el PostgreSQL <strong>real</strong> del contenedor — no hay ningún mock de por medio.</p>
+<hr>
+<h2 id="paso-3-el-test-negativo">Paso 3 — El test negativo<a class="headerlink" href="#paso-3-el-test-negativo" title="Permanent link">¶</a></h2>
+<p>Repite el mismo patrón del Paso 2, pero esta vez filtrando por una plataforma que el videojuego creado <strong>no tiene</strong> (por ejemplo, <code>?plataforma=xbox</code>), y comprueba que la lista de resultados <strong>no</strong> incluye ese videojuego:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /estudios,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 + id del estudio
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /videojuegos,&lt;br/&gt;Authorization: Bearer token,&lt;br/&gt;estudioId real,&lt;br/&gt;detallesPlataforma: steam)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 Created
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(GET /videojuegos?plataforma=xbox)
+    MockMvc-&gt;&gt;App: petición pública, sin token
+    App--&gt;&gt;MockMvc: 200 + lista SIN el videojuego
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: andExpect(jsonPath($.content).isEmpty())</code></pre>
+<p>Solo se indica el nombre del test — tú escribes todo lo demás, siguiendo el patrón del Paso 2 (recuerda: también necesitas <code>crearEstudio()</code> antes del videojuego, y este test crea el suyo propio, no reutiliza el del test anterior, así no depende del orden en que JUnit ejecute los tests de la clase):</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">filtrarPorPlataforma_NoDebeDevolverElVideojuego_CuandoNoLaTiene</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="c1">// tu turno — pista: jsonPath("$.content").isEmpty() comprueba que una lista</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="c1">//           viene vacía, sin tener que contar elementos a mano</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: los dos tests de filtrado (Pasos 2 y 3) en verde, ejecutados desde tu IDE.</p>
+<hr>
+<h2 id="paso-4-un-caso-de-error-guiado-al-completo">Paso 4 — Un caso de error, guiado al completo<a class="headerlink" href="#paso-4-un-caso-de-error-guiado-al-completo" title="Permanent link">¶</a></h2>
+<p>Los Pasos 2 y 3 solo prueban el camino feliz de la creación. Pero <code>VideojuegoService.create()</code> también puede fallar — por ejemplo, si <code>estudioId</code> no existe (el mismo <code>orElseThrow</code> que ya conoces de la teoría de PSP, Tema 2). Un test de integración también tiene que cubrir eso.</p>
+<p>Sigue en la <strong>misma clase</strong> que ya tienes: <code>VideojuegoApiIntegrationTest</code>, en <code>src/test/java/com/tunombre/gamevault/integration/VideojuegoApiIntegrationTest.java</code>. No crees ningún fichero nuevo — añade este método <code>@Test</code> dentro de la clase, junto a los de los Pasos 2 y 3 (todos comparten el mismo <code>mockMvc</code> y el mismo <code>loginComoAdmin()</code>, así que tienen que vivir en la misma clase para poder usarlos):</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /videojuegos,&lt;br/&gt;Authorization: Bearer token,&lt;br/&gt;estudioId: 999999)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    Note right of App: VideojuegoService.create()&lt;br/&gt;estudioRepository.findById(999999)&lt;br/&gt;.orElseThrow(...)
+    App--&gt;&gt;MockMvc: 404 + ErrorResponse
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: andExpect(jsonPath($.status).value(404))</code></pre>
+<p>El test que implementa este flujo:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">crearVideojuego_DebeDevolver404_CuandoElEstudioNoExiste</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="s">                            {</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="s">                              "titulo": "Juego fantasma",</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="s">                              "precio": 9.99,</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="s">                              "fechaLanzamiento": "2024-01-01",</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="s">                              "estudioId": 999999,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="s">                              "detallesPlataforma": {"steam": {"idApp": 1}}</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="s">                            }</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isNotFound</span><span class="p">())</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.status"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="mi">404</span><span class="p">));</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>estudioId: 999999</code> es, deliberadamente, un id que no existe en tu base de datos de test (recién creada por <code>ddl-auto: create-drop</code>, así que ningún id llega a esa cifra). Fíjate en que esto también pasa por Testcontainers de verdad: un mock del repositorio nunca ejecutaría el <code>orElseThrow</code> contra una base de datos real, así que este test comprueba el camino de error tal y como ocurriría en producción, no una simulación de él.</p>
+<hr>
+<h2 id="paso-5-otro-endpoint-con-mas-tipos-de-error-posibles">Paso 5 — Otro endpoint, con más tipos de error posibles<a class="headerlink" href="#paso-5-otro-endpoint-con-mas-tipos-de-error-posibles" title="Permanent link">¶</a></h2>
+<p>Los Pasos 2 a 4 prueban siempre el mismo endpoint (<code>POST /api/v1/videojuegos</code>). <code>PUT /api/v1/videojuegos/{id}</code> tiene, además del <code>404</code> que ya conoces, dos tipos de error más: validación (<code>precio</code> con <code>@PositiveOrZero</code>, puede fallar) y autorización (exige rol <code>ADMIN</code>, igual que el <code>POST</code>).</p>
+<p>Sigues en la misma clase, <code>VideojuegoApiIntegrationTest</code>. Aquí tienes la estructura de los tres tests que van a continuación de <code>crearVideojuego_DebeDevolver404_CuandoElEstudioNoExiste</code>, uno por uno — completa tú el cuerpo de cada petición y la aserción final, según lo que cada nombre de método y cada diagrama ya te dicen que tiene que pasar.</p>
+<p><strong>El primero, <code>400</code> por validación</strong>:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /estudios,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 + id del estudio
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /videojuegos,&lt;br/&gt;cuerpo válido)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    App--&gt;&gt;MockMvc: 201 + id del videojuego
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(PUT /videojuegos/{id},&lt;br/&gt;precio: -10)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    Note right of App: @Valid rechaza el DTO&lt;br/&gt;antes de llegar al service
+    App--&gt;&gt;MockMvc: 400 + ErrorResponse
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: ¿qué comprueba tu jsonPath aquí?</code></pre>
+<p>El esqueleto a completar:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">actualizarVideojuego_DebeDevolver400_CuandoElPrecioEsNegativo</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="c1">// tu turno: crearEstudio(adminToken) y luego un videojuego válido (reutiliza el</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">    </span><span class="c1">//           patrón del Paso 2) — anota el id del videojuego para el PUT de abajo</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">    </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">put</span><span class="p">(</span><span class="s">"/api/v1/videojuegos/"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="cm">/* el id que acabas de crear */</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">                    </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="w">                    </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="w">                    </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="s">                            {</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="s">                              // tu turno: mismo cuerpo válido, pero con un precio negativo</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="s">                            }</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="s">                            """</span><span class="p">))</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">            </span><span class="c1">// tu turno: ¿qué código de estado esperas? ¿qué comprueba jsonPath del cuerpo del error?</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="w">            </span><span class="p">;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>El segundo, <code>404</code> por id inexistente</strong>:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(PUT /videojuegos/999999,&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    Note right of App: videojuegoRepository.findById(999999)&lt;br/&gt;.orElseThrow(...)
+    App--&gt;&gt;MockMvc: 404 + ErrorResponse
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: ¿qué comprueba tu jsonPath aquí?</code></pre>
+<p>Mismo patrón, esqueleto a completar:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">actualizarVideojuego_DebeDevolver404_CuandoElVideojuegoNoExiste</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="c1">// tu turno: mismo patrón del Paso 4, pero sobre PUT y con un id de videojuego</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">    </span><span class="c1">//           (no de estudio) que no existe</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>El tercero, <code>403</code> por rol insuficiente</strong>:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Test
+    participant MockMvc
+    participant SecurityFilterChain
+    participant AccessDeniedHandler
+    participant App as GameVault (Testcontainers)
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/register,&lt;br/&gt;usuario sin rol ADMIN)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 201 Created
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(POST /auth/login, ese mismo usuario)
+    MockMvc-&gt;&gt;App: petición HTTP real
+    App--&gt;&gt;MockMvc: 200 + accessToken (rol USER)
+    MockMvc--&gt;&gt;Test: respuesta
+
+    Test-&gt;&gt;MockMvc: perform(PUT /videojuegos/{id},&lt;br/&gt;Authorization: Bearer token)
+    MockMvc-&gt;&gt;SecurityFilterChain: petición HTTP real, ya autenticada
+    Note right of SecurityFilterChain: hasRole("ADMIN") → no coincide
+    SecurityFilterChain-&gt;&gt;AccessDeniedHandler: AccessDeniedException
+    AccessDeniedHandler--&gt;&gt;MockMvc: 403 + ErrorResponse
+    MockMvc--&gt;&gt;Test: respuesta
+    Test-&gt;&gt;Test: ¿qué comprueba tu jsonPath aquí?</code></pre>
+<p>Y el último, también por completar:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span>
+<span class="normal"><a href="#__codelineno-10-7">7</a></span>
+<span class="normal"><a href="#__codelineno-10-8">8</a></span>
+<span class="normal"><a href="#__codelineno-10-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@Test</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">actualizarVideojuego_DebeDevolver403_CuandoElUsuarioNoEsAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="c1">// tu turno: tu base de datos de test solo tiene sembrado el admin (el ApplicationRunner) —</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="c1">//           no hay ningún usuario sin rol ADMIN todavía. Regístralo tú primero con un</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="c1">//           POST a /api/v1/auth/register (es permitAll(), no necesita token), y luego</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="c1">//           haz login con esas mismas credenciales para conseguir un token sin ADMIN.</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="c1">//           Compáralo con el test de 403 que ya has visto en la teoría de este apartado</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="c1">//           ("Comprobar también los casos de error")</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Pregunta</strong>: los tres tests de este paso comparten casi toda la estructura (login, <code>PUT</code>, cuerpo JSON, aserciones). ¿Por qué no merece la pena extraer esa parte común a un método ayudante, como sí has hecho con <code>loginComoAdmin()</code>? Piensa en qué cambia realmente entre los tres — el cuerpo de la petición, el token usado, y sobre todo la aserción final, que es lo que hace que cada test verifique algo distinto.</p>
+<p><strong>Captura</strong>: los seis tests de <code>VideojuegoApiIntegrationTest</code> en verde, ejecutados desde tu IDE.</p>
 <hr>
 <h2 id="pregunta-de-comprension">Pregunta de comprensión<a class="headerlink" href="#pregunta-de-comprension" title="Permanent link">¶</a></h2>
 <p>¿Qué detectaría este test con Testcontainers que <strong>no</strong> detectaría un test equivalente con el repositorio mockeado? Piensa en un error concreto: por ejemplo, si escribieras mal el nombre de la función SQL en <code>criteriaBuilder.function("jsonb_exists", ...)</code> (una errata tipográfica), o si el tipo de columna generado no fuera realmente <code>jsonb</code>. ¿Un mock del repositorio detectaría ese error? ¿Por qué sí o por qué no?</p>
-<hr>
-<h2 id="resumen-de-tu-evolucion">Resumen de tu evolución<a class="headerlink" href="#resumen-de-tu-evolucion" title="Permanent link">¶</a></h2>
-<p>Escribe un resumen propio (5-6 líneas) de cómo tu GameVault ha evolucionado a lo largo de las tres actividades de este tema: desde la columna JSONB básica (Actividad 2.1) hasta una consulta filtrada y probada de verdad con Testcontainers (esta actividad).</p>
-<p>Incluye, como parte explícita de este entregable, 2-3 líneas explicando por qué JSONB no abre ni cierra una conexión propia: reutiliza la misma conexión JDBC/JPA ya gestionada por el framework desde el Tema 1.</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
 <p>En el Tema 3 das el salto a MongoDB: la primera base de datos NoSQL distinta de PostgreSQL de todo el curso, con un modelo documental nativo, sin tablas de ningún tipo.</p></div>
