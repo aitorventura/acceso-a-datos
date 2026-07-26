@@ -34,7 +34,7 @@
 
 - [Actividad 2.1 — La columna `detallesPlataforma`: persistiendo objetos estructurados](actividad_2_1.md)
 - [Actividad 2.2 — Filtrar por plataforma con `jsonb_exists`](actividad_2_2.md)
-- [Actividad 2.3 — Pruebas de integración sobre JSONB](actividad_2_3.md)
+- [Actividad 2.3 — Pruebas de integración: JSONB y manejo de errores](actividad_2_3.md)
 
 ---
 

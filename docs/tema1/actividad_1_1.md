@@ -36,7 +36,7 @@ Hasta ahora todo lo que has visto de Spring Boot ha sido teoría y ejemplos de c
 - Verificar que la conexión y el mapeo funcionan de verdad, no solo que "compila".
 
 !!! info "Por qué esta vez todo va dentro de un Dev Container"
-    A partir de hoy trabajas con tu propio proyecto, no con ejercicios sueltos — y ese proyecto tiene que arrancar igual en tu portátil, en el ordenador del aula o en el de un compañero. Instalar Java, Maven, Git o el driver de PostgreSQL a mano en cada equipo es justo lo que falla: versiones distintas, permisos de instalación limitados en los equipos del centro, media hora perdida antes de escribir una sola línea. Metiendo todo eso dentro de un Dev Container (lo viste en el Tema 0, Actividad 0.7) te aseguras de que el entorno es siempre el mismo, esté donde esté tu proyecto — y no dependes de qué tenga instalado el equipo en el que te sientes ese día.
+    A partir de hoy trabajas con tu propio proyecto, no con ejercicios sueltos — y ese proyecto tiene que arrancar igual en tu portátil, en el ordenador del aula o en el de un compañero. Instalar Java, Maven, Git o el driver de PostgreSQL a mano en cada equipo es justo lo que falla: versiones distintas, permisos de instalación limitados en los equipos del centro, media hora perdida antes de escribir una sola línea. Metiendo todo eso dentro de un Dev Container (lo has visto en el Tema 0, Actividad 0.7) te aseguras de que el entorno es siempre el mismo, esté donde esté tu proyecto — y no dependes de qué tenga instalado el equipo en el que te sientes ese día.
 
 ---
 
@@ -67,7 +67,7 @@ Pulsa **Generate**, descomprime el `.zip`, y renombra la carpeta a `gamevault` (
 !!! warning "No añadas todavía el resto de dependencias"
     Tu GameVault terminado va a incluir también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... pero no las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.
 
-Fíjate en que Spring Initializr ya te ha creado una clase con `@SpringBootApplication` (el equivalente a `LibreriaApplication` que has visto en la teoría) y la estructura de carpetas `src/main/java` / `src/main/resources` — es exactamente lo que viste "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.
+Fíjate en que Spring Initializr ya te ha creado una clase con `@SpringBootApplication` (el equivalente a `LibreriaApplication` que has visto en la teoría) y la estructura de carpetas `src/main/java` / `src/main/resources` — es exactamente lo que has visto "por dentro" en el apartado de teoría, solo que ahora es tuyo y está vacío.
 
 **Pregunta**: ¿por qué crees que Spring Initializr te deja elegir las dependencias en vez de añadirlas todas por defecto?
 
@@ -75,7 +75,7 @@ Fíjate en que Spring Initializr ya te ha creado una clase con `@SpringBootAppli
 
 ## Paso 1 — El Dev Container: tu entorno y PostgreSQL, juntos
 
-En la teoría del Tema 0 viste que un `devcontainer.json` puede apoyarse en un `docker-compose.yml` en vez de en una sola `image` suelta — así el mismo fichero que describe tu entorno de programación puede levantar, en otro de sus servicios, la base de datos. Es justo lo que vas a montar hoy: un servicio `app` (tu entorno Java) y un servicio `postgres` (el gestor), arrancando los dos a la vez.
+En la teoría del Tema 0 has visto que un `devcontainer.json` puede apoyarse en un `docker-compose.yml` en vez de en una sola `image` suelta — así el mismo fichero que describe tu entorno de programación puede levantar, en otro de sus servicios, la base de datos. Es justo lo que vas a montar hoy: un servicio `app` (tu entorno Java) y un servicio `postgres` (el gestor), arrancando los dos a la vez.
 
 En la raíz de tu proyecto, crea la carpeta `.devcontainer` y, dentro, `docker-compose.yml`:
 
@@ -106,7 +106,7 @@ volumes:
 !!! warning "Con Postgres 18, el volumen va en `/var/lib/postgresql`, no en `/var/lib/postgresql/data`"
     Desde la versión 18, la imagen organiza los datos en subcarpetas por versión mayor dentro de `/var/lib/postgresql` — si montas el volumen directamente en `/var/lib/postgresql/data` (la ruta que usaban las versiones anteriores), el contenedor se niega a arrancar y sale con error nada más crearse. Si ya te ha pasado esto, sigue las instrucciones de abajo para limpiar el volumen roto antes de continuar.
 
-`app` parte esta vez de la imagen **base** genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo `volumes` de `app`, `/var/run/docker.sock:/var/run/docker.sock`, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.
+`app` parte esta vez de la imagen **base** genérica (la misma familia que ya has visto en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo `volumes` de `app`, `/var/run/docker.sock:/var/run/docker.sock`, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.
 
 Y, junto a él, `devcontainer.json`:
 
@@ -166,7 +166,7 @@ git --version
 docker version
 ```
 
-**Pregunta**: si estos mismos tres comandos los ejecutaras en un ordenador del aula sin Dev Container, ¿qué esperarías que pasara? Relaciónalo con lo que ya viste en la Actividad 0.7 sobre qué corre dentro del contenedor y qué no.
+**Pregunta**: si estos mismos tres comandos los ejecutaras en un ordenador del aula sin Dev Container, ¿qué esperarías que pasara? Relaciónalo con lo que ya has visto en la Actividad 0.7 sobre qué corre dentro del contenedor y qué no.
 
 ---
 
@@ -181,6 +181,9 @@ spring:
 ```
 
 Así todo el proyecto queda en YAML desde el principio, sin mezclar formatos entre la configuración común y la de perfil.
+
+!!! note "`.yml` o `.yaml`: da igual, son la misma extensión"
+    Spring Boot reconoce las dos sin distinción — es pura convención de quien escribe el fichero, no una regla técnica. A lo largo del curso vas a ver los dos usados indistintamente (aquí mismo, `application.yml` arriba y `application-dev.yaml` abajo); no son dos formatos distintos ni dos ficheros que tengan que coincidir en extensión entre sí.
 
 Ahora sí, crea `src/main/resources/application-dev.yaml` con la configuración de conexión:
 
@@ -283,7 +286,7 @@ public class Videojuego {
 
 `@ManyToOne` es el lado contrario de la relación: muchos videojuegos pertenecen a un estudio. `@JoinColumn(name = "estudio_id")` es la columna real, con la clave foránea, que vivirá en la tabla `videojuego`. `fetch = FetchType.LAZY` significa que Hibernate no carga el `Estudio` completo hasta que de verdad lo pidas (`videojuego.getEstudio()`), en vez de traerlo siempre aunque no lo uses.
 
-**Mini-reto**: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que usaste en `Estudio` (atributo privado + getter/setter, que ya te genera `@Getter`/`@Setter` de Lombok).
+**Mini-reto**: completa los tres campos marcados en el comentario, siguiendo exactamente el mismo patrón que ya has usado en `Estudio` (atributo privado + getter/setter, que ya te genera `@Getter`/`@Setter` de Lombok).
 
 ---
 

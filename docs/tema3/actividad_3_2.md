@@ -72,7 +72,7 @@ public class ReviewsVideojuegoEventConsumer {
 }
 ```
 
-**Fíjate**: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que analizaste en PSP.
+**Fíjate**: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que ya has analizado en PSP.
 
 ---
 
@@ -111,15 +111,17 @@ Si no lo tenías ya de la Actividad 3.1, añade también `deleteByVideojuegoId` 
 
 ```bash
 # Crea un videojuego y una reseña
-curl -X POST http://localhost:8080/api/v1/videojuegos -H "Content-Type: application/json" \
+curl -X POST http://localhost:8080/api/v1/videojuegos \
+  -H "Authorization: Bearer $TOKEN_ADMIN" -H "Content-Type: application/json" \
   -d '{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'
 
 curl -X POST http://localhost:8080/api/v1/videojuegos/{id}/reviews \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 7, "comentario": "Prueba"}'
 
-# Borra el videojuego
-curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id}
+# Borra el videojuego (exige rol ADMIN, igual que crearlo)
+curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
+  -H "Authorization: Bearer $TOKEN_ADMIN"
 ```
 
 Comprueba en MongoDB, **esperando un instante** (no es síncrono):
@@ -154,7 +156,7 @@ public long deleteByVideojuegoId(Long videojuegoId) {
 
 ## Reflexión de cierre
 
-Compara por escrito (4-5 líneas) tu experiencia con PostgreSQL en los temas anteriores y con MongoDB en este tema. Y compara también borrar de forma **síncrona** (como haría un `cascade`/`orphanRemoval` dentro de un único motor relacional, que ya usaste en el Tema 1 entre `Estudio` y `Videojuego`) frente a borrar de forma **asíncrona** entre dos motores distintos, como acabas de hacer aquí: ¿qué se gana (desacoplamiento entre módulos) y qué se pierde (consistencia inmediata — hay una ventana de tiempo en la que el videojuego ya no existe pero sus reseñas todavía sí)?
+Compara por escrito (4-5 líneas) tu experiencia con PostgreSQL en los temas anteriores y con MongoDB en este tema. Y compara también borrar de forma **síncrona** (como haría un `cascade`/`orphanRemoval` dentro de un único motor relacional, que ya has usado en el Tema 1 entre `Estudio` y `Videojuego`) frente a borrar de forma **asíncrona** entre dos motores distintos, como acabas de hacer aquí: ¿qué se gana (desacoplamiento entre módulos) y qué se pierde (consistencia inmediata — hay una ventana de tiempo en la que el videojuego ya no existe pero sus reseñas todavía sí)?
 
 ---
 
