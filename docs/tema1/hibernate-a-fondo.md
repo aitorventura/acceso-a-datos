@@ -24,47 +24,88 @@ Las anotaciones ganaron terreno porque viven pegadas al propio código: cambias 
 Un objeto gestionado por un ORM pasa por distintos estados a lo largo de su vida:
 
 - **Transient**: objeto Java recién creado, sin relación todavía con la base de datos — Hibernate no sabe que existe.
-- **Managed** (o *persistent*): Hibernate lo gestiona activamente — cambiar un campo se sincroniza solo con la base de datos.
-- **Detached**: la sesión que lo gestionaba se ha cerrado — conserva sus datos, pero ya no se sincroniza.
+- **Managed** (o *persistent*): Hibernate lo está gestionando activamente — si cambias alguno de sus campos dentro de la transacción, detectará el cambio y lo guardará al finalizar.
+- **Detached**: Hibernate ya no está gestionando el objeto — conserva sus datos, pero los cambios que hagas sobre él ya no se sincronizan automáticamente con la base de datos.
 - **Removed**: marcado para eliminarse de la base de datos.
 
-Estos nombres no son abstractos: nombran en qué momento exacto del código que ya escribes está cada objeto. Sigue este recorrido con tu propio `Videojuego`, línea a línea:
+Estos estados se entienden mejor observando tres situaciones habituales.
+
+### Crear una entidad nueva
 
 ```java
-Videojuego v = new Videojuego();       // 1. TRANSIENT: objeto Java normal, Hibernate no sabe que existe
-v.setTitulo("Celeste");                //    (puedes tocar sus campos libremente, nada se guarda todavía)
+Videojuego videojuego = new Videojuego(); // TRANSIENT
+videojuego.setTitulo("Celeste");
 
-videojuegoRepository.save(v);          // 2. Al llamar a save(), pasa a MANAGED: Hibernate ya lo controla
-                                        //    y lo ha insertado en la base de datos
-
-// ... en otra petición, más tarde ...
-
-Videojuego v2 = videojuegoRepository.findById(1L).get(); // 3. MANAGED: recién cargado desde la BD
-v2.setPrecio(nuevoPrecio);              // 4. Cambiar un campo aquí, MIENTRAS v2 sigue siendo managed,
-                                         //    ya se sincroniza solo con la base de datos
-
-// cuando el método/transacción termina y Spring cierra la sesión...
-                                         // 5. v2 pasa a DETACHED: conserva sus datos, pero ya no se sincroniza
-
-videojuegoRepository.delete(v2);        // 6. REMOVED: marcado para borrar (y borrado de verdad al terminar)
+Videojuego guardado = videojuegoRepository.save(videojuego);
 ```
+
+Al utilizar `new`, el objeto solo existe en la memoria de Java: está en estado **transient**. Cuando se guarda, Hibernate empieza a gestionarlo y lo inserta en la base de datos.
+
+Conviene recoger siempre el objeto devuelto por `save()`:
+
+```java
+Videojuego guardado = videojuegoRepository.save(videojuego);
+```
+
+Ese objeto contiene el estado definitivo de la entidad, incluido el identificador generado por la base de datos.
+
+### Recuperar y modificar una entidad
+
+```java
+@Transactional
+public void cambiarPrecio(Long id, BigDecimal nuevoPrecio) {
+    Videojuego videojuego = videojuegoRepository.findById(id)
+            .orElseThrow();
+
+    videojuego.setPrecio(nuevoPrecio);
+}
+```
+
+La entidad obtenida mediante `findById()` está en estado **managed** mientras dura la transacción. Hibernate detecta el cambio de precio y lo guarda cuando la transacción termina correctamente, aunque no aparezca una nueva llamada a `save()`.
+
+Cuando la transacción finaliza y Hibernate deja de gestionar ese objeto, pasa a estado **detached**. Conserva todos sus datos, pero los cambios posteriores ya no se sincronizan automáticamente con la base de datos.
+
+### Eliminar una entidad
+
+```java
+@Transactional
+public void eliminar(Long id) {
+    Videojuego videojuego = videojuegoRepository.findById(id)
+            .orElseThrow();
+
+    videojuegoRepository.delete(videojuego);
+}
+```
+
+Al llamar a `delete()`, la entidad queda en estado **removed**: Hibernate la marca para eliminarla de la base de datos al confirmar la transacción.
 
 ```mermaid
 flowchart LR
-    T["🆕 Transient<br/>new Videojuego()"] -->|"repository.save(v)"| M["✅ Managed<br/>Hibernate lo controla"]
-    M -->|"termina el método/transacción"| D["🔌 Detached<br/>conserva sus datos,<br/>ya no se sincroniza"]
-    M -->|"repository.delete(v)"| R["🗑️ Removed<br/>marcado para borrar"]
-    D -->|"repository.save(v) de nuevo"| M
+    T["🆕 Transient<br/>objeto creado con new"] -->|"save()"| M["✅ Managed<br/>Hibernate lo gestiona"]
+    M -->|"termina la transacción"| D["🔌 Detached<br/>conserva los datos,<br/>pero ya no se sincroniza"]
+    M -->|"delete()"| R["🗑️ Removed<br/>marcado para eliminar"]
 ```
 
-!!! question "¿Cuándo haces `new`, y cuándo intervienen los métodos del ORM?"
-    `new Videojuego()` lo escribes tú, en tu propio código (normalmente en un service) — es un objeto Java corriente, igual que cualquier otro que hayas creado en cualquier clase. Hibernate no se entera de que existe hasta que se lo pasas explícitamente a un método de tu repository. `save()` es precisamente ese momento de transición: convierte un objeto transient en managed (si es la primera vez) o sincroniza uno ya existente (si venía de un `findById`).
+En JPA existen operaciones internas distintas para guardar entidades nuevas y entidades que ya existían: `persist()` y `merge()`. Spring Data JPA oculta esa diferencia detrás de `save()`. No necesitas decidir cuál utilizar en cada caso. Para trabajar de forma segura, quédate con dos reglas:
 
-!!! tip "¿Por qué el diagrama no dice `persist()`/`merge()`, si son los nombres 'oficiales' de JPA?"
-    En JPA "puro" (sin Spring Data), tendrías que llamar tú mismo a `entityManager.persist(v)` la primera vez que guardas un objeto, y a `entityManager.merge(v)` para sincronizar uno que ya existía — dos métodos distintos según el caso, y tendrías que saber cuál tocaba en cada momento. `save()` de Spring Data JPA es una capa de comodidad por encima: mira si el objeto ya tiene id y decide por ti si hace falta un `persist` o un `merge`, sin que tengas que distinguirlo tú.
+- Si cargas una entidad dentro de una transacción, puedes modificarla y Hibernate detectará los cambios.
+- Cuando llames a `save()`, utiliza el objeto que devuelve el repository.
 
-!!! tip "¿Y por qué se vuelve detached automáticamente, sin que llames a nada?"
-    Cada método de tu service (gestionado por Spring, típicamente con `@Transactional` de por medio) abre su propia sesión de Hibernate y la cierra al terminar. Mientras el método sigue en marcha, cualquier objeto que hayas cargado o guardado está managed; en cuanto el método devuelve su resultado y la transacción se cierra, ese mismo objeto pasa a detached sin que hagas nada explícito — es una consecuencia del final del método, no una acción que tú invoques.
+!!! tip "¿Cuándo deja de estar managed?"
+    Hibernate mantiene una zona de trabajo en la que controla los objetos que ha cargado o guardado. Esta zona se llama **contexto de persistencia**.
+
+    Mientras un objeto está dentro de ese contexto, permanece `managed`: Hibernate detecta sus cambios y puede guardarlos automáticamente.
+
+    Cuando el contexto termina, el objeto pasa a `detached`. El objeto Java sigue existiendo y conserva sus datos, pero Hibernate ya no vigila los cambios que hagas sobre él.
+
+    Para empezar, quédate con esta idea:
+
+    ```text
+    managed  → Hibernate vigila los cambios
+    detached → Hibernate ya no vigila los cambios
+    ```
+
+    En los métodos anotados con `@Transactional`, lo habitual es que el objeto permanezca gestionado durante la transacción.
 
 ---
 
@@ -88,20 +129,26 @@ A diferencia de lo que sugiere la palabra "instalar", en un proyecto Spring Boot
 Tu `Videojuego` y tu `Estudio` de la Actividad 1.1 ya llevan varias anotaciones concretas — las escribiste siguiendo el patrón de la teoría, sin que se justificara todavía cada elección. Toca cerrar ese hueco.
 
 #### `GenerationType.IDENTITY`, ¿por qué esa estrategia?
+`GenerationType` tiene cinco valores. Todos resuelven el mismo problema —generar un identificador único—, pero lo hacen de formas diferentes:
 
-`GenerationType` tiene cuatro valores, y cada uno resuelve el mismo problema — generar un id único — de una forma distinta:
+| Estrategia     | Cómo genera el id                                                                                          | Cuándo conviene                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **`IDENTITY`** | Delega en una columna autoincremental de la propia base de datos.                                          | Es la que utilizas en `Videojuego` y `Estudio`, cuyos identificadores son números `Long`.      |
+| **`SEQUENCE`** | Utiliza una secuencia de la base de datos que Hibernate puede consultar antes de insertar.                 | Cuando necesitas reservar identificadores por adelantado.                                      |
+| **`TABLE`**    | Simula una secuencia mediante una tabla auxiliar gestionada por Hibernate.                                 | Cuando el gestor no dispone de columnas identity ni secuencias.                                |
+| **`UUID`**     | Genera un identificador UUID, como `550e8400-e29b-41d4-a716-446655440000`.                                 | Cuando interesa generar identificadores únicos sin depender de una secuencia numérica central. |
+| **`AUTO`**     | Deja que Hibernate elija la estrategia más adecuada según el tipo del identificador y el gestor utilizado. | Cuando prefieres delegar la elección en el ORM.                                                |
 
-| Estrategia | Cómo genera el id | Cuándo conviene |
-|---|---|---|
-| **`IDENTITY`** | Delega en una columna autoincremental de la propia base de datos (en PostgreSQL, un `serial`/`identity` nativo) | Caso general — la que ya usas en `Videojuego`/`Estudio` |
-| **`SEQUENCE`** | Usa un objeto secuencia independiente que Hibernate puede consultar por adelantado | Cuando necesitas reservar varios ids antes de insertar — algo que `IDENTITY` no permite |
-| **`TABLE`** | Simula una secuencia con una tabla auxiliar propia que Hibernate gestiona a mano | La más lenta de las cuatro — solo tiene sentido si el motor no soporta ni `IDENTITY` ni `SEQUENCE` |
-| **`AUTO`** | Deja que el propio Hibernate elija una de las anteriores según el motor de base de datos configurado | Cuando quieres que el mismo código funcione igual si cambias de motor, sin decidir tú la estrategia |
+En este proyecto continuarás utilizando `IDENTITY`, porque tus entidades tienen un identificador numérico `Long` y PostgreSQL puede generarlo automáticamente. `UUID` es otra posibilidad útil, pero requeriría declarar el identificador con el tipo `UUID`:
 
-Con PostgreSQL, que soporta columnas identity de forma nativa y eficiente, `IDENTITY` es la opción más directa cuando no necesitas la reserva anticipada de `SEQUENCE` ni la portabilidad de `AUTO`.
+```java
+@Id
+@GeneratedValue(strategy = GenerationType.UUID)
+private UUID id;
+```
 
 !!! example "`TABLE`, en concreto: así es la tabla auxiliar que crea Hibernate"
-    `TABLE` es la más difícil de visualizar de las cuatro, porque no usa ninguna función nativa del motor — Hibernate crea una tabla normal y corriente, con una fila por cada entidad que la use, y cada vez que necesita un id nuevo hace, dentro de una transacción, un `SELECT` para leer el valor actual y un `UPDATE` para incrementarlo:
+    `TABLE` es una de las estrategias más difíciles de visualizar, porque no usa ninguna función nativa del motor — Hibernate crea una tabla normal y corriente, con una fila por cada entidad que la use, y cada vez que necesita un id nuevo hace, dentro de una transacción, un `SELECT` para leer el valor actual y un `UPDATE` para incrementarlo:
 
     ```sql
     -- la tabla auxiliar que crea y gestiona Hibernate
@@ -115,7 +162,7 @@ Con PostgreSQL, que soporta columnas identity de forma nativa y eficiente, `IDEN
     UPDATE hibernate_sequence SET valor_actual = valor_actual + 1 WHERE entidad = 'videojuego'; -- 2. lo incrementa
     ```
 
-    Es literalmente lo mismo que hace `SEQUENCE` por dentro — la diferencia es que `SEQUENCE` es un objeto del motor, optimizado por el propio PostgreSQL para que muchas inserciones a la vez no se bloqueen entre sí; `TABLE` es una tabla corriente, y ese `SELECT`/`UPDATE` se bloquea como cualquier otra fila. Con pocas inserciones no se nota, pero con muchas simultáneas se convierte en un cuello de botella — de ahí que sea la opción más lenta de las cuatro.
+    Es literalmente lo mismo que hace `SEQUENCE` por dentro — la diferencia es que `SEQUENCE` es un objeto del motor, optimizado por el propio PostgreSQL para que muchas inserciones a la vez no se bloqueen entre sí; `TABLE` es una tabla corriente, y ese `SELECT`/`UPDATE` se bloquea como cualquier otra fila. Con pocas inserciones no se nota, pero con muchas simultáneas se convierte en un cuello de botella — de ahí que normalmente sea la estrategia menos eficiente.
 
 #### `@Column(precision, scale)`, y por qué importa en una columna de dinero
 
@@ -174,6 +221,8 @@ Con tu configuración actual (`cascade = CascadeType.ALL, orphanRemoval = true` 
 | `true` (la elegida) | Hibernate lo detecta como huérfano y lo elimina de la base de datos por su cuenta |
 | `false` (por defecto) | El videojuego se queda en la base de datos, sin ningún `Estudio` que lo referencie desde la lista |
 
+`orphanRemoval = true` se utiliza cuando el objeto hijo no tiene sentido por separado: si deja de pertenecer al objeto padre, también debe desaparecer de la base de datos.
+
 La cascada se declara en el lado `Estudio → Videojuego` (el lado "uno" de la relación) porque no tendría sentido al revés: borrar un solo videojuego no debería llevarse por delante el estudio entero.
 
 ### Configuración avanzada: cuando el mapeo no es directo
@@ -193,7 +242,47 @@ Ya usaste `spring.jpa.hibernate.ddl-auto: update` desde la Actividad 1.1, pero d
 | `spring.jpa.properties.hibernate.format_sql` | Si ese SQL impreso se formatea legible, en varias líneas, en vez de aparecer todo seguido. |
 
 !!! tip "El otro lado de lo automático: `data.sql`"
-    `ddl-auto` resuelve la estructura (crear las tablas), pero no mete ni una fila de datos. Si colocas un fichero `src/main/resources/data.sql` con sentencias `INSERT`, Spring Boot lo ejecuta automáticamente justo después de crear el esquema, cada vez que arranca la aplicación — útil para tener datos de prueba consistentes sin sembrarlos a mano por `psql` o por `curl` cada vez. No lo has necesitado hasta ahora porque las actividades sembraban los datos explícitamente para que quedara claro qué se estaba probando; en la Actividad 1.5 sí lo vas a usar, para tener de golpe suficiente catálogo con el que probar la paginación.
+    `ddl-auto` se ocupa de la **estructura** de la base de datos: crea o actualiza las tablas a partir de las entidades. Para introducir datos iniciales puedes crear un fichero:
+
+    ```text
+    src/main/resources/data.sql
+    ```
+
+    Dentro se escriben sentencias `INSERT` normales:
+
+    ```sql
+    INSERT INTO estudio (nombre) VALUES ('Nintendo');
+    INSERT INTO estudio (nombre) VALUES ('Supergiant Games');
+    ```
+
+    Como el proyecto utiliza PostgreSQL y las tablas las prepara Hibernate, debes añadir estas propiedades en `application-dev.yaml`:
+
+    ```yaml
+    spring:
+      jpa:
+        hibernate:
+          ddl-auto: update
+        defer-datasource-initialization: true
+
+      sql:
+        init:
+          mode: always
+    ```
+
+    Cada propiedad cumple una función:
+
+    - `spring.sql.init.mode: always` hace que Spring Boot ejecute `data.sql` también con PostgreSQL.
+    - `spring.jpa.defer-datasource-initialization: true` espera a que Hibernate haya preparado las tablas antes de ejecutar los `INSERT`.
+
+    De esta manera, el orden de arranque será:
+
+    ```text
+    Hibernate prepara las tablas → Spring Boot ejecuta data.sql → arranca la aplicación
+    ```
+
+    En la Actividad 1.5 utilizarás este mecanismo para disponer rápidamente de suficientes datos con los que probar la paginación.
+
+    Ten en cuenta que `data.sql` se ejecuta cada vez que arranca la aplicación. Los datos del fichero deben estar preparados para no provocar errores por insertar varias veces los mismos registros.
 
 ---
 
@@ -206,4 +295,5 @@ Ya usaste `spring.jpa.hibernate.ddl-auto: update` desde la Actividad 1.1, pero d
     - "Instalar" Hibernate en Spring Boot es, en la práctica, añadir `spring-boot-starter-data-jpa`.
     - `IDENTITY` delega la generación del id en la propia base de datos; `SEQUENCE` permite reservar ids por adelantado. `precision`/`scale` fijan el tipo exacto de columna (importa en dinero). `LAZY` difiere la carga de una relación hasta que se pide de verdad; `EAGER` la trae siempre. `cascade`/`orphanRemoval` propagan borrados y limpian huérfanos automáticamente.
     - `ddl-auto` es configuración del **ORM** (qué hace Hibernate con tus entidades), distinta de la configuración del **conector** (cómo se conecta); `show-sql`/`format_sql` muestran el SQL real generado.
-    - `ddl-auto` crea el esquema automáticamente; `data.sql` (si existe en `resources`) siembra datos automáticamente justo después, en cada arranque.
+    - `ddl-auto` permite que Hibernate prepare las tablas. Para ejecutar después un `data.sql` sobre PostgreSQL se utilizan `spring.sql.init.mode: always` y `spring.jpa.defer-datasource-initialization: true`.
+

@@ -2,13 +2,15 @@
 
 # 🧩 4. JDBC puro: conexión manual sin ORM
 
-Todo lo que has hecho hasta ahora con la base de datos ha pasado por Spring Data JPA: declaras una entidad, extiendes `JpaRepository`, y `save()`/`findAll()` funcionan sin que escribas una sola línea de SQL. Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apoya **todo** lo demás, incluido Hibernate: **JDBC**.
+Todo lo que has hecho hasta ahora con la base de datos ha pasado por Spring Data JPA: declaras una entidad, extiendes `JpaRepository`, y `save()` o `findAll()` funcionan sin que escribas una sola línea de SQL ni gestiones conexiones directamente. 
+
+Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apoya **todo** lo demás, incluido Hibernate: **JDBC**.
 
 ---
 
 ## 🧱 Las cuatro piezas de JDBC
 
-**JDBC** (*Java Database Connectivity*) es la API estándar de Java (`java.sql`) para hablar con bases de datos relacionales — ya la mencionaste en el apartado 2 como el protocolo que implementa cada driver. Se apoya en cuatro piezas, cada una con un papel concreto:
+**JDBC** (*Java Database Connectivity*) es la API estándar de Java para hablar con bases de datos relacionales. Se apoya en cuatro piezas, cada una con un papel concreto:
 
 | Pieza | Papel |
 |---|---|
@@ -95,7 +97,11 @@ Connection conn = DriverManager.getConnection(
 );
 ```
 
-`DriverManager.getConnection(...)` recibe la misma URL JDBC, usuario y contraseña que ya conoces de `application-dev.yaml` — solo que aquí los pasas directamente en Java, sin que Spring medie. En un proyecto real, en vez de `DriverManager` se usaría casi siempre un `DataSource` con *pooling* (como el HikariCP que Spring configura automáticamente por ti) — `DriverManager` abre una conexión nueva cada vez, sin reutilizar nada.
+`DriverManager.getConnection(...)` recibe la misma URL JDBC, usuario y contraseña que ya conoces de `application-dev.yaml`, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.
+
+Cada llamada a `getConnection()` abre una nueva conexión con la base de datos. Por eso, cuando termines de utilizarla, debes cerrarla correctamente.
+
+En las aplicaciones Spring Boot se suele trabajar de otra manera: Spring configura un `DataSource` y utiliza HikariCP para mantener un conjunto de conexiones abiertas y reutilizarlas entre distintas operaciones. En esta actividad, sin embargo, utilizarás `DriverManager` para observar el funcionamiento básico de JDBC sin que un pool gestione las conexiones por ti.
 
 ### 2. Preparar la sentencia — y por qué nunca con `+`
 
@@ -137,7 +143,11 @@ try (Connection conn = DriverManager.getConnection(url, user, pass);
 }
 ```
 
-`try-with-resources` cierra automáticamente cada recurso al salir del bloque (en orden inverso a como se abrieron), sin que tengas que escribir un `finally` con cada `close()` a mano — y lo hace incluso si se lanza una excepción a mitad. Sin este cierre, cada conexión que "olvidas" cerrar queda ocupada indefinidamente: si esto se repite, acabas agotando el *pool* de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos", y la aplicación deja de poder conectarse a la base de datos.
+`try-with-resources` cierra automáticamente cada recurso al salir del bloque, en orden inverso a como se abrió. También lo hace cuando se produce una excepción, por lo que evita tener que escribir manualmente un bloque `finally` con varias llamadas a `close()`.
+
+En este ejemplo, cada `Connection` se ha abierto directamente mediante `DriverManager`. Si olvidas cerrarla, la sesión con PostgreSQL permanece ocupada y continúa consumiendo recursos. Si el problema se repite muchas veces, la base de datos puede alcanzar su límite de conexiones y dejar de aceptar nuevas peticiones.
+
+Cerrar correctamente los recursos no es, por tanto, una tarea opcional: forma parte del funcionamiento básico de cualquier operación JDBC.
 
 ---
 
@@ -183,17 +193,87 @@ La lectura ya cuesta quince líneas. Escribir es, si cabe, más delicado — por
 
 ---
 
+## 💳 Transacciones manuales con JDBC
+
+Hasta ahora, cada ejemplo ejecutaba una única sentencia SQL. Pero algunas operaciones necesitan realizar varios cambios que deben comportarse como una sola unidad: o se completan todos, o no se conserva ninguno.
+
+Imagina una promoción que debe aplicar un descuento a dos libros. No tendría sentido que el primero cambiara de precio y el segundo no porque se produjera un error a mitad del proceso.
+
+Con JDBC, las conexiones utilizan por defecto el modo **autocommit**: cada sentencia se confirma automáticamente en cuanto termina. Para agrupar varias operaciones en una misma transacción, primero tienes que desactivar ese comportamiento:
+
+```java
+conn.setAutoCommit(false);
+```
+
+A partir de ese momento, eres tú quien decide cuándo confirmar o deshacer los cambios:
+
+```java
+String sql = "UPDATE libro SET precio = precio * ? WHERE id = ?";
+
+try (Connection conn = DriverManager.getConnection(url, user, pass)) {
+    conn.setAutoCommit(false);
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        // Primer libro
+        stmt.setBigDecimal(1, new BigDecimal("0.90"));
+        stmt.setLong(2, 1L);
+
+        if (stmt.executeUpdate() != 1) {
+            throw new SQLException("No se ha encontrado el primer libro");
+        }
+
+        // Segundo libro
+        stmt.setBigDecimal(1, new BigDecimal("0.90"));
+        stmt.setLong(2, 2L);
+
+        if (stmt.executeUpdate() != 1) {
+            throw new SQLException("No se ha encontrado el segundo libro");
+        }
+
+        conn.commit();
+    } catch (SQLException e) {
+        conn.rollback();
+        throw e;
+    }
+} catch (SQLException e) {
+    throw new RuntimeException("No se ha podido aplicar la promoción", e);
+}
+```
+
+El recorrido es este:
+
+1. `setAutoCommit(false)` inicia el control manual de la transacción.
+2. Se ejecutan las dos actualizaciones.
+3. Si ambas terminan correctamente, `commit()` confirma los cambios.
+4. Si alguna falla, `rollback()` deshace también las operaciones anteriores de esa misma transacción.
+
+```mermaid
+flowchart LR
+    A["setAutoCommit(false)"] --> B["UPDATE libro 1"]
+    B --> C["UPDATE libro 2"]
+    C -->|"todo correcto"| D["✅ commit()"]
+    B -.->|"error"| E["↩️ rollback()"]
+    C -.->|"error"| E
+```
+
+Fíjate en la diferencia con Spring Data JPA. En un método anotado con `@Transactional`, Spring abre la transacción, hace el `commit` y ejecuta el `rollback` por ti. Con JDBC puro, todas esas decisiones forman parte de tu propio código.
+
+!!! tip "Comprobar las filas afectadas"
+    Un `UPDATE` que no encuentra ninguna fila no siempre lanza una excepción: `executeUpdate()` devuelve `0`. Por eso el ejemplo comprueba que cada sentencia haya modificado exactamente una fila y lanza una excepción cuando el libro no existe.
+
+---
+
 ## 🆚 Lo que Spring Data JPA te estaba ahorrando
 
 Con las dos comparaciones ya delante, esto es lo que cambia de fondo entre un enfoque y otro:
 
-| Con JDBC puro, tienes que... | Con Spring Data JPA, lo gestiona por ti... |
+| En este ejemplo con JDBC puro, tienes que... | En la aplicación con Spring Data JPA... |
 |---|---|
-| Abrir y cerrar cada `Connection` a mano | HikariCP (el *pool* que ya conoces) |
+| Solicitar una `Connection` mediante `DriverManager` y cerrarla correctamente al terminar | Spring obtiene una conexión del pool de HikariCP y la devuelve al pool cuando termina la operación |
 | Escribir el SQL como texto, tú mismo | Hibernate lo genera a partir de tus entidades y del nombre del método |
 | Mapear cada fila del `ResultSet` a un objeto | Hibernate mapea automáticamente cada fila a tu entidad |
 | Capturar `SQLException` en cada método | Spring la convierte en excepciones *unchecked*, más cómodas de propagar |
-| Controlar manualmente cuándo hacer `commit()`/`rollback()` | `@Transactional`, que ya viste en el apartado anterior |
+| Desactivar el autocommit y decidir cuándo ejecutar `commit()` o `rollback()` | `@Transactional`, que abre, confirma o deshace la transacción automáticamente |
 
 Ahora que has visto la "fontanería" real, `libroRepository.findAll()` deja de ser magia: es JDBC con todo este trabajo repetitivo automatizado.
 

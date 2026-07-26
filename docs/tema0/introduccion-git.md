@@ -56,8 +56,7 @@ Como en un videojuego:
 - y un **mensaje**.
 
 !!! tip "Mensajes de commit"
-    Un mensaje debe decir **qué** has hecho y **para qué**.  
-    Ejemplos buenos:
+    Un mensaje debe decir **qué** has hecho y **para qué**. Ejemplos buenos:
 
     - "Añade lista inicial de libros"
     - "Corrige cálculo del total con descuento"

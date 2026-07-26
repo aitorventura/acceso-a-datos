@@ -15,30 +15,20 @@ flowchart LR
 
 Este diagrama es el destino final del apartado — pero llegarás a él en tres pasos: primero resuelves los filtros solos, luego la paginación sola, y al final las combinas. No hace falta entenderlo todavía; vuelve a mirarlo cuando llegues a la última sección.
 
+!!! note "¿Y el método `QUERY`?"
+    Como viste al estudiar HTTP, `QUERY` está pensado para consultas complejas con cuerpo, pero Spring MVC todavía no permite mapearlo directamente. Por eso, en este apartado los filtros llegarán mediante un `GET` con parámetros en la URL.
+
 ---
 
-## 🔁 El punto de partida: recuperar y modificar por id
+## 🔁 El punto de partida: buscar por un identificador
 
-Esto ya lo conoces, y funciona bien mientras sepas el id exacto del objeto que quieres:
+Hasta ahora has trabajado con operaciones en las que conoces el identificador exacto del objeto. Para recuperar o modificar un libro, el service utiliza `findById(id)`, obtiene una entidad concreta y trabaja directamente con ella.
 
-```java
-@Transactional
-public LibroResponseDTO update(Long id, LibroCreateDTO dto) {
-    Libro libro = libroRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado"));
+Eso funciona perfectamente cuando la petición se refiere a «el libro número 42». El problema cambia cuando el usuario no conoce ningún identificador y quiere buscar, por ejemplo, «libros de menos de 20 € publicados por una editorial concreta».
 
-    libro.setTitulo(dto.titulo());
-    libro.setPrecio(dto.precio());
+Ahí es donde `findById` deja de servir. En un listado real, el usuario no busca normalmente un objeto concreto: busca todos los que cumplan unos criterios determinados, sin saber ni necesitar conocer sus identificadores.
 
-    return mapToDTO(libroRepository.save(libro));
-}
-```
-
-`findById` localiza el objeto (pasa a estado *managed*, como viste en el apartado anterior), modificas sus campos directamente sobre el objeto Java, y `save()` lo sincroniza — Hibernate genera el `UPDATE` por ti, a partir de qué campos han cambiado realmente. Compáralo con lo que habrías escrito a mano en JDBC puro: un `UPDATE ... SET ... WHERE id = ?` completo, con cada columna nombrada explícitamente.
-
-Pero fíjate en la condición: **conoces el id**. En un listado de verdad, el usuario no busca "el libro número 42" — busca "libros de menos de 20€ de esta editorial", sin saber ni le importa qué id tienen. Ahí es donde `findById` deja de servir.
-
-La primera idea que se te podría ocurrir: un método derivado por nombre para cada filtro, como `findByPrecioLessThan(BigDecimal precio)`. Y funciona bien — **mientras todos los usuarios busquen siempre por lo mismo**. El problema real es que cada usuario puede querer una combinación distinta: uno busca solo por precio máximo, otro solo por título, otro por precio mínimo y máximo a la vez, otro por título y precio mínimo juntos... y no sabes de antemano cuál de esas combinaciones va a pedir cada uno.
+La primera idea que se te podría ocurrir es declarar un método derivado por nombre para cada filtro, como `findByPrecioLessThan(BigDecimal precio)`. Y funciona bien mientras todos los usuarios busquen siempre por lo mismo. El problema real es que cada usuario puede querer una combinación distinta: uno busca solo por precio máximo, otro solo por título, otro por precio mínimo y máximo a la vez, otro por título y precio mínimo juntos... y no sabes de antemano cuál de esas combinaciones va a pedir cada uno.
 
 ---
 
@@ -220,24 +210,32 @@ Fíjate en que el parámetro `Pageable pageable` del controller no lleva ninguna
 
     ```json
     {
-      "content": [ /* los libros de esta página */ ],
-      "empty": false,
-      "first": true,
-      "last": false,
-      "number": 0,
-      "numberOfElements": 3,
-      "pageable": {
-        "offset": 0,
-        "pageNumber": 0,
-        "pageSize": 3,
-        "paged": true,
-        "sort": { "empty": true, "sorted": false, "unsorted": true },
-        "unpaged": false
-      },
-      "size": 3,
-      "sort": { "empty": true, "sorted": false, "unsorted": true },
-      "totalElements": 7,
-      "totalPages": 3
+        "content": [ /* los libros de esta página */ ],
+        "empty": false,
+        "first": true,
+        "last": false,
+        "number": 0,
+        "numberOfElements": 3,
+        "pageable": {
+            "offset": 0,
+            "pageNumber": 0,
+            "pageSize": 3,
+            "paged": true,
+            "sort": { 
+                "empty": false, 
+                "sorted": true, 
+                "unsorted": false 
+            },
+            "unpaged": false
+        },
+        "size": 3,
+        "sort": { 
+            "empty": false, 
+            "sorted": true, 
+            "unsorted": false 
+        },
+        "totalElements": 7,
+        "totalPages": 3
     }
     ```
 
@@ -252,7 +250,7 @@ Fíjate en que el parámetro `Pageable pageable` del controller no lleva ninguna
     | `first` / `last` | Si esta es la primera o la última página — un atajo para no tener que comparar tú mismo `number` con `0` o con `totalPages - 1` |
     | `empty` | Si esta página en concreto no trae ningún elemento |
     | `pageable` | La petición que ha generado esta página, devuelta tal cual: `pageNumber`/`pageSize` repiten `number`/`size`, y `offset` es el mismo cálculo que viste con `LIMIT`/`OFFSET` |
-    | `sort` | El criterio de orden aplicado — aparece dos veces (aquí y dentro de `pageable.sort`); es el mismo dato repetido |
+    | `sort` | Indica si se ha aplicado algún criterio de ordenación. En este ejemplo aparece como `sorted: true` porque la petición incluye `sort=titulo,asc`. Se muestra tanto en la página como dentro de `pageable`. |
 
     En la práctica, solo un puñado de estos campos importa de verdad — `content`, `totalElements`, `totalPages`, `number` — el resto es información derivada de esos mismos datos, útil de vez en cuando pero no algo que vayas a leer en cada petición.
 

@@ -2,7 +2,7 @@
 
 # 🧩 8. Consultas JPQL y transacciones
 
-Añades la tercera y última vía de consulta de Spring Data: para lo que ni un método derivado por nombre ni una Specification pueden expresar bien.
+Añades una nueva vía de consulta mediante `@Query` y JPQL, pensada para consultas que resultan difíciles de expresar con un método derivado por nombre o con una Specification.
 
 ---
 
@@ -13,8 +13,7 @@ Imagina que quieres un ranking de editoriales, ordenado por cuántos libros tien
 - **Naming de método**: no existe ninguna combinación de palabras que le pida a Spring Data "agrupa por editorial y ordena por el número de libros de cada grupo" — el naming deriva condiciones sobre campos (`findByTitulo`, `findByPrecioLessThan`), no agregaciones sobre una relación completa. La sintaxis, directamente, no llega ahí.
 - **Specifications**: están pensadas para construir condiciones `WHERE` dinámicas y combinables entre sí (Tema 1, apartado anterior) — no para expresar un `GROUP BY` con `ORDER BY` sobre el resultado de una agregación. Se podría forzar con `CriteriaBuilder`, pero a cambio de perder justo lo que hace útiles a las Specifications (filtros simples, combinables) por una consulta rígida y bastante más difícil de leer que el propio JPQL.
 
-Este es el hueco que llena la tercera vía: `@Query` con JPQL, para consultas fijas —siempre la misma pregunta, sin variar en cada llamada— pero demasiado elaboradas (joins, agregaciones, ordenación por el resultado de una agregación) para expresarlas con naming de método o con Specifications.
-
+Aquí entra `@Query` con JPQL: permite escribir consultas fijas —siempre con la misma estructura— que resultan demasiado elaboradas para expresarlas mediante el nombre de un método o combinando Specifications.
 ---
 
 ## 🔤 Qué es JPQL
@@ -43,7 +42,7 @@ En SQL escribes tú la condición de unión a mano (`ON l.editorial_id = e.id`),
 
 ## 🛤️ Las tres vías de consulta de Spring Data
 
-Ya conoces dos; hoy llega la tercera:
+Ya conoces dos formas de construir consultas; ahora incorporas una tercera:
 
 | Vía | Cuándo usarla |
 |---|---|
@@ -83,7 +82,13 @@ Siguiendo con la librería: imagina que quieres un ranking de editoriales ordena
 ```java
 public interface EditorialRepository extends JpaRepository<Editorial, Long> {
 
-    @Query("SELECT e FROM Editorial e JOIN e.libros l GROUP BY e ORDER BY COUNT(l) DESC")
+    @Query("""
+        SELECT e
+        FROM Editorial e
+        LEFT JOIN e.libros l
+        GROUP BY e
+        ORDER BY COUNT(l) DESC
+        """)
     List<Editorial> rankingPorNumeroDeLibros();
 }
 ```
@@ -96,13 +101,21 @@ Desglosado, fragmento a fragmento:
 |---|---|
 | `SELECT e` | Devuelve el objeto `Editorial` completo — no una columna suelta, como harías en SQL. |
 | `FROM Editorial e` | La entidad de partida, con el alias `e` para referirte a ella en el resto de la consulta. |
-| `JOIN e.libros l` | Navega la relación que ya has declarado en `Editorial` (la misma idea que has visto arriba, en "Qué es JPQL") — cada editorial "trae consigo" sus libros, sin escribir a mano la condición del `JOIN`. |
+| `LEFT JOIN e.libros l` | Navega la relación `Editorial → libros` y mantiene también las editoriales que todavía no tienen ningún libro. |
 | `GROUP BY e` | Agrupa, por cada editorial, todos los libros que comparten esa misma editorial. |
 | `ORDER BY COUNT(l) DESC` | Ordena esos grupos por cuántos libros tiene cada uno, de mayor a menor. |
 
-Junta las cinco piezas y la consulta entera dice: "para cada editorial, cuenta sus libros, y devuélvemelas ordenadas de la que más tiene a la que menos".
+Junta las cinco piezas y la consulta completa dice: «para cada editorial, cuenta sus libros y ordénalas de la que más tiene a la que menos».
 
-### Cuando ni JPQL alcanza: `nativeQuery = true`
+Se utiliza `LEFT JOIN` para que también aparezcan las editoriales que todavía no tienen libros. En ese caso, `COUNT(l)` vale `0` y la editorial queda al final del ranking.
+
+```text
+Editorial con 5 libros → COUNT(l) = 5
+Editorial con 2 libros → COUNT(l) = 2
+Editorial sin libros    → COUNT(l) = 0
+```
+
+### Cuando necesitas SQL directamente: `nativeQuery = true`
 
 JPQL cubre la mayoría de casos, pero hay funcionalidad que directamente no existe en JPQL — las **funciones de ventana** (*window functions*) de SQL son el ejemplo más claro, y no las has visto todavía.
 
@@ -139,7 +152,7 @@ Ahora aplica la misma idea al ranking de editoriales: quieres que el propio rank
 ```java
 @Query(value = """
         SELECT e.*, ROW_NUMBER() OVER (ORDER BY COUNT(l.id) DESC) AS posicion
-        FROM editorial e JOIN libro l ON l.editorial_id = e.id
+        FROM editorial e LEFT JOIN libro l ON l.editorial_id = e.id
         GROUP BY e.id
         """, nativeQuery = true)
 List<Object[]> rankingConPosicion();
@@ -149,7 +162,11 @@ List<Object[]> rankingConPosicion();
 
 ### Transacciones al escribir con JPQL: `@Modifying`
 
-Todo lo visto hasta ahora son lecturas. JPQL también puede escribir — un `UPDATE` o un `DELETE` que afecte a muchas filas de golpe, sin cargarlas antes en Java una a una. Imagina que quieres aplicar un descuento a todos los libros de una editorial concreta:
+Todo lo visto hasta ahora son lecturas, pero JPQL también puede ejecutar un `UPDATE` o un `DELETE` que afecte a varias filas sin cargarlas antes en Java una a una.
+
+Ya hiciste algo parecido mediante un procedimiento almacenado. Ahora vas a conocer otra posibilidad: escribir la actualización directamente en el repository mediante `@Query`.
+
+Imagina que quieres aplicar un descuento a todos los libros de una editorial concreta:
 
 ```java
 @Modifying
@@ -158,10 +175,19 @@ Todo lo visto hasta ahora son lecturas. JPQL también puede escribir — un `UPD
 int aplicarDescuento(@Param("editorialId") Long editorialId);
 ```
 
-`@Modifying` le dice a Spring Data que esta consulta no es un `SELECT` — sin ella, Spring intentaría interpretar el resultado como si fuera una entidad, y fallaría. El método devuelve un `int`: el número de filas afectadas, no una lista — es lo único que JPA puede contarte de una operación masiva como esta, ya que ninguna de esas filas llega nunca a convertirse en un objeto `Libro` en memoria.
+`@Modifying` le dice a Spring Data que esta consulta no es un `SELECT`, sino una operación que modifica datos. El método devuelve un `int`: el número de filas que se han actualizado.
+
+Por ejemplo, si el descuento se aplica a cinco libros, el método devolverá `5`. Ninguna de esas filas necesita convertirse antes en un objeto `Libro` dentro de Java.
+
+Tanto este método como el procedimiento almacenado evitan recuperar todos los libros y recorrerlos con un bucle. La diferencia principal es dónde escribes la operación:
+
+- En el procedimiento almacenado, la operación se guarda dentro de PostgreSQL.
+- Con JPQL, la actualización se declara en el repository de la aplicación.
+
+En este apartado utilizarás la segunda opción porque el objetivo es aprender a escribir consultas de modificación mediante `@Query` y `@Modifying`.
 
 !!! warning "Aquí `@Transactional` no puede ser `readOnly`"
-    Un `UPDATE`/`DELETE` es, por definición, una escritura — ponerle `readOnly = true` no tiene sentido, y según el proveedor puede llegar a fallar en tiempo de ejecución. Usa siempre `@Transactional` a secas, exactamente como en el `create()`/`update()` de tus servicios (Tema 1).
+    Un `UPDATE` o un `DELETE` modifica datos, por lo que necesita una transacción de escritura. Debes utilizar `@Transactional` a secas, igual que en los métodos `create()` y `update()` de tus servicios (Tema 1).
 
 ---
 
@@ -172,7 +198,7 @@ int aplicarDescuento(@Param("editorialId") Long editorialId);
     - **JPQL** opera sobre entidades y propiedades Java, no sobre tablas y columnas SQL.
     - Las tres vías de consulta de Spring Data: naming de método (simple y fijo), Specifications (dinámico), `@Query`/JPQL (complejo y fijo, típicamente agregaciones).
     - `@Param` conecta un `:parámetro` del JPQL con un argumento del método — el nombre tiene que coincidir exactamente.
-    - Spring valida la sintaxis de cada `@Query` JPQL al arrancar la aplicación, contra el modelo de tus entidades — un error de escritura falla pronto y a lo grande, no en silencio en la primera petición real (al contrario que una `Specification`, donde un nombre de propiedad equivocado solo aparece en tiempo de ejecución, como `PropertyReferenceException`).
+    - Spring comprueba las consultas escritas con `@Query` al arrancar la aplicación, por lo que muchos errores se detectan antes de recibir ninguna petición. En una `Specification`, en cambio, algunos errores solo aparecen cuando se ejecuta la búsqueda.
     - `@Query(nativeQuery = true)` escribe SQL literal cuando JPQL no llega (funciones de ventana, por ejemplo) — a cambio, pierdes independencia de motor y el resultado ya no son entidades, sino `Object[]` por fila.
     - Una **agregación** (`COUNT`, `SUM`, `AVG`... con `GROUP BY`) resume varias filas en un resultado.
     - `@Modifying` marca una `@Query` JPQL como escritura (`UPDATE`/`DELETE`); necesita `@Transactional` a secas, nunca `readOnly`, y devuelve el número de filas afectadas, no una lista.

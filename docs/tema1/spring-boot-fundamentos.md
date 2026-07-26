@@ -112,12 +112,26 @@ public class LibroService {
 }
 ```
 
-Funciona, pero tiene un coste que se nota en cuanto el proyecto crece. `LibroService` queda **atado** a esa implementación concreta de `LibroRepository`: si mañana quisieras probar `LibroService` sin conectarte a una base de datos real (con un repositorio "de mentira" que devuelva datos fijos para el test), no podrías — el `new LibroRepository()` está escrito dentro de `LibroService`, así que siempre construye la versión real. Cambiar esa dependencia obliga a tocar el código de la clase que la usa.
+El código funciona, pero `LibroService` está creando por sí mismo el objeto que necesita:
 
-Con **inyección de dependencias** (o *dependency injection*, DI), la clase deja de crear lo que necesita: se limita a **declararlo** — normalmente como parámetro del constructor — y es otro quien se lo entrega ya construido:
+```java
+private LibroRepository repositorio = new LibroRepository();
+```
+
+Esto hace que el service quede unido a esa implementación concreta. Siempre que se construya un `LibroService`, este creará directamente su propio `LibroRepository`.
+
+El problema aparece cuando quieres utilizar otro repositorio. Por ejemplo, durante un test podría interesarte sustituir el repositorio real por uno preparado para devolver datos conocidos, sin conectarte a una base de datos. Como el `new LibroRepository()` está escrito dentro del service, no puedes cambiarlo desde fuera sin modificar la propia clase.
+
+```text
+LibroService
+    └── crea directamente su LibroRepository
+```
+
+Con **inyección de dependencias** —o *dependency injection*, DI— el service deja de construir el objeto que necesita. En su lugar, lo declara como parámetro del constructor:
 
 ```java
 public class LibroService {
+
     private final LibroRepository repositorio;
 
     public LibroService(LibroRepository repositorio) {
@@ -126,7 +140,31 @@ public class LibroService {
 }
 ```
 
-La diferencia parece pequeña en el código, pero cambia quién manda: `LibroService` ya no sabe (ni le importa) de dónde sale su `LibroRepository` — solo sabe que lo recibe listo para usar por el constructor. Es el mismo principio de **inversión de control** visto más arriba, aplicado esta vez a un caso muy concreto: en vez de que tu código construya sus propias piezas, las recibe ya montadas.
+Ahora el repositorio se construye fuera de `LibroService` y se le entrega al crear el service:
+
+```text
+alguien construye LibroRepository
+              ↓
+lo entrega a LibroService
+```
+
+`LibroService` sigue pudiendo utilizar el repositorio exactamente igual, pero ya no decide cómo se crea ni qué implementación concreta recibe. Solo declara: «para funcionar necesito un `LibroRepository`».
+
+Esto permite cambiar la dependencia sin modificar el código del service. En la aplicación normal podrá recibir el repositorio real y, durante un test, uno simulado:
+
+```mermaid
+flowchart LR
+    A["Aplicación real"] -->|"inyecta"| R["Repositorio real"]
+    T["Test"] -->|"inyecta"| M["Repositorio simulado"]
+
+    R --> S["LibroService"]
+    M --> S
+```
+
+La **inyección de dependencias** consiste, por tanto, en que una clase reciba desde fuera los objetos que necesita, en lugar de construirlos ella misma.
+
+Es una aplicación concreta de la **inversión de control**: tu clase ya no controla la creación de todas sus piezas. Declara qué necesita y otra parte del programa se encarga de proporcionárselo.
+
 
 !!! example "La misma analogía del restaurante, un paso más"
     Cuando cocinas en el restaurante (recuerda la analogía de antes), no vas tú al almacén a buscar los ingredientes — te los traen a la mesa de trabajo, ya listos, cuando los necesitas. La inyección de dependencias es justo eso, pero con objetos: `LibroService` no va a buscar su `LibroRepository`; se lo entregan.
@@ -138,9 +176,14 @@ flowchart LR
     subgraph manual["Sin inyección de dependencias"]
         A["LibroService"] -- "new LibroRepository()" --> B["LibroRepository"]
     end
+
     subgraph di["Con inyección de dependencias"]
-        C["🧰 Spring<br/>(contexto de la aplicación)"] -- "ya tiene el bean, lo entrega" --> D["LibroService"]
-        C -- "gestiona" --> E["LibroRepository"]
+        C["🧰 Spring<br/>(contexto de la aplicación)"]
+        E["LibroRepository"]
+        D["LibroService"]
+
+        C -- "gestiona" --> E
+        E -- "lo inyecta en" --> D
     end
 ```
 

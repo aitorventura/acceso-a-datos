@@ -115,9 +115,26 @@ El `@Transactional` de arriba es el mismo que ya viste en `update()`/`delete()` 
 
 Con el procedimiento y el método del service ya tienes la lógica completa — pero, igual que con cualquier otra operación de tu API, todavía no es alcanzable desde fuera. Falta el último paso de siempre: un endpoint en el controller correspondiente que llame a `ajustarPrecio(...)` y lo exponga por HTTP. Sin ese endpoint, el procedimiento solo podría invocarse desde dentro de la propia aplicación Java, nunca desde un cliente externo.
 
-### 3. Por qué procedimiento y no un bucle en Java
+### 3. ¿Por qué un procedimiento y no un bucle en Java?
 
-Podrías haber escrito esto en Java: cargar todos los libros de la editorial, recorrerlos con un bucle, modificar el precio de cada uno, y guardar. Funcionaría — pero el procedimiento almacenado lo hace en **una sola operación atómica** dentro del motor, sin traer ninguna fila a Java ni hacer múltiples viajes de red por cada libro. Para una actualización masiva como esta, es la opción más directa. En la Actividad 1.4 construirás un procedimiento como este en tu propio proyecto.
+También podrías resolver esta operación desde Java:
+
+1. Recuperar todos los libros de una editorial.
+2. Recorrerlos con un bucle.
+3. Actualizar su precio uno por uno.
+
+El procedimiento almacenado sigue otro enfoque: la lógica ya está guardada dentro de PostgreSQL y la aplicación simplemente la invoca mediante `CALL`.
+
+Así, el gestor actualiza todos los libros sin tener que enviarlos primero a Java ni recorrerlos individualmente.
+
+!!! info "La idea importante"
+    En un procedimiento almacenado, **la aplicación solicita una operación**, pero **la lógica que la ejecuta está almacenada dentro de la propia base de datos**.
+
+Más adelante conocerás otras formas de realizar actualizaciones masivas desde Spring Data. En este apartado el objetivo es aprender a:
+
+- crear un procedimiento almacenado;
+- pasarle parámetros;
+- invocarlo desde Java mediante `JdbcTemplate`.
 
 ---
 
@@ -157,7 +174,7 @@ List<Libro> findByTituloContainingIgnoreCaseOrderByPrecioAsc(String fragmento);
     - Un **procedimiento almacenado** es código con lógica que vive y se ejecuta dentro del gestor de base de datos, no en la aplicación.
     - PostgreSQL usa **PL/pgSQL** como lenguaje procedural; un procedimiento se invoca con `CALL`, una función se puede usar dentro de un `SELECT`.
     - Sus parámetros se pasan **por posición** y son de entrada (`IN`) por defecto — invertir el orden al invocarlo no da error, asigna mal los valores.
-    - Conviene usarlos para operaciones que deben ocurrir atómicamente y cerca de los datos (ajustes masivos, sin ida y vuelta por fila); tienen el coste de repartir la lógica entre dos sitios.
+    - Un procedimiento permite guardar y ejecutar una operación dentro de la propia base de datos. En este apartado se utiliza para actualizar varias filas sin cargarlas y recorrerlas una a una desde Java.
     - **`JdbcTemplate`** es el ayudante de Spring sobre JDBC puro — invoca procedimientos con parámetros seguros (`jdbcTemplate.update("CALL ...", ...)`) sin la fontanería manual de abrir/cerrar recursos.
     - Se inyecta como cualquier otro bean, junto a los repositorios de Spring Data JPA — ambos enfoques conviven en el mismo service.
     - Las **consultas derivadas por nombre** (`findByX`, `existsByX`, `countByX`, `deleteByX`, combinables con `And`/`OrderBy`/`ContainingIgnoreCase`...) generan SQL sin que escribas ninguna consulta — pero un nombre mal escrito falla al **arrancar** la aplicación (`PropertyReferenceException`), no al llamarlo.

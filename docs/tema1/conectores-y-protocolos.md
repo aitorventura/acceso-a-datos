@@ -65,11 +65,13 @@ Las anotaciones que vas a ver más abajo (`@Entity`, `@Id`, `@OneToMany`...) son
 
 ---
 
-## 🔌 Protocolos de acceso y conectores
+## 🔌 JDBC y los conectores de bases de datos
 
-Para que tu programa Java hable con un gestor de base de datos necesita dos cosas: un **protocolo** de acceso (las reglas de esa conversación — el mismo concepto que ya viste con HTTP en el apartado 1, un formato de mensaje acordado de antemano, aplicado ahora a bases de datos en vez de a un servidor web) y un **conector** (o *driver*) que las implemente para un gestor concreto.
+Para que tu programa Java pueda comunicarse con una base de datos necesita un **conector** —también llamado *driver*— preparado para ese gestor concreto. PostgreSQL tiene su propio driver, MySQL tiene otro y SQL Server tiene el suyo.
 
-En Java, ese protocolo estándar es **JDBC** (*Java Database Connectivity*): una interfaz común que cualquier gestor puede implementar. Tu código programa contra esa interfaz común (`Connection`, `Statement`, `ResultSet` — los verás en detalle en el apartado de JDBC puro, más adelante en este tema), y es el **driver** concreto — una librería distinta para cada gestor (PostgreSQL, MySQL, SQL Server...) — quien traduce esas llamadas al protocolo de red real de ese gestor.
+Sin embargo, no tendría sentido aprender una forma completamente distinta de programar para cada base de datos. Java resuelve este problema mediante **JDBC** (*Java Database Connectivity*): una API estándar que define una forma común de acceder a bases de datos relacionales desde una aplicación Java.
+
+Tu aplicación utiliza JDBC, y el driver concreto se encarga de traducir esas operaciones para que las entienda el gestor que estés usando:
 
 ```mermaid
 flowchart LR
@@ -77,10 +79,9 @@ flowchart LR
     B --> C[("🐘 PostgreSQL")]
 ```
 
-Esto tiene una ventaja concreta y un inconveniente concreto, y merece la pena nombrarlos los dos: la ventaja es que tu código queda desacoplado del gestor exacto — programas contra `Connection`/`Statement`, no contra PostgreSQL directamente. El inconveniente es que dependes de que exista un driver JDBC para tu gestor: si eligieras un motor muy nuevo o poco extendido, podrías encontrarte sin esa pieza todavía.
+La ventaja es que **la forma general de programar el acceso a los datos se mantiene aunque cambie el gestor**. Si una aplicación pasara de PostgreSQL a MySQL, habría que utilizar el driver correspondiente y cambiar la dirección de conexión, pero no aprender una API Java completamente nueva ni reconstruir desde cero toda la capa de acceso a datos.
 
-!!! tip "La ventaja de programar contra una interfaz común"
-    Si mañana tu proyecto cambiara de PostgreSQL a MySQL, tu código Java (el que usa `Connection`/`Statement`) apenas cambiaría — cambiarías el driver y la cadena de conexión, no la forma de escribir las consultas. Ese es el valor de un protocolo estándar: desacopla tu código del gestor concreto.
+Más adelante trabajarás directamente con las piezas que ofrece JDBC para abrir conexiones, enviar sentencias SQL y recoger sus resultados. 
 
 ---
 

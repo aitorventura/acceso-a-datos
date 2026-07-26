@@ -8,16 +8,16 @@ Ya sabes por qué hacen falta conectores y cómo se declara la estructura de una
 
 ## 🔤 Qué es CRUD
 
-**CRUD** son las siglas de las cuatro operaciones universales sobre datos: **C**reate, **R**ead, **U**pdate, **D**elete. Ya conoces su versión en SQL. También tiene una versión en verbos HTTP (`GET`, `POST`, `PUT`, `DELETE`), que trabajas en Programación de Servicios y Procesos — son la misma idea repetida en dos sitios distintos, y no por casualidad:
+**CRUD** son las siglas de las cuatro operaciones universales sobre datos: **C**reate, **R**ead, **U**pdate, **D**elete. Ya conoces su versión en SQL. HTTP expresa esas mismas intenciones sobre recursos, tal y como se vió en PSP:
 
 | CRUD | SQL | HTTP |
 |---|---|---|
 | Create | `INSERT` | `POST` |
 | Read | `SELECT` | `GET` |
-| Update | `UPDATE` | `PUT` |
+| Update | `UPDATE` | `PUT` para reemplazo completo; `PATCH` para actualización parcial |
 | Delete | `DELETE` | `DELETE` |
 
-REST está pensado precisamente para eso: modelar operaciones CRUD sobre recursos usando los verbos que HTTP ya trae de fábrica, en vez de inventar una ruta o un verbo distinto para cada acción (algo como `/libros/crear` sería el estilo antiguo, no REST). Casi cualquier funcionalidad de una aplicación real, por compleja que parezca, se reduce en el fondo a combinar estas cuatro operaciones sobre distintos datos.
+REST está pensado precisamente para modelar estas operaciones sobre recursos utilizando los verbos que HTTP ya trae de fábrica, en vez de inventar una ruta distinta para cada acción —algo como `/libros/crear` sería el estilo antiguo, no REST—.
 
 ---
 
@@ -141,7 +141,9 @@ public class LibroController {
 }
 ```
 
-Ignora por un momento el `@Transactional(readOnly = true)` — vuelves a él más abajo. Fíjate en la forma: el controller no toca el repository directamente, solo habla con el service; el service es quien de verdad llama a `libroRepository.findById(...)`. Ese orden (Controller → Service → Repository, cada uno hablando solo con el siguiente) no cambia en todo lo que viene a continuación — lo único que cambia es lo que circula por esas capas.
+De momento, quédate con una idea sencilla sobre `@Transactional(readOnly = true)`: indica que este método trabaja con la base de datos **únicamente para consultar**, sin intención de modificarla. Más abajo verás qué significa exactamente una transacción y qué aporta la opción `readOnly`.
+
+Ahora fíjate en la forma: el controller no toca el repository directamente, solo habla con el service; el service es quien de verdad llama a `libroRepository.findById(...)`. Ese orden (Controller → Service → Repository, cada uno hablando solo con el siguiente) no cambia en todo lo que viene a continuación — lo único que cambia es lo que circula por esas capas.
 
 Compila, funciona, y `GET /api/v1/libros/3` te devuelve algo así:
 
@@ -273,7 +275,7 @@ Funciona... con datos razonables. Pero nada impide mandar `{"titulo": "", "preci
 **La solución**: anotaciones de **Bean Validation** (`jakarta.validation`) sobre el propio DTO, declarando la restricción justo donde vive el dato:
 
 !!! warning "Falta una dependencia en el `pom.xml`"
-    `spring-boot-starter-webmvc` no trae Bean Validation incluido — es un starter aparte. Si usas `@NotBlank` y compañero sin haberlo añadido, el propio IDE no reconoce la anotación (no la encuentra para importar) o el proyecto falla al compilar. Añade esto al `pom.xml`:
+    `spring-boot-starter-webmvc` no trae Bean Validation incluido — es un starter aparte. Si usas `@NotBlank` y otras anotaciones de Bean Validation sin haber añadido esa dependencia, el propio IDE no reconoce la anotación (no la encuentra para importar) o el proyecto falla al compilar. Añade esto al `pom.xml`:
 
     ```xml
     <dependency>
@@ -339,13 +341,16 @@ public LibroResponseDTO update(Long id, LibroCreateDTO dto) {
 
     libro.setTitulo(dto.titulo());
     libro.setPrecio(dto.precio());
+    libro.setFechaPublicacion(dto.fechaPublicacion());
     libro.setEditorial(editorial);
 
     return mapToDTO(libroRepository.save(libro));
 }
 ```
 
-¿Qué pasaría si no comprobaras si el libro existe, y simplemente llamaras a `libro.setTitulo(...)` sobre un `libro` que nunca has cargado? No compilaría — necesitas el objeto antes de poder modificarlo, así que la comprobación de "no encontrado" no es opcional aquí, es la única forma de tener algo que modificar. El mismo `orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ...))` que ya usaste en `findById` resuelve el caso: si no existe, la petición corta ahí mismo con un `404`, antes de tocar nada.
+Como ya viste en `findById()`, `orElseThrow(...)` resuelve el caso en que el `Optional` viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un `404 Not Found`.
+
+Sin esa comprobación podrías terminar intentando utilizar un valor `null`: el código compilaría, pero fallaría durante la ejecución al llamar a uno de sus métodos.
 
 `delete()` no tiene nada que cargar ni modificar, así que usa la comprobación más ligera que ofrece el repository:
 
@@ -359,7 +364,7 @@ public void delete(Long id) {
 }
 ```
 
-`findAll()` no tiene ninguno de estos problemas (no hay "no encontrado" posible al pedir una lista completa, que puede estar vacía sin que sea un error) — es un `@Transactional(readOnly = true)` que mapea la lista entera del repository, tal como ya has visto hacer con un único libro.
+`findAll()` no tiene ninguno de estos problemas: una lista puede estar vacía sin que eso sea un error. Como solo consulta datos, también utiliza `@Transactional(readOnly = true)` y transforma cada entidad en su DTO correspondiente.
 
 ---
 
@@ -389,16 +394,59 @@ Las propiedades que debe cumplir una transacción se resumen en el acrónimo **A
 | **Aislamiento** | Dos transacciones que ocurren al mismo tiempo no se interfieren entre sí. |
 | **Durabilidad** | Una vez confirmada (commit), sobrevive aunque el sistema se caiga justo después. |
 
-Vuelve a mirar el código de `update()` y `delete()`: los dos llevan `@Transactional` encima, y `findById`/`findAll` llevan `@Transactional(readOnly = true)`. Eso es todo lo que hace falta — tú no escribes `connection.commit()` ni `connection.rollback()` en ningún sitio. Por debajo, Spring hace tres cosas:
+Vuelve a mirar el código de `update()` y `delete()`: los dos llevan `@Transactional` encima, y `findById`/`findAll` llevan `@Transactional(readOnly = true)`. Eso es todo lo que hace falta — tú no escribes `connection.commit()` ni `connection.rollback()` en ningún sitio. Por debajo, Spring se encarga del ciclo completo de la transacción:
 
-- Abre la transacción **antes** de ejecutar el método.
-- Hace ***commit* automáticamente** si el método termina bien.
-- Hace ***rollback*** si se lanza cualquier excepción por el camino — por ejemplo, el `ResponseStatusException` de "editorial no encontrada" a mitad de un `update()`: si eso pasa, el libro tampoco se guarda, aunque el `save()` esté más abajo en el método.
+* Abre la transacción **antes** de ejecutar el método.
+* Hace ***commit* automáticamente** si el método termina correctamente.
+* Hace ***rollback*** si el método termina con una excepción no comprobada —una `RuntimeException`— o con un error grave de la aplicación.
 
-`readOnly = true`, en los métodos que solo leen, es una pista de optimización: le dice al framework y a la base de datos que esa operación no va a modificar nada.
+Las excepciones que estás utilizando en este CRUD, como `ResponseStatusException`, pertenecen a ese grupo. Por ejemplo, si durante `update()` no se encuentra la editorial indicada, se lanza la excepción y Spring deshace cualquier cambio realizado dentro de la transacción. La base de datos queda como estaba antes de comenzar la operación.
+
+```mermaid
+flowchart LR
+    A["Empieza @Transactional"] --> B["Se ejecutan las operaciones"]
+    B -->|"el método termina bien"| C["✅ COMMIT<br/>se confirman los cambios"]
+    B -->|"se lanza RuntimeException o Error"| D["↩️ ROLLBACK<br/>se deshacen los cambios"]
+```
+
+Java también tiene **excepciones comprobadas**, que obligan a capturarlas o declararlas en la firma del método. Estas no provocan un rollback automático con la configuración habitual de Spring. Cuando necesitas que una de ellas también deshaga la transacción, puedes indicarlo expresamente:
+
+```java
+@Transactional(rollbackFor = IOException.class)
+public void importarLibros() throws IOException {
+    // ...
+}
+```
+
+No necesitarás configurar esta opción en el CRUD del curso, pero conviene saber que el rollback depende del tipo de excepción y no simplemente de que haya ocurrido cualquier error.
 
 !!! tip "Contraste con lo que viene después"
-    En el siguiente apartado (JDBC puro) vas a gestionar una conexión y una transacción **a mano**, sin Spring de por medio. Verás entonces, con código explícito, exactamente lo que `@Transactional` te está ahorrando aquí.
+    En el siguiente apartado (JDBC puro) utilizarás JDBC directamente y gestionarás una transacción a mano: desactivarás el autocommit y decidirás cuándo ejecutar `commit()` o `rollback()`. Verás así, con código explícito, qué trabajo te está ahorrando `@Transactional`.
+
+
+---
+
+### Transacciones de solo lectura
+
+Hasta ahora has visto `@Transactional` en métodos que crean, actualizan o eliminan datos. Los métodos de consulta también pueden ejecutarse dentro de una transacción, pero en ellos se añade `readOnly = true`:
+
+```java
+@Transactional(readOnly = true)
+public LibroResponseDTO findById(Long id) {
+    // ...
+}
+```
+
+Esta opción indica a Spring y a Hibernate que durante el método **solo se espera consultar información**. Eso permite aplicar algunas optimizaciones y, además, deja clara la intención del código para quien lo lee.
+
+Por eso, en este CRUD seguirás esta regla:
+
+| Operación                    | Anotación                         |
+| ---------------------------- | --------------------------------- |
+| Consultar datos              | `@Transactional(readOnly = true)` |
+| Crear, actualizar o eliminar | `@Transactional`                  |
+
+`readOnly = true` no significa que deje de existir una transacción: sigue habiéndola, pero está preparada para una operación que no pretende cambiar el estado de la base de datos.
 
 ---
 
@@ -486,7 +534,7 @@ Cada flecha de este diagrama es algo que ya has visto por separado en el apartad
 
 ??? tip "Abrir resumen"
 
-    - **CRUD** = Create/Read/Update/Delete, equivalentes a `INSERT`/`SELECT`/`UPDATE`/`DELETE` en SQL y a `POST`/`GET`/`PUT`/`DELETE` en HTTP — las tres son la misma idea.
+    - **CRUD** = Create/Read/Update/Delete. En HTTP, *Read* puede expresarse con `GET`, y *Update* con `PUT` o `PATCH`; siguen siendo las mismas cuatro operaciones sobre datos.
     - Un **repository** (`interface XRepository extends JpaRepository<X, Long>`) te da `findAll`/`findById`/`save`/`existsById`/`deleteById` sin escribir SQL ni implementación propia.
     - Puedes declarar tus propias consultas sin escribir SQL, con un método sin cuerpo cuyo nombre siga la convención (`findByEditorialId`, `findByTituloAndPrecioLessThan`...) — útil para consultas simples y fijas; para filtros dinámicos o consultas complejas están las Specifications y `@Query` (más adelante en este tema).
     - Devolver la entidad JPA tal cual expone campos internos que no deberías publicar (y puede arrastrar detalles de Hibernate en las relaciones *lazy*) — por eso se convierte a un **DTO** antes de salir.
