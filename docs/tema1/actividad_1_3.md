@@ -19,7 +19,7 @@
 
 ## Requisitos previos
 
-Docker funcionando y la extensión Dev Containers (las mismas que usaste en la Actividad 1.1). Haber leído la teoría de este apartado antes de empezar — la necesitas para los Pasos 3 y 4, donde no hay código dado.
+Docker funcionando y la extensión Dev Containers (las mismas que ya has usado en la Actividad 1.1). Haber leído la teoría de este apartado antes de empezar — la necesitas para los Pasos 3 y 4, donde no hay código dado.
 
 ---
 
@@ -175,7 +175,7 @@ No hay código dado para este paso — tienes la teoría de este apartado, que c
 
 ## Paso 4 — Por qué el cierre importa
 
-**Pregunta**: si conectaras con un `Connection conn = DriverManager.getConnection(...)` normal, sin `try-with-resources` y sin cerrarla nunca, ¿qué pasaría si ejecutaras tu `main()` 200 veces seguidas? Relaciona tu respuesta con el *pool* de conexiones (HikariCP) que viste en "Conectores y protocolos de acceso a bases de datos" — aunque aquí no haya ningún *pool* de por medio, ¿por qué el problema seguiría siendo real?
+**Pregunta**: si conectaras con un `Connection conn = DriverManager.getConnection(...)` normal, sin `try-with-resources` y sin cerrarla nunca, ¿qué pasaría si ejecutaras tu `main()` 200 veces seguidas? Relaciona tu respuesta con el *pool* de conexiones (HikariCP) que has visto en "Conectores y protocolos de acceso a bases de datos" — aunque aquí no haya ningún *pool* de por medio, ¿por qué el problema seguiría siendo real?
 
 ---
 

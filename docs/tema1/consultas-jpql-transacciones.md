@@ -164,7 +164,7 @@ List<Object[]> rankingConPosicion();
 
 Todo lo visto hasta ahora son lecturas, pero JPQL también puede ejecutar un `UPDATE` o un `DELETE` que afecte a varias filas sin cargarlas antes en Java una a una.
 
-Ya hiciste algo parecido mediante un procedimiento almacenado. Ahora vas a conocer otra posibilidad: escribir la actualización directamente en el repository mediante `@Query`.
+Ya has hecho algo parecido mediante un procedimiento almacenado. Ahora vas a conocer otra posibilidad: escribir la actualización directamente en el repository mediante `@Query`.
 
 Imagina que quieres aplicar un descuento a todos los libros de una editorial concreta:
 

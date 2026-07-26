@@ -4,7 +4,7 @@
     📄 [Plantilla 1.2 — CRUD completo y DTOs sobre el catálogo](plantillas/Actividad_1_2_AD_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! info "Práctica guiada — con partes a tu cargo"
-    Vas a construir, sobre las entidades que creaste en la Actividad 1.1, el CRUD completo de `Videojuego` y de `Estudio`. En la teoría ya tienes un ejemplo completo y funcionando (`Libro`/`Editorial`) — aquí no lo vas a copiar y adaptar el nombre: unos pasos vienen guiados al completo, otros solo con la especificación y pistas, y tienes que escribir tú el código, apoyándote en el patrón que ya conoces.
+    Vas a construir, sobre las entidades que has creado en la Actividad 1.1, el CRUD completo de `Videojuego` y de `Estudio`. En la teoría ya tienes un ejemplo completo y funcionando (`Libro`/`Editorial`) — aquí no lo vas a copiar y adaptar el nombre: unos pasos vienen guiados al completo, otros solo con la especificación y pistas, y tienes que escribir tú el código, apoyándote en el patrón que ya conoces.
 
 ## Qué vas a practicar
 
@@ -125,7 +125,7 @@ public class VideojuegoService {
 }
 ```
 
-**Añade tú `findAll()`** a esta misma clase: devuelve `List<VideojuegoResponseDTO>`, es `@Transactional(readOnly = true)` igual que `findById`, y mapea la lista completa del repository con `mapToDTO` — sin `orElseThrow`, porque una lista vacía no es un error (es exactamente el mismo caso que ya viste con `LibroService.findAll()` en la teoría).
+**Añade tú `findAll()`** a esta misma clase: devuelve `List<VideojuegoResponseDTO>`, es `@Transactional(readOnly = true)` igual que `findById`, y mapea la lista completa del repository con `mapToDTO` — sin `orElseThrow`, porque una lista vacía no es un error (es exactamente el mismo caso que ya has visto con `LibroService.findAll()` en la teoría).
 
 ---
 
@@ -166,7 +166,7 @@ Aquí ya no hay ningún método de ejemplo — solo la especificación. Añade a
 
 - Un método `create(VideojuegoCreateDTO dto)` que devuelve `VideojuegoResponseDTO`, anotado `@Transactional` (sin `readOnly`: es una escritura).
 - Dentro, en este orden:
-    1. Busca el `Estudio` con `estudioRepository.findById(dto.estudioId())`. Si no existe, lanza `ResponseStatusException(HttpStatus.NOT_FOUND, ...)` — mismo patrón que ya usaste en `findById`, aplicado esta vez al estudio, no al videojuego.
+    1. Busca el `Estudio` con `estudioRepository.findById(dto.estudioId())`. Si no existe, lanza `ResponseStatusException(HttpStatus.NOT_FOUND, ...)` — mismo patrón que ya has usado en `findById`, aplicado esta vez al estudio, no al videojuego.
     2. Crea un `Videojuego` nuevo (`new Videojuego()`) y rellena sus campos con los setters de Lombok — `titulo`, `precio`, `fechaLanzamiento` desde el DTO, y `estudio` con el objeto que acabas de cargar.
     3. Guarda con `videojuegoRepository.save(...)` y devuelve el resultado pasado por `mapToDTO`.
 
@@ -174,7 +174,7 @@ Y en `VideojuegoController`, un método `create` anotado `@PostMapping`, que rec
 
 Guíate por `LibroService.create()`/`LibroController.create()` de la teoría — es exactamente el mismo patrón, con otros nombres de campo.
 
-Antes de probarlo, hace falta un `Estudio` real al que asociar el videojuego — y el endpoint para crear estudios todavía no existe (lo construyes en el Paso 8). Siémbralo directamente por SQL, desde la misma terminal `psql` que ya usaste en la Actividad 1.1:
+Antes de probarlo, hace falta un `Estudio` real al que asociar el videojuego — y el endpoint para crear estudios todavía no existe (lo construyes en el Paso 8). Siémbralo directamente por SQL, desde la misma terminal `psql` que ya has usado en la Actividad 1.1:
 
 ```sql
 INSERT INTO estudio (nombre, pais) VALUES ('Supergiant Games', 'Estados Unidos');
@@ -260,7 +260,7 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/1
 
 - `findAll()` y `findById(id)` — igual que en `Videojuego`, devolviendo `EstudioResponseDTO` con su propio `mapToDTO(Estudio e)` privado.
 - `create(EstudioCreateDTO dto)` — más simple que el de `Videojuego`: no hay ningún `findById` previo, solo `new Estudio()`, rellenar y guardar.
-- `update(Long id, EstudioCreateDTO dto)` y `delete(Long id)` — mismo patrón que ya usaste en `VideojuegoService`.
+- `update(Long id, EstudioCreateDTO dto)` y `delete(Long id)` — mismo patrón que ya has usado en `VideojuegoService`.
 
 **`EstudioController`**, en `/api/v1/estudios`: las cuatro operaciones — `GET` (los dos), `POST`, `PUT` y `DELETE`, igual que en `VideojuegoController` — incluido el `@Valid` en `create`/`update`, ahora que `EstudioCreateDTO` lleva anotaciones que comprobar.
 

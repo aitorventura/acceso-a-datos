@@ -60,7 +60,7 @@ El inconveniente: la lógica queda repartida en dos sitios (tu código Java y la
 
 La vía estándar de JDBC es `CallableStatement` (el primo de `PreparedStatement`, pensado específicamente para invocar procedimientos) — se menciona para que sepas que existe, pero en este curso vas a usar una vía más cómoda: **`JdbcTemplate`**.
 
-`JdbcTemplate` es el ayudante que trae Spring sobre JDBC puro: te evita exactamente la fontanería que viste el apartado anterior (abrir conexión, cerrar recursos, gestionar excepciones a mano) sin llegar a ser un ORM completo como el que verás en detalle un poco más adelante, en este mismo tema.
+`JdbcTemplate` es el ayudante que trae Spring sobre JDBC puro: te evita exactamente la fontanería que has visto el apartado anterior (abrir conexión, cerrar recursos, gestionar excepciones a mano) sin llegar a ser un ORM completo como el que verás en detalle un poco más adelante, en este mismo tema.
 
 ```java
 jdbcTemplate.update("CALL ajustar_precio_editorial(?, ?)", editorialId, porcentaje);
@@ -111,7 +111,7 @@ public class EditorialService {
 
 `JdbcTemplate` se inyecta exactamente igual que cualquier otro bean — junto al `EditorialRepository`, con `@RequiredArgsConstructor`, sin ninguna configuración especial (Spring Boot lo configura automáticamente en cuanto detecta un `DataSource` en el classpath, que ya tienes desde el Tema 1). La comprobación de "editorial no encontrada" la sigues haciendo con Spring Data JPA (`existsById`) antes de invocar el procedimiento — no hace falta que todo pase por `JdbcTemplate`, solo la parte que de verdad conviene ejecutar cerca de los datos.
 
-El `@Transactional` de arriba es el mismo que ya viste en `update()`/`delete()` del apartado anterior: aquí también hay una lectura (`existsById`) seguida de una escritura (la llamada al procedimiento), así que el método entero se trata como una sola unidad todo-o-nada.
+El `@Transactional` de arriba es el mismo que ya has visto en `update()`/`delete()` del apartado anterior: aquí también hay una lectura (`existsById`) seguida de una escritura (la llamada al procedimiento), así que el método entero se trata como una sola unidad todo-o-nada.
 
 Con el procedimiento y el método del service ya tienes la lógica completa — pero, igual que con cualquier otra operación de tu API, todavía no es alcanzable desde fuera. Falta el último paso de siempre: un endpoint en el controller correspondiente que llame a `ajustarPrecio(...)` y lo exponga por HTTP. Sin ese endpoint, el procedimiento solo podría invocarse desde dentro de la propia aplicación Java, nunca desde un cliente externo.
 
@@ -140,7 +140,7 @@ Más adelante conocerás otras formas de realizar actualizaciones masivas desde 
 
 ## 🔍 Antes de cerrar el tema: profundizando en las consultas derivadas por nombre
 
-Este apartado es más corto que los anteriores, así que aprovechamos para volver a algo que quedó solo apuntado: en "Operaciones CRUD y gestión de transacciones" viste que puedes declarar una consulta propia en tu repository sin escribir SQL, con un método sin cuerpo — como `findByEditorialId`. Ahí quedó como una idea suelta; aquí ves la convención completa, con más ejemplos reales.
+Este apartado es más corto que los anteriores, así que aprovechamos para volver a algo que quedó solo apuntado: en "Operaciones CRUD y gestión de transacciones" has visto que puedes declarar una consulta propia en tu repository sin escribir SQL, con un método sin cuerpo — como `findByEditorialId`. Ahí quedó como una idea suelta; aquí ves la convención completa, con más ejemplos reales.
 
 Spring Data JPA lee el nombre del método pieza a pieza y lo traduce a una consulta. Estos son los patrones más habituales, todos sobre `LibroRepository`:
 

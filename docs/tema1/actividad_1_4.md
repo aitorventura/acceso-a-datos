@@ -107,7 +107,7 @@ Vuelve a ejecutar `CREATE OR REPLACE PROCEDURE` con tu versión corregida (el `O
 
 ## Paso 3 — Consultas derivadas, sobre tu propio catálogo
 
-Ya viste en la teoría de este apartado la convención completa de consultas derivadas por nombre. Añade a `VideojuegoRepository` (una interfaz vacía hasta ahora) estos dos métodos, sin cuerpo:
+Ya has visto en la teoría de este apartado la convención completa de consultas derivadas por nombre. Añade a `VideojuegoRepository` (una interfaz vacía hasta ahora) estos dos métodos, sin cuerpo:
 
 ```java
 List<Videojuego> findByEstudioIdOrderByPrecioDesc(Long estudioId);
@@ -137,4 +137,4 @@ No hay código dado para el service ni el controller — ya sabes escribir ese p
 
 ## ✅ Cierre
 
-Toca profundizar en el ORM que llevas usando desde la Actividad 1.1: instalación y configuración de Hibernate en detalle, decisiones de mapeo que ya tomaste sin cuestionarlas, y las dos vías de consulta que te faltan — Specifications dinámicas y JPQL con `@Query`. Cuando termines esos apartados, el siguiente tema da el salto a JSONB, la primera base de datos objeto-relacional del curso.
+Toca profundizar en el ORM que llevas usando desde la Actividad 1.1: instalación y configuración de Hibernate en detalle, decisiones de mapeo que ya has tomado sin cuestionarlas, y las dos vías de consulta que te faltan — Specifications dinámicas y JPQL con `@Query`. Cuando termines esos apartados, el siguiente tema da el salto a JSONB, la primera base de datos objeto-relacional del curso.

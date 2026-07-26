@@ -16,7 +16,7 @@ flowchart LR
 Este diagrama es el destino final del apartado — pero llegarás a él en tres pasos: primero resuelves los filtros solos, luego la paginación sola, y al final las combinas. No hace falta entenderlo todavía; vuelve a mirarlo cuando llegues a la última sección.
 
 !!! note "¿Y el método `QUERY`?"
-    Como viste al estudiar HTTP, `QUERY` está pensado para consultas complejas con cuerpo, pero Spring MVC todavía no permite mapearlo directamente. Por eso, en este apartado los filtros llegarán mediante un `GET` con parámetros en la URL.
+    Como has visto al estudiar HTTP, `QUERY` está pensado para consultas complejas con cuerpo, pero Spring MVC todavía no permite mapearlo directamente. Por eso, en este apartado los filtros llegarán mediante un `GET` con parámetros en la URL.
 
 ---
 
@@ -249,7 +249,7 @@ Fíjate en que el parámetro `Pageable pageable` del controller no lleva ninguna
     | `numberOfElements` | Cuántos elementos trae **esta** página en concreto — distinto de `size` en la última página, si no llega a llenarla entera |
     | `first` / `last` | Si esta es la primera o la última página — un atajo para no tener que comparar tú mismo `number` con `0` o con `totalPages - 1` |
     | `empty` | Si esta página en concreto no trae ningún elemento |
-    | `pageable` | La petición que ha generado esta página, devuelta tal cual: `pageNumber`/`pageSize` repiten `number`/`size`, y `offset` es el mismo cálculo que viste con `LIMIT`/`OFFSET` |
+    | `pageable` | La petición que ha generado esta página, devuelta tal cual: `pageNumber`/`pageSize` repiten `number`/`size`, y `offset` es el mismo cálculo que has visto con `LIMIT`/`OFFSET` |
     | `sort` | Indica si se ha aplicado algún criterio de ordenación. En este ejemplo aparece como `sorted: true` porque la petición incluye `sort=titulo,asc`. Se muestra tanto en la página como dentro de `pageable`. |
 
     En la práctica, solo un puñado de estos campos importa de verdad — `content`, `totalElements`, `totalPages`, `number` — el resto es información derivada de esos mismos datos, útil de vez en cuando pero no algo que vayas a leer en cada petición.

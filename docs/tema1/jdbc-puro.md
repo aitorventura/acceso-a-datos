@@ -51,7 +51,7 @@ Antes de entrar en el código pieza a pieza, compara el punto de partida y el de
     }
     ```
 
-    Una línea, sin cuerpo. Spring Data JPA lee el nombre del método (`findBy` + `EditorialId`) y genera la consulta SQL él solo, sin que escribas nada dentro de la interfaz — el mismo principio de "interfaz no vacía" que ya viste con `findAll()`/`save()`, aplicado ahora a una consulta que tú mismo has pedido.
+    Una línea, sin cuerpo. Spring Data JPA lee el nombre del método (`findBy` + `EditorialId`) y genera la consulta SQL él solo, sin que escribas nada dentro de la interfaz — el mismo principio de "interfaz no vacía" que ya has visto con `findAll()`/`save()`, aplicado ahora a una consulta que tú mismo has pedido.
 
 === "Con JDBC puro (lo que vas a hacer hoy)"
 

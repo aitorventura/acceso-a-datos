@@ -291,7 +291,7 @@ curl "http://localhost:8080/api/v1/videojuegos/por-idapp-switch-nativo?idApp=ABC
 
 ### Pregunta
 
-Ninguna de las dos consultas de este paso se puede combinar con `.and(...)` como `disponibleEnPlataforma` o `conIdAppSwitch`. Si quisieras filtrar por plataforma **y** por precio mínimo a la vez, ¿por qué `@Query` no sirve aquí y sí una Specification? Relaciónalo con lo que ya has visto en el Tema 1 sobre cuándo usar cada una de las tres vías de consulta (naming de método, Specifications, `@Query`).
+Ninguna de las dos consultas de este paso se puede combinar con `.and(...)` como `disponibleEnPlataforma` o `conIdAppSwitch`. Si quisieras filtrar por plataforma **y** por precio mínimo a la vez, ¿por qué `@Query` no sirve aquí y sí una Specification? Relaciónalo con lo que ya viste en el Tema 1 sobre cuándo usar cada una de las tres vías de consulta (naming de método, Specifications, `@Query`).
 
 ---
 

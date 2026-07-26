@@ -42,7 +42,7 @@ JpaRepository<Libro, Long>
 ```
 
 - **`T`**: la entidad que gestiona este repository — aquí, `Libro`.
-- **`ID`**: el tipo de la clave primaria de esa entidad — el mismo tipo que le pusiste al campo anotado con `@Id` en el apartado anterior (en este curso, siempre `Long`).
+- **`ID`**: el tipo de la clave primaria de esa entidad — el mismo tipo que le has puesto al campo anotado con `@Id` en el apartado anterior (en este curso, siempre `Long`).
 
 `JpaRepository` **no está vacía**: por dentro, ya trae declarados decenas de métodos — `findAll()`, `findById(id)`, `save(entidad)`, `deleteById(id)`... Cuando escribes `interface LibroRepository extends JpaRepository<Libro, Long> {}`, `LibroRepository` **hereda** todos esos métodos automáticamente, ya especializados para `Libro`, aunque tú no escribas ni una línea dentro de las llaves.
 
@@ -67,7 +67,7 @@ libroRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado"));
 ```
 
-`orElseThrow(...)` dice, en una línea: "si el `Optional` trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos resolviste el caso "recurso no encontrado" con un `if` explícito comprobando `null` — esto es la versión más directa de esa misma idea, apoyada en que `findById` ya te avisa con un `Optional` vacío en vez de con un `null` a pelo.
+`orElseThrow(...)` dice, en una línea: "si el `Optional` trae un libro, dámelo; si viene vacío, lanza esta excepción en su lugar". En Programación de Servicios y Procesos has resuelto el caso "recurso no encontrado" con un `if` explícito comprobando `null` — esto es la versión más directa de esa misma idea, apoyada en que `findById` ya te avisa con un `Optional` vacío en vez de con un `null` a pelo.
 
 ### Y si necesitas una consulta que no viene de fábrica
 
@@ -167,7 +167,7 @@ Mira otra vez esa respuesta. Dos cosas no deberían estar ahí:
 | Campo | Por qué es un problema |
 |---|---|
 | `coste` | El precio al que tu librería compra el libro al proveedor — un dato interno, de gestión, que jamás debería llegar a un cliente de la API. Imagina que fuera un margen de beneficio, o directamente una contraseña: el problema es el mismo — cualquier campo `private` de la entidad viaja tal cual al JSON, lo quieras exponer o no. |
-| `hibernateLazyInitializer` | Un detalle interno de cómo Hibernate representa la relación `@ManyToOne` con carga *lazy* que viste en el apartado anterior, filtrado sin querer al convertir el objeto a JSON. |
+| `hibernateLazyInitializer` | Un detalle interno de cómo Hibernate representa la relación `@ManyToOne` con carga *lazy* que has visto en el apartado anterior, filtrado sin querer al convertir el objeto a JSON. |
 
 El problema de fondo es siempre el mismo: **la entidad `Libro` está diseñada para que Hibernate la entienda, no para que la vea un cliente HTTP.** Son dos propósitos distintos, y una sola clase no puede servir bien a los dos a la vez.
 
@@ -348,7 +348,7 @@ public LibroResponseDTO update(Long id, LibroCreateDTO dto) {
 }
 ```
 
-Como ya viste en `findById()`, `orElseThrow(...)` resuelve el caso en que el `Optional` viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un `404 Not Found`.
+Como ya has visto en `findById()`, `orElseThrow(...)` resuelve el caso en que el `Optional` viene vacío. Si el libro existe, devuelve la entidad que se va a modificar; si no existe, interrumpe la petición con un `404 Not Found`.
 
 Sin esa comprobación podrías terminar intentando utilizar un valor `null`: el código compilaría, pero fallaría durante la ejecución al llamar a uno de sus métodos.
 

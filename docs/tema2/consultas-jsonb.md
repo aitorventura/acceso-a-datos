@@ -181,7 +181,7 @@ List<Libro> buscarPorFormatoEbook(@Param("formato") String formato);
 
 `buscarPorFormatoEbook("mobi")` devuelve solo *1984*, el mismo resultado que ya has visto con `jsonb_extract_path_text` desde Criteria API. Como aquí no interviene el operador `?`, no hay ningún conflicto con el marcador de parámetro de JDBC — puedes escribir la ruta con `->`/`->>` tal cual, igual que la escribirías directamente en `psql`.
 
-¿Y entonces, `criteriaBuilder.function(...)` o `@Query(nativeQuery = true)`? La misma pregunta que ya te has hecho en el Tema 1 entre Specifications y `@Query` con JPQL, con la misma respuesta:
+¿Y entonces, `criteriaBuilder.function(...)` o `@Query(nativeQuery = true)`? La misma pregunta que ya te hiciste en el Tema 1 entre Specifications y `@Query` con JPQL, con la misma respuesta:
 
 | | Specification + `criteriaBuilder.function` | `@Query(nativeQuery = true)` |
 |---|---|---|

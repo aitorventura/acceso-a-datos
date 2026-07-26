@@ -49,7 +49,7 @@ public record VideojuegoResponseDTO(
 ) {}
 ```
 
-Fíjate en que, a diferencia del resto de campos del DTO, `detallesPlataforma` no lleva ninguna anotación de validación. No es un descuido: `@NotNull` estaría mal aquí, porque un videojuego sin esta información (o creado antes de que existiera la columna) queda con `detallesPlataforma = null`, un estado válido. Y validar la forma interna del `Map` —qué claves debe tener, qué tipo debe llevar cada valor— necesitaría un validador a medida, no una anotación estándar de Bean Validation. Es, literalmente, el trade-off de "sin tipado" que ya viste en la teoría, aquí en tu propio código.
+Fíjate en que, a diferencia del resto de campos del DTO, `detallesPlataforma` no lleva ninguna anotación de validación. No es un descuido: `@NotNull` estaría mal aquí, porque un videojuego sin esta información (o creado antes de que existiera la columna) queda con `detallesPlataforma = null`, un estado válido. Y validar la forma interna del `Map` —qué claves debe tener, qué tipo debe llevar cada valor— necesitaría un validador a medida, no una anotación estándar de Bean Validation. Es, literalmente, el trade-off de "sin tipado" que ya has visto en la teoría, aquí en tu propio código.
 
 Y en el `mapToDTO`/`create`/`update` de tu `VideojuegoService`, asegúrate de que este campo se propaga igual que los demás (`v.setDetallesPlataforma(dto.detallesPlataforma())`, y en el DTO de respuesta).
 
@@ -143,7 +143,7 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
   -c "SELECT titulo, detalles_plataforma FROM videojuego;"
 ```
 
-**Anota**: ¿el JSON que ves (en `psql` o en pgAdmin/DBeaver) coincide exactamente con el que mandaste por la API?
+**Anota**: ¿el JSON que ves (en `psql` o en pgAdmin/DBeaver) coincide exactamente con el que has mandado por la API?
 
 ---
 
@@ -238,7 +238,7 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
 
 ## Paso 6 — Actualizar y observar el reemplazo total
 
-Actualiza tu "Celeste" del Paso 2 con un `PUT`, cambiando `detallesPlataforma` a una estructura **distinta** (por ejemplo, solo con la clave `"switch"`, sin `"steam"`). Sustituye `<id-de-celeste>` por el `id` que anotaste en el Paso 2 — **no** des por hecho que es `1`: si ya tenías videojuegos de temas anteriores, el tuyo tendrá otro número:
+Actualiza tu "Celeste" del Paso 2 con un `PUT`, cambiando `detallesPlataforma` a una estructura **distinta** (por ejemplo, solo con la clave `"switch"`, sin `"steam"`). Sustituye `<id-de-celeste>` por el `id` que has anotado en el Paso 2 — **no** des por hecho que es `1`: si ya tenías videojuegos de temas anteriores, el tuyo tendrá otro número:
 
 ```bash
 curl -X PUT http://localhost:8080/api/v1/videojuegos/<id-de-celeste> \
@@ -279,4 +279,4 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
 Tu `Videojuego` ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando `jsonb_exists`.
 
 !!! tip "¿Quieres quitar las 100.000 filas de prueba del Paso 5?"
-    Se quedan en tu base de datos de desarrollo sin causar ningún problema, pero si prefieres limpiarlas: si sigues teniendo un `data.sql` que reinicializa tus tablas (PSP, Actividad 2.3), pon temporalmente `spring.sql.init.mode` de nuevo en `always` en tu `application-dev.yaml` y reinicia — se ejecutará y dejará la base de datos como la tenías. Vuelve a ponerlo en `never` después, o volverás a perder cualquier dato nuevo en cada arranque, que es justo el problema que evitaste en su momento.
+    Se quedan en tu base de datos de desarrollo sin causar ningún problema, pero si prefieres limpiarlas: si sigues teniendo un `data.sql` que reinicializa tus tablas (PSP, Actividad 2.3), pon temporalmente `spring.sql.init.mode` de nuevo en `always` en tu `application-dev.yaml` y reinicia — se ejecutará y dejará la base de datos como la tenías. Vuelve a ponerlo en `never` después, o volverás a perder cualquier dato nuevo en cada arranque, que es justo el problema que has evitado en su momento.
