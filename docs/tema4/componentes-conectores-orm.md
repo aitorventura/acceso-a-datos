@@ -2,7 +2,7 @@
 
 # 🧩 1. Componentes con conectores y ORM
 
-Último tema del módulo. Todo lo que has construido hasta ahora — repositorios, servicios, controladores — lo vas a mirar ahora bajo una óptica distinta: la de **componente**. No vas a escribir código radicalmente nuevo; vas a entender por qué el código que ya tienes está bien diseñado (o cómo mejorarlo) desde este ángulo.
+Último tema del módulo. Todo lo que has construido hasta ahora — repositorios, servicios, controladores — lo vas a mirar ahora bajo una óptica distinta: la de **componente**. Vas a identificar un problema que ya tienes en tu propio código desde el Tema 3, y resolverlo construyendo tu primer componente con un contrato explícito.
 
 ---
 
@@ -51,17 +51,41 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 
 En su forma más básica, `LibroRepository` ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (`private final LibroRepository libroRepository;`) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.
 
-### Nivel 2: `CatalogoConsultaService`, el ejemplo mejor diseñado
+### Nivel 2: cuando un repositorio no basta
+
+Recuerda `NotaLecturaService`, del Tema 3: para comprobar que un libro existe antes de tocar Mongo, inyecta `LibroRepository` directamente:
 
 ```java
-// El contrato — en el paquete api, pensado para que otros módulos lo vean
-public interface CatalogoConsultaService {
+// NotaLecturaService, tal y como lo dejaste en el Tema 3
+private final LibroRepository libroRepository;
+
+public List<NotaLecturaResponseDTO> findByLibroId(Long libroId) {
+    if (!libroRepository.existsById(libroId)) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado en el catálogo");
+    }
+    // ...
+}
+```
+
+Funciona, pero acopla el módulo de notas de lectura a un detalle muy interno del módulo del catálogo: su repositorio JPA concreto. Si el catálogo cambiara mañana cómo organiza internamente su persistencia, tendrías que tocar también `NotaLecturaService`, aunque no tenga nada que ver con ese cambio. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo, y esconder todo lo demás detrás.
+
+### Construyendo el componente: interfaz + implementación oculta
+
+La solución es una interfaz pequeña, pensada para que otros módulos la usen, con una implementación que sí conoce los detalles pero permanece oculta. El contrato, en un paquete `api` — pensado para lo que otros módulos SÍ pueden ver:
+
+```java
+public interface LibroConsultaService {
     boolean existeLibro(Long libroId);
 }
+```
 
-// La implementación — oculta, sin el modificador public
+Y su implementación, en el paquete del catálogo, no en `api` — fíjate en que la clase no lleva `public`: es *package-private*, invisible fuera de su propio paquete, así que nadie puede depender de ella por accidente:
+
+```java
 @Service
-class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
+@RequiredArgsConstructor
+class LibroConsultaServiceImpl implements LibroConsultaService {
+
     private final LibroRepository libroRepository;
 
     @Override
@@ -71,11 +95,25 @@ class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
 }
 ```
 
-¿Por qué es tan buen ejemplo? Porque separa con precisión el **contrato** (la interfaz, en un paquete `api`, visible para quien la necesite) de la **implementación concreta** (la clase, sin modificador `public`, invisible fuera de su propio paquete). El módulo de reseñas del Tema 3 usa `CatalogoConsultaService.existeLibro(...)` sin conocer ni el paquete `catalogo` internamente, ni cómo está implementado ese método — desacoplamiento real entre módulos. Es, formalizado, el mismo patrón de integridad referencial manual que ya usaste allí.
+`NotaLecturaService` pasa a depender solo de la interfaz, nunca de `LibroRepository` ni de la clase que la implementa:
+
+```java
+// NotaLecturaService, ahora
+private final LibroConsultaService libroConsultaService;
+
+public List<NotaLecturaResponseDTO> findByLibroId(Long libroId) {
+    if (!libroConsultaService.existeLibro(libroId)) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Libro no encontrado en el catálogo");
+    }
+    // ...
+}
+```
 
 ### El contraste que ilustra el desacoplamiento
 
-Técnicamente, el servicio de reseñas **podría** inyectar `LibroRepository` directamente y llamar a `existsById(...)` él mismo, ahorrándose la interfaz intermedia. ¿Por qué no se hace así? Porque eso rompería el aislamiento entre módulos: `resenas` pasaría a depender de un detalle interno de `catalogo` (su repositorio JPA concreto), y cualquier cambio en cómo `catalogo` gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) obligaría a tocar también `resenas`. Con el componente de por medio, ese cambio quedaría contenido dentro de `catalogo` — `resenas` seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.
+Técnicamente, el módulo de notas de lectura **podría** seguir inyectando `LibroRepository` directamente, ahorrándose la interfaz intermedia. ¿Por qué merece la pena el paso extra? Porque con el componente de por medio, cualquier cambio en cómo el catálogo gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) queda contenido dentro de su propio módulo — el módulo de notas de lectura seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.
+
+Vas a construir exactamente este mismo patrón sobre tu propio proyecto en la Actividad 4.1, con `Videojuego`/`Review` en lugar de `Libro`/`NotaLectura`.
 
 ---
 
@@ -87,4 +125,4 @@ Técnicamente, el servicio de reseñas **podría** inyectar `LibroRepository` di
     - El origen histórico son los JavaBeans; en Spring Boot, el equivalente son los **beans gestionados por inyección de dependencias**.
     - Ventajas: reutilización, sustituibilidad, pruebas aisladas, división del trabajo. Inconveniente: más interfaces e indirección.
     - Spring (`@Service`/`@Repository`/`@Component` + inyección) ES la "herramienta de desarrollo de componentes" en este contexto — no hay paleta visual.
-    - Un `JpaRepository` ya es un componente básico; `CatalogoConsultaService`/`CatalogoConsultaServiceImpl` es el ejemplo mejor diseñado: contrato en `api`, implementación oculta, desacoplamiento real entre módulos.
+    - Un `JpaRepository` ya es un componente básico; una interfaz + implementación oculta (`LibroConsultaService`/`LibroConsultaServiceImpl`) es el siguiente nivel: contrato en `api`, implementación oculta, desacoplamiento real entre módulos.

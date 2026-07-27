@@ -110,4 +110,4 @@ Escribe un resumen propio (5-6 líneas) del recorrido completo de este tema: con
 
 ## ✅ Cierre
 
-Con esto termina todo el bloque de bases de datos del módulo. En el Tema 4, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, con `CatalogoConsultaService` (ya usado aquí mismo) como ejemplo central.
+Con esto termina todo el bloque de bases de datos del módulo. En el Tema 4, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, resolviendo con `CatalogoConsultaService` un acoplamiento que arrastras precisamente desde este tema (`ReviewService` inyectando `VideojuegoRepository` directamente).

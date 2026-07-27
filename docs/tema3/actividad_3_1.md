@@ -22,19 +22,15 @@ Tu PostgreSQL y tu login JWT de PSP (Tema 2 — Programación Segura) ya funcion
 Añade el servicio a `.devcontainer/docker-compose.yml` — el mismo fichero que ya tienes desde la Actividad 1.1, junto a `app` y `postgres`:
 
 ```yaml
-services:
-  # ... tus servicios app y postgres ya existentes ...
   mongodb:
     image: mongo:8
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
-volumes:
-  postgres_data:
-  mongo_data:
 ```
+
+Añade el nuevo servicio dentro de `services:`, junto a los que ya tienes, y `mongo_data:` como una entrada más dentro de `volumes:`.
 
 En tu `pom.xml`:
 
@@ -55,11 +51,13 @@ spring:
 
 Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
 
-Levanta el servicio nuevo desde la terminal integrada — comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`, depende de tu editor) y sustitúyelo en `docker compose -f .devcontainer/docker-compose.yml -p <proyecto> up -d mongodb` — y reinicia tu aplicación. Si prefieres, también puedes hacer **"Dev Containers: Rebuild Container"** desde la paleta de comandos, que relee el `docker-compose.yml` completo y levanta el servicio nuevo por ti.
+Reconstruye o reinicia tu Dev Container desde tu editor para que levante también el nuevo servicio.
 
 ---
 
-## Paso 2 — La entidad `Review` y su repositorio
+## Paso 2 — La entidad `Review`, su repositorio y sus DTOs
+
+Las reseñas son una funcionalidad nueva y autocontenida, así que le toca su propio paquete: `reviews`, creado hoy. La entidad, en `src/main/java/com/tunombre/gamevault/reviews/Review.java`:
 
 ```java
 package com.tunombre.gamevault.reviews;
@@ -84,6 +82,8 @@ public class Review {
 }
 ```
 
+El repositorio, en el mismo paquete, `ReviewRepository.java`:
+
 ```java
 package com.tunombre.gamevault.reviews;
 
@@ -97,48 +97,34 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
 
 `@Document(collection = "review")` es el equivalente Mongo de `@Entity`; el `@Id` es `String` porque en Mongo los identificadores son alfanuméricos. `findByVideojuegoId` se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.
 
+Los DTOs van en un subpaquete `dto`, igual que ya tienes en `catalogo` — `ReviewCreateDTO.java`, `ReviewRequestDTO.java`, `ReviewResponseDTO.java`, los tres en `src/main/java/com/tunombre/gamevault/reviews/dto/` (cada uno en su propio fichero, aunque aquí se muestren juntos por brevedad):
+
+```java
+package com.tunombre.gamevault.reviews.dto;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+
+public record ReviewCreateDTO(Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
+public record ReviewRequestDTO(
+        @Min(1) @Max(10) Integer puntuacion,
+        @NotBlank String comentario
+) {}
+public record ReviewResponseDTO(String id, Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
+```
+
 ---
 
 ## Paso 3 — Integridad referencial manual, guiada al completo
 
-Antes de usarlo desde `reviews`, crea el pequeño componente que va a permitir esa comprobación sin que `reviews` conozca nada del paquete `catalogo` por dentro — una interfaz en `catalogo.api` y su implementación oculta en `catalogo`:
-
-```java
-package com.tunombre.gamevault.catalogo.api;
-
-public interface CatalogoConsultaService {
-    boolean existeVideojuego(Long videojuegoId);
-}
-```
-
-```java
-package com.tunombre.gamevault.catalogo;
-
-import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
-class CatalogoConsultaServiceImpl implements CatalogoConsultaService {
-
-    private final VideojuegoRepository videojuegoRepository;
-
-    @Override
-    public boolean existeVideojuego(Long videojuegoId) {
-        return videojuegoRepository.existsById(videojuegoId);
-    }
-}
-```
-
-Fíjate en dos detalles deliberados: la interfaz vive en `catalogo.api` (un paquete pensado para lo que otros módulos SÍ pueden ver), mientras que `CatalogoConsultaServiceImpl` no lleva el modificador `public` — es *package-private*, invisible fuera de `catalogo`. El módulo `reviews` va a depender solo de la interfaz, sin saber nada de cómo está implementada por dentro. Vas a profundizar en por qué esto importa en el Tema 4 — de momento, réplicalo tal cual.
-
-Ahora sí, el service de `reviews` que lo usa:
+Antes de devolver las reseñas de un videojuego, comprueba primero que ese videojuego existe de verdad en PostgreSQL — si no, no tiene sentido ni mirar en Mongo. `ReviewService`, en `src/main/java/com/tunombre/gamevault/reviews/ReviewService.java`, inyecta directamente `VideojuegoRepository`, del paquete `catalogo`:
 
 ```java
 package com.tunombre.gamevault.reviews;
 
-import com.tunombre.gamevault.catalogo.api.CatalogoConsultaService;
+import com.tunombre.gamevault.catalogo.VideojuegoRepository;
+import com.tunombre.gamevault.reviews.dto.ReviewResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -149,10 +135,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final CatalogoConsultaService catalogoConsultaService;
+    private final VideojuegoRepository videojuegoRepository;
 
     public List<ReviewResponseDTO> findByVideojuegoId(Long videojuegoId) {
-        if (!catalogoConsultaService.existeVideojuego(videojuegoId)) {
+        if (!videojuegoRepository.existsById(videojuegoId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado en el catálogo");
         }
         return reviewRepository.findByVideojuegoId(videojuegoId).stream().map(this::mapToDTO).toList();
@@ -164,25 +150,18 @@ public class ReviewService {
 }
 ```
 
-**Pregunta de comprensión**: ¿por qué esta comprobación (`existeVideojuego`) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?
+**Pregunta de comprensión**: apoyándote en el diagrama de secuencia de la teoría, ¿por qué esta comprobación (`existsById`) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?
 
 ---
 
 ## Paso 4 — El `POST` de reseñas, guiado
 
-```java
-public record ReviewCreateDTO(Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
-public record ReviewRequestDTO(
-        @jakarta.validation.constraints.Min(1) @jakarta.validation.constraints.Max(10) Integer puntuacion,
-        @jakarta.validation.constraints.NotBlank String comentario
-) {}
-public record ReviewResponseDTO(String id, Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
-```
+Añade el método `create` a `ReviewService`, reutilizando la misma comprobación que ya conoces del Paso 3:
 
 ```java
 // En ReviewService
 public ReviewResponseDTO create(ReviewCreateDTO dto) {
-    if (!catalogoConsultaService.existeVideojuego(dto.videojuegoId())) {
+    if (!videojuegoRepository.existsById(dto.videojuegoId())) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No puedes reseñar un juego que no existe en el catálogo");
     }
     Review review = new Review();
@@ -194,18 +173,38 @@ public ReviewResponseDTO create(ReviewCreateDTO dto) {
 }
 ```
 
+Y el controller, también en `reviews` — `src/main/java/com/tunombre/gamevault/reviews/VideojuegoReviewController.java`:
+
 ```java
+package com.tunombre.gamevault.reviews;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/api/v1/videojuegos/{videojuegoId}/reviews")
 @RequiredArgsConstructor
 public class VideojuegoReviewController {
     private final ReviewService reviewService;
 
+    @Operation(summary = "Listar las reseñas de un videojuego")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+            @ApiResponse(responseCode = "404", description = "Videojuego no encontrado en el catálogo")
+    })
     @GetMapping
     public ResponseEntity<List<ReviewResponseDTO>> getByVideojuegoId(@PathVariable Long videojuegoId) {
         return ResponseEntity.ok(reviewService.findByVideojuegoId(videojuegoId));
     }
 
+    @Operation(summary = "Crear una reseña para un videojuego")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Reseña creada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Puntuación o comentario inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autenticado"),
+            @ApiResponse(responseCode = "404", description = "Videojuego no encontrado en el catálogo")
+    })
     @PostMapping
     public ResponseEntity<ReviewResponseDTO> create(
             @PathVariable Long videojuegoId,
@@ -218,7 +217,7 @@ public class VideojuegoReviewController {
 }
 ```
 
-Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya has construido en PSP.
+Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de `principal.getName()`, el usuario autenticado por el JWT que ya has construido en PSP. Repasa el diagrama de secuencia de la teoría (petición → filtro JWT → `SecurityContextHolder` → tu controller) si no tienes claro de dónde sale exactamente ese `Principal`.
 
 !!! warning "Esta ruta todavía no existe en tu `SecurityConfig` — añádela ahora"
     Las reseñas no existían en la Actividad 2.5 de PSP, así que no aparecen en tu política de rutas — y con `denyAll()` cerrando todo lo que no está listado explícitamente, `/api/v1/videojuegos/*/reviews` está bloqueada hasta que la añadas tú:
@@ -228,7 +227,7 @@ Fíjate en que el autor **no** viaja en el cuerpo de la petición — se toma de
     ```
     `GET` queda pública, igual que el resto de lecturas del catálogo. `POST` exige estar autenticado, pero sin ningún rol concreto: quien puede escribir una reseña es cualquier usuario logueado, no solo `ADMIN` — la comprobación que de verdad importa aquí es *quién eres* (para guardarte como autor), no *qué rol tienes*.
 
-Ahora sí, prueba con tu token:
+Ahora sí, prueba con tu token. Aquí tienes los comandos con `curl`, pero puedes hacer exactamente lo mismo desde Swagger UI si lo prefieres:
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
@@ -237,15 +236,31 @@ curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
   -d '{"puntuacion": 9, "comentario": "Excelente banda sonora"}'
 ```
 
+**Captura**: la respuesta del `POST`, con el `autor` ya relleno aunque no lo hayas mandado tú en el cuerpo.
+
+Consulta ahora el mismo videojuego con `GET`, para comprobar que la reseña que acabas de crear aparece en el listado:
+
+```bash
+curl http://localhost:8080/api/v1/videojuegos/1/reviews
+```
+
+**Captura**: la respuesta del `GET`, con la reseña recién creada dentro de la lista.
+
 ---
 
-## Mini-reto — el endpoint de resumen
+## Paso 5 — El endpoint de resumen
+
+Otro DTO más en `reviews/dto/`, `ReviewResumenDTO.java`:
 
 ```java
+package com.tunombre.gamevault.reviews.dto;
+
 public record ReviewResumenDTO(Long videojuegoId, long totalReviews, double puntuacionMedia) {}
 ```
 
-Sin más código dado, completa en `ReviewService` un método `getResumenByVideojuegoId(Long videojuegoId)` que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con `findByVideojuegoId`, y calcule con streams (`mapToInt(...).average()`) el total y la puntuación media. Expón el resultado en `GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen`.
+Sin más código dado, completa en `ReviewService` un método `getResumenByVideojuegoId(Long videojuegoId)` que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con `findByVideojuegoId`, y calcule con streams (`mapToInt(...).average()`) el total y la puntuación media. Expón el resultado en `GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen`, documentado con `@Operation`/`@ApiResponses` igual que los otros dos endpoints del controller.
+
+**Captura**: la respuesta de ese endpoint, con el total y la puntuación media ya calculados.
 
 ---
 
@@ -260,14 +275,17 @@ curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
 
 (recuerda: `DELETE /api/v1/videojuegos/{id}` exige rol `ADMIN` desde la Actividad 2.5 de PSP)
 
-Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1). Comprueba primero el nombre real de tu proyecto con `docker compose ls` (no siempre es `gamevault_devcontainer`) y sustitúyelo por `<proyecto>`:
+Consulta MongoDB directamente, desde la misma terminal integrada (gracias al `docker-outside-of-docker` de la Actividad 1.1). Busca el nombre de tu contenedor de Mongo con `docker ps` y sustitúyelo abajo:
 
 ```bash
-docker compose -f .devcontainer/docker-compose.yml -p <proyecto> ps
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
 ```
 
-**Comprueba**: las reseñas siguen ahí, apuntando a un `videojuegoId` que ya no existe en PostgreSQL — son **reseñas huérfanas**. Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.
+**Comprueba**: las reseñas siguen ahí, apuntando a un `videojuegoId` que ya no existe en PostgreSQL — son **reseñas huérfanas**.
+
+**Captura**: la salida de `mongosh` mostrando esas reseñas huérfanas.
+
+Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.
 
 ---
 

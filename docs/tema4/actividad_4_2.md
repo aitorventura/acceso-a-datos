@@ -13,7 +13,7 @@
 
 ## Requisitos previos
 
-Tu `CatalogoConsultaService` (Actividades 3.1 y 4.1) como referencia visual constante.
+Tu `CatalogoConsultaService` (Actividad 4.1) como referencia visual constante.
 
 ---
 
@@ -35,7 +35,7 @@ La lógica de estos dos métodos **ya existe** dentro de `ReviewService.getResum
 ## Mini-reto (con más peso de lo habitual) — el componente completo
 
 !!! warning "El paquete `reviews.api` no existe todavía en tu proyecto"
-    A diferencia de `catalogo.api` (que ya tienes de la Actividad 3.1), aquí no hay ningún precedente — el primer paso es crear la carpeta nueva.
+    A diferencia de `catalogo.api` (que ya tienes de la Actividad 4.1), aquí no hay ningún precedente — el primer paso es crear la carpeta nueva.
 
 Estructura de ficheros esperada:
 

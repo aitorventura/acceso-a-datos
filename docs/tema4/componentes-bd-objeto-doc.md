@@ -2,7 +2,7 @@
 
 # 🧩 2. Componentes con BD objeto-relacional y documental
 
-Este apartado no introduce ninguna tecnología nueva — es un repaso integrador. Revisitas JSONB (Tema 2) y MongoDB (Tema 3), esta vez con la óptica de "componente" que acabas de conocer en el apartado anterior.
+Revisitas JSONB (Tema 2) con la óptica de "componente" que acabas de conocer en el apartado anterior, y luego construyes un segundo componente — esta vez en la dirección contraria al que ya construiste con `LibroConsultaService`.
 
 ---
 
@@ -17,24 +17,40 @@ public interface LibroRepository extends JpaRepository<Libro, Long>, JpaSpecific
 
 ---
 
-## 🍃 MongoDB, visto como componente
+## 🍃 Un componente en la dirección contraria
+
+En el apartado anterior construiste `LibroConsultaService`, para que el módulo de notas de lectura (MongoDB) pudiera preguntarle algo al catálogo (PostgreSQL) sin conocer sus detalles internos. Ahora se plantea el problema al revés: `LibroResponseDTO` quiere mostrar la puntuación media de las notas de lectura de cada libro — pero esa información vive en MongoDB, no en PostgreSQL, y `LibroService` no debería tener que saber que Mongo existe siquiera.
+
+Se resuelve con exactamente el mismo molde, solo que ahora la interfaz vive en el módulo de notas de lectura:
 
 ```java
-public ResenaResumenDTO getResumenByLibroId(Long libroId) {
-    List<Resena> resenas = resenaRepository.findByLibroId(libroId);
-    long totalResenas = resenas.size();
-    double puntuacionMedia = resenas.stream().mapToInt(Resena::getPuntuacion).average().orElse(0.0);
-    return new ResenaResumenDTO(libroId, totalResenas, puntuacionMedia);
+public interface NotaLecturaConsultaService {
+    double puntuacionMediaDe(Long libroId);
 }
 ```
 
-`ResenaRepository` + `ResenaService` es, bajo esta misma óptica, un "componente que gestiona información almacenada en una base de datos documental nativa". `getResumenByLibroId` es un buen ejemplo de lógica que vive **dentro** del componente — la agregación en memoria (contar, calcular la media) — sin que el controlador que lo llama necesite saber cómo se ha calculado ese resumen, ni que por debajo hay documentos de MongoDB en vez de filas de una tabla.
+```java
+@Service
+@RequiredArgsConstructor
+class NotaLecturaConsultaServiceImpl implements NotaLecturaConsultaService {
+
+    private final NotaLecturaRepository notaLecturaRepository;
+
+    @Override
+    public double puntuacionMediaDe(Long libroId) {
+        return notaLecturaRepository.findByLibroId(libroId).stream()
+                .mapToInt(NotaLectura::getPuntuacion)
+                .average()
+                .orElse(0.0);
+    }
+}
+```
+
+`LibroService` inyecta `NotaLecturaConsultaService` —la interfaz, nunca `NotaLecturaRepository` ni la clase que la implementa— para rellenar ese campo nuevo de `LibroResponseDTO`. El patrón es idéntico al del apartado anterior; lo único que cambia es qué motor hay detrás (MongoDB en vez de PostgreSQL) y en qué dirección va la consulta: del catálogo hacia las notas de lectura, no al revés.
 
 ---
 
 ## 🪞 Cerrando el círculo: el mismo patrón, tres motores distintos
-
-Ya conoces `CatalogoConsultaService` del apartado anterior (y lo construirás en la Actividad 4.1) — interfaz en un paquete `api`, implementación oculta. Ese mismo patrón se puede aplicar, exactamente igual, para exponer desde el módulo de reseñas hacia otros módulos un componente análogo — por ejemplo, `ResenasConsultaService`, con algo como "cuántas reseñas tiene un libro". Es justo lo que vas a construir en la Actividad 4.2.
 
 ```mermaid
 flowchart TB
@@ -45,14 +61,14 @@ flowchart TB
         B["LibroSpecifications<br/>disponibleEnFormato"]
     end
     subgraph MONGO["🍃 MongoDB"]
-        C["ResenaRepository +<br/>ResenaService"]
+        C["NotaLecturaConsultaService"]
     end
     A --> D["🧩 Mismo patrón de componente:<br/>interfaz + implementación oculta"]
     B --> D
     C --> D
 ```
 
-La idea de síntesis de este apartado: **da igual la tecnología de persistencia** — relacional puro, objeto-relacional con JSONB, documental con MongoDB — el patrón de "componente con interfaz clara + implementación oculta" es el mismo en los tres casos. La interfaz nunca necesita saber qué motor hay por debajo. Eso, precisamente, es el objetivo de este tema: no una tecnología concreta, sino una forma de diseñar que funciona igual de bien sobre cualquiera de ellas.
+La idea de síntesis de este apartado: **da igual la tecnología de persistencia** —relacional puro, objeto-relacional con JSONB, documental con MongoDB— el patrón de "componente con interfaz clara + implementación oculta" es el mismo en los tres casos, y da igual en qué dirección se consulte. La interfaz nunca necesita saber qué motor hay por debajo. Vas a replicar este mismo componente sobre tu propio proyecto en la Actividad 4.2, con `ReviewsConsultaService`: expuesto desde `reviews` hacia `catalogo`, con la puntuación media de las reseñas de un videojuego.
 
 ---
 
@@ -61,6 +77,6 @@ La idea de síntesis de este apartado: **da igual la tecnología de persistencia
 ??? tip "Abrir resumen"
 
     - `LibroRepository`/`LibroSpecifications` es un componente que encapsula acceso objeto-relacional (JSONB) — su complejidad interna (`jsonb_exists`) queda oculta a quien lo usa.
-    - `ResenaRepository`/`ResenaService` es un componente que encapsula acceso documental (MongoDB) — su lógica de agregación vive dentro, no en el controlador.
-    - El mismo patrón (interfaz + implementación oculta) de `CatalogoConsultaService` se puede replicar sobre cualquier motor — es lo que vas a hacer con `ResenasConsultaService`.
-    - La tecnología de persistencia por debajo es irrelevante para el patrón de componente — esa independencia es exactamente la idea clave de este tema.
+    - El mismo patrón de componente (interfaz + implementación oculta) se aplica también en la dirección contraria: `NotaLecturaConsultaService` expone información de MongoDB hacia el catálogo, sin que este sepa que Mongo existe.
+    - La dirección de la dependencia y el motor de persistencia por debajo son irrelevantes para el patrón de componente — esa independencia es exactamente la idea clave de este tema.
+    - En tu proyecto real este mismo componente se llama `ReviewsConsultaService` (Actividad 4.2), expuesto desde `reviews` hacia `catalogo`.

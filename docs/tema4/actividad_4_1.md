@@ -1,25 +1,35 @@
 # 🧪 Actividad 4.1: `CatalogoConsultaService` — un componente reutilizable
 
 !!! info "Práctica guiada"
-    Relees el componente que ya construiste en el Tema 3, esta vez bajo la óptica de "componente" de la teoría, y lo extiendes con un método nuevo siguiendo el mismo patrón.
+    Desde la Actividad 3.1, `ReviewService` inyecta `VideojuegoRepository` directamente. Hoy resuelves ese acoplamiento construyendo tu primer componente con contrato explícito, siguiendo el patrón de la teoría, y lo extiendes con un método nuevo.
 
 ## Qué vas a practicar
 
-- Analizar críticamente por qué un componente ya construido está bien diseñado.
+- Construir un componente con interfaz separada de su implementación oculta.
 - Razonar sobre las consecuencias del desacoplamiento con un caso concreto.
-- Extender un componente existente siguiendo su propio patrón.
+- Extender un componente propio siguiendo su propio patrón.
 
 ---
 
 ## Requisitos previos
 
-Tu `CatalogoConsultaService`/`CatalogoConsultaServiceImpl` de la Actividad 3.1.
+Tu `ReviewService` de la Actividad 3.1, con `VideojuegoRepository` inyectado directamente — es exactamente el acoplamiento que vas a resolver hoy.
 
 ---
 
-## Paso 1 — Relectura guiada por preguntas
+## Paso 1 — Construye el componente
 
-Abre tu propio código y responde, con el código delante:
+Sin más código dado que el patrón de la teoría, crea:
+
+1. La interfaz `CatalogoConsultaService`, en un paquete nuevo `catalogo.api`, con un único método por ahora: `boolean existeVideojuego(Long videojuegoId)`.
+2. `CatalogoConsultaServiceImpl` (package-private, anotada `@Service`) en `catalogo`, que implemente la interfaz reutilizando tu `VideojuegoRepository` ya existente.
+3. Modifica `ReviewService` para que inyecte `CatalogoConsultaService` (la interfaz) en lugar de `VideojuegoRepository` directamente, y actualiza las dos comprobaciones (`findByVideojuegoId` y `create`) para llamar a `existeVideojuego(...)`.
+
+---
+
+## Paso 2 — Preguntas de comprensión
+
+Con tu código recién escrito delante, responde:
 
 1. ¿Por qué `CatalogoConsultaService` (la interfaz) vive en el paquete `catalogo.api`, y `CatalogoConsultaServiceImpl` no?
 2. ¿Por qué `CatalogoConsultaServiceImpl` no lleva el modificador `public`? ¿Qué pasaría si lo añadieras — cambiaría algo en cómo funciona, o solo en qué es visible desde fuera del paquete?
@@ -27,7 +37,7 @@ Abre tu propio código y responde, con el código delante:
 
 ---
 
-## Paso 2 — El desacoplamiento, con un caso concreto
+## Paso 3 — El desacoplamiento, con un caso concreto
 
 Imagina que mañana decides sustituir JPA por otra tecnología de persistencia para el catálogo (no lo vas a hacer, es un ejercicio de razonamiento). **Responde**:
 
@@ -49,7 +59,7 @@ Sigue exactamente el mismo patrón que ya existía para `existeVideojuego` — l
 
 ---
 
-## Paso 3 — Prueba del componente aislado
+## Paso 4 — Prueba del componente aislado
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -91,4 +101,4 @@ class CatalogoConsultaServiceImplTest {
 
 ## ✅ Cierre
 
-Ya sabes leer tu propio código con ojo crítico de "componente" — contrato separado de implementación, dependencias mínimas y explícitas. En la próxima actividad aplicas exactamente el mismo patrón sobre el módulo documental (MongoDB).
+Ya sabes construir un componente con contrato separado de implementación, dependencias mínimas y explícitas. En la próxima actividad aplicas exactamente el mismo patrón sobre el módulo documental (MongoDB).

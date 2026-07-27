@@ -15,7 +15,7 @@ Ya conectaste con MongoDB y construiste tu primer repositorio documental. Este a
 | Columna | Campo |
 | `JOIN` | Documento embebido, o referencia manual (sin integridad automática) |
 
-Ventajas del modelo documental: **esquema flexible por documento** (dos `Resena` no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y **escritura/lectura simple**, sin `JOIN` que resolver.
+Ventajas del modelo documental: **esquema flexible por documento** (dos `NotaLectura` no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y **escritura/lectura simple**, sin `JOIN` que resolver.
 
 Inconvenientes: la **integridad referencial manual** que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que `libroId` apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).
 
@@ -27,13 +27,13 @@ En `mongosh`:
 
 ```javascript
 // Se crea implícitamente al insertar el primer documento
-db.resena.insertOne({ libroId: 1, autor: "ana", puntuacion: 8 })
+db.nota_lectura.insertOne({ libroId: 1, autor: "ana", puntuacion: 8 })
 
 // O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)
-db.createCollection("resena")
+db.createCollection("nota_lectura")
 
 // Eliminar
-db.resena.drop()
+db.nota_lectura.drop()
 
 // Listar
 show collections
@@ -48,17 +48,17 @@ La forma **explícita** (`createCollection`) sirve para cuando necesitas configu
 
 ## 📚 Por qué dos motores conviven
 
-En el ejemplo de la librería, PostgreSQL guarda el catálogo (`Libro`/`Editorial`: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB guarda las reseñas (`Resena`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una **decisión de arquitectura deliberada**, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.
+En el ejemplo de la librería, PostgreSQL guarda el catálogo (`Libro`/`Editorial`: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB guarda las notas de lectura (`NotaLectura`: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una **decisión de arquitectura deliberada**, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.
 
 ### Eliminar documentos de forma masiva
 
 ```java
-public interface ResenaRepository extends MongoRepository<Resena, String> {
+public interface NotaLecturaRepository extends MongoRepository<NotaLectura, String> {
     long deleteByLibroId(Long libroId);
 }
 ```
 
-`deleteByLibroId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **reseñas huérfanas** que detectaste en la Actividad 3.1: si se borra un libro cuyas reseñas siguen en Mongo, este método las limpia de golpe.
+`deleteByLibroId` es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las **notas de lectura huérfanas** que detectaste en la Actividad 3.1: si se borra un libro cuyas notas de lectura siguen en Mongo, este método las limpia de golpe.
 
 ---
 
@@ -70,4 +70,4 @@ public interface ResenaRepository extends MongoRepository<Resena, String> {
     - El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.
     - Una colección se crea implícitamente al primer `insert`, o explícitamente con `createCollection` (para validación o colecciones capadas); se elimina con `drop()`.
     - Usar dos motores a la vez es una decisión de arquitectura deliberada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.
-    - `deleteByLibroId` elimina documentos en bloque por naming de método — es la pieza que resuelve las reseñas huérfanas.
+    - `deleteByLibroId` elimina documentos en bloque por naming de método — es la pieza que resuelve las notas de lectura huérfanas.
