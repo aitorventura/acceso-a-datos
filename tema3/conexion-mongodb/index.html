@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-conexion-a-mongodb-y-consultas-sobre-resenas" class="md-skip">
+        <a href="#1-conexion-a-mongodb-y-consultas-sobre-notas-de-lectura" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -2248,22 +2248,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cuando-encaja-lo-documental-intuicion" class="md-nav__link">
+  <a href="#cuando-encaja-lo-documental" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚖️ Cuándo encaja lo documental (intuición)
+      ⚖️ Cuándo encaja lo documental
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#un-ejemplo-completo-las-resenas-de-la-libreria" class="md-nav__link">
+  <a href="#un-ejemplo-completo-las-notas-de-lectura-de-la-libreria" class="md-nav__link">
     <span class="md-ellipsis">
-      📚 Un ejemplo completo: las reseñas de la librería
+      📚 Un ejemplo completo: las notas de lectura de la librería
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="📚 Un ejemplo completo: las reseñas de la librería">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: las notas de lectura de la librería">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2276,9 +2276,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-entidad-resena" class="md-nav__link">
+  <a href="#establecer-la-conexion" class="md-nav__link">
     <span class="md-ellipsis">
-      La entidad Resena
+      Establecer la conexión
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-entidad-notalectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      La entidad NotaLectura
     </span>
   </a>
   
@@ -2303,18 +2312,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#una-agregacion-sencilla-en-memoria" class="md-nav__link">
+  <a href="#crear-una-nota-de-lectura-con-el-autor-protegido" class="md-nav__link">
     <span class="md-ellipsis">
-      Una agregación sencilla, en memoria
+      Crear una nota de lectura, con el autor protegido
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#establecer-la-conexion" class="md-nav__link">
+  <a href="#una-agregacion-sencilla-en-memoria" class="md-nav__link">
     <span class="md-ellipsis">
-      Establecer la conexión
+      Una agregación sencilla, en memoria
     </span>
   </a>
   
@@ -2963,22 +2972,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cuando-encaja-lo-documental-intuicion" class="md-nav__link">
+  <a href="#cuando-encaja-lo-documental" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚖️ Cuándo encaja lo documental (intuición)
+      ⚖️ Cuándo encaja lo documental
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#un-ejemplo-completo-las-resenas-de-la-libreria" class="md-nav__link">
+  <a href="#un-ejemplo-completo-las-notas-de-lectura-de-la-libreria" class="md-nav__link">
     <span class="md-ellipsis">
-      📚 Un ejemplo completo: las reseñas de la librería
+      📚 Un ejemplo completo: las notas de lectura de la librería
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="📚 Un ejemplo completo: las reseñas de la librería">
+    <nav class="md-nav" aria-label="📚 Un ejemplo completo: las notas de lectura de la librería">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2991,9 +3000,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-entidad-resena" class="md-nav__link">
+  <a href="#establecer-la-conexion" class="md-nav__link">
     <span class="md-ellipsis">
-      La entidad Resena
+      Establecer la conexión
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-entidad-notalectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      La entidad NotaLectura
     </span>
   </a>
   
@@ -3018,18 +3036,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#una-agregacion-sencilla-en-memoria" class="md-nav__link">
+  <a href="#crear-una-nota-de-lectura-con-el-autor-protegido" class="md-nav__link">
     <span class="md-ellipsis">
-      Una agregación sencilla, en memoria
+      Crear una nota de lectura, con el autor protegido
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#establecer-la-conexion" class="md-nav__link">
+  <a href="#una-agregacion-sencilla-en-memoria" class="md-nav__link">
     <span class="md-ellipsis">
-      Establecer la conexión
+      Una agregación sencilla, en memoria
     </span>
   </a>
   
@@ -3066,135 +3084,293 @@
 
 
 <div><p><a id="conexion-mongodb"></a></p>
-<h1 id="1-conexion-a-mongodb-y-consultas-sobre-resenas">🧩 1. Conexión a MongoDB y consultas sobre reseñas<a class="headerlink" href="#1-conexion-a-mongodb-y-consultas-sobre-resenas" title="Permanent link">¶</a></h1>
+<h1 id="1-conexion-a-mongodb-y-consultas-sobre-notas-de-lectura">🧩 1. Conexión a MongoDB y consultas sobre notas de lectura<a class="headerlink" href="#1-conexion-a-mongodb-y-consultas-sobre-notas-de-lectura" title="Permanent link">¶</a></h1>
 <p>Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 2 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.</p>
 <hr>
 <h2 id="que-es-nosql">🗂️ Qué es NoSQL<a class="headerlink" href="#que-es-nosql" title="Permanent link">¶</a></h2>
-<p><strong>NoSQL</strong> es el nombre que se le da a la familia de bases de datos que abandonan el modelo tabla/fila/SQL en favor de otros modelos de datos. Las principales categorías:</p>
+<p>Esa base de datos "completamente distinta" que acabas de leer no es una sola cosa: es una familia entera, agrupada bajo un nombre común precisamente porque todas comparten lo que <strong>no</strong> hacen. <strong>NoSQL</strong> es el nombre que se le da a esa familia de bases de datos que abandonan el modelo tabla/fila/SQL en favor de otros modelos de datos. No es un único tipo de motor, sino cuatro grandes categorías, cada una pensada para un problema distinto:</p>
+<pre class="mermaid"><code>flowchart TB
+    N["NoSQL"] --&gt; DOC["📄 Documentales&lt;br/&gt;MongoDB"]
+    N --&gt; KV["🔑 Clave-valor&lt;br/&gt;Redis"]
+    N --&gt; COL["📊 Columnares&lt;br/&gt;Cassandra"]
+    N --&gt; GRA["🕸️ De grafos&lt;br/&gt;Neo4j"]</code></pre>
 <ul>
-<li><strong>Documentales</strong>: documentos autocontenidos, tipo JSON (donde se sitúa este tema).</li>
-<li><strong>Clave-valor</strong>: pares simples clave → valor (como Redis, que ya conoces del Tema 3 de PSP).</li>
-<li><strong>Columnares</strong>: optimizadas para leer columnas completas de grandes volúmenes de datos.</li>
-<li><strong>De grafos</strong>: optimizadas para relaciones muy conectadas (nodos y aristas).</li>
+<li><strong>Documentales</strong>: documentos autocontenidos, tipo JSON (donde se sitúa este tema) — uso habitual: catálogos de producto, perfiles de usuario, contenido con estructura variable (notas personales, artículos).</li>
+<li><strong>Clave-valor</strong>: pares simples clave → valor (como Redis) — uso habitual: cachés, sesiones de usuario, contadores; lecturas y escrituras muy rápidas, sin necesidad de consultas complejas.</li>
+<li><strong>Columnares</strong>: optimizadas para leer columnas completas de grandes volúmenes de datos — uso habitual: analítica a gran escala, series temporales (métricas, sensores).</li>
+<li><strong>De grafos</strong>: optimizadas para relaciones muy conectadas (nodos y aristas) — uso habitual: redes sociales (amigos de amigos), sistemas de recomendación.</li>
 </ul>
 <hr>
 <h2 id="bases-de-datos-documentales-nativas-documento-y-coleccion">📄 Bases de datos documentales nativas: documento y colección<a class="headerlink" href="#bases-de-datos-documentales-nativas-documento-y-coleccion" title="Permanent link">¶</a></h2>
-<p>Dos piezas, y ninguna tabla:</p>
+<p>De las cuatro, este tema se centra en la primera — la documental, con MongoDB como motor concreto — porque es la que vas a usar en las próximas actividades. Antes de verla en código, dos piezas la definen, y ninguna es una tabla:</p>
 <ul>
 <li><strong>Documento</strong>: un objeto completo, tipo JSON, autocontenido — con su propia estructura, que puede variar de un documento a otro dentro de la misma colección.</li>
 <li><strong>Colección</strong>: un grupo de documentos, sin esquema fijo impuesto por el motor.</li>
 </ul>
-<p>Contraste explícito con lo relacional: no hay tablas, ni columnas fijas, ni claves foráneas, ni <code>JOIN</code>. Y contraste con el JSONB del Tema 2: allí, el JSON era <strong>una columna</strong> dentro de una tabla relacional normal — aquí, <strong>todo</strong> es documento, no hay ninguna tabla por debajo.</p>
-<hr>
-<h2 id="que-es-mongodb">🍃 Qué es MongoDB<a class="headerlink" href="#que-es-mongodb" title="Permanent link">¶</a></h2>
-<p><strong>MongoDB</strong> es el gestor documental más usado. Sus documentos se almacenan en <strong>BSON</strong> (una versión binaria de JSON), y su identificador es un <code>ObjectId</code> — alfanumérico, no un número autoincremental como los que has usado hasta ahora en PostgreSQL. Se organiza en niveles: servidor → bases de datos → colecciones → documentos.</p>
-<p>Un documento de ejemplo, y su consulta equivalente en <code>mongosh</code> (la consola de MongoDB, análoga a <code>psql</code>):</p>
+<p>Así se ve en la práctica: dos documentos reales dentro de la misma colección <code>nota_lectura</code> (el ejemplo que vas a construir en este tema), con estructura distinta entre sí — el segundo tiene un campo (<code>comentario</code>) que el primero ni siquiera necesita:</p>
 <div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span>
-<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// Un documento</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">),</span><span class="w"> </span><span class="s2">"titulo"</span><span class="o">:</span><span class="w"> </span><span class="s2">"El nombre del viento"</span><span class="p">,</span><span class="w"> </span><span class="s2">"puntuacion"</span><span class="o">:</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// El equivalente a un SELECT sencillo</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">resenas</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="s2">"titulo"</span><span class="o">:</span><span class="w"> </span><span class="s2">"El nombre del viento"</span><span class="w"> </span><span class="p">})</span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// Colección "nota_lectura"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">),</span><span class="w"> </span><span class="s2">"libroId"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"autor"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="s2">"puntuacion"</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">),</span><span class="w"> </span><span class="s2">"libroId"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"autor"</span><span class="o">:</span><span class="w"> </span><span class="s2">"javi"</span><span class="p">,</span><span class="w"> </span><span class="s2">"puntuacion"</span><span class="o">:</span><span class="w"> </span><span class="mf">9</span><span class="p">,</span><span class="w"> </span><span class="s2">"comentario"</span><span class="o">:</span><span class="w"> </span><span class="s2">"Me ha encantado el ritmo"</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Puesto al lado de lo que ya conoces, el contraste queda más claro en tabla que en prosa:</p>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Relacional</th>
+<th>JSONB (Tema 2)</th>
+<th>Documental (este tema)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estructura de fondo</td>
+<td>Tablas y filas</td>
+<td>Tabla, con una columna en formato JSON</td>
+<td>Ninguna tabla — todo es documento</td>
+</tr>
+<tr>
+<td>Columnas fijas</td>
+<td>Sí</td>
+<td>Sí, salvo la columna JSONB</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Claves foráneas</td>
+<td>Sí</td>
+<td>Sí</td>
+<td>No (relación lógica, gestionada a mano)</td>
+</tr>
+<tr>
+<td><code>JOIN</code></td>
+<td>Sí</td>
+<td>Sí</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>La diferencia clave con el JSONB del Tema 2: allí, el JSON era <strong>una columna</strong> dentro de una tabla relacional normal — aquí, <strong>todo</strong> es documento, no hay ninguna tabla por debajo.</p>
+<hr>
+<h2 id="que-es-mongodb">🍃 Qué es MongoDB<a class="headerlink" href="#que-es-mongodb" title="Permanent link">¶</a></h2>
+<p>Siguiendo con el ejemplo que llevamos trabajando toda la teoría: podríamos necesitar una base de datos documental para las notas de lectura de nuestra librería — cada nota de lectura es un documento independiente, sin relaciones fuertes que mantener entre ellas, con una forma que podría cambiar con el tiempo (más adelante volveremos sobre esto con más detalle). El motor documental que vas a usar para eso es <strong>MongoDB</strong>.</p>
+<p><strong>MongoDB</strong> es el gestor documental más usado. Sus documentos se almacenan en <strong>BSON</strong> (una versión binaria de JSON), y su identificador es un <code>ObjectId</code> — alfanumérico, no un número autoincremental como los que has usado hasta ahora en PostgreSQL. Se organiza en niveles: servidor → bases de datos → colecciones → documentos.</p>
+<pre class="mermaid"><code>flowchart TB
+    S["🖥️ Servidor MongoDB"] --&gt; D["🗄️ Base de datos&lt;br/&gt;(p. ej. libreria_db)"]
+    D --&gt; C1["📁 Colección&lt;br/&gt;nota_lectura"]
+    C1 --&gt; DOC1["📄 Documento"]
+    C1 --&gt; DOC2["📄 Documento"]
+    C1 --&gt; DOC3["📄 Documento"]</code></pre>
+<p>Un documento de ejemplo, y su consulta equivalente en <code>mongosh</code> (la consola de MongoDB, análoga a <code>psql</code>):</p>
+<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">// Un documento</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="p">{</span><span class="w"> </span><span class="s2">"_id"</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">),</span><span class="w"> </span><span class="s2">"libroId"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"autor"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="s2">"puntuacion"</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1">// El equivalente a un SELECT sencillo</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="s2">"libroId"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 <p>Vale la pena verlo en esta forma cruda antes de que Spring lo esconda tras un repositorio.</p>
 <hr>
-<h2 id="cuando-encaja-lo-documental-intuicion">⚖️ Cuándo encaja lo documental (intuición)<a class="headerlink" href="#cuando-encaja-lo-documental-intuicion" title="Permanent link">¶</a></h2>
-<p>Datos autocontenidos, de estructura variable de un registro a otro: bien. Relaciones fuertes entre entidades y transacciones complejas que las involucren: mejor relacional. Profundizarás en esta comparación en el siguiente apartado — de momento, quédate con la intuición.</p>
+<h2 id="cuando-encaja-lo-documental">⚖️ Cuándo encaja lo documental<a class="headerlink" href="#cuando-encaja-lo-documental" title="Permanent link">¶</a></h2>
+<p>Cuando los datos son autocontenidos y su estructura puede variar de un registro a otro sin que eso sea un problema —como una nota de lectura, que a veces lleva un comentario largo y a veces solo una puntuación— el modelo documental encaja bien: cada documento se guarda tal cual, sin forzarlo a una plantilla fija que todos los registros tengan que cumplir por igual. Cuando, en cambio, hay relaciones fuertes entre entidades que hay que mantener consistentes, y operaciones que necesitan modificar varias de ellas a la vez de forma atómica —como una venta que descuenta stock y genera una factura en la misma transacción—, el modelo relacional sigue siendo la opción más segura, porque es el que sabe garantizar esa consistencia de forma nativa, con claves foráneas y transacciones reales.</p>
+<p>Profundizarás en esta comparación, con más detalle y más casos concretos, en el siguiente apartado.</p>
 <hr>
-<h2 id="un-ejemplo-completo-las-resenas-de-la-libreria">📚 Un ejemplo completo: las reseñas de la librería<a class="headerlink" href="#un-ejemplo-completo-las-resenas-de-la-libreria" title="Permanent link">¶</a></h2>
+<h2 id="un-ejemplo-completo-las-notas-de-lectura-de-la-libreria">📚 Un ejemplo completo: las notas de lectura de la librería<a class="headerlink" href="#un-ejemplo-completo-las-notas-de-lectura-de-la-libreria" title="Permanent link">¶</a></h2>
 <h3 id="por-que-dos-bases-de-datos-distintas">Por qué dos bases de datos distintas<a class="headerlink" href="#por-que-dos-bases-de-datos-distintas" title="Permanent link">¶</a></h3>
-<p>Siguiendo con la librería: el catálogo (<code>Libro</code>/<code>Editorial</code>) vive en PostgreSQL — relaciones claras, necesidad de transacciones ACID fuertes. Pero imagina que ahora los lectores pueden dejar <strong>reseñas</strong> de los libros: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar con el tiempo. Eso encaja mejor en <strong>MongoDB</strong>. Usar dos motores a la vez es una decisión de arquitectura habitual, no una moda — cada uno se usa donde encaja mejor.</p>
-<h3 id="la-entidad-resena">La entidad <code>Resena</code><a class="headerlink" href="#la-entidad-resena" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-1-10">10</a></span>
-<span class="normal"><a href="#__codelineno-1-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nd">@Document</span><span class="p">(</span><span class="n">collection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"resena"</span><span class="p">)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Resena</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nd">@Id</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">// alfanumérico, tipo ObjectId — no un Long autogenerado</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">;</span><span class="w"> </span><span class="c1">// relación "lógica" con el catálogo en PostgreSQL</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">;</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">;</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>@Document(collection = "resena")</code> es el equivalente Mongo de <code>@Entity</code>/<code>@Table</code> — declara en qué colección vive. El <code>@Id</code> es <code>String</code>, no <code>Long</code>: en Mongo los identificadores son alfanuméricos por naturaleza (<code>ObjectId</code>), a diferencia del autoincremental que has usado siempre en PostgreSQL.</p>
-<div class="admonition warning">
-<p class="admonition-title"><code>libroId</code> no es una clave foránea real</p>
-<p>Aunque el campo se llame <code>libroId</code> y apunte conceptualmente a un <code>Libro</code> de PostgreSQL, <strong>no hay ninguna integridad referencial automática</strong> entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.</p>
-</div>
-<h3 id="el-repositorio-con-naming-de-metodo-igual-que-en-jpa">El repositorio, con naming de método (igual que en JPA)<a class="headerlink" href="#el-repositorio-con-naming-de-metodo-igual-que-en-jpa" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ResenaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">Resena</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Resena</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>Spring Data también genera consultas automáticas por el nombre del método en MongoDB, exactamente igual que hacía <code>JpaRepository</code> en el Tema 1 — sin que escribas una sola query explícita.</p>
-<h3 id="el-patron-de-integridad-referencial-manual">El patrón de "integridad referencial manual"<a class="headerlink" href="#el-patron-de-integridad-referencial-manual" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span>
-<span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span>
-<span class="normal"><a href="#__codelineno-3-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">ResenaResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="c1">// 1. Verificamos que el libro exista en PostgreSQL antes de buscar sus reseñas</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">libroId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado en el catálogo"</span><span class="p">);</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="c1">// 2. Buscamos en MongoDB y mapeamos</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">resenaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">).</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">).</span><span class="na">toList</span><span class="p">();</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>Este es el patrón central de este apartado: como Mongo no puede validar una clave foránea hacia una tabla de PostgreSQL, el propio código de la aplicación tiene que hacerlo — comprobando primero contra PostgreSQL (<code>existsById</code>, Spring Data JPA) antes de tocar Mongo.</p>
-<h3 id="una-agregacion-sencilla-en-memoria">Una agregación sencilla, en memoria<a class="headerlink" href="#una-agregacion-sencilla-en-memoria" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span>
-<span class="normal"><a href="#__codelineno-4-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResenaResumenDTO</span><span class="w"> </span><span class="nf">getResumenByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Resena</span><span class="o">&gt;</span><span class="w"> </span><span class="n">resenas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">);</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">totalResenas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenas</span><span class="p">.</span><span class="na">size</span><span class="p">();</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resenas</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">Resena</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">).</span><span class="na">average</span><span class="p">().</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResenaResumenDTO</span><span class="p">(</span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">totalResenas</span><span class="p">,</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">);</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>getResumenByLibroId</code> calcula el total y la media de puntuación <strong>en memoria</strong>, con streams de Java, tras traer todos los documentos de Mongo — no usa el framework de agregación nativo de Mongo (<code>$group</code>, <code>$avg</code>). Es una simplificación deliberada: funciona bien con pocos documentos por libro, y queda como posible mejora si algún día hubiera muchísimas reseñas por consultar.</p>
+<p>Siguiendo con la librería: el catálogo (<code>Libro</code>/<code>Editorial</code>) vive en PostgreSQL — relaciones claras, necesidad de transacciones fuertes. Pero imagina que ahora los lectores pueden escribir <strong>notas de lectura</strong> sobre los libros: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar con el tiempo. Eso encaja mejor en <strong>MongoDB</strong>. Usar dos motores a la vez es una decisión de arquitectura habitual, no una moda — cada uno se usa donde encaja mejor:</p>
+<pre class="mermaid"><code>flowchart LR
+    APP["🖥️ Tu aplicación Spring Boot"]
+    APP --&gt;|"Spring Data JPA"| PG[("🐘 PostgreSQL&lt;br/&gt;Libro, Editorial")]
+    APP --&gt;|"Spring Data MongoDB"| MDB[("🍃 MongoDB&lt;br/&gt;NotaLectura")]</code></pre>
+<p>La misma aplicación habla con los dos motores a la vez, cada uno a través de su propio Spring Data — no hay ningún puente automático entre ellos, y esa ausencia de puente es precisamente lo que vas a tener que resolver tú mismo en el resto de este apartado.</p>
 <h3 id="establecer-la-conexion">Establecer la conexión<a class="headerlink" href="#establecer-la-conexion" title="Permanent link">¶</a></h3>
-<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nt">&lt;dependency&gt;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-mongodb<span class="nt">&lt;/artifactId&gt;</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nt">&lt;/dependency&gt;</span>
+<p>Antes de escribir ninguna entidad ni repositorio, tu aplicación necesita saber cómo llegar a MongoDB — exactamente igual que necesitó saber cómo llegar a PostgreSQL antes de poder usar <code>@Entity</code>. Una dependencia nueva en el <code>pom.xml</code>:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-mongodb<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nt">spring</span><span class="p">:</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span><span class="nt">mongodb</span><span class="p">:</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongodb://localhost:27017/libreria_db</span>
+<p>Y la propiedad de conexión, en <code>application-dev.yaml</code>:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">mongodb</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongodb://localhost:27017/libreria_db</span>
 </code></pre></div></td></tr></table></div>
 <div class="admonition warning">
 <p class="admonition-title">La propiedad real es <code>spring.mongodb.uri</code>, no <code>spring.data.mongodb.uri</code></p>
 <p>Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, <code>mongodb</code> cuelga directamente de <code>spring</code>, no de <code>spring.data</code>. Comprueba siempre tu <code>application-dev.yaml</code> antes de dar por buena una propiedad.</p>
 </div>
-<p>En paralelo al <code>datasource</code> de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB.</p>
+<p>En paralelo al <code>datasource</code> de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB. Con esto ya montado, puedes pasar a escribir la primera entidad.</p>
+<h3 id="la-entidad-notalectura">La entidad <code>NotaLectura</code><a class="headerlink" href="#la-entidad-notalectura" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nd">@Document</span><span class="p">(</span><span class="n">collection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"nota_lectura"</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">NotaLectura</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="nd">@Id</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">// alfanumérico, tipo ObjectId — no un Long autogenerado</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">;</span><span class="w"> </span><span class="c1">// relación "lógica" con el catálogo en PostgreSQL</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>@Document(collection = "nota_lectura")</code> es el equivalente Mongo de <code>@Entity</code>/<code>@Table</code> — declara en qué colección vive. El <code>@Id</code> es <code>String</code>, no <code>Long</code>: en Mongo los identificadores son alfanuméricos por naturaleza (<code>ObjectId</code>), a diferencia del autoincremental que has usado siempre en PostgreSQL.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>libroId</code> no es una clave foránea real</p>
+<p>Aunque el campo se llame <code>libroId</code> y apunte conceptualmente a un <code>Libro</code> de PostgreSQL, <strong>no hay ninguna integridad referencial automática</strong> entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.</p>
+</div>
+<h3 id="el-repositorio-con-naming-de-metodo-igual-que-en-jpa">El repositorio, con naming de método (igual que en JPA)<a class="headerlink" href="#el-repositorio-con-naming-de-metodo-igual-que-en-jpa" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Spring Data también genera consultas automáticas por el nombre del método en MongoDB, exactamente igual que hacía <code>JpaRepository</code> en el Tema 1 — sin que escribas una sola query explícita.</p>
+<h3 id="el-patron-de-integridad-referencial-manual">El patrón de "integridad referencial manual"<a class="headerlink" href="#el-patron-de-integridad-referencial-manual" title="Permanent link">¶</a></h3>
+<p>El método de más abajo devuelve <code>NotaLecturaResponseDTO</code>, un <code>record</code> con el mismo patrón de siempre — nada nuevo que explicar en este, a diferencia de los DTOs de creación que verás en el siguiente apartado:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">NotaLecturaResponseDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span>
+<span class="normal"><a href="#__codelineno-7-6">6</a></span>
+<span class="normal"><a href="#__codelineno-7-7">7</a></span>
+<span class="normal"><a href="#__codelineno-7-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLecturaResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">    </span><span class="c1">// 1. Verificamos que el libro exista en PostgreSQL antes de buscar sus notas de lectura</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">libroId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Libro no encontrado en el catálogo"</span><span class="p">);</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="c1">// 2. Buscamos en MongoDB y mapeamos</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">).</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">).</span><span class="na">toList</span><span class="p">();</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Este es el patrón central de este apartado: como Mongo no puede validar una clave foránea hacia una tabla de PostgreSQL, el propio código de la aplicación tiene que hacerlo — comprobando primero contra PostgreSQL (<code>existsById</code>, Spring Data JPA) antes de tocar Mongo. Así se ve el flujo completo, con los dos motores implicados y las dos posibles salidas:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Cliente
+    participant S as Service
+    participant PG as PostgreSQL
+    participant M as MongoDB
+
+    C-&gt;&gt;S: findByLibroId(libroId)
+    S-&gt;&gt;PG: existsById(libroId)
+    alt El libro no existe
+        PG--&gt;&gt;S: false
+        S--&gt;&gt;C: 404 Not Found
+    else El libro existe
+        PG--&gt;&gt;S: true
+        S-&gt;&gt;M: findByLibroId(libroId)
+        M--&gt;&gt;S: notas de lectura encontradas
+        S--&gt;&gt;C: lista de NotaLecturaResponseDTO
+    end</code></pre>
+<p>Fíjate en el orden: <strong>primero</strong> PostgreSQL, y solo si responde que sí, se llega a tocar Mongo — si lo hicieras al revés (consultar Mongo primero), estarías haciendo una consulta de más en el caso, nada raro, de que el libro no exista.</p>
+<p>Este método, igual que el resto de este apartado, vive en <code>NotaLecturaService</code>. No hace falta que veas el controller que lo expone: se construye con el mismo patrón de siempre — un <code>@RestController</code> con <code>@RequiredArgsConstructor</code> que inyecta el service y delega en él, igual que ya has hecho con <code>Libro</code>/<code>Editorial</code>.</p>
+<h3 id="crear-una-nota-de-lectura-con-el-autor-protegido">Crear una nota de lectura, con el autor protegido<a class="headerlink" href="#crear-una-nota-de-lectura-con-el-autor-protegido" title="Permanent link">¶</a></h3>
+<p>Falta la otra mitad: cómo se crea una nota de lectura nueva. Aquí aparece algo que no te hacía falta con <code>Libro</code>/<code>Editorial</code>: el campo <code>autor</code> no puede venir del cliente en el cuerpo de la petición — si lo dejaras, cualquiera podría escribir el nombre de otra persona y hacerse pasar por ella. Por eso el DTO que valida lo que manda el cliente y el objeto que de verdad se usa para crear el documento no son el mismo:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">NotaLecturaRequestDTO</span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">        </span><span class="nd">@Min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nd">@Max</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">NotaLecturaCreateDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>NotaLecturaRequestDTO</code> es literalmente lo único que el cliente controla: la puntuación y el comentario, con sus validaciones de siempre. <code>NotaLecturaCreateDTO</code> añade los dos campos que decide el servidor: <code>libroId</code> (que llega por la URL, no por el cuerpo) y <code>autor</code>. Así se juntan los dos, en el controller:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span>
+<span class="normal"><a href="#__codelineno-9-6">6</a></span>
+<span class="normal"><a href="#__codelineno-9-7">7</a></span>
+<span class="normal"><a href="#__codelineno-9-8">8</a></span>
+<span class="normal"><a href="#__codelineno-9-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="nd">@PostMapping</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">NotaLecturaResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">        </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">NotaLecturaRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">        </span><span class="n">Principal</span><span class="w"> </span><span class="n">principal</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">    </span><span class="n">NotaLecturaCreateDTO</span><span class="w"> </span><span class="n">createDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotaLecturaCreateDTO</span><span class="p">(</span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">principal</span><span class="p">.</span><span class="na">getName</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">notaLecturaService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">createDTO</span><span class="p">));</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>Principal</code> es una interfaz estándar de Java — Spring te la entrega ya rellena como parámetro del controller, sin que tengas que pedirla ni construirla tú mismo:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant C as Cliente
+    participant F as Filtro JWT
+    participant SC as SecurityContextHolder
+    participant Ctrl as Tu controller
+
+    C-&gt;&gt;F: Petición con el token
+    F-&gt;&gt;F: Valida el token
+    F-&gt;&gt;SC: Guarda la identidad
+    Note over SC: Disponible durante toda la petición
+    Ctrl-&gt;&gt;SC: Pide un Principal
+    SC--&gt;&gt;Ctrl: Entrega la identidad guardada
+    Ctrl-&gt;&gt;Ctrl: getName da el username</code></pre>
+<p>Por debajo es el mismo <code>Authentication</code> que el filtro JWT que ya construiste en PSP (Actividad 2.4) guarda al validar el token — <code>Principal</code> es, simplemente, esa misma identidad. <code>principal.getName()</code> te da directamente el <code>username</code>, el mismo que ya usas en tu <code>/me</code> de PSP.</p>
+<p>El controller combina eso (<code>autor</code>, decidido por el servidor) con lo que sí manda el cliente (<code>puntuacion</code>, <code>comentario</code>) para construir el <code>NotaLecturaCreateDTO</code> completo, antes de pasárselo al service.</p>
+<h3 id="una-agregacion-sencilla-en-memoria">Una agregación sencilla, en memoria<a class="headerlink" href="#una-agregacion-sencilla-en-memoria" title="Permanent link">¶</a></h3>
+<p>Junto al listado de notas de lectura, tiene sentido ofrecer también un resumen: cuántas tiene un libro y cuál es su puntuación media. Este método se añade al mismo <code>NotaLecturaService</code>, y se expone igual que el anterior — un controller que lo llama, sin nada nuevo que mostrar ahí:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span>
+<span class="normal"><a href="#__codelineno-10-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kd">public</span><span class="w"> </span><span class="n">NotaLecturaResumenDTO</span><span class="w"> </span><span class="nf">getResumenByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="n">notasLectura</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">);</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">totalNotas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notasLectura</span><span class="p">.</span><span class="na">size</span><span class="p">();</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notasLectura</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">NotaLectura</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">).</span><span class="na">average</span><span class="p">().</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotaLecturaResumenDTO</span><span class="p">(</span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">totalNotas</span><span class="p">,</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>getResumenByLibroId</code> calcula el total y la media de puntuación <strong>en memoria</strong>, con streams de Java, tras traer todos los documentos de Mongo — no usa el framework de agregación nativo de Mongo (<code>$group</code>, <code>$avg</code>). Es una simplificación deliberada, con un compromiso claro entre ambos enfoques:</p>
+<table>
+<thead>
+<tr>
+<th>Enfoque</th>
+<th>Cómo funciona</th>
+<th>Cuándo conviene</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>En memoria (streams de Java)</td>
+<td>Trae todos los documentos a la aplicación y calcula con <code>.stream()</code></td>
+<td>Pocos documentos por libro — simple de escribir y de entender</td>
+</tr>
+<tr>
+<td>Framework de agregación de Mongo (<code>$group</code>, <code>$avg</code>)</td>
+<td>El cálculo lo hace el propio motor, sin traer todos los documentos</td>
+<td>Muchos documentos — más eficiente, pero la consulta es más compleja de escribir</td>
+</tr>
+</tbody>
+</table>
+<p>Para este curso, con pocas notas de lectura por libro, la primera opción es más que suficiente. Si algún día hubiera muchísimas notas de lectura por consultar, la mejora sería sustituir este cálculo en memoria por una consulta con el framework de agregación nativo de Mongo (<code>$group</code>/<code>$avg</code>): el motor calcularía el total y la media directamente sobre los documentos, sin necesidad de traerlos todos a la aplicación primero.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
@@ -3203,7 +3379,7 @@
 <li><strong>NoSQL</strong> abandona tablas/filas/SQL; las bases <strong>documentales</strong> (MongoDB) son una de varias familias (clave-valor, columnares, de grafos).</li>
 <li>Un <strong>documento</strong> es un objeto autocontenido; una <strong>colección</strong> los agrupa sin esquema fijo — nada de tablas ni <code>JOIN</code>.</li>
 <li>MongoDB usa BSON y <code>ObjectId</code> (alfanumérico) como identificador — distinto del <code>Long</code> autoincremental de JPA.</li>
-<li><code>libroId</code> en <code>Resena</code> es una relación <strong>lógica</strong>, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.</li>
+<li><code>libroId</code> en <code>NotaLectura</code> es una relación <strong>lógica</strong>, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.</li>
 <li>El patrón de <strong>integridad referencial manual</strong>: el código comprueba en PostgreSQL antes de tocar Mongo, porque el motor no puede hacerlo por sí solo.</li>
 <li>La propiedad real de conexión es <code>spring.mongodb.uri</code> (no <code>spring.data.mongodb.uri</code>).</li>
 </ul>

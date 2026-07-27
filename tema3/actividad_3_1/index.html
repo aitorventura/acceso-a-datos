@@ -2271,9 +2271,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-la-entidad-review-y-su-repositorio" class="md-nav__link">
+  <a href="#paso-2-la-entidad-review-su-repositorio-y-sus-dtos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — La entidad Review y su repositorio
+      Paso 2 — La entidad Review, su repositorio y sus DTOs
     </span>
   </a>
   
@@ -2298,9 +2298,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-el-endpoint-de-resumen" class="md-nav__link">
+  <a href="#paso-5-el-endpoint-de-resumen" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — el endpoint de resumen
+      Paso 5 — El endpoint de resumen
     </span>
   </a>
   
@@ -2930,9 +2930,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-la-entidad-review-y-su-repositorio" class="md-nav__link">
+  <a href="#paso-2-la-entidad-review-su-repositorio-y-sus-dtos" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — La entidad Review y su repositorio
+      Paso 2 — La entidad Review, su repositorio y sus DTOs
     </span>
   </a>
   
@@ -2957,9 +2957,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-el-endpoint-de-resumen" class="md-nav__link">
+  <a href="#paso-5-el-endpoint-de-resumen" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — el endpoint de resumen
+      Paso 5 — El endpoint de resumen
     </span>
   </a>
   
@@ -3016,30 +3016,19 @@
 <hr>
 <h2 id="paso-1-mongodb-en-tu-proyecto">Paso 1 — MongoDB en tu proyecto<a class="headerlink" href="#paso-1-mongodb-en-tu-proyecto" title="Permanent link">¶</a></h2>
 <p>Añade el servicio a <code>.devcontainer/docker-compose.yml</code> — el mismo fichero que ya tienes desde la Actividad 1.1, junto a <code>app</code> y <code>postgres</code>:</p>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="c1"># ... tus servicios app y postgres ya existentes ...</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">mongodb</span><span class="p">:</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongo:8</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"27017:27017"</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongo_data:/data/db</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="nt">volumes</span><span class="p">:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">  </span><span class="nt">mongo_data</span><span class="p">:</span>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="w">  </span><span class="nt">mongodb</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongo:8</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"27017:27017"</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongo_data:/data/db</span>
 </code></pre></div></td></tr></table></div>
+<p>Añade el nuevo servicio dentro de <code>services:</code>, junto a los que ya tienes, y <code>mongo_data:</code> como una entrada más dentro de <code>volumes:</code>.</p>
 <p>En tu <code>pom.xml</code>:</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
@@ -3057,9 +3046,10 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongodb://mongodb:27017/gamevault_db</span>
 </code></pre></div></td></tr></table></div>
 <p>Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: <code>mongodb</code> es el nombre del servicio, no <code>localhost</code> — tu aplicación sigue corriendo dentro del contenedor <code>app</code>, y <code>mongodb</code> es ahora un tercer contenedor hermano en la misma red.</p>
-<p>Levanta el servicio nuevo desde la terminal integrada — comprueba primero el nombre real de tu proyecto con <code>docker compose ls</code> (no siempre es <code>gamevault_devcontainer</code>, depende de tu editor) y sustitúyelo en <code>docker compose -f .devcontainer/docker-compose.yml -p &lt;proyecto&gt; up -d mongodb</code> — y reinicia tu aplicación. Si prefieres, también puedes hacer <strong>"Dev Containers: Rebuild Container"</strong> desde la paleta de comandos, que relee el <code>docker-compose.yml</code> completo y levanta el servicio nuevo por ti.</p>
+<p>Reconstruye o reinicia tu Dev Container desde tu editor para que levante también el nuevo servicio.</p>
 <hr>
-<h2 id="paso-2-la-entidad-review-y-su-repositorio">Paso 2 — La entidad <code>Review</code> y su repositorio<a class="headerlink" href="#paso-2-la-entidad-review-y-su-repositorio" title="Permanent link">¶</a></h2>
+<h2 id="paso-2-la-entidad-review-su-repositorio-y-sus-dtos">Paso 2 — La entidad <code>Review</code>, su repositorio y sus DTOs<a class="headerlink" href="#paso-2-la-entidad-review-su-repositorio-y-sus-dtos" title="Permanent link">¶</a></h2>
+<p>Las reseñas son una funcionalidad nueva y autocontenida, así que le toca su propio paquete: <code>reviews</code>, creado hoy. La entidad, en <code>src/main/java/com/tunombre/gamevault/reviews/Review.java</code>:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
@@ -3100,6 +3090,7 @@
 <a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">;</span>
 <a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>El repositorio, en el mismo paquete, <code>ReviewRepository.java</code>:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
 <span class="normal"><a href="#__codelineno-4-3">3</a></span>
@@ -3117,19 +3108,34 @@
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@Document(collection = "review")</code> es el equivalente Mongo de <code>@Entity</code>; el <code>@Id</code> es <code>String</code> porque en Mongo los identificadores son alfanuméricos. <code>findByVideojuegoId</code> se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.</p>
+<p>Los DTOs van en un subpaquete <code>dto</code>, igual que ya tienes en <code>catalogo</code> — <code>ReviewCreateDTO.java</code>, <code>ReviewRequestDTO.java</code>, <code>ReviewResponseDTO.java</code>, los tres en <code>src/main/java/com/tunombre/gamevault/reviews/dto/</code> (cada uno en su propio fichero, aunque aquí se muestren juntos por brevedad):</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.dto</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.validation.constraints.Min</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.validation.constraints.Max</span><span class="p">;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">jakarta.validation.constraints.NotBlank</span><span class="p">;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewCreateDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewRequestDTO</span><span class="p">(</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">        </span><span class="nd">@Min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nd">@Max</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewResponseDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
 <hr>
 <h2 id="paso-3-integridad-referencial-manual-guiada-al-completo">Paso 3 — Integridad referencial manual, guiada al completo<a class="headerlink" href="#paso-3-integridad-referencial-manual-guiada-al-completo" title="Permanent link">¶</a></h2>
-<p>Antes de usarlo desde <code>reviews</code>, crea el pequeño componente que va a permitir esa comprobación sin que <code>reviews</code> conozca nada del paquete <code>catalogo</code> por dentro — una interfaz en <code>catalogo.api</code> y su implementación oculta en <code>catalogo</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.api</span><span class="p">;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">CatalogoConsultaService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeVideojuego</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">);</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
+<p>Antes de devolver las reseñas de un videojuego, comprueba primero que ese videojuego existe de verdad en PostgreSQL — si no, no tiene sentido ni mirar en Mongo. <code>ReviewService</code>, en <code>src/main/java/com/tunombre/gamevault/reviews/ReviewService.java</code>, inyecta directamente <code>VideojuegoRepository</code>, del paquete <code>catalogo</code>:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
@@ -3146,26 +3152,48 @@
 <span class="normal"><a href="#__codelineno-6-14">14</a></span>
 <span class="normal"><a href="#__codelineno-6-15">15</a></span>
 <span class="normal"><a href="#__codelineno-6-16">16</a></span>
-<span class="normal"><a href="#__codelineno-6-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo</span><span class="p">;</span>
+<span class="normal"><a href="#__codelineno-6-17">17</a></span>
+<span class="normal"><a href="#__codelineno-6-18">18</a></span>
+<span class="normal"><a href="#__codelineno-6-19">19</a></span>
+<span class="normal"><a href="#__codelineno-6-20">20</a></span>
+<span class="normal"><a href="#__codelineno-6-21">21</a></span>
+<span class="normal"><a href="#__codelineno-6-22">22</a></span>
+<span class="normal"><a href="#__codelineno-6-23">23</a></span>
+<span class="normal"><a href="#__codelineno-6-24">24</a></span>
+<span class="normal"><a href="#__codelineno-6-25">25</a></span>
+<span class="normal"><a href="#__codelineno-6-26">26</a></span>
+<span class="normal"><a href="#__codelineno-6-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews</span><span class="p">;</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.api.CatalogoConsultaService</span><span class="p">;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.RequiredArgsConstructor</span><span class="p">;</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="nd">@Service</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">CatalogoConsultaService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.VideojuegoRepository</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.dto.ReviewResponseDTO</span><span class="p">;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.RequiredArgsConstructor</span><span class="p">;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.HttpStatus</span><span class="p">;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.server.ResponseStatusException</span><span class="p">;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12"></a>
-<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="w">    </span><span class="nd">@Override</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeVideojuego</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">);</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="nd">@Service</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewRepository</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16"></a>
+<a id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Videojuego no encontrado en el catálogo"</span><span class="p">);</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">findByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">).</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">).</span><span class="na">toList</span><span class="p">();</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23"></a>
+<a id="__codelineno-6-24" name="__codelineno-6-24"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Review</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getVideojuegoId</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getAutor</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getPuntuacion</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getComentario</span><span class="p">());</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Fíjate en dos detalles deliberados: la interfaz vive en <code>catalogo.api</code> (un paquete pensado para lo que otros módulos SÍ pueden ver), mientras que <code>CatalogoConsultaServiceImpl</code> no lleva el modificador <code>public</code> — es <em>package-private</em>, invisible fuera de <code>catalogo</code>. El módulo <code>reviews</code> va a depender solo de la interfaz, sin saber nada de cómo está implementada por dentro. Vas a profundizar en por qué esto importa en el Tema 4 — de momento, réplicalo tal cual.</p>
-<p>Ahora sí, el service de <code>reviews</code> que lo usa:</p>
+<p><strong>Pregunta de comprensión</strong>: apoyándote en el diagrama de secuencia de la teoría, ¿por qué esta comprobación (<code>existsById</code>) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?</p>
+<hr>
+<h2 id="paso-4-el-post-de-resenas-guiado">Paso 4 — El <code>POST</code> de reseñas, guiado<a class="headerlink" href="#paso-4-el-post-de-resenas-guiado" title="Permanent link">¶</a></h2>
+<p>Añade el método <code>create</code> a <code>ReviewService</code>, reutilizando la misma comprobación que ya conoces del Paso 3:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
@@ -3177,166 +3205,147 @@
 <span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-7-10">10</a></span>
 <span class="normal"><a href="#__codelineno-7-11">11</a></span>
-<span class="normal"><a href="#__codelineno-7-12">12</a></span>
-<span class="normal"><a href="#__codelineno-7-13">13</a></span>
-<span class="normal"><a href="#__codelineno-7-14">14</a></span>
-<span class="normal"><a href="#__codelineno-7-15">15</a></span>
-<span class="normal"><a href="#__codelineno-7-16">16</a></span>
-<span class="normal"><a href="#__codelineno-7-17">17</a></span>
-<span class="normal"><a href="#__codelineno-7-18">18</a></span>
-<span class="normal"><a href="#__codelineno-7-19">19</a></span>
-<span class="normal"><a href="#__codelineno-7-20">20</a></span>
-<span class="normal"><a href="#__codelineno-7-21">21</a></span>
-<span class="normal"><a href="#__codelineno-7-22">22</a></span>
-<span class="normal"><a href="#__codelineno-7-23">23</a></span>
-<span class="normal"><a href="#__codelineno-7-24">24</a></span>
-<span class="normal"><a href="#__codelineno-7-25">25</a></span>
-<span class="normal"><a href="#__codelineno-7-26">26</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews</span><span class="p">;</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.catalogo.api.CatalogoConsultaService</span><span class="p">;</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lombok.RequiredArgsConstructor</span><span class="p">;</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.HttpStatus</span><span class="p">;</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Service</span><span class="p">;</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.server.ResponseStatusException</span><span class="p">;</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9"></a>
-<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="nd">@Service</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewRepository</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">;</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">CatalogoConsultaService</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">;</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15"></a>
-<a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByVideojuegoId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Videojuego no encontrado en el catálogo"</span><span class="p">);</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">findByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">).</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="k">this</span><span class="p">::</span><span class="n">mapToDTO</span><span class="p">).</span><span class="na">toList</span><span class="p">();</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-7-22" name="__codelineno-7-22"></a>
-<a id="__codelineno-7-23" name="__codelineno-7-23"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">mapToDTO</span><span class="p">(</span><span class="n">Review</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-24" name="__codelineno-7-24"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getVideojuegoId</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getAutor</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getPuntuacion</span><span class="p">(),</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="na">getComentario</span><span class="p">());</span>
-<a id="__codelineno-7-25" name="__codelineno-7-25"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-7-26" name="__codelineno-7-26"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">// En ReviewService</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">ReviewCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"No puedes reseñar un juego que no existe en el catálogo"</span><span class="p">);</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="n">Review</span><span class="w"> </span><span class="n">review</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Review</span><span class="p">();</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setVideojuegoId</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setAutor</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">autor</span><span class="p">());</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setPuntuacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">());</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setComentario</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">review</span><span class="p">));</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Pregunta de comprensión</strong>: ¿por qué esta comprobación (<code>existeVideojuego</code>) no la puede hacer MongoDB por sí solo, como sí haría PostgreSQL con una clave foránea real?</p>
-<hr>
-<h2 id="paso-4-el-post-de-resenas-guiado">Paso 4 — El <code>POST</code> de reseñas, guiado<a class="headerlink" href="#paso-4-el-post-de-resenas-guiado" title="Permanent link">¶</a></h2>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
-<span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span>
-<span class="normal"><a href="#__codelineno-8-4">4</a></span>
-<span class="normal"><a href="#__codelineno-8-5">5</a></span>
-<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewCreateDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewRequestDTO</span><span class="p">(</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">        </span><span class="nd">@jakarta.validation.constraints.Min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nd">@jakarta.validation.constraints.Max</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">        </span><span class="nd">@jakarta.validation.constraints.NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewResponseDTO</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<p>Y el controller, también en <code>reviews</code> — <code>src/main/java/com/tunombre/gamevault/reviews/VideojuegoReviewController.java</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span>
+<span class="normal"><a href="#__codelineno-8-29">29</a></span>
+<span class="normal"><a href="#__codelineno-8-30">30</a></span>
+<span class="normal"><a href="#__codelineno-8-31">31</a></span>
+<span class="normal"><a href="#__codelineno-8-32">32</a></span>
+<span class="normal"><a href="#__codelineno-8-33">33</a></span>
+<span class="normal"><a href="#__codelineno-8-34">34</a></span>
+<span class="normal"><a href="#__codelineno-8-35">35</a></span>
+<span class="normal"><a href="#__codelineno-8-36">36</a></span>
+<span class="normal"><a href="#__codelineno-8-37">37</a></span>
+<span class="normal"><a href="#__codelineno-8-38">38</a></span>
+<span class="normal"><a href="#__codelineno-8-39">39</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews</span><span class="p">;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io.swagger.v3.oas.annotations.Operation</span><span class="p">;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io.swagger.v3.oas.annotations.responses.ApiResponse</span><span class="p">;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io.swagger.v3.oas.annotations.responses.ApiResponses</span><span class="p">;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="nd">@RestController</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/videojuegos/{videojuegoId}/reviews"</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoReviewController</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">    </span><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Listar las reseñas de un videojuego"</span><span class="p">)</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="w">    </span><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Listado obtenido correctamente"</span><span class="p">),</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Videojuego no encontrado en el catálogo"</span><span class="p">)</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="w">    </span><span class="p">})</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="w">    </span><span class="nd">@GetMapping</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getByVideojuegoId</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">findByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">));</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23"></a><span class="w">    </span><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Crear una reseña para un videojuego"</span><span class="p">)</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24"></a><span class="w">    </span><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"201"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña creada correctamente"</span><span class="p">),</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"400"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Puntuación o comentario inválidos"</span><span class="p">),</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"401"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No autenticado"</span><span class="p">),</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28"></a><span class="w">            </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Videojuego no encontrado en el catálogo"</span><span class="p">)</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29"></a><span class="w">    </span><span class="p">})</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30"></a><span class="w">    </span><span class="nd">@PostMapping</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32"></a><span class="w">            </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33"></a><span class="w">            </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34"></a><span class="w">            </span><span class="n">Principal</span><span class="w"> </span><span class="n">principal</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36"></a><span class="w">        </span><span class="n">ReviewCreateDTO</span><span class="w"> </span><span class="n">createDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ReviewCreateDTO</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">principal</span><span class="p">.</span><span class="na">getName</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">createDTO</span><span class="p">));</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-9-10">10</a></span>
-<span class="normal"><a href="#__codelineno-9-11">11</a></span>
-<span class="normal"><a href="#__codelineno-9-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1">// En ReviewService</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">ReviewCreateDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"No puedes reseñar un juego que no existe en el catálogo"</span><span class="p">);</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span><span class="n">Review</span><span class="w"> </span><span class="n">review</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Review</span><span class="p">();</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setVideojuegoId</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">videojuegoId</span><span class="p">());</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setAutor</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">autor</span><span class="p">());</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setPuntuacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">());</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setComentario</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">review</span><span class="p">));</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-10-10">10</a></span>
-<span class="normal"><a href="#__codelineno-10-11">11</a></span>
-<span class="normal"><a href="#__codelineno-10-12">12</a></span>
-<span class="normal"><a href="#__codelineno-10-13">13</a></span>
-<span class="normal"><a href="#__codelineno-10-14">14</a></span>
-<span class="normal"><a href="#__codelineno-10-15">15</a></span>
-<span class="normal"><a href="#__codelineno-10-16">16</a></span>
-<span class="normal"><a href="#__codelineno-10-17">17</a></span>
-<span class="normal"><a href="#__codelineno-10-18">18</a></span>
-<span class="normal"><a href="#__codelineno-10-19">19</a></span>
-<span class="normal"><a href="#__codelineno-10-20">20</a></span>
-<span class="normal"><a href="#__codelineno-10-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="nd">@RestController</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">"/api/v1/videojuegos/{videojuegoId}/reviews"</span><span class="p">)</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VideojuegoReviewController</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ReviewService</span><span class="w"> </span><span class="n">reviewService</span><span class="p">;</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6"></a>
-<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="nd">@GetMapping</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">getByVideojuegoId</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">findByVideojuegoId</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">));</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11"></a>
-<a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="w">    </span><span class="nd">@PostMapping</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">            </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">            </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">            </span><span class="n">Principal</span><span class="w"> </span><span class="n">principal</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">        </span><span class="n">ReviewCreateDTO</span><span class="w"> </span><span class="n">createDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ReviewCreateDTO</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">principal</span><span class="p">.</span><span class="na">getName</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">(),</span><span class="w"> </span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">status</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">).</span><span class="na">body</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">createDTO</span><span class="p">));</span>
-<a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p>Fíjate en que el autor <strong>no</strong> viaja en el cuerpo de la petición — se toma de <code>principal.getName()</code>, el usuario autenticado por el JWT que ya has construido en PSP.</p>
+<p>Fíjate en que el autor <strong>no</strong> viaja en el cuerpo de la petición — se toma de <code>principal.getName()</code>, el usuario autenticado por el JWT que ya has construido en PSP. Repasa el diagrama de secuencia de la teoría (petición → filtro JWT → <code>SecurityContextHolder</code> → tu controller) si no tienes claro de dónde sale exactamente ese <code>Principal</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Esta ruta todavía no existe en tu <code>SecurityConfig</code> — añádela ahora</p>
 <p>Las reseñas no existían en la Actividad 2.5 de PSP, así que no aparecen en tu política de rutas — y con <code>denyAll()</code> cerrando todo lo que no está listado explícitamente, <code>/api/v1/videojuegos/*/reviews</code> está bloqueada hasta que la añadas tú:
-</p><div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
-<span class="normal"><a href="#__codelineno-11-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">GET</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/**"</span><span class="p">).</span><span class="na">permitAll</span><span class="p">()</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">POST</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
+</p><div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">GET</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/**"</span><span class="p">).</span><span class="na">permitAll</span><span class="p">()</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">POST</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 <code>GET</code> queda pública, igual que el resto de lecturas del catálogo. <code>POST</code> exige estar autenticado, pero sin ningún rol concreto: quien puede escribir una reseña es cualquier usuario logueado, no solo <code>ADMIN</code> — la comprobación que de verdad importa aquí es <em>quién eres</em> (para guardarte como autor), no <em>qué rol tienes</em>.
 </div>
-<p>Ahora sí, prueba con tu token:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
-<span class="normal"><a href="#__codelineno-12-2">2</a></span>
-<span class="normal"><a href="#__codelineno-12-3">3</a></span>
-<span class="normal"><a href="#__codelineno-12-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 9, "comentario": "Excelente banda sonora"}'</span>
+<p>Ahora sí, prueba con tu token. Aquí tienes los comandos con <code>curl</code>, pero puedes hacer exactamente lo mismo desde Swagger UI si lo prefieres:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 9, "comentario": "Excelente banda sonora"}'</span>
 </code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: la respuesta del <code>POST</code>, con el <code>autor</code> ya relleno aunque no lo hayas mandado tú en el cuerpo.</p>
+<p>Consulta ahora el mismo videojuego con <code>GET</code>, para comprobar que la reseña que acabas de crear aparece en el listado:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>curl<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews
+</code></pre></div></td></tr></table></div>
+<p><strong>Captura</strong>: la respuesta del <code>GET</code>, con la reseña recién creada dentro de la lista.</p>
 <hr>
-<h2 id="mini-reto-el-endpoint-de-resumen">Mini-reto — el endpoint de resumen<a class="headerlink" href="#mini-reto-el-endpoint-de-resumen" title="Permanent link">¶</a></h2>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewResumenDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">totalReviews</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<h2 id="paso-5-el-endpoint-de-resumen">Paso 5 — El endpoint de resumen<a class="headerlink" href="#paso-5-el-endpoint-de-resumen" title="Permanent link">¶</a></h2>
+<p>Otro DTO más en <code>reviews/dto/</code>, <code>ReviewResumenDTO.java</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.reviews.dto</span><span class="p">;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ReviewResumenDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">totalReviews</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">puntuacionMedia</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
-<p>Sin más código dado, completa en <code>ReviewService</code> un método <code>getResumenByVideojuegoId(Long videojuegoId)</code> que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con <code>findByVideojuegoId</code>, y calcule con streams (<code>mapToInt(...).average()</code>) el total y la puntuación media. Expón el resultado en <code>GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen</code>.</p>
+<p>Sin más código dado, completa en <code>ReviewService</code> un método <code>getResumenByVideojuegoId(Long videojuegoId)</code> que: compruebe primero que el videojuego existe (mismo patrón que ya has usado dos veces), obtenga sus reseñas con <code>findByVideojuegoId</code>, y calcule con streams (<code>mapToInt(...).average()</code>) el total y la puntuación media. Expón el resultado en <code>GET /api/v1/videojuegos/{videojuegoId}/reviews/resumen</code>, documentado con <code>@Operation</code>/<code>@ApiResponses</code> igual que los otros dos endpoints del controller.</p>
+<p><strong>Captura</strong>: la respuesta de ese endpoint, con el total y la puntuación media ya calculados.</p>
 <hr>
 <h2 id="experimento-de-cierre-resenas-huerfanas">Experimento de cierre — reseñas huérfanas<a class="headerlink" href="#experimento-de-cierre-resenas-huerfanas" title="Permanent link">¶</a></h2>
 <p>Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span>
 </code></pre></div></td></tr></table></div>
 <p>(recuerda: <code>DELETE /api/v1/videojuegos/{id}</code> exige rol <code>ADMIN</code> desde la Actividad 2.5 de PSP)</p>
-<p>Consulta MongoDB directamente, desde la misma terminal integrada (gracias al <code>docker-outside-of-docker</code> de la Actividad 1.1). Comprueba primero el nombre real de tu proyecto con <code>docker compose ls</code> (no siempre es <code>gamevault_devcontainer</code>) y sustitúyelo por <code>&lt;proyecto&gt;</code>:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
-<span class="normal"><a href="#__codelineno-15-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>.devcontainer/docker-compose.yml<span class="w"> </span>-p<span class="w"> </span>&lt;proyecto&gt;<span class="w"> </span>ps
-<a id="__codelineno-15-2" name="__codelineno-15-2"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-mongo&gt;<span class="w"> </span>mongosh<span class="w"> </span>gamevault_db<span class="w"> </span>--eval<span class="w"> </span><span class="s2">"db.review.find({videojuegoId: &lt;id&gt;})"</span>
+<p>Consulta MongoDB directamente, desde la misma terminal integrada (gracias al <code>docker-outside-of-docker</code> de la Actividad 1.1). Busca el nombre de tu contenedor de Mongo con <code>docker ps</code> y sustitúyelo abajo:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-mongo&gt;<span class="w"> </span>mongosh<span class="w"> </span>gamevault_db<span class="w"> </span>--eval<span class="w"> </span><span class="s2">"db.review.find({videojuegoId: &lt;id&gt;})"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: las reseñas siguen ahí, apuntando a un <code>videojuegoId</code> que ya no existe en PostgreSQL — son <strong>reseñas huérfanas</strong>. Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.</p>
+<p><strong>Comprueba</strong>: las reseñas siguen ahí, apuntando a un <code>videojuegoId</code> que ya no existe en PostgreSQL — son <strong>reseñas huérfanas</strong>.</p>
+<p><strong>Captura</strong>: la salida de <code>mongosh</code> mostrando esas reseñas huérfanas.</p>
+<p>Describe el problema con tus palabras: ¿qué implicaciones tiene tener datos en Mongo que referencian algo que ya no existe en Postgres? Este es exactamente el problema que vas a abordar en la próxima actividad.</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
 <p>Tu GameVault ya habla con dos motores de base de datos distintos, con el patrón de integridad referencial manual resuelto. En la próxima actividad trabajas con colecciones explícitas y conectas el borrado en cascada de reseñas.</p></div>

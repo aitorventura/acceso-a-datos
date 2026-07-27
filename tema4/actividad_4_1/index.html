@@ -2606,18 +2606,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-1-relectura-guiada-por-preguntas" class="md-nav__link">
+  <a href="#paso-1-construye-el-componente" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Relectura guiada por preguntas
+      Paso 1 — Construye el componente
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-el-desacoplamiento-con-un-caso-concreto" class="md-nav__link">
+  <a href="#paso-2-preguntas-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — El desacoplamiento, con un caso concreto
+      Paso 2 — Preguntas de comprensión
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-el-desacoplamiento-con-un-caso-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — El desacoplamiento, con un caso concreto
     </span>
   </a>
   
@@ -2633,9 +2642,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-prueba-del-componente-aislado" class="md-nav__link">
+  <a href="#paso-4-prueba-del-componente-aislado" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Prueba del componente aislado
+      Paso 4 — Prueba del componente aislado
     </span>
   </a>
   
@@ -2912,18 +2921,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-1-relectura-guiada-por-preguntas" class="md-nav__link">
+  <a href="#paso-1-construye-el-componente" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 1 — Relectura guiada por preguntas
+      Paso 1 — Construye el componente
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-2-el-desacoplamiento-con-un-caso-concreto" class="md-nav__link">
+  <a href="#paso-2-preguntas-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 2 — El desacoplamiento, con un caso concreto
+      Paso 2 — Preguntas de comprensión
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-3-el-desacoplamiento-con-un-caso-concreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 — El desacoplamiento, con un caso concreto
     </span>
   </a>
   
@@ -2939,9 +2957,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-3-prueba-del-componente-aislado" class="md-nav__link">
+  <a href="#paso-4-prueba-del-componente-aislado" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 3 — Prueba del componente aislado
+      Paso 4 — Prueba del componente aislado
     </span>
   </a>
   
@@ -2984,27 +3002,35 @@
 <div><h1 id="actividad-41-catalogoconsultaservice-un-componente-reutilizable">🧪 Actividad 4.1: <code>CatalogoConsultaService</code> — un componente reutilizable<a class="headerlink" href="#actividad-41-catalogoconsultaservice-un-componente-reutilizable" title="Permanent link">¶</a></h1>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
-<p>Relees el componente que ya construiste en el Tema 3, esta vez bajo la óptica de "componente" de la teoría, y lo extiendes con un método nuevo siguiendo el mismo patrón.</p>
+<p>Desde la Actividad 3.1, <code>ReviewService</code> inyecta <code>VideojuegoRepository</code> directamente. Hoy resuelves ese acoplamiento construyendo tu primer componente con contrato explícito, siguiendo el patrón de la teoría, y lo extiendes con un método nuevo.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
-<li>Analizar críticamente por qué un componente ya construido está bien diseñado.</li>
+<li>Construir un componente con interfaz separada de su implementación oculta.</li>
 <li>Razonar sobre las consecuencias del desacoplamiento con un caso concreto.</li>
-<li>Extender un componente existente siguiendo su propio patrón.</li>
+<li>Extender un componente propio siguiendo su propio patrón.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Tu <code>CatalogoConsultaService</code>/<code>CatalogoConsultaServiceImpl</code> de la Actividad 3.1.</p>
+<p>Tu <code>ReviewService</code> de la Actividad 3.1, con <code>VideojuegoRepository</code> inyectado directamente — es exactamente el acoplamiento que vas a resolver hoy.</p>
 <hr>
-<h2 id="paso-1-relectura-guiada-por-preguntas">Paso 1 — Relectura guiada por preguntas<a class="headerlink" href="#paso-1-relectura-guiada-por-preguntas" title="Permanent link">¶</a></h2>
-<p>Abre tu propio código y responde, con el código delante:</p>
+<h2 id="paso-1-construye-el-componente">Paso 1 — Construye el componente<a class="headerlink" href="#paso-1-construye-el-componente" title="Permanent link">¶</a></h2>
+<p>Sin más código dado que el patrón de la teoría, crea:</p>
+<ol>
+<li>La interfaz <code>CatalogoConsultaService</code>, en un paquete nuevo <code>catalogo.api</code>, con un único método por ahora: <code>boolean existeVideojuego(Long videojuegoId)</code>.</li>
+<li><code>CatalogoConsultaServiceImpl</code> (package-private, anotada <code>@Service</code>) en <code>catalogo</code>, que implemente la interfaz reutilizando tu <code>VideojuegoRepository</code> ya existente.</li>
+<li>Modifica <code>ReviewService</code> para que inyecte <code>CatalogoConsultaService</code> (la interfaz) en lugar de <code>VideojuegoRepository</code> directamente, y actualiza las dos comprobaciones (<code>findByVideojuegoId</code> y <code>create</code>) para llamar a <code>existeVideojuego(...)</code>.</li>
+</ol>
+<hr>
+<h2 id="paso-2-preguntas-de-comprension">Paso 2 — Preguntas de comprensión<a class="headerlink" href="#paso-2-preguntas-de-comprension" title="Permanent link">¶</a></h2>
+<p>Con tu código recién escrito delante, responde:</p>
 <ol>
 <li>¿Por qué <code>CatalogoConsultaService</code> (la interfaz) vive en el paquete <code>catalogo.api</code>, y <code>CatalogoConsultaServiceImpl</code> no?</li>
 <li>¿Por qué <code>CatalogoConsultaServiceImpl</code> no lleva el modificador <code>public</code>? ¿Qué pasaría si lo añadieras — cambiaría algo en cómo funciona, o solo en qué es visible desde fuera del paquete?</li>
 <li>En <code>ReviewService</code>, ¿qué tipo declaras al inyectar esta dependencia — la interfaz <code>CatalogoConsultaService</code>, o la clase <code>CatalogoConsultaServiceImpl</code>? ¿Podrías, siquiera, declarar el tipo concreto desde otro paquete?</li>
 </ol>
 <hr>
-<h2 id="paso-2-el-desacoplamiento-con-un-caso-concreto">Paso 2 — El desacoplamiento, con un caso concreto<a class="headerlink" href="#paso-2-el-desacoplamiento-con-un-caso-concreto" title="Permanent link">¶</a></h2>
+<h2 id="paso-3-el-desacoplamiento-con-un-caso-concreto">Paso 3 — El desacoplamiento, con un caso concreto<a class="headerlink" href="#paso-3-el-desacoplamiento-con-un-caso-concreto" title="Permanent link">¶</a></h2>
 <p>Imagina que mañana decides sustituir JPA por otra tecnología de persistencia para el catálogo (no lo vas a hacer, es un ejercicio de razonamiento). <strong>Responde</strong>:</p>
 <ul>
 <li>¿Qué ficheros del paquete <code>catalogo</code> tendrías que tocar?</li>
@@ -3021,7 +3047,7 @@
 </ol>
 <p>Sigue exactamente el mismo patrón que ya existía para <code>existeVideojuego</code> — la estructura ya la conoces.</p>
 <hr>
-<h2 id="paso-3-prueba-del-componente-aislado">Paso 3 — Prueba del componente aislado<a class="headerlink" href="#paso-3-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
+<h2 id="paso-4-prueba-del-componente-aislado">Paso 4 — Prueba del componente aislado<a class="headerlink" href="#paso-4-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -3078,7 +3104,7 @@
 <p>¿Qué información <strong>no</strong> deberías exponer nunca a través de este componente — por ejemplo, la entidad <code>Videojuego</code> completa, con todos sus campos y relaciones? ¿Dónde está la línea entre "exponer lo mínimo necesario para que <code>reviews</code> haga su trabajo" y "exponer todo por comodidad, para no tener que pensar en cada método nuevo"? Da un ejemplo concreto de un dato del catálogo que <strong>no</strong> deberías dejar ver a través de <code>CatalogoConsultaService</code>.</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Ya sabes leer tu propio código con ojo crítico de "componente" — contrato separado de implementación, dependencias mínimas y explícitas. En la próxima actividad aplicas exactamente el mismo patrón sobre el módulo documental (MongoDB).</p></div>
+<p>Ya sabes construir un componente con contrato separado de implementación, dependencias mínimas y explícitas. En la próxima actividad aplicas exactamente el mismo patrón sobre el módulo documental (MongoDB).</p></div>
 
 
 
