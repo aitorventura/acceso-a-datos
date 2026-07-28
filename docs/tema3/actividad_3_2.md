@@ -1,14 +1,53 @@
 # 🧪 Actividad 3.2: Tu propia colección documental
 
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 3.2 — Tu propia colección documental](plantillas/Actividad_3_2_AD_Plantilla.docx){target="_blank" rel="noopener"}
+
 !!! info "Práctica guiada"
     Construyes el flujo real de borrado en cascada vía eventos RabbitMQ y lo endureces frente a reintentos — esa es la mejora real de hoy.
 
 ## Qué vas a practicar
 
 - Ampliar un exchange de mensajería ya existente con una cola nueva.
+- Crear una colección explícitamente, con un validador de esquema.
 - Entender y replicar un flujo de borrado en cascada entre dos motores distintos, vía eventos.
 - Hacer una operación idempotente frente a mensajes duplicados.
+- Escribir una consulta con `@Query`, más allá de lo que cubre el naming.
 - Comparar por escrito tu experiencia con PostgreSQL y con MongoDB.
+
+---
+
+## El resultado esperado, de principio a fin
+
+Antes de tocar nada, esto es lo que vas a conseguir que pase cuando termines la actividad — una petición `DELETE` que responde al instante, y una limpieza que ocurre después, en segundo plano:
+
+```mermaid
+sequenceDiagram
+    participant Cliente
+    participant Controller as VideojuegoController
+    participant Service as VideojuegoService
+    participant PG as PostgreSQL
+    participant MQ as RabbitMQ
+    participant Consumer as ReviewsVideojuegoEventConsumer
+    participant RS as ReviewService
+    participant Mongo as MongoDB
+
+    Cliente->>Controller: DELETE /videojuegos/{id}
+    Controller->>Service: delete(id)
+    Service->>PG: borra el videojuego
+    Service->>MQ: publica evento videojuego.eliminado
+    Service-->>Controller: OK
+    Controller-->>Cliente: 204 No Content
+    Note over Cliente,Controller: La petición ya ha terminado,<br/>no espera a lo que viene después
+
+    par En otro hilo, en su propio momento
+        MQ-->>Consumer: entrega el mensaje
+        Consumer->>RS: deleteByVideojuegoId(id)
+        RS->>Mongo: borra las reseñas de ese videojuego
+    end
+```
+
+El `Cliente` recibe su `204` sin saber que las reseñas todavía existen en ese instante — el bloque `par` de abajo ocurre después, en un hilo distinto, sin que nadie lo espere. El Paso 1 retoma este mismo flujo con más detalle, centrado solo en la mitad que vas a construir tú.
 
 ---
 
@@ -47,40 +86,30 @@ A diferencia de la cola de actividad (enlazada a `videojuego.*`, todo evento), e
 El borrado en cascada de reseñas sigue un flujo ya definido — no lo vas a inventar, lo vas a construir siguiendo este diseño. El viaje completo de un evento:
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["DELETE /videojuegos/{id}<br/>(hilo de la petición)"] --> B["VideojuegoService.delete()"]
     B -->|"publica evento"| C["RabbitMQ<br/>routing key: videojuego.eliminado"]
     C -.->|"consume<br/>(hilo del listener)"| D["ReviewsVideojuegoEventConsumer"]
     D --> E["reviewService.deleteByVideojuegoId(id)"]
 ```
 
-`VideojuegoService.delete()` (en el módulo `catalogo`) no llama directamente a nada de `reviews` — publica un evento a través de `VideojuegoEventPublisher`, y sigue su camino sin esperar. En otro hilo, en su propio momento, `ReviewsVideojuegoEventConsumer` lo recibe y actúa:
+`VideojuegoService.delete()` (en el módulo `catalogo`) no llama directamente a nada de `reviews` — publica un evento a través de `VideojuegoEventPublisher`, y sigue su camino sin esperar, sin saber siquiera que `reviews` existe. En otro hilo, en su propio momento, un consumer nuevo —`ReviewsVideojuegoEventConsumer`, que vas a escribir en el Paso 2— recibe ese evento desde la cola que has creado en el Paso 0 y actúa: si el evento dice que un videojuego se ha eliminado, borra sus reseñas.
 
-```java
-@Service
-@RequiredArgsConstructor
-public class ReviewsVideojuegoEventConsumer {
-    private final ReviewService reviewService;
+!!! tip "¿Por qué un broker, y no algo más ligero como el warm-up de caché de PSP?"
+    Publicador y consumer viven en la misma aplicación, igual que en el warm-up de caché — pero ahí perder un evento es inofensivo (la caché se autocorrige sola), mientras que aquí perder uno deja reseñas huérfanas **para siempre**, nada más va a reintentarlo. El broker aporta justo lo que aquí sí importa: el mensaje sobrevive aunque la aplicación se caiga entre el `publishEvent` y que el consumer llegue a procesarlo.
 
-    @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
-    public void recibir(String payload) {
-        VideojuegoEvent event = /* deserializar */;
-        if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
-            reviewService.deleteByVideojuegoId(event.videojuegoId());
-        }
-    }
-}
-```
-
-**Fíjate**: el borrado de reseñas ocurre en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que ya has analizado en PSP.
+**Fíjate**: el borrado de reseñas va a ocurrir en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que ya has analizado en PSP.
 
 ---
 
 ## Paso 2 — Replicar el consumer en tu GameVault
 
+Aquí es donde escribes el consumer del que hablaba el Paso 1, ya con el `package` y los `import` que necesita tu proyecto:
+
 ```java
 package com.tunombre.gamevault.reviews.mensajeria;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent;
 import com.tunombre.gamevault.config.RabbitMQConfig;
 import com.tunombre.gamevault.reviews.ReviewService;
@@ -92,10 +121,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewsVideojuegoEventConsumer {
     private final ReviewService reviewService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
-    public void recibir(String payload) {
-        VideojuegoEvent event = /* deserializar con tu JsonMapper */;
+    public void recibir(String payload) throws Exception {
+        System.out.println("[TRAZA] Consumer ejecutándose en hilo: " + Thread.currentThread().getName());
+        VideojuegoEvent event = objectMapper.readValue(payload, VideojuegoEvent.class);
         if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
             reviewService.deleteByVideojuegoId(event.videojuegoId());
         }
@@ -103,11 +134,74 @@ public class ReviewsVideojuegoEventConsumer {
 }
 ```
 
-Si no lo tenías ya de la Actividad 3.1, añade también `deleteByVideojuegoId` a tu `ReviewRepository` (`long deleteByVideojuegoId(Long videojuegoId);`) y un método correspondiente en `ReviewService` que lo invoque.
+El `System.out.println` es temporal, solo para el Paso 4 — lo vas a usar para comparar el nombre de este hilo con el de la petición `DELETE`. Puedes quitarlo al terminar la actividad.
+
+Es el mismo patrón de deserialización que ya tienes en `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1): un `ObjectMapper` de Jackson, con `readValue` convirtiendo el `payload` (JSON en texto) de vuelta a un `VideojuegoEvent`.
+
+Añade también `deleteByVideojuegoId` a tu `ReviewRepository` (`long deleteByVideojuegoId(Long videojuegoId);`) y, en `ReviewService`, el método que lo invoca:
+
+```java
+public long deleteByVideojuegoId(Long videojuegoId) {
+    return reviewRepository.deleteByVideojuegoId(videojuegoId);
+}
+```
+
+!!! warning "No repitas aquí el `existsById` de tus otros métodos"
+    `findByVideojuegoId`, `create` y `getResumenByVideojuegoId` comprueban `videojuegoRepository.existsById(...)` porque los llama la API, esperando que el videojuego exista. Este método lo llama el consumer justo **después** de que el videojuego ya se ha borrado de PostgreSQL — es la razón por la que se ejecuta. Si añadieras esa misma comprobación aquí, `deleteByVideojuegoId` fallaría siempre y las reseñas nunca llegarían a limpiarse.
 
 ---
 
-## Paso 3 — Prueba con datos reales
+## Paso 3 — Protege tu colección con un validador
+
+Antes de probar nada con datos reales, un momento para cerrar un hueco que arrastras desde que empezaste con `reviews`: `puntuacion` solo está protegida en `ReviewRequestDTO` (`@Min(1)`/`@Max(10)`) — una validación que vive en tu código Java y que cualquiera con acceso directo a Mongo puede saltarse sin esfuerzo. Hazlo ahora, antes de crear tu primera reseña de verdad en el próximo paso, para que nazca ya protegida desde el primer documento.
+
+Borra tu colección `review` (todavía no tienes datos reales, así que no pierdes nada) y recréala explícitamente, esta vez con un validador:
+
+```bash
+docker exec -it <tu-contenedor-mongo> mongosh gamevault_db
+```
+
+```javascript
+db.review.drop()
+
+db.createCollection("review", {
+  validator: {
+    $jsonSchema: {
+      required: ["videojuegoId", "autor", "puntuacion"],
+      properties: {
+        puntuacion: {
+          bsonType: "int",
+          minimum: 1,
+          maximum: 10,
+          description: "debe ser un número entero entre 1 y 10"
+        }
+      }
+    }
+  }
+})
+```
+
+**Comprueba** que MongoDB rechaza un documento inválido, insertado directamente y sin pasar por tu API:
+
+```javascript
+db.review.insertOne({ videojuegoId: 1, autor: "test", puntuacion: 999 })
+```
+
+**Captura**: el error de validación que devuelve MongoDB.
+
+**Pregunta de comprensión**: si `ReviewRequestDTO` ya rechaza una `puntuacion` fuera de rango con `@Min`/`@Max`, ¿qué aporta de más este validador a nivel de MongoDB? ¿En qué situación concreta llegaría a activarse, que la validación de Java nunca llegaría a ver?
+
+---
+
+## Paso 4 — Prueba con datos reales
+
+Añade también una traza temporal al principio de `VideojuegoService.delete()`, igual que en el consumer, para tener con qué comparar el hilo de la petición `DELETE`:
+
+```java
+System.out.println("[TRAZA] DELETE ejecutándose en hilo: " + Thread.currentThread().getName());
+```
+
+Aquí tienes los comandos con `curl`, pero puedes hacer exactamente lo mismo desde Swagger UI si lo prefieres:
 
 ```bash
 # Crea un videojuego y una reseña
@@ -118,11 +212,19 @@ curl -X POST http://localhost:8080/api/v1/videojuegos \
 curl -X POST http://localhost:8080/api/v1/videojuegos/{id}/reviews \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 7, "comentario": "Prueba"}'
+# $TOKEN: crear una reseña solo exige estar autenticado, no rol ADMIN —
+# vale el token de cualquier usuario registrado, a diferencia del $TOKEN_ADMIN de arriba y abajo
 
 # Borra el videojuego (exige rol ADMIN, igual que crearlo)
 curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
   -H "Authorization: Bearer $TOKEN_ADMIN"
 ```
+
+Fíjate en que esa segunda petición ha devuelto `201`, exactamente como siempre — el validador del Paso 3 no ha cambiado nada del comportamiento normal de tu aplicación, solo bloquea lo que nunca debería haber entrado.
+
+**Captura**: los logs de tu aplicación mostrando dos nombres de hilo distintos — uno para la petición `DELETE`, otro para el consumer.
+
+**Anota**: ¿coinciden con lo que esperabas? Compáralos.
 
 Comprueba en MongoDB, **esperando un instante** (no es síncrono):
 
@@ -130,27 +232,31 @@ Comprueba en MongoDB, **esperando un instante** (no es síncrono):
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db --eval "db.review.find({videojuegoId: <id>})"
 ```
 
-**Anota**: en los logs de tu aplicación, ¿ves dos nombres de hilo distintos — uno para la petición `DELETE`, otro para el consumer? Compáralos.
+**Captura**: la salida de `mongosh`, confirmando que ya no quedan reseñas para ese `videojuegoId`.
 
 **Explica**, revisando tu `RabbitMQConfig.java`, por qué `ReviewsVideojuegoEventConsumer` se activa al borrar un videojuego pero no al crearlo o modificarlo (pista: busca la *routing key* `videojuego.eliminado` y a qué cola está enlazada) — y por qué, en cambio, `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1) sí se activa con las tres operaciones.
 
 ---
 
-## Paso 4 — La mejora real: idempotencia
+## Paso 5 — La mejora real: idempotencia
 
-Los brokers de mensajería pueden, en ciertas circunstancias (una caída de red, un reintento), entregar el **mismo** mensaje más de una vez. Haz que `deleteByVideojuegoId` sea seguro frente a eso — no debería fallar ni hacer nada extraño si se invoca dos veces seguidas para el mismo `videojuegoId`.
+Los brokers de mensajería pueden, en ciertas circunstancias (una caída de red, un reintento), entregar el **mismo** mensaje más de una vez. Antes de dar por cerrado el `deleteByVideojuegoId` que has escrito en el Paso 2, comprueba si ya es seguro frente a eso, sin tocar una línea: ¿qué pasa si RabbitMQ entrega dos veces el mismo evento `VIDEOJUEGO_ELIMINADO`, y tu método se invoca dos veces seguidas para el mismo `videojuegoId`?
 
-```java
-public long deleteByVideojuegoId(Long videojuegoId) {
-    long eliminadas = reviewRepository.deleteByVideojuegoId(videojuegoId);
-    // deleteByVideojuegoId de Mongo ya es seguro por sí mismo si no quedan documentos:
-    // borrar sobre una colección vacía para ese id simplemente elimina 0 documentos,
-    // no lanza ningún error
-    return eliminadas;
-}
+**Pregunta de comprensión**: la segunda vez, `reviewRepository.deleteByVideojuegoId` ya no encuentra ninguna reseña con ese `videojuegoId` — ¿qué hace MongoDB en ese caso, falla o simplemente no borra nada? ¿Es necesario añadir alguna comprobación extra en tu código, o el propio comportamiento de `deleteByVideojuegoId` sobre MongoDB ya es seguro por diseño?
+
+---
+
+## Paso 6 — Una consulta más allá del naming
+
+Un jugador indeciso podría querer ver, antes de comprar, solo las reseñas de un videojuego con puntuación alta. Sin más código dado que el patrón que has visto en la teoría de este apartado, añade a `ReviewRepository` un método con `@Query` que busque, para un `videojuegoId` dado, solo las reseñas con puntuación igual o superior a un mínimo — misma idea que el ejemplo de la teoría, aplicada a tu propio dominio, con sintaxis de filtro de Mongo en vez de naming.
+
+Expón el resultado en un endpoint nuevo, `GET /api/v1/videojuegos/{videojuegoId}/reviews/buenas?puntuacionMinima={min}`, siguiendo el mismo patrón de controller que ya conoces.
+
+```bash
+curl "http://localhost:8080/api/v1/videojuegos/1/reviews/buenas?puntuacionMinima=8"
 ```
 
-**Pregunta de comprensión**: si RabbitMQ reintentara la entrega del mismo evento `VIDEOJUEGO_ELIMINADO` dos veces, ¿qué pasaría la segunda vez que se invoca `deleteByVideojuegoId` sobre reseñas que ya no existen? ¿Es necesario añadir alguna comprobación extra, o el propio comportamiento de `deleteByVideojuegoId` sobre MongoDB ya es seguro por diseño?
+**Captura**: la respuesta, con solo las reseñas que cumplen el mínimo.
 
 ---
 
@@ -161,5 +267,7 @@ Compara por escrito (4-5 líneas) tu experiencia con PostgreSQL en los temas ant
 ---
 
 ## ✅ Cierre
+
+Antes de dar la actividad por terminada, quita las dos trazas temporales (`System.out.println`) que has añadido en el Paso 2 y en el Paso 4 para comparar los hilos — ya han cumplido su función.
 
 Tu GameVault ya limpia reseñas huérfanas automáticamente, de forma robusta frente a reintentos. En la última actividad del tema trabajas el `PUT` de reseñas y control de autoría.

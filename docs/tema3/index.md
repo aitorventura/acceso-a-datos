@@ -21,7 +21,7 @@
 ## 📘 Índice de contenidos
 
 1. [Conexión a MongoDB y consultas sobre notas de lectura](conexion-mongodb.md)
-2. [Colecciones documentales: relacional vs. documental](colecciones-documentales.md)
+2. [Colecciones documentales: gestión y consultas](colecciones-documentales.md)
 3. [Modificación de documentos](modificacion-documentos.md)
 
 **Actividades:**
