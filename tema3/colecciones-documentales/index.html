@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-colecciones-documentales-relacional-vs-documental" class="md-skip">
+        <a href="#2-colecciones-documentales-gestion-y-consultas" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -2313,15 +2313,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#relacional-vs-documental-concepto-a-concepto" class="md-nav__link">
-    <span class="md-ellipsis">
-      🆚 Relacional vs. documental, concepto a concepto
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#colecciones-crear-eliminar-listar" class="md-nav__link">
     <span class="md-ellipsis">
       🛠️ Colecciones: crear, eliminar, listar
@@ -2331,26 +2322,20 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#por-que-dos-motores-conviven" class="md-nav__link">
+  <a href="#eliminar-documentos-en-bloque" class="md-nav__link">
     <span class="md-ellipsis">
-      📚 Por qué dos motores conviven
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="📚 Por qué dos motores conviven">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eliminar-documentos-de-forma-masiva" class="md-nav__link">
-    <span class="md-ellipsis">
-      Eliminar documentos de forma masiva
+      🗑️ Eliminar documentos en bloque
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#cuando-el-naming-ya-no-basta-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Cuando el naming ya no basta: @Query
+    </span>
+  </a>
   
 </li>
       
@@ -2873,15 +2858,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#relacional-vs-documental-concepto-a-concepto" class="md-nav__link">
-    <span class="md-ellipsis">
-      🆚 Relacional vs. documental, concepto a concepto
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#colecciones-crear-eliminar-listar" class="md-nav__link">
     <span class="md-ellipsis">
       🛠️ Colecciones: crear, eliminar, listar
@@ -2891,26 +2867,20 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#por-que-dos-motores-conviven" class="md-nav__link">
+  <a href="#eliminar-documentos-en-bloque" class="md-nav__link">
     <span class="md-ellipsis">
-      📚 Por qué dos motores conviven
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="📚 Por qué dos motores conviven">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#eliminar-documentos-de-forma-masiva" class="md-nav__link">
-    <span class="md-ellipsis">
-      Eliminar documentos de forma masiva
+      🗑️ Eliminar documentos en bloque
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#cuando-el-naming-ya-no-basta-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Cuando el naming ya no basta: @Query
+    </span>
+  </a>
   
 </li>
       
@@ -2940,89 +2910,156 @@
 
 
 <div><p><a id="colecciones-documentales"></a></p>
-<h1 id="2-colecciones-documentales-relacional-vs-documental">🧩 2. Colecciones documentales: relacional vs. documental<a class="headerlink" href="#2-colecciones-documentales-relacional-vs-documental" title="Permanent link">¶</a></h1>
-<p>Ya conectaste con MongoDB y construiste tu primer repositorio documental. Este apartado da un paso atrás para comparar con criterio los dos modelos que has usado en el curso, y cierra el hueco práctico que dejaste abierto: crear y eliminar colecciones explícitamente.</p>
-<hr>
-<h2 id="relacional-vs-documental-concepto-a-concepto">🆚 Relacional vs. documental, concepto a concepto<a class="headerlink" href="#relacional-vs-documental-concepto-a-concepto" title="Permanent link">¶</a></h2>
-<table>
-<thead>
-<tr>
-<th>Relacional (PostgreSQL)</th>
-<th>Documental (MongoDB)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Tabla</td>
-<td>Colección</td>
-</tr>
-<tr>
-<td>Fila</td>
-<td>Documento</td>
-</tr>
-<tr>
-<td>Columna</td>
-<td>Campo</td>
-</tr>
-<tr>
-<td><code>JOIN</code></td>
-<td>Documento embebido, o referencia manual (sin integridad automática)</td>
-</tr>
-</tbody>
-</table>
-<p>Ventajas del modelo documental: <strong>esquema flexible por documento</strong> (dos <code>NotaLectura</code> no tienen por qué compartir exactamente los mismos campos si el esquema evoluciona con el tiempo, sin necesitar ninguna migración) y <strong>escritura/lectura simple</strong>, sin <code>JOIN</code> que resolver.</p>
-<p>Inconvenientes: la <strong>integridad referencial manual</strong> que ya viste en el apartado anterior es el precio a pagar — nadie garantiza automáticamente que <code>libroId</code> apunte a algo real. Tampoco hay transacciones multi-documento tan robustas como las de PostgreSQL (MongoDB moderno sí las soporta parcialmente, pero es un matiz, no la ausencia total que tenía en sus primeras versiones).</p>
+<h1 id="2-colecciones-documentales-gestion-y-consultas">🧩 2. Colecciones documentales: gestión y consultas<a class="headerlink" href="#2-colecciones-documentales-gestion-y-consultas" title="Permanent link">¶</a></h1>
+<p>La comparación relacional/documental y el porqué de usar dos motores a la vez ya los has visto con detalle en el apartado anterior — no hace falta repetirlos aquí. Lo que te falta es más práctico y algo más concreto: en el ejemplo de las notas de lectura, la colección <code>nota_lectura</code> se crea sola, sin que nadie lo pida explícitamente, en cuanto <code>NotaLecturaRepository</code> guarda el primer documento. Hoy ves esa creación <strong>explícita</strong> (y su contrapartida, eliminarla), y una herramienta nueva para cuando una consulta ya no cabe cómodamente en el nombre de un método.</p>
 <hr>
 <h2 id="colecciones-crear-eliminar-listar">🛠️ Colecciones: crear, eliminar, listar<a class="headerlink" href="#colecciones-crear-eliminar-listar" title="Permanent link">¶</a></h2>
-<p>En <code>mongosh</code>:</p>
-<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// Se crea implícitamente al insertar el primer documento</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">libroId</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">})</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// O explícitamente, cuando necesitas opciones concretas (validación, colecciones capadas)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(</span><span class="s2">"nota_lectura"</span><span class="p">)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1">// Eliminar</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1">// Listar</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nx">show</span><span class="w"> </span><span class="nx">collections</span>
+<p>Todo lo que ves en este apartado se hace desde <code>mongosh</code>, no desde tu código Java — no vas a anotar nada de esto en <code>NotaLectura</code> ni en su repositorio. Con PostgreSQL tienes a Hibernate de tu lado: <code>ddl-auto</code> puede crear la tabla por ti (ya lo viste en el Tema 1), sin que escribas ni un <code>CREATE TABLE</code>. Spring Data MongoDB no tiene ningún mecanismo equivalente para colecciones con reglas — no existe una anotación que convierta tus <code>@Min</code>/<code>@Max</code> en un validador. Por eso esto se hace a mano, como una tarea puntual de configuración. En la práctica de hoy lo harás tú mismo, con las manos, sobre tu propia colección real.</p>
+<p>Ya sabes que MongoDB no valida claves foráneas — eso lo comprueba tu código, con la integridad referencial manual del apartado anterior. Pero hay un segundo hueco, más básico todavía: por defecto, MongoDB <strong>tampoco valida la forma de un documento</strong>. Nada te impide, desde <code>mongosh</code>, insertar esto directamente en la colección:</p>
+<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">libroId</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">"ana"</span><span class="p">,</span><span class="w"> </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="mf">999</span><span class="w"> </span><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
-<p>La forma <strong>explícita</strong> (<code>createCollection</code>) sirve para cuando necesitas configurar algo desde el principio — por ejemplo, reglas de validación de esquema, o una colección "capada" (de tamaño fijo, que sobrescribe los documentos más antiguos). Para el caso normal, no hace falta: MongoDB crea la colección sola en cuanto guardas el primer documento.</p>
+<p><code>puntuacion: 999</code> no tiene ningún sentido — tu DTO en Java, con <code>@Min(1) @Max(10)</code>, nunca dejaría pasar algo así a través de tu API. Pero esa validación vive <strong>solo</strong> en tu código Java: cualquiera con acceso directo a Mongo (<code>mongosh</code>, un script, otra aplicación) se la salta sin ningún esfuerzo, porque la propia base de datos no sabe que esa regla existe.</p>
+<p>Para cerrar ese hueco, MongoDB deja poner un <strong>validador</strong> directamente en la colección — pero tiene que estar ahí desde el momento en que la colección se crea, así que ya no te vale la creación implícita (al primer <code>insert</code>, sin condiciones). Necesitas crearla tú mismo, explícitamente, con las reglas puestas:</p>
+<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(</span><span class="s2">"nota_lectura"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nx">validator</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nx">$jsonSchema</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">      </span><span class="nx">required</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"libroId"</span><span class="p">,</span><span class="w"> </span><span class="s2">"autor"</span><span class="p">,</span><span class="w"> </span><span class="s2">"puntuacion"</span><span class="p">],</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">      </span><span class="nx">properties</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">        </span><span class="nx">puntuacion</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">          </span><span class="nx">bsonType</span><span class="o">:</span><span class="w"> </span><span class="s2">"int"</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">          </span><span class="nx">minimum</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">          </span><span class="nx">maximum</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">          </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s2">"debe ser un número entero entre 1 y 10"</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+<p>Con esto montado, el mismo <code>insertOne</code> de antes (<code>puntuacion: 999</code>) falla directamente en MongoDB, sin llegar nunca a tu aplicación — la base de datos rechaza el documento por sí sola, igual que rechazaría un <code>INSERT</code> en PostgreSQL que violara una restricción <code>CHECK</code>.</p>
+<p>Las otras dos operaciones son más directas:</p>
+<div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1">// Eliminar la colección entera</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1">// Listar qué colecciones existen en la base de datos</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nx">show</span><span class="w"> </span><span class="nx">collections</span>
+</code></pre></div></td></tr></table></div>
 <div class="admonition tip">
-<p class="admonition-title">Contraste con el DDL de PostgreSQL</p>
-<p>En PostgreSQL, necesitas una sentencia <code>CREATE TABLE</code> explícita (o <code>ddl-auto</code> de Hibernate haciéndolo por ti, como viste en el Tema 1) antes de poder insertar nada. En MongoDB, la colección aparece sola al primer <code>insert</code> — es la misma diferencia de filosofía que ya viste entre esquema fijo y esquema flexible, ahora aplicada a la propia existencia de la colección.</p>
+<p class="admonition-title">El mismo resultado que un <code>CHECK</code>, con otra sintaxis</p>
+<p>Un <code>CHECK (puntuacion BETWEEN 1 AND 10)</code> en el <code>CREATE TABLE</code> de PostgreSQL y este <code>$jsonSchema</code> en <code>createCollection</code> hacen exactamente el mismo trabajo: que la propia base de datos rechace un dato inválido, sin depender de que la aplicación lo valide bien. La diferencia es que Hibernate te ahorra escribir el <code>CREATE TABLE</code>; nada te ahorra escribir este <code>createCollection</code>.</p>
 </div>
 <hr>
-<h2 id="por-que-dos-motores-conviven">📚 Por qué dos motores conviven<a class="headerlink" href="#por-que-dos-motores-conviven" title="Permanent link">¶</a></h2>
-<p>En el ejemplo de la librería, PostgreSQL guarda el catálogo (<code>Libro</code>/<code>Editorial</code>: relaciones claras, necesidad de transacciones ACID fuertes entre entidades relacionadas) y MongoDB guarda las notas de lectura (<code>NotaLectura</code>: documentos independientes entre sí, sin relaciones que mantener, con forma que podría evolucionar). Esta es una <strong>decisión de arquitectura deliberada</strong>, no "usar NoSQL porque sí": cada motor se elige por lo que sus garantías resuelven mejor en cada parte del dominio.</p>
-<h3 id="eliminar-documentos-de-forma-masiva">Eliminar documentos de forma masiva<a class="headerlink" href="#eliminar-documentos-de-forma-masiva" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
+<h2 id="eliminar-documentos-en-bloque">🗑️ Eliminar documentos en bloque<a class="headerlink" href="#eliminar-documentos-en-bloque" title="Permanent link">¶</a></h2>
+<p>Borrar la colección entera con <code>drop()</code> es un martillo demasiado grande para un problema más concreto: eliminar solo <strong>algunos</strong> documentos, los que cumplen una condición, sin tocar el resto de la colección. Imagina que borras un <code>Libro</code> de PostgreSQL: sus notas de lectura en MongoDB no se enteran de nada — son dos motores completamente independientes, sin ninguna relación real entre ellos (la integridad referencial manual que ya conoces). Se quedan ahí, <strong>huérfanas</strong>, apuntando a un <code>libroId</code> que ya no existe:</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Borras el Libro&lt;br/&gt;en PostgreSQL"] -.-&gt;|"nadie avisa a Mongo"| B["Las NotaLectura&lt;br/&gt;siguen en MongoDB"]
+    B --&gt; C["Huérfanas:&lt;br/&gt;libroId que ya no existe"]</code></pre>
+<p>Para limpiarlas hace falta un método que borre varios documentos a la vez, no uno por uno — y se genera exactamente igual que cualquier otra consulta por naming, sin escribir ninguna query:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">deleteByLibroId</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>deleteByLibroId</code> es el ejemplo de "eliminar documentos de una colección de forma masiva", generado igual que cualquier otro método por naming — sin escribir ninguna query. Es exactamente el método que resuelve el problema de las <strong>notas de lectura huérfanas</strong> que detectaste en la Actividad 3.1: si se borra un libro cuyas notas de lectura siguen en Mongo, este método las limpia de golpe.</p>
+<p><code>deleteByLibroId</code> borra de golpe todas las notas de lectura de un libro concreto. Pero, por sí solo, este método no hace nada: alguien tiene que <strong>llamarlo</strong>, y justo en el momento en que el libro se borra, ni antes ni después. Ese "alguien" no es una línea más en tu código: es el broker de mensajería que construiste en Programación de Servicios y Procesos (RabbitMQ) — el mismo mecanismo de eventos que ya usaste para el registro de actividad, pero escuchando ahora el borrado de un libro en vez de su creación. En la práctica de este tema ves exactamente cómo conectarlo a tu propio proyecto, para que <code>deleteByLibroId</code> se dispare solo, sin que tengas que acordarte de llamarlo cada vez que borres algo.</p>
+<hr>
+<h2 id="cuando-el-naming-ya-no-basta-query">🔍 Cuando el naming ya no basta: <code>@Query</code><a class="headerlink" href="#cuando-el-naming-ya-no-basta-query" title="Permanent link">¶</a></h2>
+<p><code>findByLibroId</code>, <code>deleteByLibroId</code>... el naming de Spring Data funciona muy bien mientras la consulta tenga una o dos condiciones. Pero según añades condiciones, el nombre del método crece con ellas — y en algún punto deja de ser más claro que la propia consulta. Con dos condiciones, todavía se lee bien:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroIdAndPuntuacionGreaterThanEqual</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacionMinima</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>Añade una tercera condición — que además tenga comentario, para descartar puntuaciones sueltas sin explicar — y mira qué le pasa al nombre:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findByLibroIdAndPuntuacionGreaterThanEqualAndComentarioIsNotNull</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacionMinima</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>Con <code>@Query</code>, en cambio, añadir una condición más no alarga el nombre del método — solo el filtro, que se lee de un vistazo, en la sintaxis nativa de Mongo:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">    </span><span class="nd">@Query</span><span class="p">(</span><span class="s">"{ 'libroId': ?0, 'puntuacion': { $gte: ?1 }, 'comentario': { $ne: null } }"</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarBuenasNotasConComentario</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacionMinima</span><span class="p">);</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>?0</code>, <code>?1</code>... son marcadores de posición para los parámetros del método, en el orden en que los declaras — Spring Data los sustituye por ti antes de mandar la consulta a Mongo.</p>
+<div class="admonition info">
+<p class="admonition-title">Es el mismo mecanismo que ya conoces de JPA, con otra sintaxis</p>
+<p><code>@Query</code> en Spring Data MongoDB cumple exactamente el mismo papel que <code>@Query</code> en Spring Data JPA (Tema 1): una vía de escape para cuando el naming se queda corto o se vuelve ilegible. Solo cambia el idioma dentro de las comillas — JPQL o SQL nativo allí, un documento de filtro de Mongo aquí. El concepto — "puedo escribir la consulta a mano cuando el nombre del método no me basta" — es el mismo en los dos motores.</p>
+</div>
+<p>Pero hasta <code>@Query</code> tiene un límite: el filtro sigue siendo <strong>fijo</strong>, escrito de antemano — solo los valores cambian con cada llamada, no las condiciones en sí. Imagina ahora una búsqueda con varios criterios, todos <strong>opcionales</strong>, donde no sabes de antemano cuáles va a rellenar quien la use (por autor, sí; por puntuación mínima, no; por las dos, a veces). Para eso ni el naming ni <code>@Query</code> sirven bien — necesitarías una consulta distinta por cada combinación posible.</p>
+<p>MongoDB tiene su propio equivalente a las <code>Specification</code> que ya conoces de PostgreSQL (Tema 2): las clases <code>Criteria</code> y <code>Query</code>, que se combinan condición a condición, en tiempo de ejecución, añadiendo solo los filtros que de verdad han llegado:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="nd">@Service</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">NotaLecturaService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">MongoTemplate</span><span class="w"> </span><span class="n">mongoTemplate</span><span class="p">;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NotaLectura</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscar</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacionMinima</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">        </span><span class="n">Query</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Query</span><span class="p">();</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">libroId</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">            </span><span class="n">query</span><span class="p">.</span><span class="na">addCriteria</span><span class="p">(</span><span class="n">Criteria</span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="s">"libroId"</span><span class="p">).</span><span class="na">is</span><span class="p">(</span><span class="n">libroId</span><span class="p">));</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">autor</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">            </span><span class="n">query</span><span class="p">.</span><span class="na">addCriteria</span><span class="p">(</span><span class="n">Criteria</span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="s">"autor"</span><span class="p">).</span><span class="na">is</span><span class="p">(</span><span class="n">autor</span><span class="p">));</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">puntuacionMinima</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="w">            </span><span class="n">query</span><span class="p">.</span><span class="na">addCriteria</span><span class="p">(</span><span class="n">Criteria</span><span class="p">.</span><span class="na">where</span><span class="p">(</span><span class="s">"puntuacion"</span><span class="p">).</span><span class="na">gte</span><span class="p">(</span><span class="n">puntuacionMinima</span><span class="p">));</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">mongoTemplate</span><span class="p">.</span><span class="na">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">NotaLectura</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Cada <code>if</code> añade una condición solo si ese criterio ha llegado — igual que ibas encadenando condiciones a una <code>Specification</code> con <code>.and(...)</code>, aquí vas añadiendo <code>Criteria</code> a la misma <code>Query</code>. No lo vas a trabajar en las prácticas de este módulo, pero conviene que sepas que existe, para cuando te haga falta.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Tabla↔colección, fila↔documento, columna↔campo, <code>JOIN</code>↔documento embebido o referencia manual.</li>
-<li>El modelo documental gana en flexibilidad de esquema y simplicidad de lectura/escritura; pierde integridad referencial automática y transacciones multi-documento tan robustas como en relacional.</li>
-<li>Una colección se crea implícitamente al primer <code>insert</code>, o explícitamente con <code>createCollection</code> (para validación o colecciones capadas); se elimina con <code>drop()</code>.</li>
-<li>Usar dos motores a la vez es una decisión de arquitectura deliberada: PostgreSQL para relaciones fuertes, MongoDB para documentos independientes.</li>
-<li><code>deleteByLibroId</code> elimina documentos en bloque por naming de método — es la pieza que resuelve las notas de lectura huérfanas.</li>
+<li>Por defecto, MongoDB no valida la forma de un documento (a diferencia de un <code>CHECK</code> en PostgreSQL) — una colección se crea implícitamente al primer <code>insert</code>, sin ninguna regla. Para tener validación real, hay que crearla explícitamente con <code>createCollection</code> y un <code>$jsonSchema</code>, antes de insertar nada. Se elimina con <code>drop()</code>.</li>
+<li>Borrar un <code>Libro</code> no borra sus notas de lectura en Mongo — se quedan huérfanas, porque son dos motores independientes. <code>deleteByLibroId</code> elimina documentos en bloque por naming de método, pero alguien tiene que llamarlo en el momento justo: el broker de mensajería de PSP (RabbitMQ), no una llamada directa desde tu código.</li>
+<li><code>@Query</code>, con sintaxis de filtro de Mongo, es la vía de escape cuando el naming se vuelve largo o ilegible — el mismo papel que <code>@Query</code> en Spring Data JPA, con otro idioma dentro de las comillas.</li>
+<li>Para filtros opcionales combinables en tiempo de ejecución, <code>Criteria</code>/<code>Query</code> con <code>MongoTemplate</code> es el equivalente Mongo de <code>Specification</code> — no se practica en este módulo, pero existe para cuando haga falta.</li>
 </ul>
 </details></div>
 
