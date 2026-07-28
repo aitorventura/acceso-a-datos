@@ -2848,9 +2848,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-verificar-el-ci" class="md-nav__link">
+  <a href="#paso-4-amplia-el-filtro-del-ci-y-verifica" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Verificar el CI
+      Paso 4 — Amplía el filtro del CI, y verifica
     </span>
   </a>
   
@@ -2994,9 +2994,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-verificar-el-ci" class="md-nav__link">
+  <a href="#paso-4-amplia-el-filtro-del-ci-y-verifica" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Verificar el CI
+      Paso 4 — Amplía el filtro del CI, y verifica
     </span>
   </a>
   
@@ -3221,8 +3221,14 @@
 <h2 id="paso-3-autoevaluacion-razonada">Paso 3 — Autoevaluación razonada<a class="headerlink" href="#paso-3-autoevaluacion-razonada" title="Permanent link">¶</a></h2>
 <p>De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo, y por qué concretamente? No una respuesta genérica ("necesito practicar más") — señala una pieza técnica exacta con la que todavía no te sientes cómodo, y qué harías para reforzarla.</p>
 <hr>
-<h2 id="paso-4-verificar-el-ci">Paso 4 — Verificar el CI<a class="headerlink" href="#paso-4-verificar-el-ci" title="Permanent link">¶</a></h2>
-<p>Haz <code>push</code> de tus cambios y comprueba, en la pestaña <strong>Actions</strong> de tu repositorio GitHub, que el pipeline configurado desde el Tema 0 ejecuta correctamente estos tests de integración. <strong>Captura</strong>: el resultado en verde del workflow.</p>
+<h2 id="paso-4-amplia-el-filtro-del-ci-y-verifica">Paso 4 — Amplía el filtro del CI, y verifica<a class="headerlink" href="#paso-4-amplia-el-filtro-del-ci-y-verifica" title="Permanent link">¶</a></h2>
+<p>Antes de comprobar nada, hay algo que arreglar en <code>.github/workflows/ci.yml</code>. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con <code>-Dtest='*ControllerTest'</code> — una decisión de aquel momento, cuando el único test "pesado" del proyecto era <code>GamevaultApplicationTests</code> (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido tests de integración reales con Testcontainers — el de la Actividad 2.3 de AD, y el que acabas de terminar aquí mismo — pero ese filtro nunca se amplió, así que ninguno de los dos se ha estado ejecutando en tu CI hasta hoy.</p>
+<p>La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (<code>ubuntu-latest</code>) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro. Amplíalo para que incluya también tus tests de integración, sin arrastrar <code>GamevaultApplicationTests</code> (que seguiría sin poder pasar en CI, al no usar Testcontainers):</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ejecutar los tests</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./mvnw test -B -Dtest='*ControllerTest,*IntegrationTest'</span>
+</code></pre></div></td></tr></table></div>
+<p>Haz <code>push</code> de tus cambios y comprueba, en la pestaña <strong>Actions</strong> de tu repositorio GitHub, que el pipeline ejecuta correctamente estos tests de integración. <strong>Captura</strong>: el resultado en verde del workflow.</p>
 <hr>
 <h2 id="cierre-del-modulo">✅ Cierre del módulo<a class="headerlink" href="#cierre-del-modulo" title="Permanent link">¶</a></h2>
 <p>Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, actividad a actividad, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.</p></div>
