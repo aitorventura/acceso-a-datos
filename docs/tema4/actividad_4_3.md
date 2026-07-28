@@ -132,9 +132,18 @@ De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo
 
 ---
 
-## Paso 4 — Verificar el CI
+## Paso 4 — Amplía el filtro del CI, y verifica
 
-Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline configurado desde el Tema 0 ejecuta correctamente estos tests de integración. **Captura**: el resultado en verde del workflow.
+Antes de comprobar nada, hay algo que arreglar en `.github/workflows/ci.yml`. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con `-Dtest='*ControllerTest'` — una decisión de aquel momento, cuando el único test "pesado" del proyecto era `GamevaultApplicationTests` (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido tests de integración reales con Testcontainers — el de la Actividad 2.3 de AD, y el que acabas de terminar aquí mismo — pero ese filtro nunca se amplió, así que ninguno de los dos se ha estado ejecutando en tu CI hasta hoy.
+
+La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (`ubuntu-latest`) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro. Amplíalo para que incluya también tus tests de integración, sin arrastrar `GamevaultApplicationTests` (que seguiría sin poder pasar en CI, al no usar Testcontainers):
+
+```yaml
+      - name: Ejecutar los tests
+        run: ./mvnw test -B -Dtest='*ControllerTest,*IntegrationTest'
+```
+
+Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline ejecuta correctamente estos tests de integración. **Captura**: el resultado en verde del workflow.
 
 ---
 
