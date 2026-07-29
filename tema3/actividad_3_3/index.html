@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#actividad-33-put-de-resenas-con-control-de-autoria" class="md-skip">
+        <a href="#actividad-33-put-y-delete-de-resenas-con-control-de-autoria" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -2473,27 +2473,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#paso-4-probar-con-un-administrador-el-rol-tambien-permite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Probar con un administrador: el rol también permite
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-el-delete-que-falta-con-el-mismo-patron" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — El DELETE que falta, con el mismo patrón
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pregunta-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
       Pregunta de comprensión
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resumen-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resumen del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cierre" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Cierre
     </span>
   </a>
   
@@ -2939,27 +2939,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#paso-4-probar-con-un-administrador-el-rol-tambien-permite" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 — Probar con un administrador: el rol también permite
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-5-el-delete-que-falta-con-el-mismo-patron" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 — El DELETE que falta, con el mismo patrón
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pregunta-de-comprension" class="md-nav__link">
     <span class="md-ellipsis">
       Pregunta de comprensión
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#resumen-del-tema" class="md-nav__link">
-    <span class="md-ellipsis">
-      Resumen del tema
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cierre" class="md-nav__link">
-    <span class="md-ellipsis">
-      ✅ Cierre
     </span>
   </a>
   
@@ -2981,20 +2981,24 @@
 
 
 
-<div><h1 id="actividad-33-put-de-resenas-con-control-de-autoria">🧪 Actividad 3.3: PUT de reseñas con control de autoría<a class="headerlink" href="#actividad-33-put-de-resenas-con-control-de-autoria" title="Permanent link">¶</a></h1>
+<div><h1 id="actividad-33-put-y-delete-de-resenas-con-control-de-autoria">🧪 Actividad 3.3: PUT y DELETE de reseñas con control de autoría<a class="headerlink" href="#actividad-33-put-y-delete-de-resenas-con-control-de-autoria" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_3_3_AD_Plantilla.docx" rel="noopener" target="_blank">Plantilla 3.3 — PUT y DELETE de reseñas con control de autoría</a></p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
 <p>Hoy añades el <code>PUT</code> que falta en tu módulo <code>reviews</code>, con control de autoría: solo quien escribió una reseña puede modificarla.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
-<li>Añadir un endpoint <code>PUT</code> que compruebe la identidad del solicitante.</li>
-<li>Aplicar el patrón cargar → comprobar autoría → modificar → guardar.</li>
-<li>Verificar con dos usuarios distintos que el control de acceso funciona de verdad.</li>
+<li>Añadir un endpoint <code>PUT</code> y un endpoint <code>DELETE</code> que comprueben la identidad del solicitante.</li>
+<li>Aplicar el patrón cargar → comprobar autoría (o rol de administrador) → actuar.</li>
+<li>Verificar con dos usuarios distintos, y con un administrador, que el control de acceso funciona de verdad.</li>
 </ul>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
-<p>Tu módulo <code>reviews</code> (Actividades 3.1-3.2) y tu login JWT de PSP ya funcionando — vas a necesitar dos usuarios de prueba distintos.</p>
+<p>Tu módulo <code>reviews</code> (Actividades 3.1-3.2) y tu login JWT de PSP ya funcionando — vas a necesitar dos usuarios de prueba distintos y un token de administrador.</p>
 <hr>
 <h2 id="paso-1-el-endpoint-guiado-al-completo">Paso 1 — El endpoint, guiado al completo<a class="headerlink" href="#paso-1-el-endpoint-guiado-al-completo" title="Permanent link">¶</a></h2>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -3010,21 +3014,28 @@
 <span class="normal"><a href="#__codelineno-0-11">11</a></span>
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// En ReviewService</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">usuarioActual</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="n">Review</span><span class="w"> </span><span class="n">review</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">reviewId</span><span class="p">)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NOT_FOUND</span><span class="p">,</span><span class="w"> </span><span class="s">"Reseña no encontrada"</span><span class="p">));</span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// En ReviewService</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ReviewResponseDTO</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">usuarioActual</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">esAdmin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="c1">// 1. Carga la reseña por su id — si no existe, 404 Not Found</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="c1">//    (mismo patrón que acabas de ver en la teoría de este apartado)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">review</span><span class="p">.</span><span class="na">getAutor</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="n">usuarioActual</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResponseStatusException</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">FORBIDDEN</span><span class="p">,</span><span class="w"> </span><span class="s">"Solo el autor puede modificar esta reseña"</span><span class="p">);</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="c1">// 2. Comprueba que esa reseña pertenece de verdad a videojuegoId — si no, 404 Not Found</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="c1">//    (mismo motivo que ya has visto en la teoría: el id de la reseña ya es único,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="c1">//    pero la URL afirma que pertenece a este videojuego en concreto)</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setPuntuacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">());</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setComentario</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="c1">// 3. Comprueba que usuarioActual sea el autor, o que esAdmin sea true.</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="c1">//    Si ninguna de las dos se cumple, 403 Forbidden</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">review</span><span class="p">));</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="p">}</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setPuntuacion</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">puntuacion</span><span class="p">());</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="n">review</span><span class="p">.</span><span class="na">setComentario</span><span class="p">(</span><span class="n">dto</span><span class="p">.</span><span class="na">comentario</span><span class="p">());</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mapToDTO</span><span class="p">(</span><span class="n">reviewRepository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">review</span><span class="p">));</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>Sin más código dado que el que ya ves aquí: escribe tú los pasos que faltan, siguiendo el patrón de la teoría de este apartado — cambia solo <code>NotaLectura</code>/<code>notaLecturaRepository</code> por <code>Review</code>/<code>reviewRepository</code>, y añade las condiciones de <code>videojuegoId</code> y <code>esAdmin</code>.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
@@ -3034,18 +3045,46 @@
 <span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
 <span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-1-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">// En VideojuegoReviewController</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{reviewId}"</span><span class="p">)</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">        </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">        </span><span class="n">Principal</span><span class="w"> </span><span class="n">principal</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span><span class="w"> </span><span class="n">principal</span><span class="p">.</span><span class="na">getName</span><span class="p">()));</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1">// En VideojuegoReviewController</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Modificar una reseña (solo el autor o un administrador)"</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"200"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña actualizada correctamente"</span><span class="p">),</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"400"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Puntuación o comentario inválidos"</span><span class="p">),</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"401"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No autenticado"</span><span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"403"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No eres el autor ni un administrador"</span><span class="p">),</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña no encontrada"</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="p">})</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">"/{reviewId}"</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">ReviewResponseDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">        </span><span class="nd">@Valid</span><span class="w"> </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">ReviewRequestDTO</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="w">        </span><span class="n">Authentication</span><span class="w"> </span><span class="n">authentication</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="n">esAdmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">authentication</span><span class="p">.</span><span class="na">getAuthorities</span><span class="p">().</span><span class="na">stream</span><span class="p">()</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="w">            </span><span class="p">.</span><span class="na">anyMatch</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="na">getAuthority</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="s">"ROLE_ADMIN"</span><span class="p">));</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">reviewService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">dto</span><span class="p">,</span><span class="w"> </span><span class="n">authentication</span><span class="p">.</span><span class="na">getName</span><span class="p">(),</span><span class="w"> </span><span class="n">esAdmin</span><span class="p">));</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Igual que ya hace el <code>POST</code>, recibes <code>Principal principal</code> y le pasas <code>principal.getName()</code> al service — la comparación de autoría ocurre dentro de <code>update()</code>, no en el controller.</p>
+<p><code>Authentication</code> extiende <code>Principal</code> — <code>authentication.getName()</code> te da lo mismo que ya conocías de <code>principal.getName()</code>, pero además expone <code>getAuthorities()</code>, con los roles del usuario (el mismo mecanismo que ya usa <code>JwtService</code>/<code>AuthController</code> para meter los roles en el JWT). La comparación de autoría — o de rol — ocurre dentro de <code>update()</code>, no en el controller: el controller solo se encarga de averiguar quién pregunta y con qué rol, no de decidir si puede o no.</p>
+<div class="admonition tip">
+<p class="admonition-title">Por qué el <code>ADMIN</code> también puede, y no solo el autor</p>
+<p>Un moderador tiene que poder corregir o retirar contenido problemático sin depender de que el autor original coopere — es el mismo motivo por el que <code>ROLE_ADMIN</code> ya puede crear, editar y borrar videojuegos y estudios directamente, saltándose cualquier otra condición. Aquí el rol no sustituye a la comprobación de autoría: se <strong>añade</strong> como una segunda vía de permiso, <code>autor == usuarioActual</code> <strong>o</strong> <code>esAdmin</code>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Por qué comprobar también que la reseña pertenece a <code>videojuegoId</code></p>
+<p>El <code>id</code> de la reseña ya es único por sí solo — no necesitarías <code>videojuegoId</code> para encontrarla. Pero la URL afirma que esa reseña pertenece a ese videojuego en concreto, así que conviene comprobarlo, igual que ya has visto en la teoría de este apartado.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Añade también la regla del <code>PUT</code> a tu <code>SecurityConfig</code></p>
 <p>Igual que has tenido que añadir la regla del <code>POST</code> en la Actividad 3.1, esta ruta nueva tampoco existe todavía en tu política:
@@ -3055,7 +3094,7 @@ Otra vez basta con estar autenticado, sin rol concreto — quién puede modifica
 </div>
 <hr>
 <h2 id="paso-2-probar-con-dos-usuarios-el-caso-correcto">Paso 2 — Probar con dos usuarios: el caso correcto<a class="headerlink" href="#paso-2-probar-con-dos-usuarios-el-caso-correcto" title="Permanent link">¶</a></h2>
-<p>Crea una reseña con el usuario <code>user</code> (o el que uses habitualmente) y anota el <code>id</code> que te devuelve MongoDB:</p>
+<p>Crea una reseña con el usuario <code>user</code> (o el que uses habitualmente) y anota el <code>id</code> que te devuelve MongoDB. Aquí tienes los comandos con <code>curl</code>, pero puedes hacer exactamente lo mismo desde Swagger UI si lo prefieres:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
@@ -3070,6 +3109,7 @@ Otra vez basta con estar autenticado, sin rol concreto — quién puede modifica
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>200 OK</code>, con los datos actualizados en la respuesta.</p>
+<p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>200 OK</code> y los datos ya actualizados.</p>
 <hr>
 <h2 id="paso-3-probar-con-dos-usuarios-el-caso-denegado">Paso 3 — Probar con dos usuarios: el caso denegado<a class="headerlink" href="#paso-3-probar-con-dos-usuarios-el-caso-denegado" title="Permanent link">¶</a></h2>
 <p>Consigue un token de un <strong>segundo</strong> usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:</p>
@@ -3079,16 +3119,80 @@ Otra vez basta con estar autenticado, sin rol concreto — quién puede modifica
 <a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_OTRO_USUARIO</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: <code>403 Forbidden</code>. <strong>Documenta</strong> ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.</p>
+<p><strong>Comprueba</strong>: <code>403 Forbidden</code>.</p>
+<p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>403 Forbidden</code>.</p>
+<p><strong>Documenta</strong> ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.</p>
+<hr>
+<h2 id="paso-4-probar-con-un-administrador-el-rol-tambien-permite">Paso 4 — Probar con un administrador: el rol también permite<a class="headerlink" href="#paso-4-probar-con-un-administrador-el-rol-tambien-permite" title="Permanent link">¶</a></h2>
+<p>Con <code>$TOKEN_ADMIN</code>, modifica la misma reseña del Paso 3 — sin ser el autor:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 5, "comentario": "Moderado por un administrador"}'</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong>: <code>200 OK</code> — a diferencia del Paso 3, aunque tampoco sea el autor.</p>
+<p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>200 OK</code>, hecha con <code>$TOKEN_ADMIN</code>.</p>
+<hr>
+<h2 id="paso-5-el-delete-que-falta-con-el-mismo-patron">Paso 5 — El <code>DELETE</code> que falta, con el mismo patrón<a class="headerlink" href="#paso-5-el-delete-que-falta-con-el-mismo-patron" title="Permanent link">¶</a></h2>
+<p>Hasta ahora un autor puede crear y modificar su reseña, pero nunca borrarla — cierra ese hueco reutilizando exactamente el mismo patrón de permiso que acabas de aplicar en el <code>PUT</code>, esta vez sobre <code>delete()</code>. Sin código dado esta vez — es la misma estructura que ya has escrito en el Paso 1, cambiando solo qué haces al final:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span>
+<span class="normal"><a href="#__codelineno-7-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">// En ReviewService</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">usuarioActual</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">esAdmin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="c1">// Mismo patrón que update(): cargar (404 si no existe), comprobar que pertenece a videojuegoId</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="c1">// (404 si no), comprobar autor o esAdmin (403 si no), y solo entonces reviewRepository.deleteById(reviewId)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="c1">// — el heredado de MongoRepository del que ya habla la teoría, nunca lo habías usado de verdad hasta ahora.</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// En VideojuegoReviewController</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Eliminar una reseña (solo el autor o un administrador)"</span><span class="p">)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"204"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña eliminada correctamente"</span><span class="p">),</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"401"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No autenticado"</span><span class="p">),</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"403"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No eres el autor ni un administrador"</span><span class="p">),</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña no encontrada"</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="p">})</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{reviewId}"</span><span class="p">)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">        </span><span class="n">Authentication</span><span class="w"> </span><span class="n">authentication</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">    </span><span class="c1">// Misma extracción de esAdmin que en el PUT del Paso 1, y la llamada al service</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Añade también la regla que falta a tu <code>SecurityConfig</code>, igual que hiciste con el <code>PUT</code>:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">DELETE</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/*"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<p>No hace falta repetir las tres pruebas del Paso 2-4 — la lógica de permiso es idéntica y ya la has verificado. Basta con una comprobación:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong>: <code>204 No Content</code>, y que un <code>GET</code> posterior a esa reseña ya no la incluye.</p>
+<p><strong>Captura</strong>: la respuesta del <code>DELETE</code> con <code>204 No Content</code>.</p>
 <hr>
 <h2 id="pregunta-de-comprension">Pregunta de comprensión<a class="headerlink" href="#pregunta-de-comprension" title="Permanent link">¶</a></h2>
-<p>¿Por qué la comprobación de autoría devuelve <code>403 Forbidden</code> y no <code>404 Not Found</code>, sabiendo que la reseña sí existe? ¿Cambiaría tu respuesta si, en vez de una reseña, estuvieras protegiendo un recurso donde no quieres ni confirmar que existe a alguien sin permiso? (No hace falta que cambies el código — solo que razones la diferencia).</p>
-<hr>
-<h2 id="resumen-del-tema">Resumen del tema<a class="headerlink" href="#resumen-del-tema" title="Permanent link">¶</a></h2>
-<p>Escribe un resumen propio (5-6 líneas) del recorrido completo de este tema: conectar y consultar MongoDB por primera vez (Actividad 3.1) → entender colecciones y el borrado en cascada vía eventos (Actividad 3.2) → modificar documentos con control de acceso real (esta actividad). ¿Qué diferencia concreta has notado entre trabajar con PostgreSQL (Temas 1-2) y con MongoDB (este tema) — en qué momento has echado en falta las garantías del modelo relacional, y en qué momento has agradecido la flexibilidad del documental?</p>
-<hr>
-<h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
-<p>Con esto termina todo el bloque de bases de datos del módulo. En el Tema 4, el último del curso, das un paso atrás para ver todo lo construido bajo una óptica distinta: componentes reutilizables, resolviendo con <code>CatalogoConsultaService</code> un acoplamiento que arrastras precisamente desde este tema (<code>ReviewService</code> inyectando <code>VideojuegoRepository</code> directamente).</p></div>
+<p>¿Por qué la comprobación de autoría devuelve <code>403 Forbidden</code> y no <code>404 Not Found</code>, sabiendo que la reseña sí existe? ¿Cambiaría tu respuesta si, en vez de una reseña, estuvieras protegiendo un recurso donde no quieres ni confirmar que existe a alguien sin permiso? (No hace falta que cambies el código — solo que razones la diferencia).</p></div>
 
 
 

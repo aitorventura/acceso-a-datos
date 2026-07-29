@@ -2985,9 +2985,43 @@
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="w"> </span><span class="nx">_id</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">)</span><span class="w"> </span><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 <p>Hay una diferencia conceptual importante entre <code>updateOne</code> con <code>$set</code> (modifica solo los campos indicados, deja el resto intacto) y <code>replaceOne</code> (sustituye el documento entero). Conviene que sepas que <code>$set</code> existe, aunque no lo uses directamente desde Java: <code>save()</code> de Spring Data MongoDB, que ya conoces, hace lo segundo — reemplaza el documento completo, no un <em>merge</em> parcial.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>updateOne</code> + <code>$set</code></th>
+<th><code>replaceOne</code></th>
+<th><code>save()</code> (Spring Data)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué toca</td>
+<td>Solo los campos que indicas</td>
+<td>Todo el documento</td>
+<td>Todo el documento</td>
+</tr>
+<tr>
+<td>Campos que no incluyes</td>
+<td>Se quedan como estaban</td>
+<td>Desaparecen</td>
+<td>Se sobrescriben con lo que traiga el objeto Java</td>
+</tr>
+<tr>
+<td>¿Se usa desde Java?</td>
+<td>No directamente</td>
+<td>No directamente</td>
+<td>Sí — es lo que ya usas</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">El riesgo silencioso de <code>save()</code></p>
+<p><code>save()</code> no hace un <em>merge</em>: sustituye el documento entero por el objeto Java que le pasas. Si ese objeto llega sin todos los campos rellenos (por ejemplo, porque olvidaste copiar <code>comentario</code> antes de guardar), MongoDB los sobrescribe con <code>null</code> sin ningún aviso — a diferencia de <code>$set</code>, que solo toca lo que le dices explícitamente. Por eso el patrón de la siguiente sección siempre carga el documento completo antes de tocar nada: para no perder por el camino los campos que no vas a cambiar.</p>
+</div>
 <hr>
 <h2 id="un-ejemplo-completo-modificar-una-nota-de-lectura-con-control-de-autoria">📚 Un ejemplo completo: modificar una nota de lectura, con control de autoría<a class="headerlink" href="#un-ejemplo-completo-modificar-una-nota-de-lectura-con-control-de-autoria" title="Permanent link">¶</a></h2>
-<p>Siguiendo con las notas de lectura de la librería: cualquier usuario autenticado puede publicar una, pero solo el <strong>autor original</strong> debería poder modificarla después. Ese control de autoría es la particularidad nueva de este apartado.</p>
+<p>Siguiendo con las notas de lectura de la librería: cualquier usuario autenticado puede publicar una, pero solo el <strong>autor original</strong> debería poder modificarla después. Imagina que no hicieras esa comprobación: cualquiera que tuviera sesión iniciada podría llamar al mismo endpoint sobre la nota de lectura de otra persona, y sobrescribirle la puntuación y el comentario sin que nada se lo impidiera — hasta ahora la única barrera ha sido "estás identificado", nunca "eres el dueño de esto". Ese hueco es exactamente lo que cierra el control de autoría, la particularidad nueva de este apartado.</p>
 <h3 id="de-donde-sale-la-identidad-principal">De dónde sale la identidad: <code>Principal</code><a class="headerlink" href="#de-donde-sale-la-identidad-principal" title="Permanent link">¶</a></h3>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
@@ -3036,17 +3070,40 @@
 <a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>El patrón, en tres pasos: cargar el documento por id, comprobar que el campo <code>autor</code> guardado coincide con <code>usuarioActual</code> (el <code>principal.getName()</code> de la petición), y solo entonces aplicar los cambios y guardar. Si no coincide, <code>403 Forbidden</code> — el usuario está autenticado (sabemos quién es), pero no tiene permiso para esta acción concreta sobre este recurso. Si la nota de lectura no existe, <code>404 Not Found</code>, como ya conoces.</p>
+<pre class="mermaid"><code>flowchart TD
+    A["PUT /notas-lectura/{id}"] --&gt; B{"¿Existe el documento?"}
+    B --&gt;|"No"| C["404 Not Found"]
+    B --&gt;|"Sí"| D{"¿autor == usuarioActual?"}
+    D --&gt;|"No"| E["403 Forbidden"]
+    D --&gt;|"Sí"| F["Modifica y guarda&lt;br/&gt;200 OK"]</code></pre>
+<p>El orden de las dos comprobaciones no es casual: primero averiguas si el recurso existe (si no, <code>404</code>), y solo después comparas el autor (si no coincide, <code>403</code>) — invertirlo no tendría sentido, porque no puedes comparar el autor de un documento que todavía no has cargado.</p>
+<div class="admonition tip">
+<p class="admonition-title">En la práctica, el autor no suele ser la única vía de permiso</p>
+<p>Solo el autor original es la regla mínima, pero casi cualquier aplicación real añade una segunda vía: un rol con permisos de moderación (un <code>ADMIN</code>, por ejemplo) que pueda actuar igual sin ser el autor. La condición pasa de <code>autor == usuarioActual</code> a <code>autor == usuarioActual</code> <strong>o</strong> <code>esAdmin</code> — el rol no sustituye la comprobación de autoría, se suma a ella como una vía alternativa de permiso. Lo practicas así, con tu propio dominio, en la actividad de hoy.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">El id del documento ya es único — ¿para qué comprobar también el padre de la URL?</p>
+<p>Si la ruta anida el recurso bajo otro (<code>PUT /libros/{libroId}/notas-lectura/{id}</code>), el <code>id</code> de la nota de lectura por sí solo ya basta para encontrarla — no necesitarías <code>libroId</code> para eso. Pero como la URL afirma que esa nota pertenece a ese libro concreto, conviene comprobarlo también: si la nota existe pero pertenece a otro libro distinto, trátalo igual que si no existiera (<code>404</code>) — para esa URL, tal como está escrita, ese recurso no está. Sin esa comprobación, cualquier <code>libroId</code> de la URL sería aceptado siempre que el <code>id</code> de la nota fuera válido, sin que nadie llegara a mirar si de verdad coinciden.</p>
+</div>
 <h3 id="save-sirve-para-crear-y-para-actualizar-otra-vez"><code>save()</code> sirve para crear y para actualizar — otra vez<a class="headerlink" href="#save-sirve-para-crear-y-para-actualizar-otra-vez" title="Permanent link">¶</a></h3>
 <p><code>NotaLecturaRepository</code> (que extiende <code>MongoRepository&lt;NotaLectura, String&gt;</code>) ya tiene <code>save()</code> heredado, y sirve tanto para crear un documento nuevo como para actualizar uno existente — basta con que el objeto que le pases tenga el mismo <code>id</code> que ya existe en la colección. No es un concepto nuevo: es exactamente lo mismo que ya viste con <code>JpaRepository</code> en el Tema 1 — solo cambia el motor de base de datos por debajo, el comportamiento de <code>save()</code> es idéntico en la forma de razonar sobre él.</p>
+<p>Lo mismo pasa con eliminar un documento suelto por su id: <code>deleteById(id)</code> viene heredado de <code>MongoRepository</code>, igual que en <code>JpaRepository</code> — el método en sí no hay que escribirlo. Lo que sí construyes tú, en la práctica de hoy, es el endpoint que lo expone con el mismo control de autoría (o rol de administrador) que acabas de ver, más allá del borrado en bloque por <code>libroId</code> que ya viste en el apartado anterior.</p>
+<div class="admonition info">
+<p class="admonition-title">Una alternativa más avanzada: filtrar la autoría directamente en la consulta</p>
+<p>El patrón de hoy hace dos pasos en Java: cargar el documento, comprobar el autor, y solo entonces guardar — dos idas y vueltas a MongoDB. Hay una forma más directa: exigir esa misma condición dentro del propio filtro de la actualización, <code>db.nota_lectura.updateOne({ _id: ..., autor: usuarioActual }, { $set: {...} })</code>. Si el autor no coincide, el filtro simplemente no encuentra nada que actualizar, y la operación devuelve cero documentos modificados, sin ninguna lectura previa. Es más eficiente, pero pierdes precisión en el error: sin una consulta aparte, no puedes distinguir "no existe" de "no es tuyo", así que decidir entre <code>404</code> y <code>403</code> como haces aquí ya no es tan directo. No lo vas a practicar en este módulo, pero conviene que sepas que existe, para cuando el rendimiento pese más que la claridad del error.</p>
+</div>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li><code>updateOne</code> con <code>$set</code> modifica campos concretos; <code>replaceOne</code> (y <code>save()</code> de Spring Data) sustituye el documento entero.</li>
+<li><code>updateOne</code> con <code>$set</code> modifica campos concretos; <code>replaceOne</code> (y <code>save()</code> de Spring Data) sustituye el documento entero — y lo hace en silencio, sin avisar si el objeto Java llega con campos vacíos.</li>
 <li><code>Principal</code> te da la identidad del usuario autenticado, inyectada por Spring Security a partir del JWT construido en PSP.</li>
-<li>El patrón de control de autoría: cargar → comprobar que el autor coincide con el usuario actual → solo entonces modificar y guardar. <code>403</code> si no coincide, <code>404</code> si no existe.</li>
-<li><code>save()</code> de <code>MongoRepository</code> sirve tanto para crear como para actualizar, exactamente igual que <code>JpaRepository</code> — mismo concepto, distinto motor.</li>
+<li>El patrón de control de autoría: cargar → comprobar que el autor coincide con el usuario actual → solo entonces modificar y guardar. <code>403</code> si no coincide, <code>404</code> si no existe — en ese orden, porque no puedes comparar el autor de algo que no has cargado todavía.</li>
+<li>En la práctica, un rol de moderación (<code>ADMIN</code>) suele añadirse como segunda vía de permiso junto al autor — <code>autor == usuarioActual</code> <strong>o</strong> <code>esAdmin</code>, no en sustitución de la comprobación de autoría.</li>
+<li>Si la URL anida el recurso bajo un padre (<code>.../{padreId}/notas-lectura/{id}</code>), comprueba también que el documento pertenece a ese padre, aunque su propio <code>id</code> ya sea único — si no coincide, <code>404</code>, igual que si no existiera para esa URL.</li>
+<li><code>save()</code>/<code>deleteById()</code> de <code>MongoRepository</code> sirven tanto para crear/actualizar como para eliminar un documento suelto, exactamente igual que <code>JpaRepository</code> — mismo concepto, distinto motor.</li>
+<li>Filtrar la autoría directamente en el <code>updateOne</code> (en vez de cargar y comparar en Java) es más eficiente pero pierde precisión en el error — no se practica en este módulo, pero conviene saber que existe.</li>
 </ul>
 </details></div>
 
