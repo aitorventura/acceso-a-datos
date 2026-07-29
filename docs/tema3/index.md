@@ -28,7 +28,7 @@
 
 - [Actividad 3.1 — Reseñas de videojuegos en MongoDB](actividad_3_1.md)
 - [Actividad 3.2 — Tu propia colección documental](actividad_3_2.md)
-- [Actividad 3.3 — PUT de reseñas con control de autoría](actividad_3_3.md)
+- [Actividad 3.3 — PUT y DELETE de reseñas con control de autoría](actividad_3_3.md)
 
 ---
 
