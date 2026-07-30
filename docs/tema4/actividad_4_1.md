@@ -74,6 +74,16 @@ Sin más código dado que el patrón que ya tienes delante, añade un segundo m�
 
 Sigue exactamente el mismo patrón que ya existía para `existeVideojuego` — la estructura ya la conoces.
 
+Reinicia tu aplicación y comprueba el campo nuevo:
+
+```bash
+curl http://localhost:8080/api/v1/videojuegos/1/reviews/resumen
+```
+
+**Comprueba**: que la respuesta incluye ahora `tituloVideojuego`, con el título correcto, junto al `totalReviews` y `puntuacionMedia` de siempre.
+
+**Captura**: la respuesta de `/resumen` mostrando el campo `tituloVideojuego`.
+
 ---
 
 ## Paso 5 — Prueba del componente aislado
@@ -108,9 +118,9 @@ class CatalogoConsultaServiceImplTest {
 }
 ```
 
-`@Mock` sustituye `VideojuegoRepository` por un doble de prueba; `@InjectMocks` construye `CatalogoConsultaServiceImpl` inyectándole ese mock automáticamente — sin arrancar Spring, sin base de datos, un test rapidísimo y totalmente aislado. Añade un tercer test que cubra tu método nuevo `tituloDe`, siguiendo el mismo patrón.
+`@Mock` sustituye `VideojuegoRepository` por un doble de prueba; `@InjectMocks` construye `CatalogoConsultaServiceImpl` inyectándole ese mock automáticamente — sin arrancar Spring, sin base de datos, un test rapidísimo y totalmente aislado. Añade dos tests más que cubran tu método nuevo `tituloDe`, siguiendo el mismo patrón que ya tienes arriba para `existeVideojuego` — un caso por cada rama: uno donde el videojuego existe (el mock devuelve un `Videojuego` con título), y otro donde no existe (el mock devuelve vacío y compruebas, con `assertThrows`, que se lanza la excepción `404`).
 
-**Captura**: los tres tests en verde.
+**Captura**: los cuatro tests en verde.
 
 ---
 
