@@ -2633,18 +2633,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-un-segundo-metodo" class="md-nav__link">
+  <a href="#paso-4-un-segundo-metodo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — un segundo método
+      Paso 4 — Un segundo método
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-prueba-del-componente-aislado" class="md-nav__link">
+  <a href="#paso-5-prueba-del-componente-aislado" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Prueba del componente aislado
+      Paso 5 — Prueba del componente aislado
     </span>
   </a>
   
@@ -2758,7 +2758,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 4.2 - Repaso integrador
+    Actividad 4.2 - Mismo patrón, otro motor
     
   </span>
   
@@ -2876,6 +2876,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cierre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cierre del módulo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -2948,18 +2970,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mini-reto-un-segundo-metodo" class="md-nav__link">
+  <a href="#paso-4-un-segundo-metodo" class="md-nav__link">
     <span class="md-ellipsis">
-      Mini-reto — un segundo método
+      Paso 4 — Un segundo método
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#paso-4-prueba-del-componente-aislado" class="md-nav__link">
+  <a href="#paso-5-prueba-del-componente-aislado" class="md-nav__link">
     <span class="md-ellipsis">
-      Paso 4 — Prueba del componente aislado
+      Paso 5 — Prueba del componente aislado
     </span>
   </a>
   
@@ -3000,6 +3022,10 @@
 
 
 <div><h1 id="actividad-41-catalogoconsultaservice-un-componente-reutilizable">🧪 Actividad 4.1: <code>CatalogoConsultaService</code> — un componente reutilizable<a class="headerlink" href="#actividad-41-catalogoconsultaservice-un-componente-reutilizable" title="Permanent link">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Descarga la plantilla</p>
+<p>📄 <a href="../plantillas/Actividad_4_1_AD_Plantilla.docx" rel="noopener" target="_blank">Plantilla 4.1 — CatalogoConsultaService: un componente reutilizable</a></p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
 <p>Desde la Actividad 3.1, <code>ReviewService</code> inyecta <code>VideojuegoRepository</code> directamente. Hoy resuelves ese acoplamiento construyendo tu primer componente con contrato explícito, siguiendo el patrón de la teoría, y lo extiendes con un método nuevo.</p>
@@ -3019,8 +3045,18 @@
 <ol>
 <li>La interfaz <code>CatalogoConsultaService</code>, en un paquete nuevo <code>catalogo.api</code>, con un único método por ahora: <code>boolean existeVideojuego(Long videojuegoId)</code>.</li>
 <li><code>CatalogoConsultaServiceImpl</code> (package-private, anotada <code>@Service</code>) en <code>catalogo</code>, que implemente la interfaz reutilizando tu <code>VideojuegoRepository</code> ya existente.</li>
-<li>Modifica <code>ReviewService</code> para que inyecte <code>CatalogoConsultaService</code> (la interfaz) en lugar de <code>VideojuegoRepository</code> directamente, y actualiza las dos comprobaciones (<code>findByVideojuegoId</code> y <code>create</code>) para llamar a <code>existeVideojuego(...)</code>.</li>
+<li>Modifica <code>ReviewService</code> para que inyecte <code>CatalogoConsultaService</code> (la interfaz) en lugar de <code>VideojuegoRepository</code> directamente, y actualiza <strong>las cuatro</strong> comprobaciones que hoy usan <code>videojuegoRepository.existsById(...)</code> — <code>findByVideojuegoId</code>, <code>create</code>, <code>getResumenByVideojuegoId</code> y <code>findBuenasNotas</code> — para que llamen a <code>existeVideojuego(...)</code>. Al terminar, ningún método de <code>ReviewService</code> debería seguir usando <code>videojuegoRepository</code> — quita también el campo y su <code>import</code>.</li>
 </ol>
+<p><code>ReviewRepository</code>, en cambio, no lo tocas: es el propio repositorio del módulo <code>reviews</code>, no el de otro módulo — inyectarlo directamente nunca ha sido el problema. El acoplamiento que resuelves hoy es solo el que cruza hacia <code>catalogo</code>.</p>
+<p>Reinicia tu aplicación y comprueba que nada se ha roto — crea una reseña para un videojuego existente, y prueba también con un <code>videojuegoId</code> que no exista:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Sigue funcionando igual"}'</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comprueba</strong>: mismo comportamiento de siempre — <code>201 Created</code> si el videojuego existe, <code>404 Not Found</code> si no. El refactor no debería cambiar ni un código de estado, solo de dónde viene la comprobación.</p>
+<p><strong>Captura</strong>: la respuesta <code>201</code>, confirmando que el componente nuevo funciona igual que el <code>VideojuegoRepository</code> directo que sustituye.</p>
 <hr>
 <h2 id="paso-2-preguntas-de-comprension">Paso 2 — Preguntas de comprensión<a class="headerlink" href="#paso-2-preguntas-de-comprension" title="Permanent link">¶</a></h2>
 <p>Con tu código recién escrito delante, responde:</p>
@@ -3038,7 +3074,7 @@
 <li>¿Qué papel concreto juega la interfaz <code>CatalogoConsultaService</code> en que la respuesta a la pregunta anterior sea "no"?</li>
 </ul>
 <hr>
-<h2 id="mini-reto-un-segundo-metodo">Mini-reto — un segundo método<a class="headerlink" href="#mini-reto-un-segundo-metodo" title="Permanent link">¶</a></h2>
+<h2 id="paso-4-un-segundo-metodo">Paso 4 — Un segundo método<a class="headerlink" href="#paso-4-un-segundo-metodo" title="Permanent link">¶</a></h2>
 <p>Sin más código dado que el patrón que ya tienes delante, añade un segundo método al componente: <code>String tituloDe(Long videojuegoId)</code>, que devuelva el título de un videojuego (o lance <code>ResponseStatusException(HttpStatus.NOT_FOUND, ...)</code> si no existe).</p>
 <ol>
 <li>Añádelo a la interfaz <code>CatalogoConsultaService</code>.</li>
@@ -3047,58 +3083,60 @@
 </ol>
 <p>Sigue exactamente el mismo patrón que ya existía para <code>existeVideojuego</code> — la estructura ya la conoces.</p>
 <hr>
-<h2 id="paso-4-prueba-del-componente-aislado">Paso 4 — Prueba del componente aislado<a class="headerlink" href="#paso-4-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@ExtendWith</span><span class="p">(</span><span class="n">MockitoExtension</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nd">@Mock</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nd">@InjectMocks</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="nd">@Test</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">existe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">1L</span><span class="p">);</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">existe</span><span class="p">);</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="nd">@Test</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverFalse_CuandoNoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">99L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">        </span><span class="n">assertFalse</span><span class="p">(</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">99L</span><span class="p">));</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="p">}</span>
+<h2 id="paso-5-prueba-del-componente-aislado">Paso 5 — Prueba del componente aislado<a class="headerlink" href="#paso-5-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
+<p>Siguiendo el patrón de <code>@Mock</code>/<code>@InjectMocks</code> de la teoría de este apartado:</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nd">@ExtendWith</span><span class="p">(</span><span class="n">MockitoExtension</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nd">@Mock</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nd">@InjectMocks</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">existe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">1L</span><span class="p">);</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">existe</span><span class="p">);</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverFalse_CuandoNoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">99L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a>
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="w">        </span><span class="n">assertFalse</span><span class="p">(</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">99L</span><span class="p">));</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p><code>@Mock</code> sustituye <code>VideojuegoRepository</code> por un doble de prueba; <code>@InjectMocks</code> construye <code>CatalogoConsultaServiceImpl</code> inyectándole ese mock automáticamente — sin arrancar Spring, sin base de datos, un test rapidísimo y totalmente aislado. Añade un tercer test que cubra tu método nuevo <code>tituloDe</code>, siguiendo el mismo patrón.</p>
+<p><strong>Captura</strong>: los tres tests en verde.</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
 <p>¿Qué información <strong>no</strong> deberías exponer nunca a través de este componente — por ejemplo, la entidad <code>Videojuego</code> completa, con todos sus campos y relaciones? ¿Dónde está la línea entre "exponer lo mínimo necesario para que <code>reviews</code> haga su trabajo" y "exponer todo por comodidad, para no tener que pensar en cada método nuevo"? Da un ejemplo concreto de un dato del catálogo que <strong>no</strong> deberías dejar ver a través de <code>CatalogoConsultaService</code>.</p>

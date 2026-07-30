@@ -2575,24 +2575,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#el-origen-historico-javabeans" class="md-nav__link">
-    <span class="md-ellipsis">
-      El origen histórico: JavaBeans
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#la-traduccion-al-mundo-actual" class="md-nav__link">
-    <span class="md-ellipsis">
-      La traducción al mundo actual
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#ventajas-e-inconvenientes" class="md-nav__link">
     <span class="md-ellipsis">
       Ventajas e inconvenientes
@@ -2653,9 +2635,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#el-contraste-que-ilustra-el-desacoplamiento" class="md-nav__link">
+  <a href="#probar-el-componente-en-aislamiento" class="md-nav__link">
     <span class="md-ellipsis">
-      El contraste que ilustra el desacoplamiento
+      Probar el componente en aislamiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sustituibilidad-hecha-concreta" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sustituibilidad, hecha concreta
     </span>
   </a>
   
@@ -2788,7 +2779,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 4.2 - Repaso integrador
+    Actividad 4.2 - Mismo patrón, otro motor
     
   </span>
   
@@ -2906,6 +2897,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cierre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cierre del módulo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -2941,24 +2954,6 @@
   
     <nav class="md-nav" aria-label="🧩 Qué es la programación orientada a componentes">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#el-origen-historico-javabeans" class="md-nav__link">
-    <span class="md-ellipsis">
-      El origen histórico: JavaBeans
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#la-traduccion-al-mundo-actual" class="md-nav__link">
-    <span class="md-ellipsis">
-      La traducción al mundo actual
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#ventajas-e-inconvenientes" class="md-nav__link">
@@ -3021,9 +3016,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#el-contraste-que-ilustra-el-desacoplamiento" class="md-nav__link">
+  <a href="#probar-el-componente-en-aislamiento" class="md-nav__link">
     <span class="md-ellipsis">
-      El contraste que ilustra el desacoplamiento
+      Probar el componente en aislamiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sustituibilidad-hecha-concreta" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sustituibilidad, hecha concreta
     </span>
   </a>
   
@@ -3064,18 +3068,40 @@
 <p>Último tema del módulo. Todo lo que has construido hasta ahora — repositorios, servicios, controladores — lo vas a mirar ahora bajo una óptica distinta: la de <strong>componente</strong>. Vas a identificar un problema que ya tienes en tu propio código desde el Tema 3, y resolverlo construyendo tu primer componente con un contrato explícito.</p>
 <hr>
 <h2 id="que-es-la-programacion-orientada-a-componentes">🧩 Qué es la programación orientada a componentes<a class="headerlink" href="#que-es-la-programacion-orientada-a-componentes" title="Permanent link">¶</a></h2>
-<p>La <strong>programación orientada a componentes</strong> consiste en construir aplicaciones ensamblando piezas autocontenidas y reutilizables — cada una con una responsabilidad clara y un <strong>contrato público</strong> (su interfaz), que oculta cómo resuelve esa responsabilidad por dentro. Quien usa un componente solo necesita conocer su contrato, nunca su implementación.</p>
-<p>El currículo asocia a un componente varias características clásicas:</p>
-<ul>
-<li><strong>Propiedades</strong>: valores configurables del componente.</li>
-<li><strong>Eventos</strong>: acciones que el componente puede disparar, a las que otros pueden reaccionar.</li>
-<li><strong>Persistencia/serialización</strong>: la capacidad de guardar y recuperar el estado del componente.</li>
-<li><strong>Empaquetado</strong>: la forma de distribuirlo para que otros lo usen sin ver su código fuente.</li>
-</ul>
-<h3 id="el-origen-historico-javabeans">El origen histórico: JavaBeans<a class="headerlink" href="#el-origen-historico-javabeans" title="Permanent link">¶</a></h3>
-<p>Estas ideas vienen de los <strong>JavaBeans</strong> y los componentes visuales que, en entornos de desarrollo antiguos, se arrastraban desde una paleta del IDE — un botón, una rejilla de datos — y se configuraban ajustando sus propiedades desde un panel, sin escribir código. De ahí sale el vocabulario del currículo: propiedades, eventos, empaquetado.</p>
-<h3 id="la-traduccion-al-mundo-actual">La traducción al mundo actual<a class="headerlink" href="#la-traduccion-al-mundo-actual" title="Permanent link">¶</a></h3>
-<p>En un proyecto Spring Boot moderno, el equivalente conceptual de aquellos JavaBeans son los <strong>Spring Beans gestionados por inyección de dependencias</strong> — ya los conoces desde el Tema 1. Una clase con una responsabilidad clara, con su interfaz, que se declara una vez y se reutiliza donde haga falta, sin que quien la usa conozca los detalles internos. La idea de fondo es exactamente la misma: piezas autocontenidas, con un contrato, ensambladas por un contenedor (el IDE antes, Spring ahora).</p>
+<p>Ya usas componentes, sin haberlos llamado así todavía. Cada <code>@Service</code>, cada <code>@Repository</code> que has escrito en este módulo es uno: una pieza que hace una cosa concreta (gestionar libros, hablar con la base de datos...), que otras clases usan sin saber ni necesitar saber cómo está construida por dentro. Eso es, en esencia, la <strong>programación orientada a componentes</strong>: construir la aplicación ensamblando piezas autocontenidas y reutilizables, cada una con una responsabilidad clara y un <strong>contrato público</strong> (su interfaz) — lo único que hace falta conocer para usarla, nunca cómo resuelve esa responsabilidad por dentro.</p>
+<p>A un componente se le asocian, además, varias características que vienen de una época anterior a Spring — la de los <strong>JavaBeans</strong> y los primeros entornos de desarrollo visuales, donde se construían programas arrastrando piezas ya hechas (un botón, una tabla) sobre un lienzo, sin escribir código para colocarlas, y ajustando su comportamiento desde un panel de opciones. No hace falta que hayas visto nada parecido — esas herramientas son anteriores a que empezaras a programar —, pero el vocabulario que dejaron sigue siendo el que se usa hoy, con su equivalente en Spring:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto (época JavaBeans)</th>
+<th>Qué significa</th>
+<th>Su equivalente hoy, en Spring Boot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Propiedades</strong></td>
+<td>Valores configurables del componente, ajustables sin tocar su código</td>
+<td>Campos configurables de un bean — por ejemplo, el <code>corePoolSize</code> de un <code>TaskExecutor</code></td>
+</tr>
+<tr>
+<td><strong>Eventos</strong></td>
+<td>Acciones que el componente dispara, a las que otros reaccionan sin que el primero los conozca</td>
+<td><code>ApplicationEventPublisher</code> + <code>@TransactionalEventListener</code>, que ya has construido en Programación de Servicios y Procesos</td>
+</tr>
+<tr>
+<td><strong>Persistencia/serialización</strong></td>
+<td>Guardar y recuperar el estado del propio componente</td>
+<td>Poco relevante aquí: tus componentes (<code>@Service</code>) no suelen guardar estado propio, delegan en el repositorio</td>
+</tr>
+<tr>
+<td><strong>Empaquetado</strong></td>
+<td>Distribuir el componente para que otros lo usen sin ver su código fuente</td>
+<td>Una dependencia añadida a tu <code>pom.xml</code> — un <code>.jar</code> que usas sin ver ni un archivo <code>.java</code> de dentro</td>
+</tr>
+</tbody>
+</table>
+<p>Lo único que cambia de verdad es quién ensambla las piezas: antes lo hacía el propio IDE, al arrastrarlas sobre el lienzo; ahora lo hace Spring, leyendo tus anotaciones (<code>@Service</code>, <code>@Autowired</code>...) y montando el objeto completo por ti.</p>
 <h3 id="ventajas-e-inconvenientes">Ventajas e inconvenientes<a class="headerlink" href="#ventajas-e-inconvenientes" title="Permanent link">¶</a></h3>
 <table>
 <thead>
@@ -3103,6 +3129,7 @@
 </tr>
 </tbody>
 </table>
+<p><strong>Indirección</strong> significa que, para ver qué hace de verdad un método, ya no basta con mirar una sola clase: primero encuentras la interfaz que se llama, y luego tienes que buscar por separado cuál es su implementación real — un salto más que si llamaras directamente a la clase concreta. Es el precio de la sustituibilidad: ganas poder cambiar la implementación sin tocar quien la usa, pero a cambio, seguir el rastro del código a mano cuesta un poco más.</p>
 <hr>
 <h2 id="la-progresion-de-componente-con-la-libreria">📚 La progresión de "componente", con la librería<a class="headerlink" href="#la-progresion-de-componente-con-la-libreria" title="Permanent link">¶</a></h2>
 <h3 id="herramientas-de-desarrollo-de-componentes">Herramientas de desarrollo de componentes<a class="headerlink" href="#herramientas-de-desarrollo-de-componentes" title="Permanent link">¶</a></h3>
@@ -3113,8 +3140,9 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>En su forma más básica, <code>LibroRepository</code> ya es un "componente con conector a base de datos": una interfaz que Spring implementa y gestiona por ti — se declara una vez (<code>private final LibroRepository libroRepository;</code>) y se reutiliza donde haga falta, sin que nadie que lo use necesite saber cómo genera Spring esa implementación por debajo.</p>
+<p>Esto no cambia nada si ese repositorio, además, usa <code>JpaSpecificationExecutor</code> con Specifications sobre JSONB (Tema 2) — <code>LibroRepository</code>/<code>LibroSpecifications</code>, con <code>disponibleEnFormato</code> y su <code>jsonb_exists</code> por debajo, es exactamente el mismo tipo de componente: quien lo consume (<code>LibroService</code>, o cualquier otro service) no tiene ni que saber que ahí dentro hay una función nativa de PostgreSQL. No has tenido que construir nada nuevo para esto — ya lo tenías, solo le falta el nombre.</p>
 <h3 id="nivel-2-cuando-un-repositorio-no-basta">Nivel 2: cuando un repositorio no basta<a class="headerlink" href="#nivel-2-cuando-un-repositorio-no-basta" title="Permanent link">¶</a></h3>
-<p>Recuerda <code>NotaLecturaService</code>, del Tema 3: para comprobar que un libro existe antes de tocar Mongo, inyecta <code>LibroRepository</code> directamente:</p>
+<p>Recuerda <code>NotaLecturaService</code>, del Tema 3: para comprobar que un libro existe antes de tocar Mongo, inyecta <code>LibroRepository</code> directamente. Fíjate en que el problema no es "inyectar un repositorio" en general — <code>NotaLecturaService</code> también inyecta <code>NotaLecturaRepository</code>, el suyo propio, y eso no tiene nada de malo. El problema es cruzar la frontera hacia el repositorio de <strong>otro módulo</strong>: <code>LibroRepository</code> pertenece al catálogo, no a notas de lectura.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
 <span class="normal"><a href="#__codelineno-1-3">3</a></span>
@@ -3133,16 +3161,81 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="c1">// ...</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Funciona, pero acopla el módulo de notas de lectura a un detalle muy interno del módulo del catálogo: su repositorio JPA concreto. Si el catálogo cambiara mañana cómo organiza internamente su persistencia, tendrías que tocar también <code>NotaLecturaService</code>, aunque no tenga nada que ver con ese cambio. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo, y esconder todo lo demás detrás.</p>
+<p>Funciona, pero acopla el módulo de notas de lectura a un detalle muy interno del módulo del catálogo: su repositorio JPA concreto. Imagina un cambio concreto, nada rebuscado: mañana el catálogo decide dejar de borrar libros de verdad, y pasa a marcarlos como <code>activo = false</code> (<strong>borrado lógico</strong>, para poder recuperarlos si alguien se equivoca al borrar).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Antes</th>
+<th>Después del borrado lógico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cómo se comprueba "el libro existe"</td>
+<td><code>libroRepository.existsById(libroId)</code></td>
+<td><code>libroRepository.existsByIdAndActivoTrue(libroId)</code></td>
+</tr>
+<tr>
+<td>Ficheros a tocar, <strong>con</strong> el componente (<code>LibroConsultaService</code>)</td>
+<td>—</td>
+<td>Solo <code>LibroConsultaServiceImpl</code></td>
+</tr>
+<tr>
+<td>Ficheros a tocar, <strong>sin</strong> el componente (cada módulo inyectando <code>LibroRepository</code> directo)</td>
+<td>—</td>
+<td>Cada módulo que inyecte <code>LibroRepository</code> — <code>NotaLecturaService</code>, y cualquier otro que hiciera lo mismo</td>
+</tr>
+</tbody>
+</table>
+<p>Esa decisión es solo cosa del catálogo. Pero si <code>NotaLecturaService</code> inyecta <code>LibroRepository</code> directamente, alguien tiene que acordarse de ir también a ese módulo —que no tiene nada que ver con cómo el catálogo decide borrar sus libros— y cambiar la llamada ahí.</p>
+<p>Multiplica eso por cada módulo que inyecte <code>LibroRepository</code> directamente, y un cambio interno del catálogo se convierte en un cambio que hay que repetir por toda la aplicación:</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph Sin["🔗 Sin componente — hay que repetir el cambio"]
+        direction TB
+        R1["LibroRepository&lt;br/&gt;(cambia por dentro)"]
+        M1["NotaLecturaService"] --&gt;|"toca aquí"| R1
+        M2["Módulo B"] --&gt;|"toca aquí"| R1
+        M3["Módulo C"] --&gt;|"toca aquí"| R1
+    end
+    subgraph Con["🧩 Con componente — un único sitio"]
+        direction TB
+        I2["Interfaz del componente&lt;br/&gt;(no cambia)"]
+        IMPL2["Su implementación&lt;br/&gt;(el único sitio que cambia)"]
+        N1["NotaLecturaService"] --&gt; I2
+        N2["Módulo B"] --&gt; I2
+        N3["Módulo C"] --&gt; I2
+        I2 -.-&gt; IMPL2
+    end</code></pre>
+<p>En "Sin componente", cada módulo apunta directamente a lo que cambia — tres sitios que tocar. En "Con componente", todos apuntan a una interfaz que no cambia nunca; el único que se entera del cambio es su implementación, oculta detrás. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo, sin decir cómo se decide por dentro, y esconder todo lo demás detrás. Así se construye uno, paso a paso:</p>
 <h3 id="construyendo-el-componente-interfaz-implementacion-oculta">Construyendo el componente: interfaz + implementación oculta<a class="headerlink" href="#construyendo-el-componente-interfaz-implementacion-oculta" title="Permanent link">¶</a></h3>
-<p>La solución es una interfaz pequeña, pensada para que otros módulos la usen, con una implementación que sí conoce los detalles pero permanece oculta. El contrato, en un paquete <code>api</code> — pensado para lo que otros módulos SÍ pueden ver:</p>
+<p>La solución es una interfaz pequeña, pensada para que otros módulos la usen, con una implementación que sí conoce los detalles pero permanece oculta. Antes de ver el código, dos modificadores de Java que hacen todo el trabajo aquí:</p>
+<table>
+<thead>
+<tr>
+<th>Modificador</th>
+<th>¿Quién puede ver y usar la clase?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>Cualquier clase, de cualquier paquete, con solo importarla</td>
+</tr>
+<tr>
+<td><em>(sin modificador — package-private)</em></td>
+<td>Solo las clases que viven en su mismo paquete</td>
+</tr>
+</tbody>
+</table>
+<p>El contrato, en un paquete <code>api</code> — pensado para lo que otros módulos SÍ pueden ver — lleva <code>public</code>, a propósito: quieres que cualquier módulo lo importe y lo use.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
 <span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroConsultaService</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">existeLibro</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Y su implementación, en el paquete del catálogo, no en <code>api</code> — fíjate en que la clase no lleva <code>public</code>: es <em>package-private</em>, invisible fuera de su propio paquete, así que nadie puede depender de ella por accidente:</p>
+<p>Su implementación, en cambio, va en el paquete del catálogo, no en <code>api</code> — y fíjate en que la clase <strong>no lleva <code>public</code></strong>: es <em>package-private</em>, así que solo el propio paquete <code>catalogo</code> puede verla y usarla. Ningún otro módulo puede ni siquiera nombrarla.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
@@ -3165,6 +3258,19 @@
 <a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>Así queda repartida la visibilidad entre los tres paquetes implicados:</p>
+<pre class="mermaid"><code>flowchart LR
+    SERV["NotaLecturaService&lt;br/&gt;(paquete notaLectura)"]
+    I["LibroConsultaService&lt;br/&gt;paquete catalogo.api · public"]
+    IMPL["LibroConsultaServiceImpl&lt;br/&gt;paquete catalogo · package-private"]
+
+    SERV ==&gt;|"permitido: es public"| I
+    SERV -.-&gt;|"bloqueado: el compilador no la deja ni nombrar"| IMPL</code></pre>
+<p><code>NotaLecturaService</code>, desde su propio paquete, puede importar y usar <code>LibroConsultaService</code> sin ningún problema — es <code>public</code>, para eso está. Pero no tiene ninguna forma de escribir <code>LibroConsultaServiceImpl</code> en su código: el compilador ni se lo permite, porque esa clase no existe para nadie fuera de <code>catalogo</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Un error fácil de cometer: la implementación dentro de <code>api</code></p>
+<p>Si <code>LibroConsultaServiceImpl</code> viviera en <code>catalogo.api</code>, junto a la interfaz, el <code>package-private</code> dejaría de proteger nada: cualquier módulo que ya importa ese paquete para usar la interfaz vería también la implementación, porque estaría en el mismo paquete. El <code>package-private</code> solo cumple su función si la implementación vive en el paquete "normal" (<code>catalogo</code>), separado de <code>api</code> — la interfaz es lo único que sale de ahí.</p>
+</div>
 <p><code>NotaLecturaService</code> pasa a depender solo de la interfaz, nunca de <code>LibroRepository</code> ni de la clase que la implementa:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
@@ -3184,8 +3290,49 @@
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="c1">// ...</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<h3 id="el-contraste-que-ilustra-el-desacoplamiento">El contraste que ilustra el desacoplamiento<a class="headerlink" href="#el-contraste-que-ilustra-el-desacoplamiento" title="Permanent link">¶</a></h3>
-<p>Técnicamente, el módulo de notas de lectura <strong>podría</strong> seguir inyectando <code>LibroRepository</code> directamente, ahorrándose la interfaz intermedia. ¿Por qué merece la pena el paso extra? Porque con el componente de por medio, cualquier cambio en cómo el catálogo gestiona su persistencia (cambiar de JPA a otra cosa, por ejemplo) queda contenido dentro de su propio módulo — el módulo de notas de lectura seguiría llamando a la misma interfaz, sin enterarse de nada. Esta es la ventaja de sustituibilidad de la tabla de arriba, hecha concreta.</p>
+<h3 id="probar-el-componente-en-aislamiento">Probar el componente en aislamiento<a class="headerlink" href="#probar-el-componente-en-aislamiento" title="Permanent link">¶</a></h3>
+<p>Recuerda la ventaja de "pruebas aisladas" de la tabla del principio de este apartado. <code>LibroConsultaServiceImpl</code> depende de una única pieza, <code>LibroRepository</code>, inyectada por constructor — eso es justo lo que hace falta para probar su lógica sin arrancar Spring y sin ninguna base de datos real: basta con sustituir esa única dependencia por un doble de prueba.</p>
+<p><strong>Mockito</strong> es la librería que hace eso. Es el mismo principio que ya conoces de <code>@MockitoBean</code> en tus tests de controller (Tema 1) — sustituir una dependencia por un doble controlado —, pero aquí ni siquiera hace falta levantar el contexto de Spring: el objeto se construye a mano, en el propio test.</p>
+<ul>
+<li><code>@ExtendWith(MockitoExtension.class)</code>: activa Mockito para esta clase de test, sin ningún contenedor de Spring de por medio — mucho más rápido que un <code>@SpringBootTest</code>.</li>
+<li><code>@Mock</code>: crea el doble de prueba de <code>LibroRepository</code> — un objeto que se comporta como el repositorio real, pero cuya respuesta decides tú, línea a línea.</li>
+<li><code>@InjectMocks</code>: crea la instancia real de <code>LibroConsultaServiceImpl</code> que quieres probar, e inyecta automáticamente los <code>@Mock</code> declarados por su constructor — el mismo mecanismo de inyección que usa Spring en producción, solo que aquí lo hace Mockito, a mano, solo para este test.</li>
+</ul>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nd">@ExtendWith</span><span class="p">(</span><span class="n">MockitoExtension</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="kd">class</span> <span class="nc">LibroConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="nd">@Mock</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">    </span><span class="nd">@InjectMocks</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroConsultaServiceImpl</span><span class="w"> </span><span class="n">libroConsultaService</span><span class="p">;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeLibro_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">libroConsultaService</span><span class="p">.</span><span class="na">existeLibro</span><span class="p">(</span><span class="mi">1L</span><span class="p">));</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p><code>when(libroRepository.existsById(1L)).thenReturn(true)</code> es la parte que "programa" el doble de prueba: le dices exactamente qué debe devolver cuando alguien lo llame con ese argumento concreto, sin que haya ninguna base de datos real respondiendo por detrás.</p>
+<h3 id="sustituibilidad-hecha-concreta">Sustituibilidad, hecha concreta<a class="headerlink" href="#sustituibilidad-hecha-concreta" title="Permanent link">¶</a></h3>
+<p>El escenario del borrado lógico de más arriba es la ventaja de <strong>sustituibilidad</strong> de la tabla de este apartado, hecha concreta: el módulo de notas de lectura nunca se entera de cómo cambia el catálogo por dentro, solo sigue llamando a la misma interfaz.</p>
 <p>Vas a construir exactamente este mismo patrón sobre tu propio proyecto en la Actividad 4.1, con <code>Videojuego</code>/<code>Review</code> en lugar de <code>Libro</code>/<code>NotaLectura</code>.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
@@ -3197,6 +3344,10 @@
 <li>Ventajas: reutilización, sustituibilidad, pruebas aisladas, división del trabajo. Inconveniente: más interfaces e indirección.</li>
 <li>Spring (<code>@Service</code>/<code>@Repository</code>/<code>@Component</code> + inyección) ES la "herramienta de desarrollo de componentes" en este contexto — no hay paleta visual.</li>
 <li>Un <code>JpaRepository</code> ya es un componente básico; una interfaz + implementación oculta (<code>LibroConsultaService</code>/<code>LibroConsultaServiceImpl</code>) es el siguiente nivel: contrato en <code>api</code>, implementación oculta, desacoplamiento real entre módulos.</li>
+<li>Un repositorio con Specifications sobre JSONB (Tema 2) es el mismo tipo de componente básico, sin nada nuevo que construir — su complejidad interna (<code>jsonb_exists</code>) ya queda oculta a quien lo usa.</li>
+<li>El problema no es inyectar un repositorio — es inyectar el repositorio de <strong>otro módulo</strong>. Usar tu propio repositorio directamente (<code>NotaLecturaRepository</code> desde <code>NotaLecturaService</code>) nunca ha sido el problema.</li>
+<li>La implementación tiene que vivir fuera de <code>api</code>, en el paquete "normal" — si estuviera dentro de <code>api</code> junto a la interfaz, el <code>package-private</code> no protegería nada.</li>
+<li>Un componente con una única dependencia se presta a un test aislado con Mockito: <code>@Mock</code> sustituye esa dependencia por un doble de prueba, <code>@InjectMocks</code> construye la clase real inyectándoselo — sin arrancar Spring, mucho más rápido que un <code>@SpringBootTest</code>.</li>
 </ul>
 </details></div>
 

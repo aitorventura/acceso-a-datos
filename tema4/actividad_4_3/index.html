@@ -12,6 +12,8 @@
         <link rel="prev" href="../integracion-y-pruebas/">
       
       
+        <link rel="next" href="../../cierre/">
+      
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
@@ -2631,7 +2633,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 4.2 - Repaso integrador
+    Actividad 4.2 - Mismo patrón, otro motor
     
   </span>
   
@@ -2889,6 +2891,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cierre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cierre del módulo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -3043,8 +3067,8 @@
 <p>Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos los componentes de este tema.</p>
 <hr>
 <h2 id="paso-1-el-test-de-integracion-de-flujo-completo">Paso 1 — El test de integración de flujo completo<a class="headerlink" href="#paso-1-el-test-de-integracion-de-flujo-completo" title="Permanent link">¶</a></h2>
-<h3 id="tramo-1-guiado-al-completo">Tramo 1 — guiado al completo<a class="headerlink" href="#tramo-1-guiado-al-completo" title="Permanent link">¶</a></h3>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<p>Antes de nada, añade a tu <code>pom.xml</code> las dos dependencias de Testcontainers que todavía no tienes — ya usas <code>org.testcontainers:postgresql</code> desde la Actividad 2.3, pero este test necesita también MongoDB y RabbitMQ reales:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
 <span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
@@ -3053,166 +3077,197 @@
 <span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
 <span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span>
-<span class="normal"><a href="#__codelineno-0-21">21</a></span>
-<span class="normal"><a href="#__codelineno-0-22">22</a></span>
-<span class="normal"><a href="#__codelineno-0-23">23</a></span>
-<span class="normal"><a href="#__codelineno-0-24">24</a></span>
-<span class="normal"><a href="#__codelineno-0-25">25</a></span>
-<span class="normal"><a href="#__codelineno-0-26">26</a></span>
-<span class="normal"><a href="#__codelineno-0-27">27</a></span>
-<span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span>
-<span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span>
-<span class="normal"><a href="#__codelineno-0-63">63</a></span>
-<span class="normal"><a href="#__codelineno-0-64">64</a></span>
-<span class="normal"><a href="#__codelineno-0-65">65</a></span>
-<span class="normal"><a href="#__codelineno-0-66">66</a></span>
-<span class="normal"><a href="#__codelineno-0-67">67</a></span>
-<span class="normal"><a href="#__codelineno-0-68">68</a></span>
-<span class="normal"><a href="#__codelineno-0-69">69</a></span>
-<span class="normal"><a href="#__codelineno-0-70">70</a></span>
-<span class="normal"><a href="#__codelineno-0-71">71</a></span>
-<span class="normal"><a href="#__codelineno-0-72">72</a></span>
-<span class="normal"><a href="#__codelineno-0-73">73</a></span>
-<span class="normal"><a href="#__codelineno-0-74">74</a></span>
-<span class="normal"><a href="#__codelineno-0-75">75</a></span>
-<span class="normal"><a href="#__codelineno-0-76">76</a></span>
-<span class="normal"><a href="#__codelineno-0-77">77</a></span>
-<span class="normal"><a href="#__codelineno-0-78">78</a></span>
-<span class="normal"><a href="#__codelineno-0-79">79</a></span>
-<span class="normal"><a href="#__codelineno-0-80">80</a></span>
-<span class="normal"><a href="#__codelineno-0-81">81</a></span>
-<span class="normal"><a href="#__codelineno-0-82">82</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.integration</span><span class="p">;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.jayway.jsonpath.JsonPath</span><span class="p">;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.testcontainers.service.connection.ServiceConnection</span><span class="p">;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.MediaType</span><span class="p">;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.ActiveProfiles</span><span class="p">;</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.MockMvc</span><span class="p">;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc</span><span class="p">;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.containers.PostgreSQLContainer</span><span class="p">;</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.mongodb.MongoDBContainer</span><span class="p">;</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Container</span><span class="p">;</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Testcontainers</span><span class="p">;</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*</span><span class="p">;</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.result.MockMvcResultMatchers.*</span><span class="p">;</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="nd">@SpringBootTest</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="nd">@AutoConfigureMockMvc</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="nd">@Testcontainers</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="kd">class</span> <span class="nc">FlujoCompletoIntegrationTest</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="nd">@Container</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="nd">@Container</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="w"> </span><span class="n">mongodb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="p">(</span><span class="s">"mongo:7"</span><span class="p">);</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">    </span><span class="nd">@Autowired</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="s">                                {</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="s">                                  "username": "admin",</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="s">                                  "password": "admin123"</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="s">                                }</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="s">                                """</span><span class="p">))</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">().</span><span class="na">getResponse</span><span class="p">().</span><span class="na">getContentAsString</span><span class="p">();</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">    </span><span class="nd">@Test</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">flujoCompleto_DesdeCrearHastaBorrarConReviews</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="w">        </span><span class="c1">// Tramo 1: crear un estudio y un videojuego con detallesPlataforma</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="w">        </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/estudios"</span><span class="p">)</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">                        </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="s">                                {"nombre": "Team Cherry", "pais": "Australia"}</span>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="s">                                """</span><span class="p">))</span>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">());</span>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuestaVideojuego</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="w">                        </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="s">                                {</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="s">                                  "titulo": "Hollow Knight",</span>
-<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="s">                                  "precio": 14.99,</span>
-<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="s">                                  "fechaLanzamiento": "2017-02-24",</span>
-<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="s">                                  "estudioId": 1,</span>
-<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="s">                                  "detallesPlataforma": {"steam": {"idApp": 367520}}</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="s">                                }</span>
-<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="s">                                """</span><span class="p">))</span>
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
-<a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">().</span><span class="na">getResponse</span><span class="p">().</span><span class="na">getContentAsString</span><span class="p">();</span>
-<a id="__codelineno-0-79" name="__codelineno-0-79"></a>
-<a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="w">        </span><span class="c1">// extrae el id del videojuego creado (con JsonPath, por ejemplo) para los tramos siguientes</span>
-<a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="p">}</span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>mongodb<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">&lt;/dependency&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>rabbitmq<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con <code>@ServiceConnection</code> en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente. Fíjate en <code>loginComoAdmin()</code> y en <code>@ActiveProfiles("test")</code>: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio <code>application-test.yml</code>, que reutilizas tal cual) — sin login, estos <code>POST</code> devolverían <code>403</code>, no <code>201</code>, porque <code>/api/v1/estudios</code> y <code>/api/v1/videojuegos</code> exigen rol <code>ADMIN</code> desde la Actividad 2.5 de PSP.</p>
+<h3 id="tramo-1-guiado-al-completo">Tramo 1 — guiado al completo<a class="headerlink" href="#tramo-1-guiado-al-completo" title="Permanent link">¶</a></h3>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span>
+<span class="normal"><a href="#__codelineno-1-33">33</a></span>
+<span class="normal"><a href="#__codelineno-1-34">34</a></span>
+<span class="normal"><a href="#__codelineno-1-35">35</a></span>
+<span class="normal"><a href="#__codelineno-1-36">36</a></span>
+<span class="normal"><a href="#__codelineno-1-37">37</a></span>
+<span class="normal"><a href="#__codelineno-1-38">38</a></span>
+<span class="normal"><a href="#__codelineno-1-39">39</a></span>
+<span class="normal"><a href="#__codelineno-1-40">40</a></span>
+<span class="normal"><a href="#__codelineno-1-41">41</a></span>
+<span class="normal"><a href="#__codelineno-1-42">42</a></span>
+<span class="normal"><a href="#__codelineno-1-43">43</a></span>
+<span class="normal"><a href="#__codelineno-1-44">44</a></span>
+<span class="normal"><a href="#__codelineno-1-45">45</a></span>
+<span class="normal"><a href="#__codelineno-1-46">46</a></span>
+<span class="normal"><a href="#__codelineno-1-47">47</a></span>
+<span class="normal"><a href="#__codelineno-1-48">48</a></span>
+<span class="normal"><a href="#__codelineno-1-49">49</a></span>
+<span class="normal"><a href="#__codelineno-1-50">50</a></span>
+<span class="normal"><a href="#__codelineno-1-51">51</a></span>
+<span class="normal"><a href="#__codelineno-1-52">52</a></span>
+<span class="normal"><a href="#__codelineno-1-53">53</a></span>
+<span class="normal"><a href="#__codelineno-1-54">54</a></span>
+<span class="normal"><a href="#__codelineno-1-55">55</a></span>
+<span class="normal"><a href="#__codelineno-1-56">56</a></span>
+<span class="normal"><a href="#__codelineno-1-57">57</a></span>
+<span class="normal"><a href="#__codelineno-1-58">58</a></span>
+<span class="normal"><a href="#__codelineno-1-59">59</a></span>
+<span class="normal"><a href="#__codelineno-1-60">60</a></span>
+<span class="normal"><a href="#__codelineno-1-61">61</a></span>
+<span class="normal"><a href="#__codelineno-1-62">62</a></span>
+<span class="normal"><a href="#__codelineno-1-63">63</a></span>
+<span class="normal"><a href="#__codelineno-1-64">64</a></span>
+<span class="normal"><a href="#__codelineno-1-65">65</a></span>
+<span class="normal"><a href="#__codelineno-1-66">66</a></span>
+<span class="normal"><a href="#__codelineno-1-67">67</a></span>
+<span class="normal"><a href="#__codelineno-1-68">68</a></span>
+<span class="normal"><a href="#__codelineno-1-69">69</a></span>
+<span class="normal"><a href="#__codelineno-1-70">70</a></span>
+<span class="normal"><a href="#__codelineno-1-71">71</a></span>
+<span class="normal"><a href="#__codelineno-1-72">72</a></span>
+<span class="normal"><a href="#__codelineno-1-73">73</a></span>
+<span class="normal"><a href="#__codelineno-1-74">74</a></span>
+<span class="normal"><a href="#__codelineno-1-75">75</a></span>
+<span class="normal"><a href="#__codelineno-1-76">76</a></span>
+<span class="normal"><a href="#__codelineno-1-77">77</a></span>
+<span class="normal"><a href="#__codelineno-1-78">78</a></span>
+<span class="normal"><a href="#__codelineno-1-79">79</a></span>
+<span class="normal"><a href="#__codelineno-1-80">80</a></span>
+<span class="normal"><a href="#__codelineno-1-81">81</a></span>
+<span class="normal"><a href="#__codelineno-1-82">82</a></span>
+<span class="normal"><a href="#__codelineno-1-83">83</a></span>
+<span class="normal"><a href="#__codelineno-1-84">84</a></span>
+<span class="normal"><a href="#__codelineno-1-85">85</a></span>
+<span class="normal"><a href="#__codelineno-1-86">86</a></span>
+<span class="normal"><a href="#__codelineno-1-87">87</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">package</span><span class="w"> </span><span class="nn">com.tunombre.gamevault.integration</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.jayway.jsonpath.JsonPath</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.test.context.SpringBootTest</span><span class="p">;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.testcontainers.service.connection.ServiceConnection</span><span class="p">;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.MediaType</span><span class="p">;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.context.ActiveProfiles</span><span class="p">;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.MockMvc</span><span class="p">;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc</span><span class="p">;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.containers.PostgreSQLContainer</span><span class="p">;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.mongodb.MongoDBContainer</span><span class="p">;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.containers.RabbitMQContainer</span><span class="p">;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Container</span><span class="p">;</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="kn">import</span><span class="w"> </span><span class="nn">org.testcontainers.junit.jupiter.Testcontainers</span><span class="p">;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*</span><span class="p">;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a><span class="kn">import static</span><span class="w"> </span><span class="nn">org.springframework.test.web.servlet.result.MockMvcResultMatchers.*</span><span class="p">;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="nd">@SpringBootTest</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="nd">@AutoConfigureMockMvc</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a><span class="nd">@ActiveProfiles</span><span class="p">(</span><span class="s">"test"</span><span class="p">)</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="nd">@Testcontainers</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="kd">class</span> <span class="nc">FlujoCompletoIntegrationTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26"></a>
+<a id="__codelineno-1-27" name="__codelineno-1-27"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">postgres</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostgreSQLContainer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">"postgres:16-alpine"</span><span class="p">);</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="w"> </span><span class="n">mongodb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="p">(</span><span class="s">"mongo:7"</span><span class="p">);</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34"></a>
+<a id="__codelineno-1-35" name="__codelineno-1-35"></a><span class="w">    </span><span class="nd">@Container</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">RabbitMQContainer</span><span class="w"> </span><span class="n">rabbitmq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RabbitMQContainer</span><span class="p">(</span><span class="s">"rabbitmq:3-management"</span><span class="p">);</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38"></a>
+<a id="__codelineno-1-39" name="__codelineno-1-39"></a><span class="w">    </span><span class="nd">@Autowired</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">MockMvc</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">;</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41"></a>
+<a id="__codelineno-1-42" name="__codelineno-1-42"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">loginComoAdmin</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuesta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/auth/login"</span><span class="p">)</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46"></a><span class="s">                                {</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47"></a><span class="s">                                  "username": "admin",</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48"></a><span class="s">                                  "password": "admin123"</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49"></a><span class="s">                                }</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50"></a><span class="s">                                """</span><span class="p">))</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isOk</span><span class="p">())</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">().</span><span class="na">getResponse</span><span class="p">().</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53"></a>
+<a id="__codelineno-1-54" name="__codelineno-1-54"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">JsonPath</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">respuesta</span><span class="p">,</span><span class="w"> </span><span class="s">"$.accessToken"</span><span class="p">);</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56"></a>
+<a id="__codelineno-1-57" name="__codelineno-1-57"></a><span class="w">    </span><span class="nd">@Test</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">flujoCompleto_DesdeCrearHastaBorrarConReviews</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">adminToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginComoAdmin</span><span class="p">();</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60"></a>
+<a id="__codelineno-1-61" name="__codelineno-1-61"></a><span class="w">        </span><span class="c1">// Tramo 1: crear un estudio y un videojuego con detallesPlataforma</span>
+<a id="__codelineno-1-62" name="__codelineno-1-62"></a><span class="w">        </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/estudios"</span><span class="p">)</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63"></a><span class="w">                        </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-1-64" name="__codelineno-1-64"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-1-65" name="__codelineno-1-65"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-1-66" name="__codelineno-1-66"></a><span class="s">                                {"nombre": "Team Cherry", "pais": "Australia"}</span>
+<a id="__codelineno-1-67" name="__codelineno-1-67"></a><span class="s">                                """</span><span class="p">))</span>
+<a id="__codelineno-1-68" name="__codelineno-1-68"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">());</span>
+<a id="__codelineno-1-69" name="__codelineno-1-69"></a>
+<a id="__codelineno-1-70" name="__codelineno-1-70"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">respuestaVideojuego</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mockMvc</span><span class="p">.</span><span class="na">perform</span><span class="p">(</span><span class="n">post</span><span class="p">(</span><span class="s">"/api/v1/videojuegos"</span><span class="p">)</span>
+<a id="__codelineno-1-71" name="__codelineno-1-71"></a><span class="w">                        </span><span class="p">.</span><span class="na">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="s">"Bearer "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">adminToken</span><span class="p">)</span>
+<a id="__codelineno-1-72" name="__codelineno-1-72"></a><span class="w">                        </span><span class="p">.</span><span class="na">contentType</span><span class="p">(</span><span class="n">MediaType</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">)</span>
+<a id="__codelineno-1-73" name="__codelineno-1-73"></a><span class="w">                        </span><span class="p">.</span><span class="na">content</span><span class="p">(</span><span class="s">"""</span>
+<a id="__codelineno-1-74" name="__codelineno-1-74"></a><span class="s">                                {</span>
+<a id="__codelineno-1-75" name="__codelineno-1-75"></a><span class="s">                                  "titulo": "Hollow Knight",</span>
+<a id="__codelineno-1-76" name="__codelineno-1-76"></a><span class="s">                                  "precio": 14.99,</span>
+<a id="__codelineno-1-77" name="__codelineno-1-77"></a><span class="s">                                  "fechaLanzamiento": "2017-02-24",</span>
+<a id="__codelineno-1-78" name="__codelineno-1-78"></a><span class="s">                                  "estudioId": 1,</span>
+<a id="__codelineno-1-79" name="__codelineno-1-79"></a><span class="s">                                  "detallesPlataforma": {"steam": {"idApp": 367520}}</span>
+<a id="__codelineno-1-80" name="__codelineno-1-80"></a><span class="s">                                }</span>
+<a id="__codelineno-1-81" name="__codelineno-1-81"></a><span class="s">                                """</span><span class="p">))</span>
+<a id="__codelineno-1-82" name="__codelineno-1-82"></a><span class="w">                </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">status</span><span class="p">().</span><span class="na">isCreated</span><span class="p">())</span>
+<a id="__codelineno-1-83" name="__codelineno-1-83"></a><span class="w">                </span><span class="p">.</span><span class="na">andReturn</span><span class="p">().</span><span class="na">getResponse</span><span class="p">().</span><span class="na">getContentAsString</span><span class="p">();</span>
+<a id="__codelineno-1-84" name="__codelineno-1-84"></a>
+<a id="__codelineno-1-85" name="__codelineno-1-85"></a><span class="w">        </span><span class="c1">// extrae el id del videojuego creado (con JsonPath, por ejemplo) para los tramos siguientes</span>
+<a id="__codelineno-1-86" name="__codelineno-1-86"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-87" name="__codelineno-1-87"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con <code>@ServiceConnection</code> en tres contenedores a la vez, PostgreSQL, MongoDB y RabbitMQ corriendo de verdad, simultáneamente (los tres motores reales que usa tu aplicación). Fíjate en <code>loginComoAdmin()</code> y en <code>@ActiveProfiles("test")</code>: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio <code>application-test.yml</code>, que reutilizas tal cual) — sin login, estos <code>POST</code> devolverían <code>403</code>, no <code>201</code>, porque <code>/api/v1/estudios</code> y <code>/api/v1/videojuegos</code> exigen rol <code>ADMIN</code> desde la Actividad 2.5 de PSP.</p>
 <h3 id="tramo-2-mini-reto-la-resena-y-el-resumen">Tramo 2 — mini-reto: la reseña y el resumen<a class="headerlink" href="#tramo-2-mini-reto-la-resena-y-el-resumen" title="Permanent link">¶</a></h3>
 <p>Sin más código dado, amplía el mismo test (<code>@Test</code>) para: crear una reseña para ese videojuego (reutiliza el mismo <code>adminToken</code> — crear una reseña solo exige estar autenticado, no rol <code>ADMIN</code>, así que te sirve igual), y comprobar con un <code>GET .../resumen</code> que el total y la puntuación media son correctos. Repite el patrón que ya has usado en la Actividad 2.3 (MockMvc completo, <code>jsonPath</code> sobre el cuerpo).</p>
 <h3 id="tramo-3-mini-reto-el-borrado-en-cascada">Tramo 3 — mini-reto: el borrado en cascada<a class="headerlink" href="#tramo-3-mini-reto-el-borrado-en-cascada" title="Permanent link">¶</a></h3>
-<p>Borra el videojuego (de nuevo con <code>adminToken</code>, exige rol <code>ADMIN</code>), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un <code>Thread.sleep</code> breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).</p>
+<p>Borra el videojuego (de nuevo con <code>adminToken</code>, exige rol <code>ADMIN</code>), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB. El contenedor <code>rabbitmq</code> del Tramo 1 ya entrega el mensaje de verdad, pero sigue siendo asíncrono — necesitas un pequeño margen de espera (un <code>Thread.sleep</code> breve, o un mecanismo de espera activa) antes de comprobar que la reseña ya no está.</p>
 <hr>
 <h2 id="paso-2-documento-de-cierre">Paso 2 — Documento de cierre<a class="headerlink" href="#paso-2-documento-de-cierre" title="Permanent link">¶</a></h2>
 <p>Escribe un documento breve (README de tu propio GameVault, o una sección de memoria si tu centro lo pide así) que liste los componentes que has desarrollado, con 1-2 frases por componente describiendo su responsabilidad. No es un manual exhaustivo, es un mapa rápido de "qué hace cada pieza".</p>
@@ -3222,13 +3277,15 @@
 <p>De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo, y por qué concretamente? No una respuesta genérica ("necesito practicar más") — señala una pieza técnica exacta con la que todavía no te sientes cómodo, y qué harías para reforzarla.</p>
 <hr>
 <h2 id="paso-4-amplia-el-filtro-del-ci-y-verifica">Paso 4 — Amplía el filtro del CI, y verifica<a class="headerlink" href="#paso-4-amplia-el-filtro-del-ci-y-verifica" title="Permanent link">¶</a></h2>
-<p>Antes de comprobar nada, hay algo que arreglar en <code>.github/workflows/ci.yml</code>. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con <code>-Dtest='*ControllerTest'</code> — una decisión de aquel momento, cuando el único test "pesado" del proyecto era <code>GamevaultApplicationTests</code> (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido tests de integración reales con Testcontainers — el de la Actividad 2.3 de AD, y el que acabas de terminar aquí mismo — pero ese filtro nunca se amplió, así que ninguno de los dos se ha estado ejecutando en tu CI hasta hoy.</p>
-<p>La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (<code>ubuntu-latest</code>) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro. Amplíalo para que incluya también tus tests de integración, sin arrastrar <code>GamevaultApplicationTests</code> (que seguiría sin poder pasar en CI, al no usar Testcontainers):</p>
-<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ejecutar los tests</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./mvnw test -B -Dtest='*ControllerTest,*IntegrationTest'</span>
+<p>Antes de comprobar nada, hay algo que arreglar en <code>.github/workflows/ci.yml</code>. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con <code>-Dtest='*ControllerTest'</code> — una decisión de aquel momento, cuando el único test "pesado" del proyecto era <code>GamevaultApplicationTests</code> (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido muchos más tipos de test que ese filtro nunca ha recogido: los de integración con Testcontainers (Actividad 2.3 de AD, y el que acabas de terminar aquí mismo) y los de componente aislado con Mockito (Actividad 4.1, 4.2) — ninguno de ellos se ha estado ejecutando en tu CI hasta hoy, porque ninguno termina en <code>ControllerTest</code>.</p>
+<p>Podrías seguir añadiendo sufijos a la lista (<code>*IntegrationTest</code>, <code>*ServiceImplTest</code>...), pero es una lista que se queda corta cada vez que construyes un tipo de test nuevo — exactamente el problema que acabas de descubrir. Mejor invertir el enfoque: en vez de decir qué <strong>sí</strong> ejecutar, di qué <strong>no</strong> puede ejecutarse en CI (solo <code>GamevaultApplicationTests</code>, que no usa Testcontainers y necesita una <code>dev</code> que el runner no tiene) y deja que todo lo demás se ejecute por defecto, sea del tipo que sea.</p>
+<p>La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (<code>ubuntu-latest</code>) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro:</p>
+<div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ejecutar los tests</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./mvnw test -B -Dtest='!GamevaultApplicationTests'</span>
 </code></pre></div></td></tr></table></div>
-<p>Haz <code>push</code> de tus cambios y comprueba, en la pestaña <strong>Actions</strong> de tu repositorio GitHub, que el pipeline ejecuta correctamente estos tests de integración. <strong>Captura</strong>: el resultado en verde del workflow.</p>
+<p>El <code>!</code> invierte el filtro: en vez de una lista cerrada de qué ejecutar, excluye solo esa clase concreta — todo lo demás (controllers, integración, componentes aislados, y cualquier test nuevo que construyas en el futuro) se ejecuta por defecto, sin que tengas que acordarte de ampliar la lista cada vez.</p>
+<p>Haz <code>push</code> de tus cambios y comprueba, en la pestaña <strong>Actions</strong> de tu repositorio GitHub, que el pipeline ejecuta correctamente todos tus tests — de controller, de integración y de componente aislado. <strong>Captura</strong>: el resultado en verde del workflow.</p>
 <hr>
 <h2 id="cierre-del-modulo">✅ Cierre del módulo<a class="headerlink" href="#cierre-del-modulo" title="Permanent link">¶</a></h2>
 <p>Con esta entrega se cierra Acceso a Datos entero. Tu GameVault ha evolucionado, actividad a actividad, desde un proyecto vacío hasta una aplicación con persistencia relacional, ORM, objeto-relacional, documental y componentes desacoplados — probado de extremo a extremo y verificado automáticamente en cada cambio. Buen trabajo.</p></div>
@@ -3282,6 +3339,22 @@
             </div>
           </a>
         
+        
+          
+          <a href="../../cierre/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Cierre del módulo">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Cierre del módulo
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     

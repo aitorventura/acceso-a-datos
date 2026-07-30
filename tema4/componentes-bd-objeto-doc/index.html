@@ -2657,15 +2657,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#jsonb-visto-como-componente" class="md-nav__link">
-    <span class="md-ellipsis">
-      🐘 JSONB, visto como componente
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#un-componente-en-la-direccion-contraria" class="md-nav__link">
     <span class="md-ellipsis">
       🍃 Un componente en la dirección contraria
@@ -2713,7 +2704,7 @@
   
   
   <span class="md-ellipsis">
-    Actividad 4.2 - Repaso integrador
+    Actividad 4.2 - Mismo patrón, otro motor
     
   </span>
   
@@ -2831,6 +2822,28 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cierre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cierre del módulo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -2856,15 +2869,6 @@
       Tabla de contenidos
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#jsonb-visto-como-componente" class="md-nav__link">
-    <span class="md-ellipsis">
-      🐘 JSONB, visto como componente
-    </span>
-  </a>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#un-componente-en-la-direccion-contraria" class="md-nav__link">
@@ -2911,53 +2915,55 @@
 
 <div><p><a id="componentes-bd-objeto-doc"></a></p>
 <h1 id="2-componentes-con-bd-objeto-relacional-y-documental">🧩 2. Componentes con BD objeto-relacional y documental<a class="headerlink" href="#2-componentes-con-bd-objeto-relacional-y-documental" title="Permanent link">¶</a></h1>
-<p>Revisitas JSONB (Tema 2) con la óptica de "componente" que acabas de conocer en el apartado anterior, y luego construyes un segundo componente — esta vez en la dirección contraria al que ya construiste con <code>LibroConsultaService</code>.</p>
-<hr>
-<h2 id="jsonb-visto-como-componente">🐘 JSONB, visto como componente<a class="headerlink" href="#jsonb-visto-como-componente" title="Permanent link">¶</a></h2>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">LibroRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JpaRepository</span><span class="o">&lt;</span><span class="n">Libro</span><span class="p">,</span><span class="w"> </span><span class="n">Long</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="n">Libro</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-<p><code>LibroRepository</code>, junto con <code>LibroSpecifications</code> (donde vive <code>disponibleEnFormato</code>, con su <code>jsonb_exists</code>), es un <strong>componente que encapsula el acceso a una base de datos objeto-relacional</strong>. Quien lo consume — <code>LibroService</code>, o cualquier otro service que pudiera necesitarlo — no tiene ni que saber que, por debajo de una de sus Specifications, hay una función nativa de PostgreSQL como <code>jsonb_exists</code>. Esa complejidad queda completamente contenida dentro del componente; fuera de él, es "una Specification más".</p>
+<p>Ya has visto, en el apartado anterior, que tu <code>LibroRepository</code> con Specifications sobre JSONB (Tema 2) es también un componente objeto-relacional, sin que hayas tenido que construir nada nuevo para eso. Ahora construyes uno de verdad, nuevo — esta vez en la dirección contraria al que ya has construido con <code>LibroConsultaService</code>.</p>
 <hr>
 <h2 id="un-componente-en-la-direccion-contraria">🍃 Un componente en la dirección contraria<a class="headerlink" href="#un-componente-en-la-direccion-contraria" title="Permanent link">¶</a></h2>
-<p>En el apartado anterior construiste <code>LibroConsultaService</code>, para que el módulo de notas de lectura (MongoDB) pudiera preguntarle algo al catálogo (PostgreSQL) sin conocer sus detalles internos. Ahora se plantea el problema al revés: <code>LibroResponseDTO</code> quiere mostrar la puntuación media de las notas de lectura de cada libro — pero esa información vive en MongoDB, no en PostgreSQL, y <code>LibroService</code> no debería tener que saber que Mongo existe siquiera.</p>
+<p>En el apartado anterior has construido <code>LibroConsultaService</code>, para que el módulo de notas de lectura (MongoDB) pudiera preguntarle algo al catálogo (PostgreSQL) sin conocer sus detalles internos. Ahora se plantea el problema al revés: <code>LibroResponseDTO</code> quiere mostrar la puntuación media de las notas de lectura de cada libro — pero esa información vive en MongoDB, no en PostgreSQL, y <code>LibroService</code> no debería tener que saber que Mongo existe siquiera.</p>
+<p>Imagina un cambio concreto, del mismo tipo que ya viste con el borrado lógico: mañana decides que las notas de lectura marcadas como spam (un campo <code>moderado</code> nuevo en <code>NotaLectura</code>) no deben contar en la media. Si <code>LibroService</code> inyectara <code>NotaLecturaRepository</code> directamente y calculara la media él mismo, tendría que enterarse de ese campo — un detalle de moderación interno de otro módulo, sobre un motor que ni siquiera es el suyo. Con el componente de por medio, ese cambio se queda contenido dentro de <code>NotaLecturaConsultaServiceImpl</code>: <code>LibroService</code> sigue llamando a <code>puntuacionMediaDe(libroId)</code> exactamente igual, sin enterarse de nada.</p>
 <p>Se resuelve con exactamente el mismo molde, solo que ahora la interfaz vive en el módulo de notas de lectura:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span>
-<span class="normal"><a href="#__codelineno-1-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaConsultaService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="nf">puntuacionMediaDe</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">NotaLecturaConsultaService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="nf">puntuacionMediaDe</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span>
-<span class="normal"><a href="#__codelineno-2-12">12</a></span>
-<span class="normal"><a href="#__codelineno-2-13">13</a></span>
-<span class="normal"><a href="#__codelineno-2-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nd">@Service</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nd">@RequiredArgsConstructor</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kd">class</span> <span class="nc">NotaLecturaConsultaServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">NotaLecturaConsultaService</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">NotaLecturaRepository</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">;</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="nd">@Override</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">puntuacionMediaDe</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">).</span><span class="na">stream</span><span class="p">()</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="w">                </span><span class="p">.</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">NotaLectura</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">)</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="w">                </span><span class="p">.</span><span class="na">average</span><span class="p">()</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="w">                </span><span class="p">.</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nd">@Service</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nd">@RequiredArgsConstructor</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kd">class</span> <span class="nc">NotaLecturaConsultaServiceImpl</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">NotaLecturaConsultaService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">NotaLecturaRepository</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="nd">@Override</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">puntuacionMediaDe</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">notaLecturaRepository</span><span class="p">.</span><span class="na">findByLibroId</span><span class="p">(</span><span class="n">libroId</span><span class="p">).</span><span class="na">stream</span><span class="p">()</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">                </span><span class="p">.</span><span class="na">mapToInt</span><span class="p">(</span><span class="n">NotaLectura</span><span class="p">::</span><span class="n">getPuntuacion</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">                </span><span class="p">.</span><span class="na">average</span><span class="p">()</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">                </span><span class="p">.</span><span class="na">orElse</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>LibroService</code> inyecta <code>NotaLecturaConsultaService</code> —la interfaz, nunca <code>NotaLecturaRepository</code> ni la clase que la implementa— para rellenar ese campo nuevo de <code>LibroResponseDTO</code>. El patrón es idéntico al del apartado anterior; lo único que cambia es qué motor hay detrás (MongoDB en vez de PostgreSQL) y en qué dirección va la consulta: del catálogo hacia las notas de lectura, no al revés.</p>
+<p><code>LibroService</code> inyecta <code>NotaLecturaConsultaService</code> —la interfaz, nunca <code>NotaLecturaRepository</code> ni la clase que la implementa— para rellenar ese campo nuevo de <code>LibroResponseDTO</code>. El patrón es idéntico al del apartado anterior; lo único que cambia es qué motor hay detrás (MongoDB en vez de PostgreSQL) y en qué dirección va la consulta:</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Ap1["Apartado anterior"]
+        NL1["NotaLecturaService"] --&gt;|"pregunta"| LC["LibroConsultaService&lt;br/&gt;(catalogo.api)"]
+    end
+    subgraph Ap2["Este apartado"]
+        LS2["LibroService"] --&gt;|"pregunta"| NC["NotaLecturaConsultaService&lt;br/&gt;(notaLectura.api)"]
+    end</code></pre>
+<p>En el apartado anterior, quien pregunta es notas de lectura y quien responde es el catálogo; aquí es al revés. Ningún módulo es "el importante" al que los demás preguntan — cualquiera de los dos puede exponer un contrato hacia el otro, según quién necesite qué dato.</p>
 <hr>
 <h2 id="cerrando-el-circulo-el-mismo-patron-tres-motores-distintos">🪞 Cerrando el círculo: el mismo patrón, tres motores distintos<a class="headerlink" href="#cerrando-el-circulo-el-mismo-patron-tres-motores-distintos" title="Permanent link">¶</a></h2>
 <pre class="mermaid"><code>flowchart TB
@@ -2979,7 +2985,6 @@
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li><code>LibroRepository</code>/<code>LibroSpecifications</code> es un componente que encapsula acceso objeto-relacional (JSONB) — su complejidad interna (<code>jsonb_exists</code>) queda oculta a quien lo usa.</li>
 <li>El mismo patrón de componente (interfaz + implementación oculta) se aplica también en la dirección contraria: <code>NotaLecturaConsultaService</code> expone información de MongoDB hacia el catálogo, sin que este sepa que Mongo existe.</li>
 <li>La dirección de la dependencia y el motor de persistencia por debajo son irrelevantes para el patrón de componente — esa independencia es exactamente la idea clave de este tema.</li>
 <li>En tu proyecto real este mismo componente se llama <code>ReviewsConsultaService</code> (Actividad 4.2), expuesto desde <code>reviews</code> hacia <code>catalogo</code>.</li>
@@ -3037,13 +3042,13 @@
         
         
           
-          <a href="../actividad_4_2/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 4.2 - Repaso integrador">
+          <a href="../actividad_4_2/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Actividad 4.2 - Mismo patrón, otro motor">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Siguiente
               </span>
               <div class="md-ellipsis">
-                Actividad 4.2 - Repaso integrador
+                Actividad 4.2 - Mismo patrón, otro motor
               </div>
             </div>
             <div class="md-footer__button md-icon">
