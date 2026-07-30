@@ -1,5 +1,8 @@
 # 🧪 Actividad 4.1: `CatalogoConsultaService` — un componente reutilizable
 
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 4.1 — CatalogoConsultaService: un componente reutilizable](plantillas/Actividad_4_1_AD_Plantilla.docx){target="_blank" rel="noopener"}
+
 !!! info "Práctica guiada"
     Desde la Actividad 3.1, `ReviewService` inyecta `VideojuegoRepository` directamente. Hoy resuelves ese acoplamiento construyendo tu primer componente con contrato explícito, siguiendo el patrón de la teoría, y lo extiendes con un método nuevo.
 
@@ -23,7 +26,21 @@ Sin más código dado que el patrón de la teoría, crea:
 
 1. La interfaz `CatalogoConsultaService`, en un paquete nuevo `catalogo.api`, con un único método por ahora: `boolean existeVideojuego(Long videojuegoId)`.
 2. `CatalogoConsultaServiceImpl` (package-private, anotada `@Service`) en `catalogo`, que implemente la interfaz reutilizando tu `VideojuegoRepository` ya existente.
-3. Modifica `ReviewService` para que inyecte `CatalogoConsultaService` (la interfaz) en lugar de `VideojuegoRepository` directamente, y actualiza las dos comprobaciones (`findByVideojuegoId` y `create`) para llamar a `existeVideojuego(...)`.
+3. Modifica `ReviewService` para que inyecte `CatalogoConsultaService` (la interfaz) en lugar de `VideojuegoRepository` directamente, y actualiza **las cuatro** comprobaciones que hoy usan `videojuegoRepository.existsById(...)` — `findByVideojuegoId`, `create`, `getResumenByVideojuegoId` y `findBuenasNotas` — para que llamen a `existeVideojuego(...)`. Al terminar, ningún método de `ReviewService` debería seguir usando `videojuegoRepository` — quita también el campo y su `import`.
+
+`ReviewRepository`, en cambio, no lo tocas: es el propio repositorio del módulo `reviews`, no el de otro módulo — inyectarlo directamente nunca ha sido el problema. El acoplamiento que resuelves hoy es solo el que cruza hacia `catalogo`.
+
+Reinicia tu aplicación y comprueba que nada se ha roto — crea una reseña para un videojuego existente, y prueba también con un `videojuegoId` que no exista:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"puntuacion": 8, "comentario": "Sigue funcionando igual"}'
+```
+
+**Comprueba**: mismo comportamiento de siempre — `201 Created` si el videojuego existe, `404 Not Found` si no. El refactor no debería cambiar ni un código de estado, solo de dónde viene la comprobación.
+
+**Captura**: la respuesta `201`, confirmando que el componente nuevo funciona igual que el `VideojuegoRepository` directo que sustituye.
 
 ---
 
@@ -47,7 +64,7 @@ Imagina que mañana decides sustituir JPA por otra tecnología de persistencia p
 
 ---
 
-## Mini-reto — un segundo método
+## Paso 4 — Un segundo método
 
 Sin más código dado que el patrón que ya tienes delante, añade un segundo método al componente: `String tituloDe(Long videojuegoId)`, que devuelva el título de un videojuego (o lance `ResponseStatusException(HttpStatus.NOT_FOUND, ...)` si no existe).
 
@@ -59,7 +76,9 @@ Sigue exactamente el mismo patrón que ya existía para `existeVideojuego` — l
 
 ---
 
-## Paso 4 — Prueba del componente aislado
+## Paso 5 — Prueba del componente aislado
+
+Siguiendo el patrón de `@Mock`/`@InjectMocks` de la teoría de este apartado:
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -90,6 +109,8 @@ class CatalogoConsultaServiceImplTest {
 ```
 
 `@Mock` sustituye `VideojuegoRepository` por un doble de prueba; `@InjectMocks` construye `CatalogoConsultaServiceImpl` inyectándole ese mock automáticamente — sin arrancar Spring, sin base de datos, un test rapidísimo y totalmente aislado. Añade un tercer test que cubra tu método nuevo `tituloDe`, siguiendo el mismo patrón.
+
+**Captura**: los tres tests en verde.
 
 ---
 

@@ -102,10 +102,11 @@ nav:
           - Actividad 4.1 - CatalogoConsultaService: tema4/actividad_4_1.md
       - Componentes con BD objeto-rel. y documental:
           - Componentes con BD objeto-rel. y documental: tema4/componentes-bd-objeto-doc.md
-          - Actividad 4.2 - Repaso integrador: tema4/actividad_4_2.md
+          - Actividad 4.2 - Mismo patrón, otro motor: tema4/actividad_4_2.md
       - Integración y pruebas:
           - Integración y pruebas: tema4/integracion-y-pruebas.md
           - Actividad 4.3 - Integración final del proyecto: tema4/actividad_4_3.md
+  - Cierre del módulo: cierre.md
 
 markdown_extensions:
   - md_in_html

@@ -1,7 +1,10 @@
-# 🧪 Actividad 4.2: Repaso integrador — un componente sobre el módulo documental
+# 🧪 Actividad 4.2: Mismo patrón, otro motor — un componente sobre el módulo documental
 
-!!! info "Práctica guiada — mini-reto de mayor peso"
-    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya construiste sobre PostgreSQL en la Actividad 4.1. Es una actividad de repaso integrador: casi todo es aplicar una estructura que ya conoces.
+!!! warning "Descarga la plantilla"
+    📄 [Plantilla 4.2 — Mismo patrón, otro motor: un componente sobre el módulo documental](plantillas/Actividad_4_2_AD_Plantilla.docx){target="_blank" rel="noopener"}
+
+!!! info "Práctica guiada — paso de mayor peso"
+    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya has construido sobre PostgreSQL en la Actividad 4.1: casi todo es aplicar, sobre un motor distinto, una estructura que ya conoces.
 
 ## Qué vas a practicar
 
@@ -32,7 +35,7 @@ La lógica de estos dos métodos **ya existe** dentro de `ReviewService.getResum
 
 ---
 
-## Mini-reto (con más peso de lo habitual) — el componente completo
+## Paso 2 — El componente completo
 
 !!! warning "El paquete `reviews.api` no existe todavía en tu proyecto"
     A diferencia de `catalogo.api` (que ya tienes de la Actividad 4.1), aquí no hay ningún precedente — el primer paso es crear la carpeta nueva.
@@ -53,11 +56,10 @@ Sin más código dado que la estructura de arriba y el contrato del Paso 1, crea
 
 1. La interfaz `ReviewsConsultaService` en el paquete nuevo `reviews.api` — por analogía exacta con `catalogo.api.CatalogoConsultaService`.
 2. `ReviewsConsultaServiceImpl` (package-private, anotada `@Service`) en `reviews`, que implemente la interfaz reutilizando `ReviewRepository` — el código es idéntico en estructura al de `CatalogoConsultaServiceImpl` que ya tienes delante, solo cambia la lógica interna (usa `findByVideojuegoId` y calcula total/media como ya hace `getResumenByVideojuegoId`).
-3. Un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (mock del repositorio, `@InjectMocks` sobre la implementación).
 
 ---
 
-## Paso 2 — Usarlo desde `catalogo`
+## Paso 3 — Usarlo desde `catalogo`
 
 Enriquece `VideojuegoResponseDTO` con la puntuación media, usando el componente nuevo desde `catalogo`:
 
@@ -88,13 +90,27 @@ private VideojuegoResponseDTO mapToDTO(Videojuego v) {
 
 ---
 
-## Paso 3 — Verificación
+## Paso 4 — Verificación
 
 ```bash
 curl http://localhost:8080/api/v1/videojuegos/1
 ```
 
-**Comprueba**: que la respuesta incluye `puntuacionMedia`, y que el dato coincide con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos. **Ejecuta también** tus tests existentes (`ReviewServiceTest`, `VideojuegoServiceTest`, etc.) y comprueba que siguen pasando.
+**Comprueba**: que la respuesta incluye `puntuacionMedia`, y que el dato coincide con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.
+
+**Captura**: la respuesta de `GET /videojuegos/1` con `puntuacionMedia`, junto a la de `GET /reviews/resumen` mostrando el mismo valor.
+
+**Ejecuta también** tus tests existentes (`ReviewServiceTest`, `VideojuegoServiceTest`, etc.) y comprueba que siguen pasando.
+
+**Captura**: tu batería de tests completa en verde.
+
+---
+
+## Paso 5 — Prueba del componente aislado
+
+Con `ReviewsConsultaService` ya construido, integrado en `catalogo` y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (mock del repositorio, `@InjectMocks` sobre la implementación).
+
+**Captura**: tus tests de `ReviewsConsultaServiceImplTest` en verde.
 
 ---
 
@@ -110,6 +126,8 @@ Rellena esta tabla con tu propia experiencia:
 | ¿El consumidor sabe qué motor hay debajo? | | |
 
 **Conclusión** (2-3 frases propias): ¿en qué se diferencian las implementaciones de ambos componentes? ¿En qué son idénticas sus interfaces vistas desde fuera? La respuesta esperada: el patrón de componente es independiente del motor de persistencia que hay por debajo — se replica con exactamente el mismo molde.
+
+**Una pregunta más**: con `CatalogoConsultaService` (Actividad 4.1) y `ReviewsConsultaService` (hoy), `catalogo` y `reviews` pasan a depender el uno del otro — cada módulo expone un contrato que el otro consume. ¿Te parece un problema que dos módulos dependan mutuamente el uno del otro? Razónalo (pista: fíjate en qué depende de qué exactamente — ¿es `VideojuegoService` quien depende de `ReviewService`, o de algo más concreto?).
 
 ---
 

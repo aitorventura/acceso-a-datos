@@ -19,6 +19,21 @@ Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos 
 
 ## Paso 1 — El test de integración de flujo completo
 
+Antes de nada, añade a tu `pom.xml` las dos dependencias de Testcontainers que todavía no tienes — ya usas `org.testcontainers:postgresql` desde la Actividad 2.3, pero este test necesita también MongoDB y RabbitMQ reales:
+
+```xml
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mongodb</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>rabbitmq</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
 ### Tramo 1 — guiado al completo
 
 ```java
@@ -35,6 +50,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.mongodb.MongoDBContainer;
+import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -54,6 +70,10 @@ class FlujoCompletoIntegrationTest {
     @Container
     @ServiceConnection
     static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
+
+    @Container
+    @ServiceConnection
+    static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:3-management");
 
     @Autowired
     private MockMvc mockMvc;
@@ -106,7 +126,7 @@ class FlujoCompletoIntegrationTest {
 }
 ```
 
-Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en dos contenedores a la vez, PostgreSQL y MongoDB corriendo de verdad, simultáneamente. Fíjate en `loginComoAdmin()` y en `@ActiveProfiles("test")`: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio `application-test.yml`, que reutilizas tal cual) — sin login, estos `POST` devolverían `403`, no `201`, porque `/api/v1/estudios` y `/api/v1/videojuegos` exigen rol `ADMIN` desde la Actividad 2.5 de PSP.
+Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en tres contenedores a la vez, PostgreSQL, MongoDB y RabbitMQ corriendo de verdad, simultáneamente (los tres motores reales que usa tu aplicación). Fíjate en `loginComoAdmin()` y en `@ActiveProfiles("test")`: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio `application-test.yml`, que reutilizas tal cual) — sin login, estos `POST` devolverían `403`, no `201`, porque `/api/v1/estudios` y `/api/v1/videojuegos` exigen rol `ADMIN` desde la Actividad 2.5 de PSP.
 
 ### Tramo 2 — mini-reto: la reseña y el resumen
 
@@ -114,7 +134,7 @@ Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña p
 
 ### Tramo 3 — mini-reto: el borrado en cascada
 
-Borra el videojuego (de nuevo con `adminToken`, exige rol `ADMIN`), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB tras un pequeño margen de espera (recuerda: es asíncrono, vía RabbitMQ — puede que necesites un `Thread.sleep` breve o un mecanismo de espera activa en el test, ya que Testcontainers no siempre incluye RabbitMQ salvo que añadas también ese contenedor).
+Borra el videojuego (de nuevo con `adminToken`, exige rol `ADMIN`), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB. El contenedor `rabbitmq` del Tramo 1 ya entrega el mensaje de verdad, pero sigue siendo asíncrono — necesitas un pequeño margen de espera (un `Thread.sleep` breve, o un mecanismo de espera activa) antes de comprobar que la reseña ya no está.
 
 ---
 
@@ -134,16 +154,20 @@ De todos los temas trabajados en este módulo, ¿con cuál te sientes más flojo
 
 ## Paso 4 — Amplía el filtro del CI, y verifica
 
-Antes de comprobar nada, hay algo que arreglar en `.github/workflows/ci.yml`. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con `-Dtest='*ControllerTest'` — una decisión de aquel momento, cuando el único test "pesado" del proyecto era `GamevaultApplicationTests` (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido tests de integración reales con Testcontainers — el de la Actividad 2.3 de AD, y el que acabas de terminar aquí mismo — pero ese filtro nunca se amplió, así que ninguno de los dos se ha estado ejecutando en tu CI hasta hoy.
+Antes de comprobar nada, hay algo que arreglar en `.github/workflows/ci.yml`. Ese workflow lo configuraste en la Actividad 1.3 de PSP, y desde entonces filtra los tests con `-Dtest='*ControllerTest'` — una decisión de aquel momento, cuando el único test "pesado" del proyecto era `GamevaultApplicationTests` (el de arranque completo, sin ninguna PostgreSQL real disponible en el runner). Desde entonces has construido muchos más tipos de test que ese filtro nunca ha recogido: los de integración con Testcontainers (Actividad 2.3 de AD, y el que acabas de terminar aquí mismo) y los de componente aislado con Mockito (Actividad 4.1, 4.2) — ninguno de ellos se ha estado ejecutando en tu CI hasta hoy, porque ninguno termina en `ControllerTest`.
 
-La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (`ubuntu-latest`) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro. Amplíalo para que incluya también tus tests de integración, sin arrastrar `GamevaultApplicationTests` (que seguiría sin poder pasar en CI, al no usar Testcontainers):
+Podrías seguir añadiendo sufijos a la lista (`*IntegrationTest`, `*ServiceImplTest`...), pero es una lista que se queda corta cada vez que construyes un tipo de test nuevo — exactamente el problema que acabas de descubrir. Mejor invertir el enfoque: en vez de decir qué **sí** ejecutar, di qué **no** puede ejecutarse en CI (solo `GamevaultApplicationTests`, que no usa Testcontainers y necesita una `dev` que el runner no tiene) y deja que todo lo demás se ejecute por defecto, sea del tipo que sea.
+
+La buena noticia: no hace falta la complejidad que aquella nota de PSP 1.3 anticipaba (levantar servicios manuales en el propio workflow) — los runners de GitHub Actions (`ubuntu-latest`) ya traen Docker instalado, así que Testcontainers puede levantar sus propios contenedores sin tocar el YAML más allá del filtro:
 
 ```yaml
       - name: Ejecutar los tests
-        run: ./mvnw test -B -Dtest='*ControllerTest,*IntegrationTest'
+        run: ./mvnw test -B -Dtest='!GamevaultApplicationTests'
 ```
 
-Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline ejecuta correctamente estos tests de integración. **Captura**: el resultado en verde del workflow.
+El `!` invierte el filtro: en vez de una lista cerrada de qué ejecutar, excluye solo esa clase concreta — todo lo demás (controllers, integración, componentes aislados, y cualquier test nuevo que construyas en el futuro) se ejecuta por defecto, sin que tengas que acordarte de ampliar la lista cada vez.
+
+Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline ejecuta correctamente todos tus tests — de controller, de integración y de componente aislado. **Captura**: el resultado en verde del workflow.
 
 ---
 

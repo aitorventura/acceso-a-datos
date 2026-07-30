@@ -35,7 +35,7 @@
 **Actividades:**
 
 - [Actividad 4.1 — `CatalogoConsultaService`: un componente reutilizable](actividad_4_1.md)
-- [Actividad 4.2 — Repaso integrador: un componente sobre el módulo documental](actividad_4_2.md)
+- [Actividad 4.2 — Mismo patrón, otro motor: un componente sobre el módulo documental](actividad_4_2.md)
 - [Actividad 4.3 — Integración final del proyecto](actividad_4_3.md)
 
 ---
