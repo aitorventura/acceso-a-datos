@@ -3,8 +3,8 @@
 !!! warning "Descarga la plantilla"
     📄 [Plantilla 4.2 — Mismo patrón, otro motor: un componente sobre el módulo documental](plantillas/Actividad_4_2_AD_Plantilla.docx){target="_blank" rel="noopener"}
 
-!!! info "Práctica guiada — paso de mayor peso"
-    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya has construido sobre PostgreSQL en la Actividad 4.1: casi todo es aplicar, sobre un motor distinto, una estructura que ya conoces.
+!!! info "Menos código dado que en la 4.1 — la estructura ya la conoces"
+    Hoy repites, sobre MongoDB, el mismo patrón exacto de componente que ya has construido sobre PostgreSQL en la Actividad 4.1. Como ya has pasado por esto una vez, aquí encuentras menos código ya escrito y más guía: la estructura la conoces, así que el peso recae en que la apliques tú.
 
 ## Qué vas a practicar
 
@@ -52,32 +52,16 @@ Sin más código dado que la estructura de arriba y el contrato del Paso 1, crea
 
 ## Paso 3 — Usarlo desde `catalogo`
 
-Enriquece `VideojuegoResponseDTO` con la puntuación media, usando el componente nuevo desde `catalogo`:
+Sin código dado, ahora te toca a ti conectar las dos piezas:
 
-```java
-public record VideojuegoResponseDTO(
-        Long id,
-        String titulo,
-        BigDecimal precio,
-        LocalDate fechaLanzamiento,
-        String nombreEstudio,
-        Map<String, Object> detallesPlataforma,
-        Double puntuacionMedia // campo nuevo
-) {}
-```
-
-```java
-// En VideojuegoService, inyecta ReviewsConsultaService (la interfaz, no la implementación)
-private VideojuegoResponseDTO mapToDTO(Videojuego v) {
-    Double media = reviewsConsultaService.puntuacionMediaDe(v.getId());
-    return new VideojuegoResponseDTO(
-            v.getId(), v.getTitulo(), v.getPrecio(), v.getFechaLanzamiento(),
-            v.getEstudio().getNombre(), v.getDetallesPlataforma(), media
-    );
-}
-```
+1. Añade a `VideojuegoResponseDTO` un séptimo campo, `puntuacionMedia` (tipo `Double`, sin ninguna anotación de validación — es un dato de solo lectura, igual que `nombreEstudio`).
+2. En `VideojuegoService`, inyecta `ReviewsConsultaService` —la interfaz, nunca la implementación— junto al resto de dependencias del constructor.
+3. Dentro de `mapToDTO`, llama a `puntuacionMediaDe(v.getId())` y pasa el resultado como ese séptimo argumento. Es el mismo mecanismo que ya usas para `nombreEstudio` (`v.getEstudio().getNombre()`), solo que esta vez el dato no sale de `Videojuego`, sale del componente nuevo.
 
 **Fíjate**: `catalogo` no importa nada de `reviews` salvo la interfaz del paquete `api` — ni conoce `Review`, ni `ReviewRepository`, ni cómo se calcula la media por dentro.
+
+!!! warning "Esto rompe tu `VideojuegoControllerTest`"
+    Igual que pasó con `detallesPlataforma` en la Actividad 2.1, añadir un séptimo campo a `VideojuegoResponseDTO` rompe cualquier `new VideojuegoResponseDTO(...)` que siga usando el constructor de los seis campos antiguos. Localiza los **tres** sitios de `VideojuegoControllerTest` donde pasa esto, y añade un valor `Double` cualquiera al final de cada uno — el valor concreto no importa, ninguno de esos tests comprueba nada sobre `puntuacionMedia`, solo necesitan que el DTO compile.
 
 ---
 
@@ -91,7 +75,7 @@ curl http://localhost:8080/api/v1/videojuegos/1
 
 **Captura**: la respuesta de `GET /videojuegos/1` con `puntuacionMedia`, junto a la de `GET /reviews/resumen` mostrando el mismo valor.
 
-**Ejecuta también** tus tests existentes (`ReviewServiceTest`, `VideojuegoServiceTest`, etc.) y comprueba que siguen pasando.
+**Ejecuta también** tus tests existentes (`VideojuegoControllerTest`, `CatalogoConsultaServiceImplTest`, `VideojuegoApiIntegrationTest`) y comprueba que siguen pasando, ya con el cambio del Paso 3 aplicado.
 
 **Captura**: tu batería de tests completa en verde.
 

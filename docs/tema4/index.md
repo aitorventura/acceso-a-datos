@@ -28,9 +28,8 @@
 
 ## 📘 Índice de contenidos
 
-1. [Componentes con conectores y ORM](componentes-conectores-orm.md)
-2. [Componentes con BD objeto-relacional y documental](componentes-bd-objeto-doc.md)
-3. [Integración y pruebas](integracion-y-pruebas.md)
+1. [Componentes](componentes-conectores-orm.md)
+2. [Integración y pruebas](integracion-y-pruebas.md)
 
 **Actividades:**
 

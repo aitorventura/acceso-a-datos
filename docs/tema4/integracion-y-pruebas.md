@@ -1,6 +1,6 @@
 <a id="integracion-y-pruebas"></a>
 
-# 🧩 3. Integración y pruebas
+# 🧩 2. Integración y pruebas
 
 Último apartado del módulo. Responde a la pregunta que da sentido a todo lo anterior: ¿cómo sabes que tus componentes, diseñados por separado, funcionan bien **juntos**?
 
