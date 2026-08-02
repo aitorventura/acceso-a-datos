@@ -55,6 +55,8 @@ En el apartado anterior, quien pregunta es notas de lectura y quien responde es 
 
 ## 🪞 Cerrando el círculo: el mismo patrón, tres motores distintos
 
+Ya has visto el patrón aplicado dos veces, sobre dos motores distintos y en las dos direcciones. Antes de la actividad, un último repaso: los tres componentes que has construido en este tema (relacional puro, objeto-relacional con JSONB, documental con MongoDB) convergen exactamente en el mismo molde.
+
 ```mermaid
 flowchart TB
     subgraph JPA["🐘 PostgreSQL puro"]

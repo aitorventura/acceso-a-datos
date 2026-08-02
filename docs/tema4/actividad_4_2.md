@@ -22,16 +22,7 @@ Tu `CatalogoConsultaService` (Actividad 4.1) como referencia visual constante.
 
 ## Paso 1 — Planteamiento: el contrato mínimo
 
-¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define el contrato:
-
-```java
-public interface ReviewsConsultaService {
-    long totalReviewsDe(Long videojuegoId);
-    double puntuacionMediaDe(Long videojuegoId);
-}
-```
-
-La lógica de estos dos métodos **ya existe** dentro de `ReviewService.getResumenByVideojuegoId` — no la vas a reescribir, solo a exponerla como componente.
+¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define tú mismo el contrato mínimo: dos métodos, uno que devuelva cuántas reseñas tiene un videojuego (`long`) y otro que devuelva su puntuación media (`double`), los dos recibiendo el `id` del videojuego. La lógica de ambos **ya existe** dentro de `ReviewService.getResumenByVideojuegoId` — no la vas a reescribir, solo a exponerla como componente.
 
 ---
 
