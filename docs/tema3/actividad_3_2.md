@@ -109,24 +109,24 @@ Aquí es donde escribes el consumer del que hablaba el Paso 1, ya con el `packag
 ```java
 package com.tunombre.gamevault.reviews.mensajeria;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tunombre.gamevault.catalogo.api.eventos.VideojuegoEvent;
 import com.tunombre.gamevault.config.RabbitMQConfig;
 import com.tunombre.gamevault.reviews.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewsVideojuegoEventConsumer {
     private final ReviewService reviewService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper jsonMapper;
 
     @RabbitListener(queues = RabbitMQConfig.REVIEWS_VIDEOJUEGO_QUEUE)
-    public void recibir(String payload) throws Exception {
+    public void recibir(String payload) {
         System.out.println("[TRAZA] Consumer ejecutándose en hilo: " + Thread.currentThread().getName());
-        VideojuegoEvent event = objectMapper.readValue(payload, VideojuegoEvent.class);
+        VideojuegoEvent event = jsonMapper.readValue(payload, VideojuegoEvent.class);
         if (VideojuegoEvent.VIDEOJUEGO_ELIMINADO.equals(event.tipo())) {
             reviewService.deleteByVideojuegoId(event.videojuegoId());
         }
@@ -136,7 +136,7 @@ public class ReviewsVideojuegoEventConsumer {
 
 El `System.out.println` es temporal, solo para el Paso 4 — lo vas a usar para comparar el nombre de este hilo con el de la petición `DELETE`. Puedes quitarlo al terminar la actividad.
 
-Es el mismo patrón de deserialización que ya tienes en `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1): un `ObjectMapper` de Jackson, con `readValue` convirtiendo el `payload` (JSON en texto) de vuelta a un `VideojuegoEvent`.
+Es el mismo patrón de deserialización que ya tienes en `ActividadVideojuegoEventConsumer` (PSP, Actividad 3.1): un `JsonMapper` de Jackson, inyectado como bean, con `readValue` convirtiendo el `payload` (JSON en texto) de vuelta a un `VideojuegoEvent`.
 
 Añade también `deleteByVideojuegoId` a tu `ReviewRepository` (`long deleteByVideojuegoId(Long videojuegoId);`) y, en `ReviewService`, el método que lo invoca:
 
