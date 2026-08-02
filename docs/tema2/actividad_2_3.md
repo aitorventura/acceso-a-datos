@@ -183,7 +183,7 @@ gamevault:
     expiration-minutes: 60
 ```
 
-`ddl-auto: create-drop` deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior.
+`ddl-auto: create-drop` deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior. La limpieza se produce al arrancar un nuevo contexto de pruebas, no antes de cada método `@Test`. Como el contenedor y el contexto se comparten durante la ejecución de esta clase, los datos creados por un método podrían seguir presentes cuando se ejecute el siguiente.
 
 !!! warning "Sin `admin.password`, `jwt.secret` y `jwt.expiration-minutes`, el contexto ni arranca"
     Ninguna de las tres tiene valor por defecto en el código (`@Value` sin *fallback*) — sin ellas, ningún test de la clase llega a ejecutarse. La contraseña que pongas aquí tiene que coincidir con la que envíe `loginComoAdmin()` en su petición de login (más arriba, dentro de la misma clase) — de ahí el nombre `admintest123`, para que quede claro de un vistazo que es una credencial solo de test, sin relación con la de `dev`. El valor de `expiration-minutes` no importa para el test — `60` (el mismo de `dev`) sirve igual que cualquier otro. Este fichero sí se sube a Git: las credenciales de dentro no son reales, solo existen en el contenedor Postgres desechable que Testcontainers destruye al terminar el test.
@@ -203,17 +203,17 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/login, admin)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada dentro del contexto real
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /estudios,<br/>Authorization: Bearer token)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada dentro del contexto real, ya autenticada
     App-->>MockMvc: 201 + id del estudio
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /videojuegos,<br/>Authorization: Bearer token,<br/>estudioId real,<br/>detallesPlataforma: steam)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada dentro del contexto real, ya autenticada
     App-->>MockMvc: 201 Created
     MockMvc-->>Test: respuesta
 

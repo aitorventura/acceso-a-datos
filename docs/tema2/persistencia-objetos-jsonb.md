@@ -2,7 +2,9 @@
 
 # 🧩 1. Persistencia de objetos con JSONB
 
-Hasta ahora, cada campo de tus entidades ha sido un valor simple: un texto, un número, una fecha. Este tema abre una categoría intermedia entre lo puramente relacional (Tema 1) y lo orientado a objetos puro (que verás de forma teórica más adelante en este mismo tema): las **bases de datos objeto-relacionales**, gestores relacionales que además saben almacenar y consultar objetos completos dentro de sus tablas.
+Hasta ahora, cada atributo de tus entidades se almacenaba normalmente en una columna independiente: un texto, un número o una fecha. Este apartado introduce una posibilidad intermedia entre el modelo relacional clásico y las bases de datos orientadas a objetos: utilizar capacidades objeto-relacionales de PostgreSQL para almacenar datos estructurados dentro de una columna.
+
+Con `jsonb`, PostgreSQL no guarda directamente un objeto Java ni sus métodos. Guarda su representación como un documento JSON, que Hibernate puede convertir al escribir y reconstruir al leer.
 
 ---
 
@@ -12,8 +14,13 @@ Ya lo has visto antes, pero conviene no darlo por dominado. **JSON** (*JavaScrip
 
 ```json
 {
-  "tapaDura": { "isbn": "978-84-376-0494-7", "paginas": 496 },
-  "ebook": { "formato": "epub" }
+   "tapaDura":{
+      "isbn":"978-84-376-0494-7",
+      "paginas":496
+   },
+   "ebook":{
+      "formato":"epub"
+   }
 }
 ```
 
@@ -24,7 +31,7 @@ Se ha convertido en el formato universal de intercambio de datos porque es legib
 ## 🧱 Objeto simple vs. objeto estructurado
 
 - **Objeto simple**: un valor escalar — un texto, un número, una fecha. Es lo que has persistido siempre (`titulo`, `precio`).
-- **Objeto estructurado**: un objeto con campos anidados, posiblemente con colecciones dentro — como el ejemplo JSON de arriba, con dos formatos de edición, cada uno con sus propios campos internos.
+- **Objeto estructurado**: un objeto con campos anidados, posiblemente con colecciones dentro. En el ejemplo anterior, se almacenan los datos de dos ediciones del mismo libro —`tapaDura` y `ebook`— y cada una tiene sus propios atributos.
 
 ---
 
@@ -60,17 +67,25 @@ public class Libro {
 
 ### `titulo`/`precio` (objeto simple) vs. `detallesEdicion` (objeto estructurado)
 
-`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 1 — un valor escalar por columna. `detallesEdicion`, en cambio, es un objeto estructurado real: puede contener claves anidadas como
+`titulo` y `precio` son la persistencia "de toda la vida" que ya conoces del Tema 1 — un valor escalar por columna. `detallesEdicion`, en cambio, representa datos estructurados que Hibernate serializa como JSON dentro de una única columna:
 
 ```json
-{"tapaDura": {"isbn": "978-84-376-0494-7", "paginas": 496}, "ebook": {"formato": "epub"}}
+{
+   "tapaDura":{
+      "isbn":"978-84-376-0494-7",
+      "paginas":496
+   },
+   "ebook":{
+      "formato":"epub"
+   }
+}
 ```
-
-todo dentro de una única columna, sin que hayas tenido que crear una tabla nueva por cada formato en que se publique el libro.
 
 ### Cómo Hibernate serializa el `Map` a JSON
 
-Hibernate no convierte un `Map<String, Object>` Java a JSON (y de vuelta) por sí solo — necesita apoyarse en **Jackson**, la librería estándar de JSON en el ecosistema Spring. La buena noticia es que no tienes que configurar nada de eso a mano: Spring Boot incluye Jackson en el classpath por defecto, y en cuanto Hibernate 6 detecta un campo anotado con `@JdbcTypeCode(SqlTypes.JSON)`, lo conecta automáticamente — ni una clase de configuración que escribir, ni ninguna dependencia nueva que añadir.
+Hibernate necesita una biblioteca capaz de convertir el `Map<String, Object>` a JSON y reconstruirlo después. En este proyecto puede utilizar **Jackson**, que ya está disponible porque Spring Boot lo incorpora mediante las dependencias web que añadiste anteriormente.
+
+Al detectar `@JdbcTypeCode(SqlTypes.JSON)` y encontrar Jackson en el classpath, Hibernate lo utiliza para realizar esa conversión. Por eso aquí no necesitas añadir una dependencia ni escribir un conversor manual.
 
 ---
 
@@ -78,13 +93,14 @@ Hibernate no convierte un `Map<String, Object>` Java a JSON (y de vuelta) por s�
 
 Con lo que ya sabes del Tema 1, podrías haber modelado esto como una tabla `detalle_edicion` con una relación `@OneToMany` desde `Libro` — una fila por formato, con sus propias columnas. ¿Por qué elegir JSONB en su lugar?
 
-| | Tabla relacional nueva | Columna JSONB |
+| | Modelo relacional | Columna JSONB |
 |---|---|---|
-| **Añadir un formato nuevo** | Requiere migración de esquema (nueva tabla o columnas) | No requiere ningún cambio de esquema |
-| **Integridad referencial** | Garantizada por el motor (claves foráneas) | Ninguna — el contenido del JSON no se valida contra nada |
-| **Tipado estricto** | Cada columna tiene su tipo fijo | Sin tipado — cualquier estructura es válida |
+| **Añadir otra edición con la misma estructura** | Basta con insertar otra fila | Basta con modificar el documento JSON |
+| **Añadir atributos o estructuras nuevas** | Puede requerir nuevas columnas, tablas o relaciones | Normalmente no requiere modificar el esquema |
+| **Integridad y validación** | El motor aplica tipos, restricciones y claves foráneas | La estructura interna no se valida por defecto |
+| **Acceso desde Java** | Entidades y atributos tipados | Con `Map<String, Object>`, claves y tipos se comprueban durante la ejecución |
 
-El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo mañana — audiolibro, por ejemplo — no toca el esquema de la base de datos) a cambio de perder las garantías que sí tendría una tabla normal. Es una decisión de diseño, no una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 2.1.
+El equilibrio es real: JSONB facilita que los datos internos evolucionen sin modificar continuamente el esquema de tablas, pero reduce el tipado y las garantías que PostgreSQL aplica automáticamente sobre cada campo. Un modelo relacional aporta más control; JSONB, más flexibilidad. La elección es una decisión de diseño, no existe una regla universal — y es justo lo que vas a discutir con criterio en la Actividad 2.1.
 
 !!! example "La pérdida de tipado, en la práctica"
     Con una tabla relacional, escribir `detalleEdicion.getPaginas()` que no existe da un error de compilación — no hay forma de que el código llegue a ejecutarse así. Con `Map<String, Object>`, en cambio, `detallesEdicion.get("paginas")` compila sin problema aunque hayas escrito `"pagina"` por error: el fallo no aparece hasta que ejecutas el código y te encuentras con un `null` inesperado (o un `ClassCastException`, si además asumías un tipo concreto). El compilador ya no te cubre las espaldas — pasa a ser responsabilidad tuya, en tiempo de ejecución.
@@ -93,17 +109,28 @@ El trade-off es real: JSONB gana en flexibilidad (añadir un formato nuevo maña
 
 ## 📇 Indexar el contenido de una columna JSONB
 
-Un **índice** es una estructura auxiliar que el motor de base de datos mantiene aparte de la tabla, pensada para encontrar filas rápido sin tener que recorrerlas todas una a una — la misma idea que el índice de un libro: en vez de leer página por página buscando un tema, vas directo a la página que el índice te señala. Sin ningún índice, cualquier búsqueda por una columna implica recorrer la tabla entera, fila a fila.
+Un **índice** es una estructura auxiliar que el motor de base de datos mantiene aparte de la tabla, pensada para encontrar filas rápido sin tener que recorrerlas todas una a una — la misma idea que el índice de un libro: en vez de leer página por página buscando un tema, vas directo a la página que el índice te señala. Sin un índice adecuado para la consulta, PostgreSQL puede tener que recorrer la tabla entera, fila a fila.
 
-El tipo de índice más habitual es el **B-tree**, y acelera búsquedas por el valor completo de una columna — perfecto para `WHERE titulo = 'Celeste'`. Pero JSONB no tiene "un valor": tiene un objeto con claves dentro, y lo que sueles necesitar filtrar es "¿existe esta clave?" o "¿contiene este valor concreto?" — algo que un índice B-tree normal no sabe acelerar, porque no entiende la estructura interna del JSON.
+El tipo de índice más habitual es el **B-tree**, apropiado para operaciones como igualdad, comparaciones por rango y ordenación sobre valores escalares: por ejemplo, buscar un título concreto u ordenar por precio.
 
-PostgreSQL resuelve esto con un tipo de índice distinto: **GIN** (*Generalized Inverted Index*), pensado precisamente para tipos de datos "compuestos" como JSONB, arrays, o búsqueda de texto completo. Se crea así:
+Pero las consultas habituales sobre JSONB no comparan necesariamente el documento completo. Suelen preguntar si existe una clave, si el documento contiene cierta estructura o si un valor aparece dentro de él.
+
+PostgreSQL resuelve estas búsquedas mediante índices **GIN** (*Generalized Inverted Index*), diseñados para localizar elementos dentro de valores compuestos como JSONB, arrays o documentos de texto. Se crea así:
 
 ```sql
-CREATE INDEX idx_libro_detalles_edicion ON libro USING GIN (detalles_edicion);
+CREATE INDEX idx_libro_detalles_edicion
+ON libro USING GIN (detalles_edicion);
 ```
+Por ejemplo, el operador `?` permite comprobar si existe una clave en el nivel superior del documento:
 
-Con este índice, una consulta que filtre por el contenido del JSON (como `jsonb_exists`, que verás en el próximo apartado) deja de recorrer la tabla entera fila a fila — PostgreSQL consulta el índice directamente. Pero eso solo pasa si de verdad compensa: hacen falta **dos** condiciones a la vez, no solo una. Necesitas volumen (con pocas filas, cualquier plan es rápido) **y** que la consulta sea selectiva — que descarte la mayoría de la tabla, no la mitad. Si una consulta devuelve, por ejemplo, el 50% de las filas, recorrerlas todas seguidas sigue siendo más barato que saltar de una en una por el índice, por muchas filas que tenga la tabla. Es exactamente el tipo de decisión que separa una consulta que escala de una que no.
+```sql
+SELECT *
+FROM libro
+WHERE detalles_edicion ? 'ebook';
+```
+El índice GIN puede acelerar este tipo de consultas sobre el contenido del JSONB. Eso no significa que PostgreSQL vaya a utilizarlo siempre: el planificador compara los costes y puede preferir recorrer la tabla completa cuando hay pocas filas o cuando la consulta devuelve una parte muy grande de ellas.
+
+Para que el índice resulte especialmente útil suelen coincidir dos condiciones: que exista un volumen considerable de datos y que la consulta sea selectiva, es decir, que descarte la mayoría de las filas.
 
 !!! tip "Con pocas filas no se nota — por eso en la actividad generas muchas"
     Con una tabla de prueba de un puñado de filas no verías ninguna diferencia real: el motor decide el plan por coste estimado, y con pocos datos un recorrido completo de la tabla ya es barato de por sí. En la Actividad 2.1 vas a generar 100.000 filas de golpe y comparar el plan de la misma consulta antes y después de crear el índice — con ese volumen, la diferencia deja de ser cuestión de suerte.
@@ -120,7 +147,7 @@ Con JSONB hay tres estados distintos que se confunden con facilidad:
 | `{"ebook": null}` | Hay un objeto JSON guardado, con la clave `"ebook"` presente, pero su valor es el `null` de JSON — no confundir con el `NULL` de SQL de arriba. |
 | `{}` (objeto vacío) | Hay un objeto JSON guardado, sin ninguna clave dentro. |
 
-Comprobar "¿existe la clave `ebook`?" da resultados distintos en cada caso: en el primero, la consulta ni siquiera tiene sobre qué mirar; en el segundo, la clave existe, aunque su valor sea `null`; en el tercero, la clave directamente no existe. Tenerlo claro desde ahora te ahorra un bug real: "el libro no tiene ebook" no es lo mismo que "la clave `ebook` no existe" — podrías tener la clave con valor `null` a propósito, para indicar "hay edición ebook prevista, pero sin detalles todavía".
+Comprobar «¿existe la clave `ebook`?» da resultados distintos en cada caso: si la columna es `NULL`, la expresión devuelve también `NULL`; en `{"ebook": null}`, la clave existe aunque su valor sea el `null` de JSON; y en `{}`, la clave no existe.
 
 ---
 
@@ -128,11 +155,11 @@ Comprobar "¿existe la clave `ebook`?" da resultados distintos en cada caso: en 
 
 ??? tip "Abrir resumen"
 
-    - Una base de datos **objeto-relacional** es un gestor relacional que además sabe almacenar objetos completos dentro de sus tablas.
-    - `jsonb` en PostgreSQL guarda JSON en formato binario indexable — preferible a `json` (texto plano) salvo que necesites preservar el formato exacto.
+    - PostgreSQL es un gestor objeto-relacional: mantiene el modelo de tablas y relaciones, pero incorpora tipos y funciones avanzadas, como `JSONB`, para almacenar y consultar datos estructurados.
+    - `JSONB` en PostgreSQL guarda JSON en formato binario indexable — preferible a `JSON` (texto plano) salvo que necesites preservar el formato exacto.
     - `@JdbcTypeCode(SqlTypes.JSON)` + `@Column(columnDefinition = "jsonb")` mapean un `Map<String, Object>` Java contra una columna `jsonb`.
     - **Objeto simple** = valor escalar; **objeto estructurado** = objeto anidado con posibles colecciones dentro.
-    - JSONB gana en flexibilidad de esquema, pierde integridad referencial y tipado estricto frente a una tabla relacional — es una decisión de diseño con trade-offs, no una opción siempre superior.
-    - JSONB no abre ninguna conexión nueva: reutiliza el mismo `DataSource` del Tema 1.
-    - Un índice **GIN** acelera consultas por el contenido de una columna JSONB — un índice normal (B-tree) no sabe mirar dentro del objeto. Pero solo gana si la consulta es selectiva (descarta la mayoría de filas) además de haber volumen — con una consulta poco selectiva, el `Seq Scan` sigue siendo más barato por muchas filas que haya.
+    - `JSONB` gana en flexibilidad de esquema, pierde integridad referencial y tipado estricto frente a una tabla relacional — es una decisión de diseño con trade-offs, no una opción siempre superior.
+    - `JSONB` no abre ninguna conexión nueva: reutiliza el mismo `DataSource` del Tema 1.
+    - Un índice **GIN** acelera consultas por el contenido de una columna `JSONB` — un índice normal (B-tree) no sabe mirar dentro del objeto. Pero solo gana si la consulta es selectiva (descarta la mayoría de filas) además de haber volumen — con una consulta poco selectiva, el `Seq Scan` sigue siendo más barato por muchas filas que haya.
     - `NULL` de columna, `null` dentro del JSON, y objeto vacío `{}` son tres estados distintos, y comprobar "existe la clave" da un resultado diferente en cada uno.

@@ -2,7 +2,7 @@
 
 # 🧩 2. Consultas sobre columnas JSONB
 
-Ya sabes guardar objetos estructurados en una columna JSONB. El siguiente paso: filtrar por su contenido — algo que una condición `WHERE` normal no sabe hacer, porque ya no compara una columna, sino una **clave dentro de un objeto**.
+Ya sabes guardar datos estructurados en una columna JSONB. El siguiente paso es filtrar por su contenido. Para ello no bastan los comparadores habituales sobre valores escalares: necesitas operadores y funciones de PostgreSQL capaces de acceder a las claves y valores almacenados dentro del JSON.
 
 ---
 
@@ -29,8 +29,12 @@ SELECT detalles_edicion ->> 'ebook' FROM libro;      -- como texto
 
 Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.
 
-!!! tip "El índice GIN de la Actividad 2.1 es exactamente para esto"
-    Si en la Actividad 2.1 has creado un índice GIN sobre `detalles_edicion` (`CREATE INDEX ... USING GIN (detalles_edicion)`), no era un ejercicio suelto: `jsonb_exists` y el operador `?` son precisamente las consultas que ese índice acelera. Un `WHERE detalles_edicion ? 'ebook'` sobre una tabla grande es justo el caso que pasaba de `Seq Scan` a `Bitmap Index Scan` cuando has comprobado el `EXPLAIN` antes y después de crearlo. Todo lo que veas en este apartado se beneficia de ese mismo índice, sin que tengas que hacer nada más.
+!!! tip "El índice GIN de la Actividad 2.1 está pensado para operadores JSONB"
+    El índice GIN creado sobre `detalles_edicion` puede acelerar operadores como `?`, que comprueba si existe una clave. Por ejemplo, `WHERE detalles_edicion ? 'ebook'` puede aprovechar el índice cuando el planificador estima que resulta más eficiente que recorrer toda la tabla.
+
+    `jsonb_exists(detalles_edicion, 'ebook')` produce el mismo resultado lógico, pero PostgreSQL documenta el operador `?` —no la llamada directa a la función— entre los operadores compatibles con el índice GIN. Por eso no debes dar por hecho que ambas formas utilizarán el índice del mismo modo.
+
+    En la actividad de rendimiento utilizas el operador `?`; en la Specification utilizarás `jsonb_exists(...)` porque Criteria API permite invocar funciones SQL por su nombre.
 
 ---
 
@@ -74,13 +78,13 @@ sequenceDiagram
     Controller->>Spec: disponibleEnFormato("ebook")
     Spec->>Spec: .and(...) con el resto de filtros
     Spec->>Hibernate: Specification combinada
-    Hibernate->>Postgres: WHERE detalles_edicion ? 'ebook'
+    Hibernate->>Postgres: WHERE jsonb_exists(detalles_edicion, 'ebook')
     Postgres-->>Hibernate: filas que cumplen la condición
     Hibernate-->>Controller: Cien años de soledad, 1984
     Controller-->>Cliente: 200 + lista filtrada
 ```
 
-Cada paso es una pieza que ya conoces por separado — el parámetro de consulta, el DTO, la Specification, `.and(...)` — la novedad de hoy es solo el tramo Hibernate→PostgreSQL: cómo `jsonb_exists`/`?` llega a formar parte de esa traducción.
+Cada paso es una pieza que ya conoces por separado — el parámetro de consulta, el DTO, la Specification, `.and(...)` — la novedad de hoy es solo el tramo Hibernate→PostgreSQL: cómo la llamada a `jsonb_exists(...)` llega a formar parte de la consulta generada.
 
 ### La Specification, con `jsonb_exists` desde Criteria API
 
@@ -106,7 +110,7 @@ Compárala con las Specifications "normales" que ya conoces del Tema 1 (`tituloC
 
 **Criteria API** es la API de JPA para construir consultas con objetos Java (`CriteriaBuilder`, `Root`, `Predicate`...) en vez de con SQL o JPQL escrito como texto — es justo lo que hay detrás de cada `Specification` que ya has escrito. Pero aquí no existe un método directo de Criteria API para "existe esta clave en este JSON", porque es una función **específica del motor** (PostgreSQL), no parte del estándar JPA. Por eso hace falta `criteriaBuilder.function("jsonb_exists", ...)`: es la forma de invocar una función SQL nativa arbitraria desde Criteria API, pasándole el nombre de la función, el tipo de resultado esperado (`Boolean.class`), y sus argumentos (la columna, y un literal con la clave a buscar).
 
-Con los cuatro libros de antes, `disponibleEnFormato("ebook")` genera —por debajo, a través de Hibernate— la misma consulta que ya has visto en SQL, y devuelve la misma pareja: Cien años de soledad y 1984. La Specification no es una forma distinta de filtrar, es la misma condición `WHERE`, solo expresada en Java para que Spring Data la combine con el resto de filtros del buscador.
+Con los cuatro libros de antes, `disponibleEnFormato("ebook")` genera —por debajo, a través de Hibernate— una condición lógicamente equivalente a la que ya has visto en SQL, y devuelve la misma pareja: Cien años de soledad y 1984. La Specification no es una forma distinta de filtrar: expresa en Java la misma comprobación para que Spring Data pueda combinarla con el resto de filtros del buscador.
 
 ### Combinada con el resto, de forma transparente
 
@@ -150,8 +154,10 @@ criteriaBuilder.equal(
 
 La técnica es idéntica a la de `disponibleEnFormato`: nombre de la función nativa, tipo de retorno, argumentos — solo cambia la función y qué haces con el resultado. La construyes tú mismo en la Actividad 2.2, con tus propios datos de plataforma.
 
-!!! warning "El índice GIN no acelera esto igual"
-    El índice de la Actividad 2.1 está pensado para `?`/`jsonb_exists` (existencia de claves), no para comparaciones de un valor anidado como esta. Una consulta así, sobre una tabla grande, volvería a hacer `Seq Scan` — necesitaría un índice distinto (por ejemplo, uno de expresión sobre `(detalles_edicion -> 'ebook' ->> 'formato')`) si de verdad se usara mucho en producción. Queda fuera del alcance de este apartado, pero conviene no dar por hecho que "ya tienes un índice JSONB, así que todo va rápido" — depende de qué consulta exacta hagas.
+!!! warning "El índice GIN anterior no acelera automáticamente esta comparación"
+    El índice GIN sobre la columna completa está pensado para determinados operadores JSONB, como `?` o `@>`. Una comparación basada en extraer un valor como texto mediante `->>` o `#>>` no aprovecha automáticamente ese mismo índice.
+
+    Si una consulta sobre `ebook.formato` se utilizara con mucha frecuencia en una tabla grande, podría crearse un índice de expresión sobre `(detalles_edicion -> 'ebook' ->> 'formato')`. Queda fuera del alcance de este apartado, pero conviene no dar por hecho que cualquier consulta sobre JSONB será rápida por tener un índice GIN: depende de la expresión y del operador utilizados.
 
 ---
 
@@ -167,8 +173,10 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 }
 ```
 
-!!! warning "Usa la función, no el operador `?`, dentro de una `@Query` nativa"
-    El operador `?` de JSONB choca con el `?` que JDBC usa como marcador de parámetro posicional — Hibernate lo interpretaría mal, y la consulta fallaría o se comportaría de forma inesperada. `jsonb_exists(columna, clave)` hace exactamente lo mismo que `?`, sin ese conflicto: dentro de una `@Query` nativa, usa siempre la función.
+!!! warning "En esta `@Query` nativa se utiliza la función para evitar ambigüedades"
+    JDBC y JPA utilizan el carácter `?` para representar parámetros posicionales. Dependiendo de la versión y de cómo se procese la consulta nativa, el operador JSONB `?` puede confundirse con uno de esos marcadores.
+
+    Para evitar esa ambigüedad, en estos apuntes se utiliza `jsonb_exists(columna, clave)`, que expresa la misma comprobación de existencia sin emplear el carácter `?`.
 
 Fíjate en el tipo de retorno: a diferencia del ranking con `ROW_NUMBER()` del Tema 1 (que necesitaba `List<Object[]>`, porque añadía una columna calculada que ninguna entidad tiene), aquí `SELECT *` selecciona exactamente las columnas de `Libro` — Spring Data mapea el resultado de vuelta a `List<Libro>` sin problema, como si fuera una consulta derivada normal.
 
@@ -213,10 +221,10 @@ libro.setDetallesEdicion(dto.detallesEdicion()); // sustituye el Map entero
 ??? tip "Abrir resumen"
 
     - `jsonb_exists(columna, clave)` (o el operador `?`) comprueba si una clave existe en el JSON; `->`/`->>` extraen valores (como JSON o como texto).
-    - El índice GIN de la Actividad 2.1 acelera exactamente estas consultas — `jsonb_exists`/`?` son el caso de uso para el que se creó.
+    - El índice GIN de la Actividad 2.1 puede acelerar operadores JSONB como `?`. `jsonb_exists(...)` realiza la misma comprobación lógica, pero no debe darse por hecho que la llamada directa a la función utilice el índice del mismo modo.
     - Para comparar un valor anidado (no solo comprobar que una clave existe), se encadena `->`/`->>` o se usa el operador de ruta `#>>` — y ahí el índice GIN de `?` ya no ayuda igual.
     - Consultar el contenido de una columna JSONB desde Criteria API requiere `criteriaBuilder.function(...)`, porque son funciones específicas del motor, no parte del estándar JPA.
-    - `@Query(nativeQuery = true)` es la alternativa cuando la consulta JSONB no necesita combinarse con otros filtros — más simple de leer, pero fija; usa `jsonb_exists(...)` en vez de `?`, que choca con el marcador de parámetro de JDBC.
+    - `@Query(nativeQuery = true)` es una alternativa más directa cuando la consulta JSONB es fija y no necesita combinarse como una Specification. En estos apuntes se usa `jsonb_exists(...)` para evitar la posible ambigüedad entre el operador `?` y los parámetros posicionales de JDBC/JPA.
     - Combinada con `.and(...)`, una Specification sobre JSONB se usa exactamente igual que una sobre una columna normal — transparente para quien consume el repositorio.
     - Actualizar un campo JSONB **reemplaza** el objeto completo — JPA no sabe hacer *merge* parcial de un valor de columna; si lo necesitas, lo haces tú en memoria antes de guardar.
     - `@Transactional` no cambia en nada por tener columnas JSONB de por medio.

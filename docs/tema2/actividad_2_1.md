@@ -143,7 +143,9 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
   -c "SELECT titulo, detalles_plataforma FROM videojuego;"
 ```
 
-**Anota**: ¿el JSON que ves (en `psql` o en pgAdmin/DBeaver) coincide exactamente con el que has mandado por la API?
+**Anota**: ¿el JSON almacenado contiene las mismas claves, valores y estructuras que has enviado por la API?
+
+No compares espacios ni el orden de las claves: `jsonb` conserva el contenido del documento, pero no necesariamente su representación textual exacta.
 
 ---
 
@@ -214,7 +216,9 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
   -c "EXPLAIN SELECT * FROM videojuego WHERE detalles_plataforma ? 'steam';"
 ```
 
-**Comprueba**: el plan debería cambiar — en vez de `Seq Scan`, ahora debería aparecer una combinación de `Bitmap Heap Scan` y `Bitmap Index Scan` sobre `idx_videojuego_detalles_plataforma`. Con 100.000 filas de por medio, esta vez la diferencia no es cuestión de suerte.
+**Comprueba** el plan elegido por PostgreSQL. Con 100.000 filas y una consulta que solo selecciona aproximadamente el 1 % de ellas, lo habitual es que aparezca una combinación de `Bitmap Heap Scan` y `Bitmap Index Scan` sobre `idx_videojuego_detalles_plataforma`.
+
+El planificador decide siempre por coste estimado, por lo que no debes tratar un plan concreto como una garantía absoluta. Si siguiera apareciendo `Seq Scan`, comprueba que el índice existe y que has ejecutado `ANALYZE videojuego`.
 
 !!! example "Cómo leer y comparar los dos planes"
     Cada línea de `EXPLAIN` trae `cost=X..Y`: `X` es el coste de arrancar (devolver la primera fila), `Y` es el coste **total** estimado para terminar la consulta. Para comparar planes, el número que importa es `Y`.
@@ -230,7 +234,7 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
     ```
     Ahora son **dos pasos**, no uno. Primero, el `Bitmap Index Scan` (la línea de dentro, con la flecha `->`) consulta tu índice GIN para averiguar **dónde** están las filas que cumplen la condición, sin tocar la tabla todavía — coste `25.88`, prácticamente gratis, porque el índice ya sabe la respuesta. Después, el `Bitmap Heap Scan` (la línea de fuera, que envuelve a la anterior) usa esa lista de ubicaciones para ir **directamente** a esas filas concretas de la tabla, sin mirar el resto — coste total (ya incluye el paso anterior): `2211.22`.
 
-    La comparación que importa es `4699.19` (antes) frente a `2211.22` (después): la consulta pasa a costar menos de la mitad. En vez de mirar 100.000 filas para descartar el 99%, el motor va directo a las ~1.000 que sí importan.
+    La comparación que importa es `4699.19` (antes) frente a `2211.22` (después): el coste total estimado por el planificador pasa a ser menos de la mitad en este ejemplo. En vez de mirar 100.000 filas para descartar el 99%, el motor va directo a las ~1.000 que sí importan.
 
 **Captura**: los dos planes, el de antes y el de después, uno junto al otro — desde tu terminal con `psql`, o desde la pestaña "Explain" si usas pgAdmin/DBeaver.
 
@@ -270,7 +274,7 @@ docker exec -it <tu-contenedor-postgres> psql -U gamevault_user -d gamevault_db 
 
 ## Pregunta final
 
-¿Qué ventaja concreta tiene JSONB frente a crear una tabla `plataforma_videojuego` (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?
+¿Qué ventaja concreta tiene JSONB frente a crear una tabla `plataforma_videojuego` (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde cada plataforma tuviera que referenciar una entidad propia, cumplir tipos y restricciones estrictas, participar frecuentemente en relaciones con otras tablas o utilizarse en informes y consultas complejas?
 
 ---
 

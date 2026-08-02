@@ -89,6 +89,8 @@ public static Specification<Videojuego> disponibleEnPlataforma(String plataforma
 }
 ```
 
+Esta función realiza la misma comprobación lógica que el operador `?`, pero no debes dar por hecho que PostgreSQL utilizará el índice GIN del mismo modo. En la actividad anterior mediste el índice con el operador `?`; aquí eliges `jsonb_exists(...)` porque Criteria API permite invocar funciones SQL por su nombre.
+
 Por qué cada pieza: `criteriaBuilder.function("jsonb_exists", Boolean.class, ...)` invoca esa función nativa de PostgreSQL, indicando que devuelve un `Boolean`; `root.get("detallesPlataforma")` es la columna sobre la que se aplica; `criteriaBuilder.literal(plataforma.toLowerCase())` es la clave a buscar, pasada como literal (no como columna) — y en minúsculas, para que la búsqueda no dependa de cómo escribió el usuario la plataforma (asumiendo que también guardas las claves del JSON en minúsculas, como en tus datos de la Actividad 2.1). `criteriaBuilder.isTrue(...)` envuelve el resultado booleano de la función para usarlo como condición del `WHERE`.
 
 ---
@@ -206,7 +208,8 @@ Añade a `VideojuegoRepository` este método, **escribiendo tú el `@Query`** qu
 
 ```java
 // TODO: @Query(value = "...", nativeQuery = true)
-// Usa jsonb_exists(...), no el operador ? — choca con el marcador de parámetro de JDBC.
+// Usa jsonb_exists(...) para evitar la posible ambigüedad entre el operador ?
+// de PostgreSQL y los marcadores de parámetros posicionales de JDBC/JPA.
 List<Videojuego> buscarPorPlataformaNativo(@Param("plataforma") String plataforma);
 ```
 
@@ -291,7 +294,9 @@ curl "http://localhost:8080/api/v1/videojuegos/por-idapp-switch-nativo?idApp=ABC
 
 ### Pregunta
 
-Ninguna de las dos consultas de este paso se puede combinar con `.and(...)` como `disponibleEnPlataforma` o `conIdAppSwitch`. Si quisieras filtrar por plataforma **y** por precio mínimo a la vez, ¿por qué `@Query` no sirve aquí y sí una Specification? Relaciónalo con lo que ya viste en el Tema 1 sobre cuándo usar cada una de las tres vías de consulta (naming de método, Specifications, `@Query`).
+Estas consultas `@Query` son consultas fijas y no pueden encadenarse dinámicamente con `.and(...)` como una Specification. Podrías escribir otra `@Query` que incluyera plataforma y precio mínimo, pero necesitarías definir expresamente esa nueva combinación.
+
+¿Por qué resulta más adecuada una Specification cuando los filtros son opcionales y deben combinarse de distintas formas? Relaciónalo con lo que viste en el Tema 1 sobre cuándo utilizar naming de métodos, Specifications y `@Query`.
 
 ---
 
