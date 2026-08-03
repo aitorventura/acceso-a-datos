@@ -3150,7 +3150,7 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-mongodb<span class="nt">&lt;/artifactId&gt;</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>Y la propiedad de conexión, en <code>application-dev.yaml</code>:</p>
+<p>Y la propiedad de conexión, en <code>application-dev.yml</code>:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">spring</span><span class="p">:</span>
@@ -3159,7 +3159,7 @@
 </code></pre></div></td></tr></table></div>
 <div class="admonition warning">
 <p class="admonition-title">La propiedad real es <code>spring.mongodb.uri</code>, no <code>spring.data.mongodb.uri</code></p>
-<p>Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, <code>mongodb</code> cuelga directamente de <code>spring</code>, no de <code>spring.data</code>. Comprueba siempre tu <code>application-dev.yaml</code> antes de dar por buena una propiedad.</p>
+<p>Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, <code>mongodb</code> cuelga directamente de <code>spring</code>, no de <code>spring.data</code>. Comprueba siempre tu <code>application-dev.yml</code> antes de dar por buena una propiedad.</p>
 </div>
 <p>En paralelo al <code>datasource</code> de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB. Con esto ya montado, puedes pasar a escribir la primera entidad.</p>
 <h3 id="la-entidad-notalectura">La entidad <code>NotaLectura</code><a class="headerlink" href="#la-entidad-notalectura" title="Permanent link">¶</a></h3>

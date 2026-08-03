@@ -2935,7 +2935,8 @@
 <h2 id="bases-de-datos-orientadas-a-objetos-puras">🧊 Bases de datos orientadas a objetos puras<a class="headerlink" href="#bases-de-datos-orientadas-a-objetos-puras" title="Permanent link">¶</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Idea clave</p>
-<p>Una base de datos orientada a objetos <strong>pura</strong> persiste los objetos tal cual, con su identidad y sus referencias intactas, sin traducirlos a filas y columnas ni siquiera parcialmente. Es un paso más allá de lo objeto-relacional que has trabajado con JSONB: allí, una columna de una tabla normal contenía un objeto JSON, pero seguía siendo una tabla con filas. Aquí no hay tablas en absoluto — el propio motor entiende y almacena objetos directamente.</p>
+<p>Una base de datos orientada a objetos almacena directamente el estado de los objetos, su identidad y las relaciones que mantienen entre ellos, sin descomponerlos previamente en el modelo relacional de filas, columnas y claves foráneas.</p>
+<p>Esto no significa que copie literalmente un objeto Java tal como existe en la memoria del programa. El gestor utiliza su propia representación interna, pero su modelo lógico se basa en objetos y referencias, no en tablas relacionales.</p>
 </div>
 <p>Con los tres modelos ya vistos —el relacional puro del Tema 1, el objeto-relacional con JSONB de este mismo tema, y este último— conviene verlos uno junto a otro:</p>
 <table>
@@ -2944,41 +2945,42 @@
 <th></th>
 <th>Relacional (Tema 1)</th>
 <th>Objeto-relacional con JSONB (este tema)</th>
-<th>Orientada a objetos pura</th>
+<th>Orientada a objetos</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>¿Cómo se guarda un objeto?</td>
-<td>Traducido a filas y columnas</td>
-<td>Filas y columnas, con una columna JSON dentro</td>
-<td>Tal cual, con su identidad y sus referencias intactas</td>
+<td><strong>Modelo de almacenamiento</strong></td>
+<td>Tablas, filas, columnas y relaciones</td>
+<td>Modelo relacional, con tipos avanzados como <code>jsonb</code></td>
+<td>Objetos, identidades y referencias</td>
 </tr>
 <tr>
-<td>¿Hace falta un ORM?</td>
-<td>Sí</td>
-<td>Sí</td>
-<td>No — el motor ya entiende objetos de forma nativa</td>
+<td><strong>Acceso desde Java</strong></td>
+<td>JDBC directamente o mediante un ORM como Hibernate</td>
+<td>SQL/JDBC o, como en este curso, Hibernate</td>
+<td>API específica del gestor o estándares orientados a objetos</td>
 </tr>
 <tr>
-<td>Lenguaje de consulta</td>
+<td><strong>Lenguaje de consulta</strong></td>
 <td>SQL</td>
-<td>SQL (+ funciones JSONB, como <code>jsonb_exists</code>)</td>
-<td>OQL</td>
+<td>SQL y operadores o funciones JSONB</td>
+<td>Depende del gestor: OQL, JPQL, JDOQL o APIs propias</td>
 </tr>
 <tr>
-<td>Adopción real</td>
-<td>Muy extendido</td>
-<td>Extendido (PostgreSQL, MySQL...)</td>
-<td>Nicho — casi ningún proyecto nuevo lo elige hoy</td>
+<td><strong>Adopción</strong></td>
+<td>Muy extendida</td>
+<td>Muy extendida en gestores como PostgreSQL</td>
+<td>Mucho menos habitual</td>
 </tr>
 </tbody>
 </table>
 <p>Esa última fila resume la desventaja real de este modelo: menos documentación, menos gente con experiencia a la que preguntar, y el riesgo de quedarte atado a un gestor que puede dejar de mantenerse — por eso casi nadie elige hoy una BD orientada a objetos pura para un proyecto nuevo.</p>
-<p>Como consecuencia directa de no traducir nada a tablas, <strong>no hace falta un ORM</strong>: un ORM (Tema 1) existe precisamente para hacer de puente entre el mundo de objetos de tu programa y el mundo de tablas de una base de datos relacional, y aquí ese puente sobra. El lenguaje de consulta asociado a este modelo se llama <strong>OQL</strong> (<em>Object Query Language</em>) — a diferencia de JPQL (Tema 1), que opera sobre entidades y propiedades pero sigue traduciéndose a SQL relacional por debajo, OQL consulta directamente sobre el modelo de objetos nativo del motor, sin esa traducción intermedia.</p>
+<p>Al no existir la separación entre objetos y tablas relacionales, no hace falta un <strong>ORM objeto-relacional</strong> como Hibernate. Sigue siendo necesaria una API o un controlador que permita al programa comunicarse con el gestor, pero ya no tiene que traducir entidades a filas y claves foráneas.</p>
+<p><strong>OQL</strong> (<em>Object Query Language</em>) es uno de los lenguajes asociados históricamente a este modelo, pero no es una opción universal. Cada gestor puede ofrecer lenguajes y APIs diferentes. Algunos utilizan OQL; otros, como ObjectDB, permiten consultar directamente mediante JPQL o JDOQL sin traducir después la consulta a SQL.</p>
 <div class="admonition note">
 <p class="admonition-title">Algunos gestores, solo como referencia</p>
-<p><strong>db4o</strong>, <strong>ObjectDB</strong>, <strong>Versant</strong> — los mencionas aquí solo para saber que existen; no vas a instalar ninguno, este bloque es puramente conceptual.</p>
+<p><strong>db4o</strong>, <strong>ObjectDB</strong> y <strong>Versant</strong> son ejemplos representativos —algunos principalmente históricos— de este tipo de bases de datos. No todos utilizan el mismo lenguaje de consulta ni ofrecen las mismas APIs. No vas a instalar ninguno: este bloque es puramente conceptual.</p>
 </div>
 <hr>
 <h2 id="pruebas-y-documentacion">🧪 Pruebas y documentación<a class="headerlink" href="#pruebas-y-documentacion" title="Permanent link">¶</a></h2>
@@ -2987,10 +2989,12 @@
 <p>Ya conoces el test de <strong>controller</strong>, del Tema 1 de PSP (aunque aquí es Acceso a Datos, la idea es la misma): con MockMvc, mockeando el service, prueba solo la capa HTTP — y aplica igual cuando la entidad lleva una columna JSONB, como aquí. Existe también el test de <strong>service</strong>, que aísla la lógica de negocio mockeando el repositorio en su lugar — pero ese lo construyes más adelante, en la Actividad 4.1 de este mismo módulo; no hace falta todavía.</p>
 <h3 id="test-de-integracion-real-con-testcontainers">Test de integración real (con Testcontainers)<a class="headerlink" href="#test-de-integracion-real-con-testcontainers" title="Permanent link">¶</a></h3>
 <p>Los dos tests de arriba tienen algo en común: ninguno toca una base de datos de verdad, todo lo que hay debajo está mockeado. <strong>Testcontainers</strong> es la librería que resuelve ese hueco — levanta contenedores Docker reales (una base de datos, una cola de mensajes, lo que haga falta) solo para la duración del test, y los destruye al terminar, sin dejar nada instalado en tu máquina ni depender de ningún servicio externo compartido. No viene incluida en ningún starter que ya tengas — es la primera vez que aparece en el curso, así que hace falta añadirla.</p>
-<p>Y aquí aparece algo que no habías necesitado hasta ahora: cada <code>&lt;dependency&gt;</code> que has añadido en todo el curso ha resuelto su versión sola, porque <code>spring-boot-starter-parent</code> (tu <code>&lt;parent&gt;</code>, desde la Actividad 1.1) ya sabe qué versión de cada pieza de Spring es compatible con tu proyecto. <code>org.testcontainers:junit-jupiter</code> y <code>org.testcontainers:postgresql</code>, en cambio, no son de Spring — son del propio proyecto Testcontainers, y ese <code>&lt;parent&gt;</code> no sabe nada de ellos. Sin ayuda, Maven falla con <code>'dependencies.dependency.version' ... is missing</code> antes de compilar nada.</p>
+<p><code>spring-boot-starter-parent</code> gestiona también versiones de numerosas dependencias externas, entre ellas Testcontainers. Sin embargo, en este curso se fija expresamente <strong>Testcontainers 1.20.4</strong>, porque los módulos y los imports utilizados en las actividades corresponden a la línea 1.x.</p>
+<p>Testcontainers 2 cambió los nombres de sus módulos y trasladó varias clases a paquetes nuevos. Por tanto, utilizar directamente la versión actual gestionada por Spring Boot no sería un cambio transparente: también habría que adaptar las coordenadas Maven y algunos imports. El BOM explícito mantiene todos los ejemplos del tema en una versión común y compatible, sin realizar ahora esa migración.</p>
 <div class="admonition info">
 <p class="admonition-title">Idea clave: qué es un BOM</p>
-<p>Un <strong>BOM</strong> (<em>Bill of Materials</em>, "lista de materiales") es un POM especial que no añade ningún código a tu proyecto — solo fija qué versión usar para un conjunto de artefactos que se saben compatibles entre sí. Es exactamente lo mismo que ya hace <code>spring-boot-starter-parent</code> para todo lo de Spring; aquí lo añades tú mismo, explícitamente, para lo de Testcontainers. Se declara en <code>&lt;dependencyManagement&gt;</code>, no en <code>&lt;dependencies&gt;</code>: <code>&lt;dependencyManagement&gt;</code> fija qué versión usar <strong>si</strong> algo la pide, sin añadir nada todavía a tu build; <code>&lt;dependencies&gt;</code> es lo que de verdad mete un artefacto en tu proyecto.</p>
+<p>Un <strong>BOM</strong> (<em>Bill of Materials</em>, "lista de materiales") es un POM especial que coordina las versiones de un conjunto de artefactos compatibles, pero no añade por sí mismo esas librerías al proyecto.</p>
+<p><code>spring-boot-starter-parent</code> ya incorpora su propia gestión de dependencias. Al importar el BOM de Testcontainers 1.20.4, este proyecto fija explícitamente la versión de todos sus módulos y permite mantener las coordenadas e imports utilizados en las actividades.</p>
 </div>
 <p>Va junto al <code>&lt;parent&gt;</code>, no dentro del bloque de dependencias habitual:</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -3023,7 +3027,7 @@
 <a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">&lt;/dependencies&gt;</span>
 <a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="nt">&lt;/dependencyManagement&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>Ahora sí, las tres dependencias de siempre, dentro de tu <code>&lt;dependencies&gt;</code> habitual — con el BOM ya importado, ninguna necesita <code>&lt;version&gt;</code> propia:</p>
+<p>Con el BOM explícito ya importado, las dependencias de Testcontainers utilizan la versión coordinada que has fijado y no necesitan declarar una <code>&lt;version&gt;</code> individual:</p>
 <div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
@@ -3142,24 +3146,25 @@ y reconstruye el contenedor (<strong>"Dev Containers: Rebuild Container"</strong
 <a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div></td></tr></table></div>
 La contraseña que pongas aquí tiene que ser exactamente la misma que envíe <code>loginComoAdmin()</code> en su petición de login, más abajo — los dos viven dentro del mismo mundo de test, aislado del perfil <code>dev</code> (que ni siquiera se carga con <code>@ActiveProfiles("test")</code> activo). De ahí el nombre <code>admintest123</code>: dice de un vistazo que es una credencial solo de test, sin que tengas que recordar que no tiene relación con la de <code>dev</code>. El valor de <code>expiration-minutes</code>, en cambio, no importa para el test — <code>60</code> (el mismo de <code>dev</code>) sirve igual que cualquier otro.
-Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml</code>: las credenciales que lleva dentro no son reales, solo existen dentro del contenedor Postgres desechable que Testcontainers destruye al terminar el test — no hay nada que proteger.
+Este fichero puede subirse a Git porque contiene valores ficticios, utilizados únicamente por el perfil <code>test</code> y por una base de datos desechable. La condición es que esas credenciales y secretos no se reutilicen nunca en <code>dev</code>, producción ni en ningún servicio persistente o compartido.
 </div>
 <p>¿Por qué esto da más confianza que mockear el repositorio? Porque prueba el mapeo JSONB <strong>real</strong> contra un PostgreSQL <strong>real</strong> — una base de datos en memoria genérica (como H2) podría no soportar <code>jsonb_exists</code> exactamente igual, o ni siquiera soportar el tipo <code>jsonb</code> de PostgreSQL. Un test con Testcontainers detectaría un error de mapeo que un test con mocks jamás vería, porque el mock nunca ejecuta SQL de verdad contra ningún motor.</p>
 <h3 id="peticiones-autenticadas-dentro-del-test">Peticiones autenticadas dentro del test<a class="headerlink" href="#peticiones-autenticadas-dentro-del-test" title="Permanent link">¶</a></h3>
-<p>Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, con roles y todo—, un test de integración real tiene que pasar por la misma autenticación que pasaría un cliente cualquiera: no hay ningún atajo que salte la seguridad "porque es un test". <code>MockMvc</code> hace la petición de login exactamente igual que la haría un cliente HTTP real, y <code>JsonPath</code> (la misma clase que ya usas dentro de <code>jsonPath(...)</code> para comprobar respuestas) sirve también para <strong>leer</strong> un valor de una respuesta, no solo para compararlo. Son dos peticiones separadas, una detrás de otra, dentro del mismo método de test:</p>
+<p>Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, con roles y todo—, el test debe recorrer el mismo flujo de autenticación y autorización de la aplicación: no hay ningún atajo que salte la seguridad «porque es un test».</p>
+<p><code>MockMvc</code> no abre una conexión HTTP real ni arranca un servidor. Construye peticiones y respuestas simuladas, pero las hace pasar por el <code>DispatcherServlet</code>, la cadena de filtros de seguridad, los controllers y el resto del contexto real de Spring. Por eso puedes realizar el login, extraer el token y utilizarlo después en otra petición dentro del test.</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant Test
     participant MockMvc
     participant App as GameVault (Testcontainers)
 
     Test-&gt;&gt;MockMvc: perform(POST /auth/login)
-    MockMvc-&gt;&gt;App: petición HTTP real
+    MockMvc-&gt;&gt;App: petición simulada dentro del contexto real
     App--&gt;&gt;MockMvc: 200 + accessToken
     MockMvc--&gt;&gt;Test: respuesta
     Test-&gt;&gt;Test: JsonPath.read($.accessToken)
 
     Test-&gt;&gt;MockMvc: perform(POST /libros,&lt;br/&gt;Authorization: Bearer token)
-    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    MockMvc-&gt;&gt;App: petición simulada con el token Bearer
     App--&gt;&gt;MockMvc: 201 + cuerpo creado
     MockMvc--&gt;&gt;Test: respuesta
     Test-&gt;&gt;Test: andExpect(jsonPath(...))</code></pre>
@@ -3232,7 +3237,9 @@ Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml<
 <a id="__codelineno-6-33" name="__codelineno-6-33"></a><span class="w">            </span><span class="p">.</span><span class="na">andExpect</span><span class="p">(</span><span class="n">jsonPath</span><span class="p">(</span><span class="s">"$.detallesEdicion.editorial"</span><span class="p">).</span><span class="na">value</span><span class="p">(</span><span class="s">"Sudamericana"</span><span class="p">));</span>
 <a id="__codelineno-6-34" name="__codelineno-6-34"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>loginComoAdmin()</code> no lleva <code>@Test</code>: es un método ayudante, no un test en sí mismo, que cualquier otro test de la clase puede llamar cuando necesite un token válido (necesita <code>import com.jayway.jsonpath.JsonPath;</code>, ya incluida en <code>spring-boot-starter-test</code>). El test de arriba es un <code>POST</code> normal con la cabecera <code>Authorization</code> añadida, y sus aserciones finales no se quedan en el código de estado: comprueban también el cuerpo devuelto campo a campo con <code>jsonPath</code>, incluida la parte anidada dentro del propio JSONB (<code>detallesEdicion.editorial</code>) — confirmando que el objeto estructurado se ha guardado y se ha devuelto tal cual, no solo que "algo" se ha creado.</p>
+<p><code>loginComoAdmin()</code> no lleva <code>@Test</code>: es un método ayudante que cualquier otro test de la clase puede utilizar cuando necesite un token válido. Requiere <code>import com.jayway.jsonpath.JsonPath;</code>, ya incluido en <code>spring-boot-starter-test</code>.</p>
+<p>El test ejecuta el flujo completo de creación contra un PostgreSQL real y comprueba tanto el código de estado como el cuerpo devuelto, incluida la propiedad anidada <code>detallesEdicion.editorial</code>. De esta forma se ejercitan el mapeo JSONB y la escritura en la base de datos.</p>
+<p>Sin embargo, las aserciones mostradas solo inspeccionan la respuesta del <code>POST</code>. Para comprobar de forma independiente que el dato puede recuperarse después, haría falta una segunda petición <code>GET</code> o una consulta al repositorio, como se indica en el aviso final del apartado.</p>
 <h3 id="comprobar-tambien-los-casos-de-error">Comprobar también los casos de error<a class="headerlink" href="#comprobar-tambien-los-casos-de-error" title="Permanent link">¶</a></h3>
 <p>Un test de integración que solo prueba el camino feliz deja fuera la mitad del comportamiento real de tu API: qué pasa cuando la petición <strong>no</strong> debería tener éxito. Con tu <code>GlobalExceptionHandler</code> ya construido (PSP, Tema 2), cada error tiene un formato consistente — y ese formato también se comprueba con <code>jsonPath</code>, campo a campo, igual que un cuerpo de éxito. Aquí la petición sí está autenticada —el token de <code>user</code> es válido—, pero no autorizada, así que ni siquiera llega a tu controller:</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -3243,12 +3250,12 @@ Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml<
     participant App as GameVault (Testcontainers)
 
     Test-&gt;&gt;MockMvc: perform(POST /auth/login, user)
-    MockMvc-&gt;&gt;App: petición HTTP real
+    MockMvc-&gt;&gt;App: petición simulada dentro del contexto real
     App--&gt;&gt;MockMvc: 200 + accessToken (rol USER)
     MockMvc--&gt;&gt;Test: respuesta
 
     Test-&gt;&gt;MockMvc: perform(POST /libros,&lt;br/&gt;Authorization: Bearer token)
-    MockMvc-&gt;&gt;SecurityFilterChain: petición HTTP real, ya autenticada
+    MockMvc-&gt;&gt;SecurityFilterChain: petición simulada, ya autenticada
     Note right of SecurityFilterChain: Token válido → autenticado.&lt;br/&gt;hasRole("ADMIN") → no coincide (rol USER)
     SecurityFilterChain-&gt;&gt;AccessDeniedHandler: AccessDeniedException
     AccessDeniedHandler--&gt;&gt;MockMvc: 403 + ErrorResponse
@@ -3299,14 +3306,14 @@ Este fichero sí se sube a Git, a diferencia de <code>application-dev-local.yml<
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li>Una BD orientada a objetos <strong>pura</strong> persiste objetos tal cual, sin traducirlos a filas/columnas — por eso no necesita ORM.</li>
-<li><strong>OQL</strong> consulta directamente sobre el modelo de objetos nativo, sin traducción a SQL relacional (a diferencia de JPQL).</li>
+<li>Una base de datos orientada a objetos almacena el estado, la identidad y las referencias de los objetos sin descomponerlos en tablas relacionales; por eso no necesita un ORM objeto-relacional, aunque sí una API para comunicarse con el gestor.</li>
+<li>OQL es uno de los lenguajes asociados históricamente a este modelo, pero no es universal: cada gestor puede utilizar OQL, JPQL, JDOQL o APIs propias.</li>
 <li>Comparado con relacional puro y objeto-relacional (JSONB), lo orientado a objetos puro tiene poquísima adopción real — la razón de que este bloque sea conceptual y no práctico.</li>
 <li>Un test de <strong>controller</strong> (ya conocido, PSP Tema 1) prueba la capa HTTP mockeando el service; un test de <strong>service</strong> hace lo análogo mockeando el repositorio, pero eso llega en la Actividad 4.1; un test de <strong>integración</strong> con Testcontainers levanta un motor real en Docker.</li>
 <li>Testcontainers detecta errores de mapeo real (como con <code>jsonb</code>) que un mock nunca podría detectar.</li>
-<li>Contra rutas protegidas, el test hace login de verdad con <code>MockMvc</code> y extrae el token con <code>JsonPath</code>, igual que haría un cliente real — no hay atajo que salte la seguridad "por ser un test".</li>
+<li>Contra rutas protegidas, MockMvc reproduce el flujo real de login, filtros y autorización y extrae el token con <code>JsonPath</code>, aunque utiliza peticiones simuladas y no un servidor HTTP real.</li>
 <li>Los casos de error también se comprueban con <code>jsonPath</code>, campo a campo del <code>ErrorResponse</code> — no basta con el código de estado, porque dos errores distintos pueden compartir el mismo.</li>
-<li>Un test bien nombrado, con esas tres comprobaciones, documenta el comportamiento mejor que un README aparte — y no se queda desactualizado sin avisar: si el comportamiento cambia, el test falla.</li>
+<li>Un test bien nombrado actúa como documentación ejecutable: si cambia alguno de los comportamientos que comprueba, el test falla. No sustituye toda la documentación escrita y solo documenta los casos que realmente cubre.</li>
 </ul>
 </details></div>
 

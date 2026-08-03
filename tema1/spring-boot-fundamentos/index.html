@@ -1234,9 +1234,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
+  <a href="#configuracion-applicationyml-y-perfiles" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚙️ Configuración: application.yaml y perfiles
+      ⚙️ Configuración: application.yml y perfiles
     </span>
   </a>
   
@@ -2926,9 +2926,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuracion-applicationyaml-y-perfiles" class="md-nav__link">
+  <a href="#configuracion-applicationyml-y-perfiles" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚙️ Configuración: application.yaml y perfiles
+      ⚙️ Configuración: application.yml y perfiles
     </span>
   </a>
   
@@ -3216,8 +3216,12 @@
 </code></pre></div></td></tr></table></div>
 <p>Sin Lombok tendrías que escribir ese constructor a mano cada vez que añadieras un campo <code>final</code>. Con la anotación, Spring sigue pudiendo inyectar las dependencias exactamente igual (por constructor), pero tú no mantienes ese código repetitivo.</p>
 <hr>
-<h2 id="configuracion-applicationyaml-y-perfiles">⚙️ Configuración: <code>application.yaml</code> y perfiles<a class="headerlink" href="#configuracion-applicationyaml-y-perfiles" title="Permanent link">¶</a></h2>
-<p>Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en <code>src/main/resources</code>. Lo habitual es tener al menos dos: <code>application.yaml</code>, con la configuración común, y <code>application-dev.yaml</code>, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).</p>
+<h2 id="configuracion-applicationyml-y-perfiles">⚙️ Configuración: <code>application.yml</code> y perfiles<a class="headerlink" href="#configuracion-applicationyml-y-perfiles" title="Permanent link">¶</a></h2>
+<p>Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en <code>src/main/resources</code>. Lo habitual es tener al menos dos: <code>application.yml</code>, con la configuración común, y <code>application-dev.yml</code>, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).</p>
+<div class="admonition note">
+<p class="admonition-title"><code>.yml</code> o <code>.yaml</code>: es lo mismo, pero en este curso usamos siempre <code>.yml</code></p>
+<p>Spring Boot reconoce las dos extensiones sin ninguna distinción — es pura convención de quien escribe el fichero, no una regla técnica. En otros proyectos que veas por tu cuenta (tutoriales, código de terceros) puedes encontrarte cualquiera de las dos indistintamente. En este curso vas a usar siempre <code>.yml</code>, por uniformidad — cuando veas <code>application.yml</code> o <code>application-dev.yml</code>, esa es la extensión que debes usar tú también.</p>
+</div>
 <p>Ese <code>-dev</code> en el nombre es un <strong>perfil</strong>: un conjunto de configuración que solo se activa si le dices a Spring Boot que use ese perfil al arrancar. Así, el mismo código puede arrancar con configuración distinta según si estás desarrollando en tu máquina, ejecutando tests, o (en un proyecto real) desplegando en producción, sin tocar una sola línea de Java.</p>
 <hr>
 <h2 id="donde-estas-y-hacia-donde-vas">🧭 Dónde estás y hacia dónde vas<a class="headerlink" href="#donde-estas-y-hacia-donde-vas" title="Permanent link">¶</a></h2>
@@ -3233,7 +3237,7 @@
 <li><strong>Maven</strong> gestiona las dependencias del proyecto a través del <code>pom.xml</code>; en este curso usarás <code>spring-boot-starter-webmvc</code> (no <code>-web</code>, nombre antiguo) y <code>spring-boot-starter-data-jpa</code>.</li>
 <li>La arquitectura en capas es controller (HTTP) → service (lógica) → repository (datos): cada capa habla solo con la siguiente.</li>
 <li>La <strong>inyección de dependencias</strong> hace que una clase declare lo que necesita (por constructor) en vez de crearlo ella misma; Spring guarda una instancia de cada clase gestionada (un <strong>bean</strong>) en su contexto de la aplicación, y se la entrega ya construida a quien la pida. <code>@Service</code>, <code>@Repository</code>, <code>@RestController</code> y <code>@Configuration</code> marcan qué clases gestiona Spring como beans.</li>
-<li><code>application.yaml</code>/<code>application-dev.yaml</code> centralizan la configuración; un <strong>perfil</strong> (<code>dev</code>) permite tener configuración distinta según el entorno sin tocar código.</li>
+<li><code>application.yml</code>/<code>application-dev.yml</code> centralizan la configuración; un <strong>perfil</strong> (<code>dev</code>) permite tener configuración distinta según el entorno sin tocar código.</li>
 <li><code>@RequiredArgsConstructor</code> de Lombok genera el constructor con los campos <code>final</code>, que es lo que Spring usa para inyectar dependencias.</li>
 </ul>
 </details></div>

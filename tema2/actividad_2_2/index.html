@@ -3150,7 +3150,7 @@
 </code></pre></div></td></tr></table></div>
 <div class="admonition tip">
 <p class="admonition-title">Actívalo con <code>spring.sql.init.mode: always</code></p>
-<p>Este <code>data.sql</code> solo se ejecuta si <code>spring.sql.init.mode</code> está en <code>always</code> en tu <code>application-dev.yaml</code> — si ya lo has puesto en <code>never</code> (Actividad 2.3 de PSP, para no perder los usuarios que creas a mano), ponlo temporalmente de nuevo en <code>always</code>, reinicia para cargar estos datos, y vuelve a dejarlo en <code>never</code> después — si no, perderás cualquier dato nuevo en cada arranque, el mismo problema que ya has evitado antes.</p>
+<p>Este <code>data.sql</code> solo se ejecuta si <code>spring.sql.init.mode</code> está en <code>always</code> en tu <code>application-dev.yml</code> — si ya lo has puesto en <code>never</code> (Actividad 2.3 de PSP, para no perder los usuarios que creas a mano), ponlo temporalmente de nuevo en <code>always</code>, reinicia para cargar estos datos, y vuelve a dejarlo en <code>never</code> después — si no, perderás cualquier dato nuevo en cada arranque, el mismo problema que ya has evitado antes.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Tu API ahora usa JWT, no <code>-u usuario:contraseña</code></p>
@@ -3190,6 +3190,7 @@
 <a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="w">            </span><span class="p">);</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
+<p>Esta función realiza la misma comprobación lógica que el operador <code>?</code>, pero no debes dar por hecho que PostgreSQL utilizará el índice GIN del mismo modo. En la actividad anterior mediste el índice con el operador <code>?</code>; aquí eliges <code>jsonb_exists(...)</code> porque Criteria API permite invocar funciones SQL por su nombre.</p>
 <p>Por qué cada pieza: <code>criteriaBuilder.function("jsonb_exists", Boolean.class, ...)</code> invoca esa función nativa de PostgreSQL, indicando que devuelve un <code>Boolean</code>; <code>root.get("detallesPlataforma")</code> es la columna sobre la que se aplica; <code>criteriaBuilder.literal(plataforma.toLowerCase())</code> es la clave a buscar, pasada como literal (no como columna) — y en minúsculas, para que la búsqueda no dependa de cómo escribió el usuario la plataforma (asumiendo que también guardas las claves del JSON en minúsculas, como en tus datos de la Actividad 2.1). <code>criteriaBuilder.isTrue(...)</code> envuelve el resultado booleano de la función para usarlo como condición del <code>WHERE</code>.</p>
 <hr>
 <h2 id="paso-2-anadir-el-filtro-al-dto-y-combinarlo">Paso 2 — Añadir el filtro al DTO y combinarlo<a class="headerlink" href="#paso-2-anadir-el-filtro-al-dto-y-combinarlo" title="Permanent link">¶</a></h2>
@@ -3286,9 +3287,11 @@
 <p>Añade a <code>VideojuegoRepository</code> este método, <strong>escribiendo tú el <code>@Query</code></strong> que falta encima:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
 <span class="normal"><a href="#__codelineno-9-2">2</a></span>
-<span class="normal"><a href="#__codelineno-9-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1">// TODO: @Query(value = "...", nativeQuery = true)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="c1">// Usa jsonb_exists(...), no el operador ? — choca con el marcador de parámetro de JDBC.</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorPlataformaNativo</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">"plataforma"</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">plataforma</span><span class="p">);</span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1">// TODO: @Query(value = "...", nativeQuery = true)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="c1">// Usa jsonb_exists(...) para evitar la posible ambigüedad entre el operador ?</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="c1">// de PostgreSQL y los marcadores de parámetros posicionales de JDBC/JPA.</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="n">List</span><span class="o">&lt;</span><span class="n">Videojuego</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">buscarPorPlataformaNativo</span><span class="p">(</span><span class="nd">@Param</span><span class="p">(</span><span class="s">"plataforma"</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">plataforma</span><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
 <p>El service y el controller ya están construidos, tal cual los vas a usar:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
@@ -3377,7 +3380,8 @@
 <p><strong>Comprueba</strong>: que devuelve exactamente el mismo videojuego que el Paso 5 — el que has actualizado en el Paso 4.</p>
 <p><strong>Captura</strong>: la respuesta de este endpoint, junto a la del Paso 5.</p>
 <h3 id="pregunta">Pregunta<a class="headerlink" href="#pregunta" title="Permanent link">¶</a></h3>
-<p>Ninguna de las dos consultas de este paso se puede combinar con <code>.and(...)</code> como <code>disponibleEnPlataforma</code> o <code>conIdAppSwitch</code>. Si quisieras filtrar por plataforma <strong>y</strong> por precio mínimo a la vez, ¿por qué <code>@Query</code> no sirve aquí y sí una Specification? Relaciónalo con lo que ya viste en el Tema 1 sobre cuándo usar cada una de las tres vías de consulta (naming de método, Specifications, <code>@Query</code>).</p>
+<p>Estas consultas <code>@Query</code> son consultas fijas y no pueden encadenarse dinámicamente con <code>.and(...)</code> como una Specification. Podrías escribir otra <code>@Query</code> que incluyera plataforma y precio mínimo, pero necesitarías definir expresamente esa nueva combinación.</p>
+<p>¿Por qué resulta más adecuada una Specification cuando los filtros son opcionales y deben combinarse de distintas formas? Relaciónalo con lo que viste en el Tema 1 sobre cuándo utilizar naming de métodos, Specifications y <code>@Query</code>.</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
 <p>¿Qué haría falta para filtrar por "disponible en Steam <strong>Y</strong> en Switch a la vez"? Piensa en dos enfoques posibles: encadenar dos veces <code>disponibleEnPlataforma</code> con <code>.and(...)</code> (una vez por cada plataforma) frente a usar una función distinta de PostgreSQL como <code>jsonb_exists_all</code> (que comprueba varias claves de golpe). No hace falta que implementes ninguno de los dos — explica con tus palabras qué diferencia habría entre ambos enfoques en cuanto a cómo se construye la consulta SQL final.</p>

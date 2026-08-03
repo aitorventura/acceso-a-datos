@@ -3207,7 +3207,7 @@
 <a id="__codelineno-4-67" name="__codelineno-4-67"></a><span class="w">    </span><span class="c1">// los tests van aquí</span>
 <a id="__codelineno-4-68" name="__codelineno-4-68"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@ServiceConnection</code> es la pieza clave: conecta automáticamente el <code>PostgreSQLContainer</code> a tu aplicación de test, sin que tengas que configurar manualmente <code>spring.datasource.url</code> en ningún <code>application-test.yml</code> — Spring Boot lo resuelve por ti. Fíjate en que la imagen es <code>postgres:16-alpine</code>, no la <code>18-alpine</code> de tu <code>docker-compose.yaml</code> de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.</p>
+<p><code>@ServiceConnection</code> es la pieza clave: conecta automáticamente el <code>PostgreSQLContainer</code> a tu aplicación de test, sin que tengas que configurar manualmente <code>spring.datasource.url</code> en ningún <code>application-test.yml</code> — Spring Boot lo resuelve por ti. Fíjate en que la imagen es <code>postgres:16-alpine</code>, no la <code>18-alpine</code> de tu <code>docker-compose.yml</code> de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.</p>
 <p><code>@ActiveProfiles("test")</code> activa un perfil que todavía no existe en tu proyecto. Sin él, el contexto de Spring no arranca y ningún test se ejecuta — así que antes de nada, crea <code>src/test/resources/application-test.yml</code>:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
@@ -3239,7 +3239,7 @@
 <a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">un-secreto-de-test-de-al-menos-32-caracteres-largo</span>
 <a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">    </span><span class="nt">expiration-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
 </code></pre></div></td></tr></table></div>
-<p><code>ddl-auto: create-drop</code> deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior.</p>
+<p><code>ddl-auto: create-drop</code> deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior. La limpieza se produce al arrancar un nuevo contexto de pruebas, no antes de cada método <code>@Test</code>. Como el contenedor y el contexto se comparten durante la ejecución de esta clase, los datos creados por un método podrían seguir presentes cuando se ejecute el siguiente.</p>
 <div class="admonition warning">
 <p class="admonition-title">Sin <code>admin.password</code>, <code>jwt.secret</code> y <code>jwt.expiration-minutes</code>, el contexto ni arranca</p>
 <p>Ninguna de las tres tiene valor por defecto en el código (<code>@Value</code> sin <em>fallback</em>) — sin ellas, ningún test de la clase llega a ejecutarse. La contraseña que pongas aquí tiene que coincidir con la que envíe <code>loginComoAdmin()</code> en su petición de login (más arriba, dentro de la misma clase) — de ahí el nombre <code>admintest123</code>, para que quede claro de un vistazo que es una credencial solo de test, sin relación con la de <code>dev</code>. El valor de <code>expiration-minutes</code> no importa para el test — <code>60</code> (el mismo de <code>dev</code>) sirve igual que cualquier otro. Este fichero sí se sube a Git: las credenciales de dentro no son reales, solo existen en el contenedor Postgres desechable que Testcontainers destruye al terminar el test.</p>
@@ -3254,17 +3254,17 @@
     participant App as GameVault (Testcontainers)
 
     Test-&gt;&gt;MockMvc: perform(POST /auth/login, admin)
-    MockMvc-&gt;&gt;App: petición HTTP real
+    MockMvc-&gt;&gt;App: petición simulada dentro del contexto real
     App--&gt;&gt;MockMvc: 200 + accessToken
     MockMvc--&gt;&gt;Test: respuesta
 
     Test-&gt;&gt;MockMvc: perform(POST /estudios,&lt;br/&gt;Authorization: Bearer token)
-    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    MockMvc-&gt;&gt;App: petición simulada dentro del contexto real, ya autenticada
     App--&gt;&gt;MockMvc: 201 + id del estudio
     MockMvc--&gt;&gt;Test: respuesta
 
     Test-&gt;&gt;MockMvc: perform(POST /videojuegos,&lt;br/&gt;Authorization: Bearer token,&lt;br/&gt;estudioId real,&lt;br/&gt;detallesPlataforma: steam)
-    MockMvc-&gt;&gt;App: petición HTTP real, ya autenticada
+    MockMvc-&gt;&gt;App: petición simulada dentro del contexto real, ya autenticada
     App--&gt;&gt;MockMvc: 201 Created
     MockMvc--&gt;&gt;Test: respuesta
 

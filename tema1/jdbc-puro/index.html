@@ -3139,7 +3139,7 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">        </span><span class="s">"password123"</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">);</span>
 </code></pre></div></td></tr></table></div>
-<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yaml</code>, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.</p>
+<p><code>DriverManager.getConnection(...)</code> recibe la misma URL JDBC, usuario y contraseña que ya conoces de <code>application-dev.yml</code>, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.</p>
 <p>Cada llamada a <code>getConnection()</code> abre una nueva conexión con la base de datos. Por eso, cuando termines de utilizarla, debes cerrarla correctamente.</p>
 <p>En las aplicaciones Spring Boot se suele trabajar de otra manera: Spring configura un <code>DataSource</code> y utiliza HikariCP para mantener un conjunto de conexiones abiertas y reutilizarlas entre distintas operaciones. En esta actividad, sin embargo, utilizarás <code>DriverManager</code> para observar el funcionamiento básico de JDBC sin que un pool gestione las conexiones por ti.</p>
 <h3 id="2-preparar-la-sentencia-y-por-que-nunca-con">2. Preparar la sentencia — y por qué nunca con <code>+</code><a class="headerlink" href="#2-preparar-la-sentencia-y-por-que-nunca-con" title="Permanent link">¶</a></h3>

@@ -3105,7 +3105,8 @@ La misma consulta, si prefieres lanzarla por <code>psql</code> en vez de escribi
 <span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"SELECT titulo, detalles_plataforma FROM videojuego;"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Anota</strong>: ¿el JSON que ves (en <code>psql</code> o en pgAdmin/DBeaver) coincide exactamente con el que has mandado por la API?</p>
+<p><strong>Anota</strong>: ¿el JSON almacenado contiene las mismas claves, valores y estructuras que has enviado por la API?</p>
+<p>No compares espacios ni el orden de las claves: <code>jsonb</code> conserva el contenido del documento, pero no necesariamente su representación textual exacta.</p>
 <hr>
 <h2 id="paso-5-indexar-con-gin-antes-y-despues">Paso 5 — Indexar con GIN, antes y después<a class="headerlink" href="#paso-5-indexar-con-gin-antes-y-despues" title="Permanent link">¶</a></h2>
 <p>Con un puñado de filas de prueba nunca vas a ver un índice ganar, por poco que cueste usarlo: recorrer una tabla pequeña entera es más barato que consultar cualquier índice. Antes de crear nada, genera un volumen de datos realista con una sola sentencia:</p>
@@ -3186,7 +3187,8 @@ La misma consulta, si prefieres lanzarla por <code>psql</code> en vez de escribi
 <span class="normal"><a href="#__codelineno-13-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-postgres&gt;<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>gamevault_user<span class="w"> </span>-d<span class="w"> </span>gamevault_db<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span>-c<span class="w"> </span><span class="s2">"EXPLAIN SELECT * FROM videojuego WHERE detalles_plataforma ? 'steam';"</span>
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: el plan debería cambiar — en vez de <code>Seq Scan</code>, ahora debería aparecer una combinación de <code>Bitmap Heap Scan</code> y <code>Bitmap Index Scan</code> sobre <code>idx_videojuego_detalles_plataforma</code>. Con 100.000 filas de por medio, esta vez la diferencia no es cuestión de suerte.</p>
+<p><strong>Comprueba</strong> el plan elegido por PostgreSQL. Con 100.000 filas y una consulta que solo selecciona aproximadamente el 1 % de ellas, lo habitual es que aparezca una combinación de <code>Bitmap Heap Scan</code> y <code>Bitmap Index Scan</code> sobre <code>idx_videojuego_detalles_plataforma</code>.</p>
+<p>El planificador decide siempre por coste estimado, por lo que no debes tratar un plan concreto como una garantía absoluta. Si siguiera apareciendo <code>Seq Scan</code>, comprueba que el índice existe y que has ejecutado <code>ANALYZE videojuego</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Cómo leer y comparar los dos planes</p>
 <p>Cada línea de <code>EXPLAIN</code> trae <code>cost=X..Y</code>: <code>X</code> es el coste de arrancar (devolver la primera fila), <code>Y</code> es el coste <strong>total</strong> estimado para terminar la consulta. Para comparar planes, el número que importa es <code>Y</code>.</p>
@@ -3201,7 +3203,7 @@ La misma consulta, si prefieres lanzarla por <code>psql</code> en vez de escribi
 <a id="__codelineno-14-4" name="__codelineno-14-4"></a>        Index Cond: (detalles_plataforma ? 'steam'::text)
 </code></pre></div></td></tr></table></div>
 Ahora son <strong>dos pasos</strong>, no uno. Primero, el <code>Bitmap Index Scan</code> (la línea de dentro, con la flecha <code>-&gt;</code>) consulta tu índice GIN para averiguar <strong>dónde</strong> están las filas que cumplen la condición, sin tocar la tabla todavía — coste <code>25.88</code>, prácticamente gratis, porque el índice ya sabe la respuesta. Después, el <code>Bitmap Heap Scan</code> (la línea de fuera, que envuelve a la anterior) usa esa lista de ubicaciones para ir <strong>directamente</strong> a esas filas concretas de la tabla, sin mirar el resto — coste total (ya incluye el paso anterior): <code>2211.22</code>.
-<p>La comparación que importa es <code>4699.19</code> (antes) frente a <code>2211.22</code> (después): la consulta pasa a costar menos de la mitad. En vez de mirar 100.000 filas para descartar el 99%, el motor va directo a las ~1.000 que sí importan.</p>
+<p>La comparación que importa es <code>4699.19</code> (antes) frente a <code>2211.22</code> (después): el coste total estimado por el planificador pasa a ser menos de la mitad en este ejemplo. En vez de mirar 100.000 filas para descartar el 99%, el motor va directo a las ~1.000 que sí importan.</p>
 </div>
 <p><strong>Captura</strong>: los dos planes, el de antes y el de después, uno junto al otro — desde tu terminal con <code>psql</code>, o desde la pestaña "Explain" si usas pgAdmin/DBeaver.</p>
 <hr>
@@ -3237,13 +3239,13 @@ Ahora son <strong>dos pasos</strong>, no uno. Primero, el <code>Bitmap Index Sca
 <p><strong>Pregunta de comprensión</strong>: ¿por qué el <code>PUT</code> reemplaza el objeto JSON completo en vez de combinar (<em>merge</em>) el nuevo contenido con el anterior? Relaciona tu respuesta con cómo funciona el mapeo <code>Map</code> → <code>jsonb</code>: ¿en qué punto del proceso Hibernate tendría que decidir "combinar" en vez de "sustituir", y por qué no lo hace por defecto?</p>
 <hr>
 <h2 id="pregunta-final">Pregunta final<a class="headerlink" href="#pregunta-final" title="Permanent link">¶</a></h2>
-<p>¿Qué ventaja concreta tiene JSONB frente a crear una tabla <code>plataforma_videojuego</code> (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde necesitaras, por ejemplo, buscar todos los videojuegos disponibles en una plataforma concreta de forma muy eficiente, o donde la estructura de cada plataforma tuviera que cumplir reglas estrictas?</p>
+<p>¿Qué ventaja concreta tiene JSONB frente a crear una tabla <code>plataforma_videojuego</code> (con una fila por plataforma y sus columnas propias)? ¿En qué situación sería mejor la tabla relacional en vez de JSONB — piensa en un caso donde cada plataforma tuviera que referenciar una entidad propia, cumplir tipos y restricciones estrictas, participar frecuentemente en relaciones con otras tablas o utilizarse en informes y consultas complejas?</p>
 <hr>
 <h2 id="cierre">✅ Cierre<a class="headerlink" href="#cierre" title="Permanent link">¶</a></h2>
 <p>Tu <code>Videojuego</code> ya persiste objetos estructurados reales en una columna JSONB. Todavía no has consultado por su contenido — solo lo has guardado y leído entero. En la próxima actividad vas a filtrar videojuegos según qué plataformas tienen, usando <code>jsonb_exists</code>.</p>
 <div class="admonition tip">
 <p class="admonition-title">¿Quieres quitar las 100.000 filas de prueba del Paso 5?</p>
-<p>Se quedan en tu base de datos de desarrollo sin causar ningún problema, pero si prefieres limpiarlas: si sigues teniendo un <code>data.sql</code> que reinicializa tus tablas (PSP, Actividad 2.3), pon temporalmente <code>spring.sql.init.mode</code> de nuevo en <code>always</code> en tu <code>application-dev.yaml</code> y reinicia — se ejecutará y dejará la base de datos como la tenías. Vuelve a ponerlo en <code>never</code> después, o volverás a perder cualquier dato nuevo en cada arranque, que es justo el problema que has evitado en su momento.</p>
+<p>Se quedan en tu base de datos de desarrollo sin causar ningún problema, pero si prefieres limpiarlas: si sigues teniendo un <code>data.sql</code> que reinicializa tus tablas (PSP, Actividad 2.3), pon temporalmente <code>spring.sql.init.mode</code> de nuevo en <code>always</code> en tu <code>application-dev.yml</code> y reinicia — se ejecutará y dejará la base de datos como la tenías. Vuelve a ponerlo en <code>never</code> después, o volverás a perder cualquier dato nuevo en cada arranque, que es justo el problema que has evitado en su momento.</p>
 </div></div>
 
 

@@ -1340,9 +1340,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-conexion-application-devyaml" class="md-nav__link">
+  <a href="#la-conexion-application-devyml" class="md-nav__link">
     <span class="md-ellipsis">
-      La conexión: application-dev.yaml
+      La conexión: application-dev.yml
     </span>
   </a>
   
@@ -3019,9 +3019,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#la-conexion-application-devyaml" class="md-nav__link">
+  <a href="#la-conexion-application-devyml" class="md-nav__link">
     <span class="md-ellipsis">
-      La conexión: application-dev.yaml
+      La conexión: application-dev.yml
     </span>
   </a>
   
@@ -3322,7 +3322,7 @@
 <hr>
 <h2 id="las-piezas-en-un-proyecto-spring-boot">🗄️ Las piezas en un proyecto Spring Boot<a class="headerlink" href="#las-piezas-en-un-proyecto-spring-boot" title="Permanent link">¶</a></h2>
 <h3 id="el-gestor-postgresql-independiente-via-docker">El gestor: PostgreSQL independiente, vía Docker<a class="headerlink" href="#el-gestor-postgresql-independiente-via-docker" title="Permanent link">¶</a></h3>
-<p>Un <code>docker-compose.yaml</code> como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:</p>
+<p>Un <code>docker-compose.yml</code> como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:</p>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
 <span class="normal"><a href="#__codelineno-4-3">3</a></span>
@@ -3346,7 +3346,7 @@
 <p class="admonition-title">Una mejora posible: H2 embebido para tests</p>
 <p>Una práctica habitual en proyectos reales es añadir H2 (embebido) en un perfil <code>test</code> para los tests unitarios más simples, que así no dependen de tener Docker levantado — el gestor embebido arranca y muere con los propios tests.</p>
 </div>
-<h3 id="la-conexion-application-devyaml">La conexión: <code>application-dev.yaml</code><a class="headerlink" href="#la-conexion-application-devyaml" title="Permanent link">¶</a></h3>
+<h3 id="la-conexion-application-devyml">La conexión: <code>application-dev.yml</code><a class="headerlink" href="#la-conexion-application-devyml" title="Permanent link">¶</a></h3>
 <div class="language-yaml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YAML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
 <span class="normal"><a href="#__codelineno-5-2">2</a></span>
 <span class="normal"><a href="#__codelineno-5-3">3</a></span>
@@ -3393,7 +3393,7 @@
 <li><code>cascade = CascadeType.ALL</code>: propaga las operaciones de <code>Editorial</code> a sus <code>Libro</code> — si guardas o borras una editorial, Hibernate aplica esa misma operación a todos sus libros automáticamente. Sin <code>cascade</code>, tendrías que guardar o borrar cada libro tú mismo, uno por uno.</li>
 <li><code>orphanRemoval = true</code>: va un paso más allá — si quitas un libro de la lista <code>libros</code> sin borrar la editorial entera, ese libro queda "huérfano" (ya no lo referencia ninguna editorial) y Hibernate lo elimina de la base de datos por su cuenta, sin que tengas que borrarlo tú explícitamente.</li>
 </ul>
-<p>Y en <code>application-dev.yaml</code>, la propiedad <code>spring.jpa.hibernate.ddl-auto: update</code> es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el <code>CREATE TABLE</code>. Existen otros valores (<code>validate</code>, que solo comprueba que las tablas coincidan sin tocarlas, o <code>none</code>, que no hace nada): en un proyecto real, en producción, casi nunca se usa <code>update</code> ni mucho menos <code>create-drop</code> (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.</p>
+<p>Y en <code>application-dev.yml</code>, la propiedad <code>spring.jpa.hibernate.ddl-auto: update</code> es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el <code>CREATE TABLE</code>. Existen otros valores (<code>validate</code>, que solo comprueba que las tablas coincidan sin tocarlas, o <code>none</code>, que no hace nada): en un proyecto real, en producción, casi nunca se usa <code>update</code> ni mucho menos <code>create-drop</code> (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.</p>
 <p>Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y definir las primeras entidades de tu proyecto.</p>
 <hr>
 <h2 id="ideas-clave">✅ Ideas clave<a class="headerlink" href="#ideas-clave" title="Permanent link">¶</a></h2>
@@ -3406,7 +3406,7 @@
 <li>Un gestor <strong>embebido</strong> (H2, SQLite) corre dentro de tu proceso; uno <strong>independiente</strong> (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.</li>
 <li>El <strong>pooling de conexiones</strong> reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.</li>
 <li>Las relaciones entre entidades tienen <strong>multiplicidad</strong>: 1:1 (<code>@OneToOne</code>), 1:N (<code>@OneToMany</code>/<code>@ManyToOne</code>) y N:M (<code>@ManyToMany</code>, con una tabla intermedia vía <code>@JoinTable</code>).</li>
-<li>En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en <code>application-dev.yaml</code> (<code>spring.datasource.*</code>).</li>
+<li>En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en <code>application-dev.yml</code> (<code>spring.datasource.*</code>).</li>
 <li>La estructura de la base de datos se declara con anotaciones JPA (<code>@Entity</code>, <code>@Id</code>, <code>@OneToMany</code>/<code>@ManyToOne</code>) sobre las propias clases Java; <code>mappedBy</code> señala el lado inverso, <code>cascade</code> propaga operaciones y <code>orphanRemoval</code> borra registros huérfanos automáticamente. <code>ddl-auto</code> controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).</li>
 </ul>
 </details></div>
