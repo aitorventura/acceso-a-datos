@@ -19,122 +19,21 @@ Tu GameVault completo: catálogo (JDBC, JPA, JSONB), reviews (MongoDB), y todos 
 
 ## Paso 1 — El test de integración de flujo completo
 
-Antes de nada, añade a tu `pom.xml` las dos dependencias de Testcontainers que todavía no tienes — ya usas `org.testcontainers:postgresql` desde la Actividad 2.3, pero este test necesita también MongoDB y RabbitMQ reales:
+No partes de cero: tu `VideojuegoApiIntegrationTest` (Actividad 2.3) ya tiene los tres motores reales conectados —PostgreSQL desde el principio, MongoDB desde la Actividad 4.2, RabbitMQ desde la Actividad 3.1 de PSP— y ya tiene `loginComoAdmin()` y un helper para crear un estudio. No vas a crear ninguna clase nueva ni ningún `@Container` nuevo: añades un `@Test` más a esa misma clase, que encadena todo lo que el resto de tests de ahí ya prueban por separado — crear un videojuego (reutiliza el mismo patrón de `POST /videojuegos` con `detallesPlataforma` que ya ves en los tests existentes) y, a partir de ahí, los tramos que sí son nuevos: reseñas, borrado en cascada, y el registro de actividad que ese mismo borrado dispara en paralelo.
 
-```xml
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>mongodb</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>rabbitmq</artifactId>
-    <scope>test</scope>
-</dependency>
-```
+### Tramo 1 — la reseña y el resumen
 
-### Tramo 1 — guiado al completo
+Sin más código dado, añade un `@Test` nuevo que: haga login como admin y cree un estudio y un videojuego (reutilizando `loginComoAdmin()` y el resto de helpers ya existentes en la clase), cree una reseña para ese videojuego (reutiliza el mismo `adminToken` — crear una reseña solo exige estar autenticado, no rol `ADMIN`, así que te sirve igual), y compruebe con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya usa el resto de tests de la clase (MockMvc completo, `jsonPath` sobre el cuerpo).
 
-```java
-package com.tunombre.gamevault.integration;
+### Tramo 2 — el borrado en cascada
 
-import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.mongodb.MongoDBContainer;
-import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+Borra el videojuego (de nuevo con `adminToken`, exige rol `ADMIN`), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 1 debe desaparecer de MongoDB. El `RabbitMQContainer` ya entrega el mensaje de verdad, pero sigue siendo asíncrono — necesitas un pequeño margen de espera (un `Thread.sleep` breve, o un mecanismo de espera activa) antes de comprobar que la reseña ya no está.
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+### Tramo 3 — un evento, dos colas
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Testcontainers
-class FlujoCompletoIntegrationTest {
+El borrado que acabas de disparar no tiene un único destino: sobre el mismo exchange (`RabbitMQConfig`, Actividad 3.1 de PSP) hay **dos** colas independientes escuchando `videojuego.eliminado` — la del borrado en cascada de reseñas, que acabas de comprobar, y la del registro de actividad. Amplía el mismo test para comprobar también la segunda: `GET /api/v1/actividad` (con `adminToken`, exige rol `ADMIN`) debe incluir un registro con `tipo: "VIDEOJUEGO_ELIMINADO"` y el `entidadId` del videojuego que has borrado.
 
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
-
-    @Container
-    @ServiceConnection
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
-
-    @Container
-    @ServiceConnection
-    static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:3-management");
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private String loginComoAdmin() throws Exception {
-        String respuesta = mockMvc.perform(post("/api/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "username": "admin",
-                                  "password": "admin123"
-                                }
-                                """))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
-
-        return JsonPath.read(respuesta, "$.accessToken");
-    }
-
-    @Test
-    void flujoCompleto_DesdeCrearHastaBorrarConReviews() throws Exception {
-        String adminToken = loginComoAdmin();
-
-        // Tramo 1: crear un estudio y un videojuego con detallesPlataforma
-        mockMvc.perform(post("/api/v1/estudios")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {"nombre": "Team Cherry", "pais": "Australia"}
-                                """))
-                .andExpect(status().isCreated());
-
-        String respuestaVideojuego = mockMvc.perform(post("/api/v1/videojuegos")
-                        .header("Authorization", "Bearer " + adminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                  "titulo": "Hollow Knight",
-                                  "precio": 14.99,
-                                  "fechaLanzamiento": "2017-02-24",
-                                  "estudioId": 1,
-                                  "detallesPlataforma": {"steam": {"idApp": 367520}}
-                                }
-                                """))
-                .andExpect(status().isCreated())
-                .andReturn().getResponse().getContentAsString();
-
-        // extrae el id del videojuego creado (con JsonPath, por ejemplo) para los tramos siguientes
-    }
-}
-```
-
-Este primer tramo crea el estudio y el videojuego que vas a usar en el resto del test — con `@ServiceConnection` en tres contenedores a la vez, PostgreSQL, MongoDB y RabbitMQ corriendo de verdad, simultáneamente (los tres motores reales que usa tu aplicación). Fíjate en `loginComoAdmin()` y en `@ActiveProfiles("test")`: los dos son exactamente el mismo patrón que ya has construido en la Actividad 2.3 (incluido tu propio `application-test.yml`, que reutilizas tal cual) — sin login, estos `POST` devolverían `403`, no `201`, porque `/api/v1/estudios` y `/api/v1/videojuegos` exigen rol `ADMIN` desde la Actividad 2.5 de PSP.
-
-### Tramo 2 — mini-reto: la reseña y el resumen
-
-Sin más código dado, amplía el mismo test (`@Test`) para: crear una reseña para ese videojuego (reutiliza el mismo `adminToken` — crear una reseña solo exige estar autenticado, no rol `ADMIN`, así que te sirve igual), y comprobar con un `GET .../resumen` que el total y la puntuación media son correctos. Repite el patrón que ya has usado en la Actividad 2.3 (MockMvc completo, `jsonPath` sobre el cuerpo).
-
-### Tramo 3 — mini-reto: el borrado en cascada
-
-Borra el videojuego (de nuevo con `adminToken`, exige rol `ADMIN`), y verifica el borrado en cascada de la Actividad 3.2: la reseña que has creado en el Tramo 2 debe desaparecer de MongoDB. El contenedor `rabbitmq` del Tramo 1 ya entrega el mensaje de verdad, pero sigue siendo asíncrono — necesitas un pequeño margen de espera (un `Thread.sleep` breve, o un mecanismo de espera activa) antes de comprobar que la reseña ya no está.
+**Pregunta**: si solo comprobaras una de las dos colas, ¿qué tipo de fallo de configuración —piensa en el `binding`/`routing key` de `RabbitMQConfig`— podría pasar completamente desapercibido? Relaciónalo con la predicción que has hecho en la teoría de este apartado.
 
 ---
 
