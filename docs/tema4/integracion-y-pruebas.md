@@ -59,7 +59,7 @@ class FlujoCompletoIntegrationTest {
 }
 ```
 
-Los tres son los servicios reales de tu `docker-compose.yaml`, arrancados solo para este test (si mañana añadieras un motor más, se sumaría aquí igual, un `@Container` por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las reseñas y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa. Es exactamente el test que vas a construir en la Actividad 4.3.
+Los tres son los servicios reales de tu `docker-compose.yml`, arrancados solo para este test (si mañana añadieras un motor más, se sumaría aquí igual, un `@Container` por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las reseñas y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa. Es exactamente el test que vas a construir en la Actividad 4.3.
 
 ### Cuándo conviene cada tipo de test
 

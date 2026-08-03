@@ -58,7 +58,7 @@ INSERT INTO videojuego (titulo, precio, fecha_lanzamiento, estudio_id, detalles_
 ```
 
 !!! tip "Actívalo con `spring.sql.init.mode: always`"
-    Este `data.sql` solo se ejecuta si `spring.sql.init.mode` está en `always` en tu `application-dev.yaml` — si ya lo has puesto en `never` (Actividad 2.3 de PSP, para no perder los usuarios que creas a mano), ponlo temporalmente de nuevo en `always`, reinicia para cargar estos datos, y vuelve a dejarlo en `never` después — si no, perderás cualquier dato nuevo en cada arranque, el mismo problema que ya has evitado antes.
+    Este `data.sql` solo se ejecuta si `spring.sql.init.mode` está en `always` en tu `application-dev.yml` — si ya lo has puesto en `never` (Actividad 2.3 de PSP, para no perder los usuarios que creas a mano), ponlo temporalmente de nuevo en `always`, reinicia para cargar estos datos, y vuelve a dejarlo en `never` después — si no, perderás cualquier dato nuevo en cada arranque, el mismo problema que ya has evitado antes.
 
 !!! warning "Tu API ahora usa JWT, no `-u usuario:contraseña`"
     Si has seguido también Programación de Servicios y Procesos hasta la Actividad 2.4, tu GameVault ya ha sustituido HTTP Basic por JWT: las peticiones que modifican datos necesitan un token (`Authorization: Bearer <token>`), no la cabecera `-u` que has usado en la Actividad 2.1. El Paso 4 de esta actividad te recuerda cómo conseguirlo.

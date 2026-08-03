@@ -255,7 +255,7 @@ Ya has usado `spring.jpa.hibernate.ddl-auto: update` desde la Actividad 1.1, per
     INSERT INTO estudio (nombre) VALUES ('Supergiant Games');
     ```
 
-    Como el proyecto utiliza PostgreSQL y las tablas las prepara Hibernate, debes añadir estas propiedades en `application-dev.yaml`:
+    Como el proyecto utiliza PostgreSQL y las tablas las prepara Hibernate, debes añadir estas propiedades en `application-dev.yml`:
 
     ```yaml
     spring:

@@ -58,7 +58,7 @@ INSERT INTO videojuego (titulo, precio, fecha_lanzamiento, estudio_id) VALUES
     ('Oxygen Not Included', 24.99, '2019-07-30', 5);
 ```
 
-Y en `application-dev.yaml`, dos propiedades — sin ellas, este fichero no llega a ejecutarse nunca, o falla al arrancar:
+Y en `application-dev.yml`, dos propiedades — sin ellas, este fichero no llega a ejecutarse nunca, o falla al arrancar:
 
 ```yaml
 spring:

@@ -161,7 +161,7 @@ class VideojuegoApiIntegrationTest {
 }
 ```
 
-`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yml` — Spring Boot lo resuelve por ti. Fíjate en que la imagen es `postgres:16-alpine`, no la `18-alpine` de tu `docker-compose.yaml` de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.
+`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yml` — Spring Boot lo resuelve por ti. Fíjate en que la imagen es `postgres:16-alpine`, no la `18-alpine` de tu `docker-compose.yml` de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.
 
 `@ActiveProfiles("test")` activa un perfil que todavía no existe en tu proyecto. Sin él, el contexto de Spring no arranca y ningún test se ejecuta — así que antes de nada, crea `src/test/resources/application-test.yml`:
 

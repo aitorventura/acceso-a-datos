@@ -209,7 +209,7 @@ Aquí ninguna de las dos tablas (`libro`, `autor`) puede llevar la clave foráne
 
 ### El gestor: PostgreSQL independiente, vía Docker
 
-Un `docker-compose.yaml` como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:
+Un `docker-compose.yml` como este levanta PostgreSQL como gestor independiente — el ejemplo sigue con la aplicación de la librería:
 
 ```yaml
 services:
@@ -228,7 +228,7 @@ Es exactamente el caso de la tabla de más arriba: un proceso separado, en su pr
 !!! tip "Una mejora posible: H2 embebido para tests"
     Una práctica habitual en proyectos reales es añadir H2 (embebido) en un perfil `test` para los tests unitarios más simples, que así no dependen de tener Docker levantado — el gestor embebido arranca y muere con los propios tests.
 
-### La conexión: `application-dev.yaml`
+### La conexión: `application-dev.yml`
 
 ```yaml
 spring:
@@ -266,7 +266,7 @@ public class Editorial {
 - `cascade = CascadeType.ALL`: propaga las operaciones de `Editorial` a sus `Libro` — si guardas o borras una editorial, Hibernate aplica esa misma operación a todos sus libros automáticamente. Sin `cascade`, tendrías que guardar o borrar cada libro tú mismo, uno por uno.
 - `orphanRemoval = true`: va un paso más allá — si quitas un libro de la lista `libros` sin borrar la editorial entera, ese libro queda "huérfano" (ya no lo referencia ninguna editorial) y Hibernate lo elimina de la base de datos por su cuenta, sin que tengas que borrarlo tú explícitamente.
 
-Y en `application-dev.yaml`, la propiedad `spring.jpa.hibernate.ddl-auto: update` es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el `CREATE TABLE`. Existen otros valores (`validate`, que solo comprueba que las tablas coincidan sin tocarlas, o `none`, que no hace nada): en un proyecto real, en producción, casi nunca se usa `update` ni mucho menos `create-drop` (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.
+Y en `application-dev.yml`, la propiedad `spring.jpa.hibernate.ddl-auto: update` es lo que hace que, al arrancar, Hibernate cree o actualice las tablas según esas anotaciones — sin que tú escribas el `CREATE TABLE`. Existen otros valores (`validate`, que solo comprueba que las tablas coincidan sin tocarlas, o `none`, que no hace nada): en un proyecto real, en producción, casi nunca se usa `update` ni mucho menos `create-drop` (que borraría y recrearía las tablas en cada arranque) — se prefiere gestionar el esquema con migraciones controladas (Flyway, Liquibase), precisamente para no perder datos por accidente.
 
 Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreSQL con Docker Compose y definir las primeras entidades de tu proyecto.
 
@@ -282,5 +282,5 @@ Con esto ya tienes las piezas para la Actividad 1.1: levantar tu propio PostgreS
     - Un gestor **embebido** (H2, SQLite) corre dentro de tu proceso; uno **independiente** (PostgreSQL, MySQL) corre como servicio aparte, al que te conectas por red.
     - El **pooling de conexiones** reutiliza conexiones ya abiertas en vez de crear una nueva cada vez — en Spring Boot lo gestiona HikariCP por defecto, sin configuración manual.
     - Las relaciones entre entidades tienen **multiplicidad**: 1:1 (`@OneToOne`), 1:N (`@OneToMany`/`@ManyToOne`) y N:M (`@ManyToMany`, con una tabla intermedia vía `@JoinTable`).
-    - En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en `application-dev.yaml` (`spring.datasource.*`).
+    - En este curso el gestor es PostgreSQL independiente vía Docker; la conexión se configura en `application-dev.yml` (`spring.datasource.*`).
     - La estructura de la base de datos se declara con anotaciones JPA (`@Entity`, `@Id`, `@OneToMany`/`@ManyToOne`) sobre las propias clases Java; `mappedBy` señala el lado inverso, `cascade` propaga operaciones y `orphanRemoval` borra registros huérfanos automáticamente. `ddl-auto` controla si Hibernate crea/actualiza las tablas automáticamente (algo que en producción se sustituye por migraciones controladas).

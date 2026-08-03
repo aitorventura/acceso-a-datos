@@ -116,7 +116,7 @@ Antes de escribir ninguna entidad ni repositorio, tu aplicación necesita saber 
 </dependency>
 ```
 
-Y la propiedad de conexión, en `application-dev.yaml`:
+Y la propiedad de conexión, en `application-dev.yml`:
 
 ```yaml
 spring:
@@ -125,7 +125,7 @@ spring:
 ```
 
 !!! warning "La propiedad real es `spring.mongodb.uri`, no `spring.data.mongodb.uri`"
-    Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, `mongodb` cuelga directamente de `spring`, no de `spring.data`. Comprueba siempre tu `application-dev.yaml` antes de dar por buena una propiedad.
+    Es fácil confundirse con tutoriales antiguos: en la versión de Spring Boot que usas en este curso, `mongodb` cuelga directamente de `spring`, no de `spring.data`. Comprueba siempre tu `application-dev.yml` antes de dar por buena una propiedad.
 
 En paralelo al `datasource` de PostgreSQL que ya conoces del Tema 1, esta es toda la configuración necesaria para conectar con MongoDB. Con esto ya montado, puedes pasar a escribir la primera entidad.
 

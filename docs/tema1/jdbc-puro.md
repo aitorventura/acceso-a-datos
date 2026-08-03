@@ -97,7 +97,7 @@ Connection conn = DriverManager.getConnection(
 );
 ```
 
-`DriverManager.getConnection(...)` recibe la misma URL JDBC, usuario y contraseña que ya conoces de `application-dev.yaml`, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.
+`DriverManager.getConnection(...)` recibe la misma URL JDBC, usuario y contraseña que ya conoces de `application-dev.yml`, pero aquí los datos se pasan directamente desde Java, sin que Spring intervenga.
 
 Cada llamada a `getConnection()` abre una nueva conexión con la base de datos. Por eso, cuando termines de utilizarla, debes cerrarla correctamente.
 

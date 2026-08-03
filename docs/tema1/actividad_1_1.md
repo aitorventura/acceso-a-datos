@@ -182,10 +182,7 @@ spring:
 
 Así todo el proyecto queda en YAML desde el principio, sin mezclar formatos entre la configuración común y la de perfil.
 
-!!! note "`.yml` o `.yaml`: da igual, son la misma extensión"
-    Spring Boot reconoce las dos sin distinción — es pura convención de quien escribe el fichero, no una regla técnica. A lo largo del curso vas a ver los dos usados indistintamente (aquí mismo, `application.yml` arriba y `application-dev.yaml` abajo); no son dos formatos distintos ni dos ficheros que tengan que coincidir en extensión entre sí.
-
-Ahora sí, crea `src/main/resources/application-dev.yaml` con la configuración de conexión:
+Ahora sí, crea `src/main/resources/application-dev.yml` con la configuración de conexión:
 
 ```yaml
 spring:

@@ -259,9 +259,12 @@ Sin Lombok tendrías que escribir ese constructor a mano cada vez que añadieras
 
 ---
 
-## ⚙️ Configuración: `application.yaml` y perfiles
+## ⚙️ Configuración: `application.yml` y perfiles
 
-Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en `src/main/resources`. Lo habitual es tener al menos dos: `application.yaml`, con la configuración común, y `application-dev.yaml`, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).
+Spring Boot centraliza la configuración (credenciales de base de datos, puertos, propiedades propias de la aplicación) en ficheros YAML en `src/main/resources`. Lo habitual es tener al menos dos: `application.yml`, con la configuración común, y `application-dev.yml`, con la específica del entorno de desarrollo (por ejemplo, la URL de conexión a PostgreSQL que usarás en la Actividad 1.1).
+
+!!! note "`.yml` o `.yaml`: es lo mismo, pero en este curso usamos siempre `.yml`"
+    Spring Boot reconoce las dos extensiones sin ninguna distinción — es pura convención de quien escribe el fichero, no una regla técnica. En otros proyectos que veas por tu cuenta (tutoriales, código de terceros) puedes encontrarte cualquiera de las dos indistintamente. En este curso vas a usar siempre `.yml`, por uniformidad — cuando veas `application.yml` o `application-dev.yml`, esa es la extensión que debes usar tú también.
 
 Ese `-dev` en el nombre es un **perfil**: un conjunto de configuración que solo se activa si le dices a Spring Boot que use ese perfil al arrancar. Así, el mismo código puede arrancar con configuración distinta según si estás desarrollando en tu máquina, ejecutando tests, o (en un proyecto real) desplegando en producción, sin tocar una sola línea de Java.
 
@@ -283,5 +286,5 @@ Estas piezas —el proyecto Maven, las capas, la inyección de dependencias, la 
     - **Maven** gestiona las dependencias del proyecto a través del `pom.xml`; en este curso usarás `spring-boot-starter-webmvc` (no `-web`, nombre antiguo) y `spring-boot-starter-data-jpa`.
     - La arquitectura en capas es controller (HTTP) → service (lógica) → repository (datos): cada capa habla solo con la siguiente.
     - La **inyección de dependencias** hace que una clase declare lo que necesita (por constructor) en vez de crearlo ella misma; Spring guarda una instancia de cada clase gestionada (un **bean**) en su contexto de la aplicación, y se la entrega ya construida a quien la pida. `@Service`, `@Repository`, `@RestController` y `@Configuration` marcan qué clases gestiona Spring como beans.
-    - `application.yaml`/`application-dev.yaml` centralizan la configuración; un **perfil** (`dev`) permite tener configuración distinta según el entorno sin tocar código.
+    - `application.yml`/`application-dev.yml` centralizan la configuración; un **perfil** (`dev`) permite tener configuración distinta según el entorno sin tocar código.
     - `@RequiredArgsConstructor` de Lombok genera el constructor con los campos `final`, que es lo que Spring usa para inyectar dependencias.
