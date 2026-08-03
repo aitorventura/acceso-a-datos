@@ -52,16 +52,16 @@ Sin más código dado que la estructura de arriba y el contrato del Paso 1, crea
 
 ## Paso 3 — Usarlo desde `catalogo`
 
-Sin código dado, ahora te toca a ti conectar las dos piezas:
+Sin código dado, ahora te toca a ti conectar las dos piezas — y esta vez usas **los dos** métodos del componente, no solo uno:
 
-1. Añade a `VideojuegoResponseDTO` un séptimo campo, `puntuacionMedia` (tipo `Double`, sin ninguna anotación de validación — es un dato de solo lectura, igual que `nombreEstudio`).
+1. Añade a `VideojuegoResponseDTO` dos campos nuevos: `totalReviews` (tipo `long`) y `puntuacionMedia` (tipo `Double`), sin ninguna anotación de validación — son datos de solo lectura, igual que `nombreEstudio`.
 2. En `VideojuegoService`, inyecta `ReviewsConsultaService` —la interfaz, nunca la implementación— junto al resto de dependencias del constructor.
-3. Dentro de `mapToDTO`, llama a `puntuacionMediaDe(v.getId())` y pasa el resultado como ese séptimo argumento. Es el mismo mecanismo que ya usas para `nombreEstudio` (`v.getEstudio().getNombre()`), solo que esta vez el dato no sale de `Videojuego`, sale del componente nuevo.
+3. Dentro de `mapToDTO`, llama a `totalReviewsDe(v.getId())` y a `puntuacionMediaDe(v.getId())`, y pasa los dos resultados como esos dos argumentos nuevos. Es el mismo mecanismo que ya usas para `nombreEstudio` (`v.getEstudio().getNombre()`), solo que estos dos datos no salen de `Videojuego`, salen del componente nuevo.
 
-**Fíjate**: `catalogo` no importa nada de `reviews` salvo la interfaz del paquete `api` — ni conoce `Review`, ni `ReviewRepository`, ni cómo se calcula la media por dentro.
+**Fíjate**: `catalogo` no importa nada de `reviews` salvo la interfaz del paquete `api` — ni conoce `Review`, ni `ReviewRepository`, ni cómo se calculan esos dos datos por dentro.
 
 !!! warning "Esto rompe tu `VideojuegoControllerTest`"
-    Igual que pasó con `detallesPlataforma` en la Actividad 2.1, añadir un séptimo campo a `VideojuegoResponseDTO` rompe cualquier `new VideojuegoResponseDTO(...)` que siga usando el constructor de los seis campos antiguos. Localiza los **tres** sitios de `VideojuegoControllerTest` donde pasa esto, y añade un valor `Double` cualquiera al final de cada uno — el valor concreto no importa, ninguno de esos tests comprueba nada sobre `puntuacionMedia`, solo necesitan que el DTO compile.
+    Igual que pasó con `detallesPlataforma` en la Actividad 2.1, añadir dos campos nuevos a `VideojuegoResponseDTO` rompe cualquier `new VideojuegoResponseDTO(...)` que siga usando el constructor de los seis campos antiguos. Localiza los **tres** sitios de `VideojuegoControllerTest` donde pasa esto, y añade un valor `long` y un valor `Double` cualquiera al final de cada uno — los valores concretos no importan, ninguno de esos tests comprueba nada sobre `totalReviews` ni `puntuacionMedia`, solo necesitan que el DTO compile.
 
 ---
 
@@ -71,9 +71,34 @@ Sin código dado, ahora te toca a ti conectar las dos piezas:
 curl http://localhost:8080/api/v1/videojuegos/1
 ```
 
-**Comprueba**: que la respuesta incluye `puntuacionMedia`, y que el dato coincide con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.
+Usa el `id` que quieras, `1` o cualquier otro — pero elige uno que tenga **al menos una reseña** ya creada: con `totalReviews = 0`, `puntuacionMedia` sale `0.0` por el propio `.orElse(0.0)`, y no se distingue de un fallo real en el cálculo. Si no tienes claro qué videojuego tiene reseñas, consúltalo primero con `GET /api/v1/videojuegos/{id}/reviews`.
 
-**Captura**: la respuesta de `GET /videojuegos/1` con `puntuacionMedia`, junto a la de `GET /reviews/resumen` mostrando el mismo valor.
+**Comprueba**: que la respuesta incluye `totalReviews` y `puntuacionMedia`, y que los dos datos coinciden con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.
+
+**Captura**: la respuesta de `GET /videojuegos/{id}` (con reseñas de verdad) con `totalReviews` y `puntuacionMedia`, junto a la de `GET /reviews/resumen` mostrando los mismos valores.
+
+!!! warning "`VideojuegoApiIntegrationTest` necesita MongoDB a partir de ahora"
+    Antes de esta actividad, `VideojuegoApiIntegrationTest` (Actividad 2.3) solo tocaba PostgreSQL — nunca pasaba por `reviews`. Desde el Paso 3, `mapToDTO` llama a `ReviewsConsultaService` en **cada** petición sobre `Videojuego`, así que este test también necesita un contenedor de MongoDB real, o falla con un error de conexión en cuanto ejecutes cualquier test de la clase.
+
+    Añade la dependencia a tu `pom.xml`, junto a la de `postgresql` que ya tienes:
+
+    ```xml
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>mongodb</artifactId>
+        <scope>test</scope>
+    </dependency>
+    ```
+
+    Y el contenedor, junto al de `postgres` que ya tienes en `VideojuegoApiIntegrationTest` (mismo patrón `@Container`/`@ServiceConnection`, no hace falta tocar nada más):
+
+    ```java
+    @Container
+    @ServiceConnection
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:8");
+    ```
+
+    No olvides el `import org.testcontainers.containers.MongoDBContainer;`.
 
 **Ejecuta también** tus tests existentes (`VideojuegoControllerTest`, `CatalogoConsultaServiceImplTest`, `VideojuegoApiIntegrationTest`) y comprueba que siguen pasando, ya con el cambio del Paso 3 aplicado.
 
@@ -83,7 +108,11 @@ curl http://localhost:8080/api/v1/videojuegos/1
 
 ## Paso 5 — Prueba del componente aislado
 
-Con `ReviewsConsultaService` ya construido, integrado en `catalogo` y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (mock del repositorio, `@InjectMocks` sobre la implementación).
+Con `ReviewsConsultaService` ya construido, integrado en `catalogo` y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (`@Mock` sobre `ReviewRepository`, `@InjectMocks` sobre `ReviewsConsultaServiceImpl`). Cubre, como mínimo, estos tres casos:
+
+1. `totalReviewsDe`: con el mock de `findByVideojuegoId` devolviendo una lista de varias reseñas, comprueba que el resultado coincide con el tamaño de la lista.
+2. `puntuacionMediaDe`: con el mock devolviendo reseñas con puntuaciones conocidas, comprueba que la media calculada es la correcta.
+3. `puntuacionMediaDe` cuando no hay ninguna reseña: con el mock devolviendo una lista vacía, comprueba que devuelve `0.0` en vez de lanzar una excepción — es el mismo `.orElse(0.0)` que ya usa `getResumenByVideojuegoId`.
 
 **Captura**: tus tests de `ReviewsConsultaServiceImplTest` en verde.
 
