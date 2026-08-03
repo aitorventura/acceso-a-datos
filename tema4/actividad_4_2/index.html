@@ -3001,28 +3001,57 @@
 </ol>
 <hr>
 <h2 id="paso-3-usarlo-desde-catalogo">Paso 3 — Usarlo desde <code>catalogo</code><a class="headerlink" href="#paso-3-usarlo-desde-catalogo" title="Permanent link">¶</a></h2>
-<p>Sin código dado, ahora te toca a ti conectar las dos piezas:</p>
+<p>Sin código dado, ahora te toca a ti conectar las dos piezas — y esta vez usas <strong>los dos</strong> métodos del componente, no solo uno:</p>
 <ol>
-<li>Añade a <code>VideojuegoResponseDTO</code> un séptimo campo, <code>puntuacionMedia</code> (tipo <code>Double</code>, sin ninguna anotación de validación — es un dato de solo lectura, igual que <code>nombreEstudio</code>).</li>
+<li>Añade a <code>VideojuegoResponseDTO</code> dos campos nuevos: <code>totalReviews</code> (tipo <code>long</code>) y <code>puntuacionMedia</code> (tipo <code>Double</code>), sin ninguna anotación de validación — son datos de solo lectura, igual que <code>nombreEstudio</code>.</li>
 <li>En <code>VideojuegoService</code>, inyecta <code>ReviewsConsultaService</code> —la interfaz, nunca la implementación— junto al resto de dependencias del constructor.</li>
-<li>Dentro de <code>mapToDTO</code>, llama a <code>puntuacionMediaDe(v.getId())</code> y pasa el resultado como ese séptimo argumento. Es el mismo mecanismo que ya usas para <code>nombreEstudio</code> (<code>v.getEstudio().getNombre()</code>), solo que esta vez el dato no sale de <code>Videojuego</code>, sale del componente nuevo.</li>
+<li>Dentro de <code>mapToDTO</code>, llama a <code>totalReviewsDe(v.getId())</code> y a <code>puntuacionMediaDe(v.getId())</code>, y pasa los dos resultados como esos dos argumentos nuevos. Es el mismo mecanismo que ya usas para <code>nombreEstudio</code> (<code>v.getEstudio().getNombre()</code>), solo que estos dos datos no salen de <code>Videojuego</code>, salen del componente nuevo.</li>
 </ol>
-<p><strong>Fíjate</strong>: <code>catalogo</code> no importa nada de <code>reviews</code> salvo la interfaz del paquete <code>api</code> — ni conoce <code>Review</code>, ni <code>ReviewRepository</code>, ni cómo se calcula la media por dentro.</p>
+<p><strong>Fíjate</strong>: <code>catalogo</code> no importa nada de <code>reviews</code> salvo la interfaz del paquete <code>api</code> — ni conoce <code>Review</code>, ni <code>ReviewRepository</code>, ni cómo se calculan esos dos datos por dentro.</p>
 <div class="admonition warning">
 <p class="admonition-title">Esto rompe tu <code>VideojuegoControllerTest</code></p>
-<p>Igual que pasó con <code>detallesPlataforma</code> en la Actividad 2.1, añadir un séptimo campo a <code>VideojuegoResponseDTO</code> rompe cualquier <code>new VideojuegoResponseDTO(...)</code> que siga usando el constructor de los seis campos antiguos. Localiza los <strong>tres</strong> sitios de <code>VideojuegoControllerTest</code> donde pasa esto, y añade un valor <code>Double</code> cualquiera al final de cada uno — el valor concreto no importa, ninguno de esos tests comprueba nada sobre <code>puntuacionMedia</code>, solo necesitan que el DTO compile.</p>
+<p>Igual que pasó con <code>detallesPlataforma</code> en la Actividad 2.1, añadir dos campos nuevos a <code>VideojuegoResponseDTO</code> rompe cualquier <code>new VideojuegoResponseDTO(...)</code> que siga usando el constructor de los seis campos antiguos. Localiza los <strong>tres</strong> sitios de <code>VideojuegoControllerTest</code> donde pasa esto, y añade un valor <code>long</code> y un valor <code>Double</code> cualquiera al final de cada uno — los valores concretos no importan, ninguno de esos tests comprueba nada sobre <code>totalReviews</code> ni <code>puntuacionMedia</code>, solo necesitan que el DTO compile.</p>
 </div>
 <hr>
 <h2 id="paso-4-verificacion">Paso 4 — Verificación<a class="headerlink" href="#paso-4-verificacion" title="Permanent link">¶</a></h2>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>curl<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1
 </code></pre></div></td></tr></table></div>
-<p><strong>Comprueba</strong>: que la respuesta incluye <code>puntuacionMedia</code>, y que el dato coincide con lo que calcula <code>GET /api/v1/videojuegos/{id}/reviews/resumen</code> para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.</p>
-<p><strong>Captura</strong>: la respuesta de <code>GET /videojuegos/1</code> con <code>puntuacionMedia</code>, junto a la de <code>GET /reviews/resumen</code> mostrando el mismo valor.</p>
+<p>Usa el <code>id</code> que quieras, <code>1</code> o cualquier otro — pero elige uno que tenga <strong>al menos una reseña</strong> ya creada: con <code>totalReviews = 0</code>, <code>puntuacionMedia</code> sale <code>0.0</code> por el propio <code>.orElse(0.0)</code>, y no se distingue de un fallo real en el cálculo. Si no tienes claro qué videojuego tiene reseñas, consúltalo primero con <code>GET /api/v1/videojuegos/{id}/reviews</code>.</p>
+<p><strong>Comprueba</strong>: que la respuesta incluye <code>totalReviews</code> y <code>puntuacionMedia</code>, y que los dos datos coinciden con lo que calcula <code>GET /api/v1/videojuegos/{id}/reviews/resumen</code> para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.</p>
+<p><strong>Captura</strong>: la respuesta de <code>GET /videojuegos/{id}</code> (con reseñas de verdad) con <code>totalReviews</code> y <code>puntuacionMedia</code>, junto a la de <code>GET /reviews/resumen</code> mostrando los mismos valores.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>VideojuegoApiIntegrationTest</code> necesita MongoDB a partir de ahora</p>
+<p>Antes de esta actividad, <code>VideojuegoApiIntegrationTest</code> (Actividad 2.3) solo tocaba PostgreSQL — nunca pasaba por <code>reviews</code>. Desde el Paso 3, <code>mapToDTO</code> llama a <code>ReviewsConsultaService</code> en <strong>cada</strong> petición sobre <code>Videojuego</code>, así que este test también necesita un contenedor de MongoDB real, o falla con un error de conexión en cuanto ejecutes cualquier test de la clase.</p>
+<p>Añade la dependencia a tu <code>pom.xml</code>, junto a la de <code>postgresql</code> que ya tienes:</p>
+<div class="language-xml highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">XML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nt">&lt;dependency&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nt">&lt;artifactId&gt;</span>mongodb<span class="nt">&lt;/artifactId&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>Y el contenedor, junto al de <code>postgres</code> que ya tienes en <code>VideojuegoApiIntegrationTest</code> (mismo patrón <code>@Container</code>/<code>@ServiceConnection</code>, no hace falta tocar nada más):</p>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nd">@Container</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nd">@ServiceConnection</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="kd">static</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="w"> </span><span class="n">mongodb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MongoDBContainer</span><span class="p">(</span><span class="s">"mongo:8"</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>No olvides el <code>import org.testcontainers.containers.MongoDBContainer;</code>.</p>
+</div>
 <p><strong>Ejecuta también</strong> tus tests existentes (<code>VideojuegoControllerTest</code>, <code>CatalogoConsultaServiceImplTest</code>, <code>VideojuegoApiIntegrationTest</code>) y comprueba que siguen pasando, ya con el cambio del Paso 3 aplicado.</p>
 <p><strong>Captura</strong>: tu batería de tests completa en verde.</p>
 <hr>
 <h2 id="paso-5-prueba-del-componente-aislado">Paso 5 — Prueba del componente aislado<a class="headerlink" href="#paso-5-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
-<p>Con <code>ReviewsConsultaService</code> ya construido, integrado en <code>catalogo</code> y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de <code>CatalogoConsultaServiceImplTest</code> (mock del repositorio, <code>@InjectMocks</code> sobre la implementación).</p>
+<p>Con <code>ReviewsConsultaService</code> ya construido, integrado en <code>catalogo</code> y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de <code>CatalogoConsultaServiceImplTest</code> (<code>@Mock</code> sobre <code>ReviewRepository</code>, <code>@InjectMocks</code> sobre <code>ReviewsConsultaServiceImpl</code>). Cubre, como mínimo, estos tres casos:</p>
+<ol>
+<li><code>totalReviewsDe</code>: con el mock de <code>findByVideojuegoId</code> devolviendo una lista de varias reseñas, comprueba que el resultado coincide con el tamaño de la lista.</li>
+<li><code>puntuacionMediaDe</code>: con el mock devolviendo reseñas con puntuaciones conocidas, comprueba que la media calculada es la correcta.</li>
+<li><code>puntuacionMediaDe</code> cuando no hay ninguna reseña: con el mock devolviendo una lista vacía, comprueba que devuelve <code>0.0</code> en vez de lanzar una excepción — es el mismo <code>.orElse(0.0)</code> que ya usa <code>getResumenByVideojuegoId</code>.</li>
+</ol>
 <p><strong>Captura</strong>: tus tests de <code>ReviewsConsultaServiceImplTest</code> en verde.</p>
 <hr>
 <h2 id="reflexion-de-cierre-tabla-comparativa">Reflexión de cierre — tabla comparativa<a class="headerlink" href="#reflexion-de-cierre-tabla-comparativa" title="Permanent link">¶</a></h2>
