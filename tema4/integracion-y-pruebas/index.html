@@ -2699,6 +2699,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#la-piramide-de-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      La pirámide de tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cuando-conviene-cada-tipo-de-test" class="md-nav__link">
     <span class="md-ellipsis">
       Cuándo conviene cada tipo de test
@@ -2854,6 +2863,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#la-piramide-de-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      La pirámide de tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cuando-conviene-cada-tipo-de-test" class="md-nav__link">
     <span class="md-ellipsis">
       Cuándo conviene cada tipo de test
@@ -2915,7 +2933,7 @@
 <p>Último apartado del módulo. Responde a la pregunta que da sentido a todo lo anterior: ¿cómo sabes que tus componentes, diseñados por separado, funcionan bien <strong>juntos</strong>?</p>
 <hr>
 <h2 id="probar-un-componente-aislado-repaso">🧪 Probar un componente aislado — repaso<a class="headerlink" href="#probar-un-componente-aislado-repaso" title="Permanent link">¶</a></h2>
-<p>Ya has construido este tipo de test en la Actividad 4.1:</p>
+<p>Ya has construido este tipo de test en la Actividad 4.1, con el mismo patrón que viste en la teoría de "Componentes":</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -2930,26 +2948,31 @@
 <span class="normal"><a href="#__codelineno-0-12">12</a></span>
 <span class="normal"><a href="#__codelineno-0-13">13</a></span>
 <span class="normal"><a href="#__codelineno-0-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nd">@ExtendWith</span><span class="p">(</span><span class="n">MockitoExtension</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">class</span> <span class="nc">CatalogoConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kd">class</span> <span class="nc">LibroConsultaServiceImplTest</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nd">@Mock</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VideojuegoRepository</span><span class="w"> </span><span class="n">videojuegoRepository</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroRepository</span><span class="w"> </span><span class="n">libroRepository</span><span class="p">;</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nd">@InjectMocks</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">CatalogoConsultaServiceImpl</span><span class="w"> </span><span class="n">catalogoConsultaService</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LibroConsultaServiceImpl</span><span class="w"> </span><span class="n">libroConsultaService</span><span class="p">;</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="nd">@Test</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeVideojuego_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">videojuegoRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">catalogoConsultaService</span><span class="p">.</span><span class="na">existeVideojuego</span><span class="p">(</span><span class="mi">1L</span><span class="p">));</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">existeLibro_DebeDevolverTrue_CuandoExiste</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">        </span><span class="n">when</span><span class="p">(</span><span class="n">libroRepository</span><span class="p">.</span><span class="na">existsById</span><span class="p">(</span><span class="mi">1L</span><span class="p">)).</span><span class="na">thenReturn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="n">assertTrue</span><span class="p">(</span><span class="n">libroConsultaService</span><span class="p">.</span><span class="na">existeLibro</span><span class="p">(</span><span class="mi">1L</span><span class="p">));</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Un test aislado con mocks prueba la <strong>lógica interna</strong> de un componente, sin ninguna base de datos real de por medio — rapidísimo, perfecto para verificar el comportamiento de una pieza concreta.</p>
 <hr>
 <h2 id="probar-la-integracion-de-todo-junto">🔗 Probar la integración de todo junto<a class="headerlink" href="#probar-la-integracion-de-todo-junto" title="Permanent link">¶</a></h2>
-<p>Un mock no miente, pero sí puede estar equivocado: cuando escribes <code>when(videojuegoRepository.existsById(1L)).thenReturn(true)</code>, ese valor lo has puesto tú a mano — el test no ha comprobado que <code>VideojuegoRepository</code> se comporte así de verdad, solo que tu código reacciona bien <em>si</em> se comporta así.</p>
-<p>Piensa en el borrado en cascada que construiste en la Actividad 3.2: al borrar un videojuego, <code>VideojuegoService</code> publica un evento, RabbitMQ lo transporta, y un listener asíncrono lo recoge para borrar la reseña correspondiente en MongoDB. Un test aislado de esa pieza, con mocks, podría comprobar "si me llega el evento, borro la reseña correctamente" — pero nunca demuestra que el evento <strong>llega</strong>. Si el listener no estuviera bien registrado, o la cola tuviera un nombre distinto al que espera quien publica, el mock ni se enteraría: no hay ningún RabbitMQ real de por medio con el que ese fallo pueda ocurrir. Para comprobar que la cadena completa —evento, cola, listener, borrado— funciona de verdad, hace falta un test que hable con un RabbitMQ real, no con una promesa sobre cómo se comporta.</p>
-<p>El test de integración más completo no mockea nada — levanta <strong>todos</strong> los motores reales que usa la aplicación, simultáneamente, en contenedores Docker, solo para la duración del test. En tu GameVault, eso significa tres motores a la vez: PostgreSQL (catálogo), MongoDB (reseñas) y RabbitMQ (la cadena de eventos de arriba):</p>
+<p>Un mock no miente, pero sí puede estar equivocado: cuando escribes <code>when(libroRepository.existsById(1L)).thenReturn(true)</code>, ese valor lo has puesto tú a mano — el test no ha comprobado que <code>LibroRepository</code> se comporte así de verdad, solo que tu código reacciona bien <em>si</em> se comporta así.</p>
+<p>Piensa en el borrado en cascada del apartado anterior: al borrar un <code>Libro</code>, alguien tiene que llamar a <code>deleteByLibroId</code> sobre <code>NotaLecturaRepository</code> en el momento justo — y ese "alguien" es un evento que viaja por RabbitMQ hasta un listener asíncrono. Un test aislado de ese listener, con mocks, podría comprobar "si me llega el evento, borro las notas correctamente" — pero nunca demuestra que el evento <strong>llega</strong>. Si el listener no estuviera bien registrado, o la cola tuviera un nombre distinto al que espera quien publica, el mock ni se enteraría: no hay ningún RabbitMQ real de por medio con el que ese fallo pueda ocurrir. Para comprobar que la cadena completa —evento, cola, listener, borrado— funciona de verdad, hace falta un test que hable con un RabbitMQ real, no con una promesa sobre cómo se comporta.</p>
+<div class="admonition question">
+<p class="admonition-title">Antes de seguir, predícelo</p>
+<p>Tu proyecto tiene, sobre ese mismo exchange, <strong>dos</strong> colas independientes escuchando el borrado: la del registro de actividad (Programación de Servicios y Procesos, todas las <code>videojuego.*</code>) y la del borrado en cascada de reseñas (solo <code>videojuego.eliminado</code>). Imagina que un día, sin querer, dejas la segunda cola enlazada a la routing key equivocada — <code>videojuego.actualizado</code> en vez de <code>videojuego.eliminado</code>. ¿Lo detectaría un test aislado (con mocks) del listener de borrado? ¿Y un test de integración con RabbitMQ real? Razona tu respuesta antes de seguir leyendo.</p>
+<p>El test aislado <strong>no</strong> lo detectaría — sigue probando "si me llega el evento, borro bien", y eres tú quien decide a mano que le llega. El test de integración <strong>sí</strong>: publicas el evento de borrado de verdad, y el listener nunca se dispara, porque su binding real no coincide con la routing key que se publica. Es exactamente el tipo de error de configuración que solo un RabbitMQ real puede delatar.</p>
+</div>
+<p>El test de integración más completo no mockea nada — levanta <strong>todos</strong> los motores reales que usa la aplicación, simultáneamente, en contenedores Docker, solo para la duración del test. Sobre el ejemplo de <code>Libro</code>, eso significa tres motores a la vez: PostgreSQL (catálogo), MongoDB (notas de lectura) y RabbitMQ (la cadena de eventos de arriba):</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
@@ -2967,7 +2990,7 @@
 <span class="normal"><a href="#__codelineno-1-15">15</a></span>
 <span class="normal"><a href="#__codelineno-1-16">16</a></span>
 <span class="normal"><a href="#__codelineno-1-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nd">@Testcontainers</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kd">class</span> <span class="nc">FlujoCompletoIntegrationTest</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kd">class</span> <span class="nc">LibroFlujoCompletoIntegrationTest</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3"></a>
 <a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="nd">@Container</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="nd">@ServiceConnection</span>
@@ -2984,7 +3007,21 @@
 <a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="w">    </span><span class="c1">// ...</span>
 <a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p>Los tres son los servicios reales de tu <code>docker-compose.yml</code>, arrancados solo para este test (si mañana añadieras un motor más, se sumaría aquí igual, un <code>@Container</code> por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las reseñas y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa. Es exactamente el test que vas a construir en la Actividad 4.3.</p>
+<p>Los tres son los servicios reales del <code>docker-compose.yml</code> de este proyecto de ejemplo, arrancados solo para este test (si mañana añadieras un motor más, se sumaría aquí igual, un <code>@Container</code> por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las notas de lectura y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa.</p>
+<div class="admonition tip">
+<p class="admonition-title">En tu proyecto no partes de cero</p>
+<p>No vas a crear una clase nueva desde cero en la Actividad 4.3: tu <code>VideojuegoApiIntegrationTest</code> (Actividad 2.3) ya levanta PostgreSQL desde el principio, y ya has ido añadiendo MongoDB y RabbitMQ a esa misma clase en actividades posteriores, a medida que <code>VideojuegoService</code> empezó a necesitarlos de verdad. Los tres motores reales ya están conectados ahí — en la 4.3 <strong>amplías</strong> ese test con el flujo que todavía falta (reseñas y borrado en cascada), no lo repites.</p>
+</div>
+<h3 id="la-piramide-de-tests">La pirámide de tests<a class="headerlink" href="#la-piramide-de-tests" title="Permanent link">¶</a></h3>
+<p>No es casualidad que tu proyecto tenga muchos tests aislados y solo un puñado de tests de integración — es la forma recomendada de repartirlos, y tiene un nombre: la <strong>pirámide de tests</strong>. Cuantos más motores reales levanta un test, más lento y más caro es de mantener, así que conviene tener pocos de esos y muchos del tipo barato y rápido:</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph P[" "]
+    direction TB
+    C["🐢 Testcontainers&lt;br/&gt;pocos · lentos · levantan Docker de verdad&lt;br/&gt;VideojuegoApiIntegrationTest"]
+    B["⚡ Mockito (aislados)&lt;br/&gt;muchos · rapidísimos · sin BD real&lt;br/&gt;CatalogoConsultaServiceImplTest, ReviewsConsultaServiceImplTest..."]
+    C --- B
+    end</code></pre>
+<p>Un proyecto sano se parece a esta pirámide: base ancha de tests aislados que revisan cada pieza suelta en milisegundos, y una punta estrecha de tests de integración que revisan, más despacio, que esas piezas encajan de verdad. Si lo hicieras al revés —todo con Testcontainers, nada con mocks— cada <code>push</code> tardaría minutos en verificarse y encontrar un fallo concreto sería más lento, porque un test de integración que falla no te dice <strong>qué</strong> pieza exacta ha fallado, solo que algo en la cadena no encaja.</p>
 <h3 id="cuando-conviene-cada-tipo-de-test">Cuándo conviene cada tipo de test<a class="headerlink" href="#cuando-conviene-cada-tipo-de-test" title="Permanent link">¶</a></h3>
 <table>
 <thead>
@@ -3010,20 +3047,25 @@
 <td>Casos de la lógica de un componente concreto (validaciones, cálculos)</td>
 <td>Flujos completos, entre módulos, entre motores distintos</td>
 </tr>
+<tr>
+<td>Si falla, ¿qué te dice?</td>
+<td>Exactamente qué pieza y qué caso concreto</td>
+<td>Que algo en la cadena no encaja — toca investigar cuál</td>
+</tr>
 </tbody>
 </table>
-<p>Ninguno sustituye al otro — un proyecto real necesita ambos niveles.</p>
+<p>Ninguno sustituye al otro — un proyecto real necesita ambos niveles, en esa proporción: muchos aislados, pocos de integración.</p>
 <hr>
 <h2 id="documentar-un-componente">📝 "Documentar" un componente<a class="headerlink" href="#documentar-un-componente" title="Permanent link">¶</a></h2>
 <p>Tienes los componentes construidos y las dos capas de test verificándolos. Queda una pregunta más: dentro de unos meses, o el día que otra persona se sume al proyecto, ¿cómo va a saber qué garantiza cada componente sin tener que leer la implementación entera?</p>
-<p>Documentar un componente no es sobre todo escribir un documento externo aparte — es que el propio test, con nombres descriptivos (<code>existeVideojuego_DebeDevolverTrue_CuandoExiste</code>) y una estructura clara, deje constancia de qué comportamiento se espera y en qué condiciones. El test bien escrito <strong>es</strong> la documentación viva del componente — se actualiza sola cuando el comportamiento cambia (si no, el test falla y te avisa).</p>
+<p>Documentar un componente no es sobre todo escribir un documento externo aparte — es que el propio test, con nombres descriptivos (<code>existeLibro_DebeDevolverTrue_CuandoExiste</code>) y una estructura clara, deje constancia de qué comportamiento se espera y en qué condiciones. El test bien escrito <strong>es</strong> la documentación viva del componente — se actualiza sola cuando el comportamiento cambia (si no, el test falla y te avisa).</p>
 <hr>
 <h2 id="el-circulo-se-cierra-ci">🔄 El círculo se cierra: CI<a class="headerlink" href="#el-circulo-se-cierra-ci" title="Permanent link">¶</a></h2>
 <p>Tener los dos niveles de test escritos no basta si nadie los ejecuta en el momento justo — un test que solo corres cuando te acuerdas es, tarde o temprano, un test que no corres el día que más falta te hace (justo antes de un cambio que rompe algo). La solución no es disciplina personal, es automatización.</p>
 <p>El concepto de integración continua lo viste al principio del módulo (Tema 0); el <code>.github/workflows/ci.yml</code> de tu propio GameVault lo construiste después, sobre el proyecto real, en la Actividad 1.3 de PSP. Ese workflow ejecuta tus tests automáticamente en cada <code>push</code> — sin que tengas que acordarte de lanzarlos tú a mano cada vez:</p>
 <pre class="mermaid"><code>flowchart LR
     A["Test aislado (mocks)&lt;br/&gt;CatalogoConsultaServiceImplTest"] --&gt; C["git push"]
-    B["Test de integración&lt;br/&gt;(Testcontainers)&lt;br/&gt;FlujoCompletoIntegrationTest"] --&gt; C
+    B["Test de integración&lt;br/&gt;(Testcontainers)&lt;br/&gt;VideojuegoApiIntegrationTest"] --&gt; C
     C --&gt; D["ci.yml&lt;br/&gt;los ejecuta todos automáticamente"]</code></pre>
 <p>Ahora mismo ese workflow solo ejecuta los tests que terminan en <code>ControllerTest</code> — un filtro que tenía sentido cuando ese era el único tipo de test del proyecto, pero que se queda corto en cuanto construyes tests de otro tipo, como los aislados y de integración de este tema. Lo arreglas en la Actividad 4.3, cerrando el círculo del todo: que el CI ejecute, sin excepción, cualquier test que construyas de aquí en adelante.</p>
 <hr>
@@ -3033,7 +3075,7 @@
 <ul>
 <li>Un test <strong>aislado</strong> (mocks) prueba la lógica interna de un componente; un test de <strong>integración</strong> (Testcontainers) prueba que varios componentes reales funcionan bien juntos.</li>
 <li>Un test de integración completo levanta todos los motores reales de la aplicación (PostgreSQL, MongoDB, RabbitMQ...) simultáneamente en Docker, solo para el test.</li>
-<li>Ninguno de los dos niveles de test sustituye al otro — un proyecto real necesita ambos.</li>
+<li>La pirámide de tests: muchos aislados (rápidos, baratos) en la base, pocos de integración (lentos, más caros) en la punta — ninguno de los dos niveles sustituye al otro.</li>
 <li>"Documentar" un componente es, sobre todo, que el propio test (nombre + estructura) deje claro qué se espera de él.</li>
 <li>El <code>ci.yml</code> de tu GameVault (construido en la Actividad 1.3 de PSP) ejecuta tus tests automáticamente en cada <code>push</code> — su filtro actual solo recoge los de controller, y lo amplías en la Actividad 4.3 para que cubra también los aislados y los de integración.</li>
 </ul>
