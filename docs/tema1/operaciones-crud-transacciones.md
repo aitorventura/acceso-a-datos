@@ -2,6 +2,13 @@
 
 # 🧩 3. Operaciones CRUD y gestión de transacciones
 
+![Operaciones CRUD y gestión de transacciones](diapositivas/operaciones-crud-transacciones.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/operaciones-crud-transacciones.pdf){target="_blank" rel="noopener"}
+
+---
+
 Ya sabes por qué hacen falta conectores y cómo se declara la estructura de una base de datos desde Java. Toca el paso siguiente: cómo se modifican y consultan los datos desde una aplicación real. Vas a construir el CRUD de `Libro` igual que lo harías tú solo — empezando por la versión más simple, tropezando con sus problemas, y resolviéndolos uno a uno — hasta llegar al mismo código que vas a escribir en la Actividad 1.2.
 
 ---

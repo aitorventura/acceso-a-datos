@@ -2,6 +2,13 @@
 
 # 🧩 5. Procedimientos almacenados
 
+![Procedimientos almacenados](diapositivas/procedimientos-almacenados.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/procedimientos-almacenados.pdf){target="_blank" rel="noopener"}
+
+---
+
 Hasta ahora, toda la lógica sobre tus datos vivía en tu aplicación Java: tanto con Spring Data JPA como con JDBC puro, era tu programa el que pedía las filas, las recorría y decidía qué hacer con ellas. En este apartado esa lógica cambia de sitio: se traslada al propio motor de base de datos, que la ejecuta él mismo, sin que tu aplicación tenga que traerse nada.
 
 ---

@@ -2,6 +2,13 @@
 
 # 🧩 8. Consultas JPQL y transacciones
 
+![Consultas JPQL y transacciones](diapositivas/consultas-jpql-transacciones.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/consultas-jpql-transacciones.pdf){target="_blank" rel="noopener"}
+
+---
+
 Añades una nueva vía de consulta mediante `@Query` y JPQL, pensada para consultas que resultan difíciles de expresar con un método derivado por nombre o con una Specification.
 
 ---

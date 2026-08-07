@@ -2,6 +2,13 @@
 
 # 🧩 6. Hibernate a fondo: decisiones de mapeo y ciclo de vida
 
+![Hibernate a fondo: decisiones de mapeo y ciclo de vida](diapositivas/hibernate-a-fondo.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/hibernate-a-fondo.pdf){target="_blank" rel="noopener"}
+
+---
+
 Ya sabes qué es un ORM, y por qué existe (lo viste al principio de este tema, con `Libro`/`Editorial`) — llevas usando sus anotaciones desde la primera actividad. Toca ahora profundizar en lo que hasta ahora dabas por sentado: que esas anotaciones se podrían haber declarado de una forma completamente distinta, qué estados atraviesa un objeto mientras el ORM lo gestiona, y — ya sobre tu propio proyecto — cómo se instala y configura Hibernate de verdad, y por qué tomaste ciertas decisiones de mapeo (`IDENTITY`, `LAZY`, `cascade`...) que hasta ahora no habías cuestionado.
 
 ---

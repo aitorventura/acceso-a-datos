@@ -2,6 +2,13 @@
 
 # 🧩 1. Fundamentos de Spring Boot
 
+![Fundamentos de Spring Boot](diapositivas/spring-boot-fundamentos.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/spring-boot-fundamentos.pdf){target="_blank" rel="noopener"}
+
+---
+
 Hasta ahora todo lo que has programado en Java ha sido consola: el programa arranca, hace algo, y termina. A partir de aquí vas a construir un tipo de programa distinto — uno que arranca y se queda **esperando**, sin que tú le digas nada más, hasta que otro programa le hace una pregunta. Este apartado es la base sin la que no vas a entender nada de lo que viene, ni en este módulo ni en Programación de Servicios y Procesos (PSP).
 
 ---

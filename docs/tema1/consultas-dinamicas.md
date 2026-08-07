@@ -2,6 +2,13 @@
 
 # 🧩 7. Consultas dinámicas: Specifications y paginación
 
+![Consultas dinámicas: Specifications y paginación](diapositivas/consultas-dinamicas.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/consultas-dinamicas.pdf){target="_blank" rel="noopener"}
+
+---
+
 Ya sabes recuperar y modificar un objeto cuando conoces su id — `findById()` lo trae, cambias sus campos, `save()` lo guarda. Pero un listado real casi nunca busca por id: busca por **criterios que el usuario elige**, y además no puede devolver el catálogo entero de golpe. Este apartado resuelve **dos problemas distintos**, que además comparten el mismo listado como escenario — por eso, al final, verás cómo se combinan en una sola consulta:
 
 ```mermaid
