@@ -2,6 +2,13 @@
 
 # 🧩 3. Bases de datos orientadas a objetos, pruebas y documentación
 
+![Bases de datos orientadas a objetos, pruebas y documentación](diapositivas/bd-orientadas-a-objetos.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/bd-orientadas-a-objetos.pdf){target="_blank" rel="noopener"}
+
+---
+
 Este apartado tiene dos partes bien diferenciadas: primero un bloque teórico sobre una categoría de bases de datos que no vas a usar en las prácticas —lo ves de forma conceptual, sin instalar ni configurar nada—, y después las pruebas que dan por buenas todas las piezas construidas hasta ahora.
 
 ---

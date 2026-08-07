@@ -2,6 +2,13 @@
 
 # 🧩 1. Persistencia de objetos con JSONB
 
+![Persistencia de objetos con JSONB](diapositivas/persistencia-objetos-jsonb.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/persistencia-objetos-jsonb.pdf){target="_blank" rel="noopener"}
+
+---
+
 Hasta ahora, cada atributo de tus entidades se almacenaba normalmente en una columna independiente: un texto, un número o una fecha. Este apartado introduce una posibilidad intermedia entre el modelo relacional clásico y las bases de datos orientadas a objetos: utilizar capacidades objeto-relacionales de PostgreSQL para almacenar datos estructurados dentro de una columna.
 
 Con `jsonb`, PostgreSQL no guarda directamente un objeto Java ni sus métodos. Guarda su representación como un documento JSON, que Hibernate puede convertir al escribir y reconstruir al leer.

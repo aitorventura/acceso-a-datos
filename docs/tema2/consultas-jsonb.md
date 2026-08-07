@@ -2,6 +2,13 @@
 
 # 🧩 2. Consultas sobre columnas JSONB
 
+![Consultas sobre columnas JSONB](diapositivas/consultas-jsonb.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/consultas-jsonb.pdf){target="_blank" rel="noopener"}
+
+---
+
 Ya sabes guardar datos estructurados en una columna JSONB. El siguiente paso es filtrar por su contenido. Para ello no bastan los comparadores habituales sobre valores escalares: necesitas operadores y funciones de PostgreSQL capaces de acceder a las claves y valores almacenados dentro del JSON.
 
 ---
