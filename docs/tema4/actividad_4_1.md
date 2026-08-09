@@ -34,7 +34,7 @@ Reinicia tu aplicación y comprueba que nada se ha roto — crea una reseña par
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $USER_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 8, "comentario": "Sigue funcionando igual"}'
 ```
 
@@ -88,7 +88,7 @@ curl http://localhost:8080/api/v1/videojuegos/1/reviews/resumen
 
 ## Paso 5 — Prueba del componente aislado
 
-Siguiendo el patrón de `@Mock`/`@InjectMocks` de la teoría de este apartado:
+Siguiendo el patrón de `@Mock`/`@InjectMocks` de la teoría de este apartado, crea el test en `src/test/java/com/tunombre/gamevault/catalogo/CatalogoConsultaServiceImplTest.java`, con el mismo `package com.tunombre.gamevault.catalogo;` que la implementación. Esto es necesario porque `CatalogoConsultaServiceImpl` es *package-private*: desde un paquete distinto el propio test no podría ni nombrar esa clase.
 
 ```java
 @ExtendWith(MockitoExtension.class)

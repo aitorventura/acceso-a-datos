@@ -13,14 +13,14 @@ Piensa en el cargador de tu móvil. Lo enchufas a cualquier teléfono con el mis
 !!! info "Idea clave"
     Un **componente** de software es la misma idea aplicada a código: una pieza autocontenida, con una responsabilidad concreta, que expone un **contrato público** — lo único que hace falta conocer para usarla — sin que quien la usa necesite saber cómo resuelve ese trabajo por dentro. Igual que el teléfono no sabe, ni le importa, qué hay dentro del cargador.
 
-Ya usas componentes, sin haberlos llamado así todavía. Cada `@Service`, cada `@Repository` que has escrito en este módulo es uno: una pieza que hace una cosa concreta (gestionar libros, hablar con la base de datos...), que otras clases usan sin saber ni necesitar saber cómo está construida por dentro. Eso es, en esencia, la **programación orientada a componentes**: construir la aplicación ensamblando piezas autocontenidas y reutilizables, cada una con una responsabilidad clara y un **contrato público** — lo único que hace falta conocer para usarla, nunca cómo resuelve esa responsabilidad por dentro.
+Ya usas componentes, sin haberlos llamado así todavía. Tus servicios gestionados por Spring y los repositorios de Spring Data son ejemplos de piezas que otras clases pueden utilizar sin conocer cómo resuelven internamente su trabajo: una pieza que hace una cosa concreta (gestionar libros, hablar con la base de datos...), que otras clases usan sin saber ni necesitar saber cómo está construida por dentro. Eso es, en esencia, la **programación orientada a componentes**: construir la aplicación ensamblando piezas autocontenidas y reutilizables, cada una con una responsabilidad clara y un **contrato público** — lo único que hace falta conocer para usarla, nunca cómo resuelve esa responsabilidad por dentro.
 
 Ese contrato no siempre es una interfaz Java separada — depende de qué tipo de pieza sea:
 
 | Pieza | ¿Interfaz separada de su implementación? | Cuál es el contrato |
 |---|---|---|
-| `@Service` normal (`LibroService`) | No | Sus propios métodos públicos — la clase concreta hace de contrato, nadie la va a sustituir por otra |
-| `@Repository` (`LibroRepository`) | Sí, y la genera Spring por ti | La interfaz `JpaRepository` que extiendes (lo ves en detalle en "Nivel 1", más abajo) |
+| `@Service` normal (`LibroService`) | No | Sus métodos públicos; los consumidores dependen directamente de la clase concreta |
+| `@Repository` (`LibroRepository`) | Sí | La interfaz `LibroRepository`, que extiende `JpaRepository`; Spring genera su implementación |
 | El patrón que construyes hoy | Sí, la escribes tú a propósito | Una interfaz aparte, con la implementación oculta detrás |
 
 A un componente se le asocian, además, varias características que vienen de una época anterior a Spring — la de los **JavaBeans** y los primeros entornos de desarrollo visuales, donde se construían programas arrastrando piezas ya hechas (un botón, una tabla) sobre un lienzo, sin escribir código para colocarlas, y ajustando su comportamiento desde un panel de opciones. No hace falta que hayas visto nada parecido — esas herramientas son anteriores a que empezaras a programar —, pero el vocabulario que dejaron sigue siendo el que se usa hoy, con su equivalente en Spring:
@@ -32,7 +32,7 @@ A un componente se le asocian, además, varias características que vienen de un
 | **Persistencia/serialización** | Guardar y recuperar el estado del propio componente | Poco relevante aquí: tus componentes (`@Service`) no suelen guardar estado propio, delegan en el repositorio |
 | **Empaquetado** | Distribuir el componente para que otros lo usen sin ver su código fuente | Una dependencia añadida a tu `pom.xml` — un `.jar` que usas sin ver ni un archivo `.java` de dentro |
 
-Lo único que cambia de verdad es quién ensambla las piezas: antes lo hacía el propio IDE, al arrastrarlas sobre el lienzo; ahora lo hace Spring, leyendo tus anotaciones (`@Service`, `@Autowired`...) y montando el objeto completo por ti.
+Lo único que cambia de verdad es quién ensambla las piezas: antes lo hacía el propio IDE, al arrastrarlas sobre el lienzo; ahora lo hace Spring, detectando tus componentes (`@Service`, `@Repository`, `@Component`...) e inyectando sus dependencias — normalmente por constructor, como llevas haciendo con `@RequiredArgsConstructor`.
 
 ### Ventajas e inconvenientes
 
@@ -101,7 +101,7 @@ flowchart TB
     end
     subgraph Con["🧩 Con componente — un único sitio"]
         direction TB
-        I2["Interfaz del componente<br/>(no cambia)"]
+        I2["Interfaz del componente<br/>(contrato estable)"]
         IMPL2["Su implementación<br/>(el único sitio que cambia)"]
         N1["NotaLecturaService"] --> I2
         N2["Módulo B"] --> I2
@@ -110,7 +110,7 @@ flowchart TB
     end
 ```
 
-En "Sin componente", cada módulo apunta directamente a lo que cambia — tres sitios que tocar. En "Con componente", todos apuntan a una interfaz que no cambia nunca; el único que se entera del cambio es su implementación, oculta detrás. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo, sin decir cómo se decide por dentro, y esconder todo lo demás detrás. Así se construye uno, paso a paso:
+En "Sin componente", cada módulo apunta directamente a un detalle interno que puede cambiar — tres sitios que tocar. En "Con componente", todos dependen de una interfaz diseñada para mantenerse estable aunque cambie la implementación; mientras el contrato siga siendo el mismo, los consumidores no necesitan enterarse de esos cambios internos. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo y esconder detrás cómo se resuelve realmente.
 
 ### Construyendo el componente: interfaz + implementación oculta
 
@@ -159,8 +159,8 @@ flowchart LR
 
 `NotaLecturaService`, desde su propio paquete, puede importar y usar `LibroConsultaService` sin ningún problema — es `public`, para eso está. Pero no tiene ninguna forma de escribir `LibroConsultaServiceImpl` en su código: el compilador ni se lo permite, porque esa clase no existe para nadie fuera de `catalogo`.
 
-!!! warning "Un error fácil de cometer: la implementación dentro de `api`"
-    Si `LibroConsultaServiceImpl` viviera en `catalogo.api`, junto a la interfaz, el `package-private` dejaría de proteger nada: cualquier módulo que ya importa ese paquete para usar la interfaz vería también la implementación, porque estaría en el mismo paquete. El `package-private` solo cumple su función si la implementación vive en el paquete "normal" (`catalogo`), separado de `api` — la interfaz es lo único que sale de ahí.
+!!! warning "La implementación no forma parte del API público"
+    Aunque `LibroConsultaServiceImpl` estuviera en `catalogo.api` y siguiera siendo *package-private*, continuaría siendo invisible para las clases de otros paquetes: en Java, *package-private* solo permite el acceso desde clases declaradas en el mismo paquete. Aun así, conviene mantener la implementación fuera de `api`, en `catalogo`, para que la estructura deje clara la intención: `api` contiene el contrato público que otros módulos pueden usar; `catalogo`, los detalles internos de su implementación.
 
 `NotaLecturaService` pasa a depender solo de la interfaz, nunca de `LibroRepository` ni de la clase que la implementa:
 
@@ -266,8 +266,8 @@ Vas a replicar este mismo componente sobre tu propio proyecto en la Actividad 4.
     - El origen histórico son los JavaBeans; en Spring Boot, el equivalente son los **beans gestionados por inyección de dependencias**.
     - Ventajas: reutilización, sustituibilidad, pruebas aisladas, división del trabajo. Inconveniente: más interfaces e indirección.
     - Spring (`@Service`/`@Repository`/`@Component` + inyección) ES la "herramienta de desarrollo de componentes" en este contexto — no hay paleta visual.
-    - Un `JpaRepository` ya es un componente básico; una interfaz + implementación oculta (`LibroConsultaService`/`LibroConsultaServiceImpl`) es el siguiente nivel: contrato en `api`, implementación oculta, desacoplamiento real entre módulos.
+    - Un `JpaRepository` ya es un componente básico; una interfaz + implementación oculta (`LibroConsultaService`/`LibroConsultaServiceImpl`) es el siguiente nivel: contrato en `api`, implementación oculta y menor acoplamiento, porque los consumidores dependen del contrato público y no de los detalles internos del otro módulo.
     - El problema no es inyectar un repositorio — es inyectar el repositorio de **otro módulo**. Usar tu propio repositorio directamente (`NotaLecturaRepository` desde `NotaLecturaService`) nunca ha sido el problema.
-    - La implementación tiene que vivir fuera de `api`, en el paquete "normal" — si estuviera dentro de `api` junto a la interfaz, el `package-private` no protegería nada.
+    - Conviene mantener la implementación fuera de `api`, en el paquete "normal", para que la estructura separe claramente el contrato público de sus detalles internos. `package-private` seguiría limitando su acceso aunque estuviera dentro de `api`; la separación de paquetes expresa aquí una decisión de diseño.
     - Un componente con una única dependencia se presta a un test aislado con Mockito: `@Mock` sustituye esa dependencia por un doble de prueba, `@InjectMocks` construye la clase real inyectándoselo — sin arrancar Spring, mucho más rápido que un `@SpringBootTest`.
     - El mismo patrón funciona en cualquier dirección y con cualquier motor detrás: `NotaLecturaConsultaService` expone MongoDB hacia el catálogo, igual que `LibroConsultaService` expone PostgreSQL hacia notas de lectura — ningún módulo es "el importante" al que los demás preguntan.

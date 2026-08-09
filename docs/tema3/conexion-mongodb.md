@@ -8,7 +8,7 @@ Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — inclu
 
 ## 🗂️ Qué es NoSQL
 
-Esa base de datos "completamente distinta" que acabas de leer no es una sola cosa: es una familia entera, agrupada bajo un nombre común precisamente porque todas comparten lo que **no** hacen. **NoSQL** es el nombre que se le da a esa familia de bases de datos que abandonan el modelo tabla/fila/SQL en favor de otros modelos de datos. No es un único tipo de motor, sino cuatro grandes categorías, cada una pensada para un problema distinto:
+Esa base de datos "completamente distinta" que acabas de leer no es una sola cosa: **NoSQL** agrupa distintas familias de bases de datos que no siguen como modelo principal el relacional tradicional de tablas relacionadas mediante claves y `JOIN`. No es un único tipo de motor, sino varias categorías, cada una pensada para problemas distintos:
 
 ```mermaid
 flowchart TB
@@ -20,7 +20,7 @@ flowchart TB
 
 - **Documentales**: documentos autocontenidos, tipo JSON (donde se sitúa este tema) — uso habitual: catálogos de producto, perfiles de usuario, contenido con estructura variable (notas personales, artículos).
 - **Clave-valor**: pares simples clave → valor (como Redis) — uso habitual: cachés, sesiones de usuario, contadores; lecturas y escrituras muy rápidas, sin necesidad de consultas complejas.
-- **Columnares**: optimizadas para leer columnas completas de grandes volúmenes de datos — uso habitual: analítica a gran escala, series temporales (métricas, sensores).
+- **Columnares**: organizan los datos en tablas distribuidas por particiones y diseña su estructura pensando en las consultas que la aplicación necesita realizar — uso habitual: grandes volúmenes de datos distribuidos, con alta disponibilidad y muchas lecturas y escrituras.
 - **De grafos**: optimizadas para relaciones muy conectadas (nodos y aristas) — uso habitual: redes sociales (amigos de amigos), sistemas de recomendación.
 
 ---
@@ -30,7 +30,7 @@ flowchart TB
 De las cuatro, este tema se centra en la primera — la documental, con MongoDB como motor concreto — porque es la que vas a usar en las próximas actividades. Antes de verla en código, dos piezas la definen, y ninguna es una tabla:
 
 - **Documento**: un objeto completo, tipo JSON, autocontenido — con su propia estructura, que puede variar de un documento a otro dentro de la misma colección.
-- **Colección**: un grupo de documentos, sin esquema fijo impuesto por el motor.
+- **Colección**: un grupo de documentos. Por defecto admite un esquema flexible, aunque MongoDB permite añadir reglas de validación si necesitas imponer una estructura determinada.
 
 Así se ve en la práctica: dos documentos reales dentro de la misma colección `nota_lectura` (el ejemplo que vas a construir en este tema), con estructura distinta entre sí — el segundo tiene un campo (`comentario`) que el primero ni siquiera necesita:
 
@@ -45,9 +45,9 @@ Puesto al lado de lo que ya conoces, el contraste queda más claro en tabla que 
 | Aspecto | Relacional | JSONB (Tema 2) | Documental (este tema) |
 |---|---|---|---|
 | Estructura de fondo | Tablas y filas | Tabla, con una columna en formato JSON | Ninguna tabla — todo es documento |
-| Columnas fijas | Sí | Sí, salvo la columna JSONB | No |
+| Estructura fija por defecto | Sí | Sí, salvo el contenido de la columna JSONB | No — aunque puede añadirse validación |
 | Claves foráneas | Sí | Sí | No (relación lógica, gestionada a mano) |
-| `JOIN` | Sí | Sí | No |
+| `JOIN` | Sí | Sí | No como en SQL; MongoDB dispone de operaciones como `$lookup` |
 
 La diferencia clave con el JSONB del Tema 2: allí, el JSON era **una columna** dentro de una tabla relacional normal — aquí, **todo** es documento, no hay ninguna tabla por debajo.
 
@@ -57,7 +57,7 @@ La diferencia clave con el JSONB del Tema 2: allí, el JSON era **una columna** 
 
 Siguiendo con el ejemplo que llevamos trabajando toda la teoría: podríamos necesitar una base de datos documental para las notas de lectura de nuestra librería — cada nota de lectura es un documento independiente, sin relaciones fuertes que mantener entre ellas, con una forma que podría cambiar con el tiempo (más adelante volveremos sobre esto con más detalle). El motor documental que vas a usar para eso es **MongoDB**.
 
-**MongoDB** es el gestor documental más usado. Sus documentos se almacenan en **BSON** (una versión binaria de JSON), y su identificador es un `ObjectId` — alfanumérico, no un número autoincremental como los que has usado hasta ahora en PostgreSQL. Se organiza en niveles: servidor → bases de datos → colecciones → documentos.
+**MongoDB** almacena sus documentos en **BSON** (una representación binaria de JSON). Todo documento tiene un campo `_id` único y, si no proporcionas uno, MongoDB genera normalmente un `ObjectId`. En Spring Data puedes representarlo cómodamente con un `String`, en lugar del `Long` autoincremental que has usado hasta ahora en PostgreSQL.
 
 ```mermaid
 flowchart TB
@@ -84,9 +84,9 @@ Vale la pena verlo en esta forma cruda antes de que Spring lo esconda tras un re
 
 ## ⚖️ Cuándo encaja lo documental
 
-Cuando los datos son autocontenidos y su estructura puede variar de un registro a otro sin que eso sea un problema —como una nota de lectura, que a veces lleva un comentario largo y a veces solo una puntuación— el modelo documental encaja bien: cada documento se guarda tal cual, sin forzarlo a una plantilla fija que todos los registros tengan que cumplir por igual. Cuando, en cambio, hay relaciones fuertes entre entidades que hay que mantener consistentes, y operaciones que necesitan modificar varias de ellas a la vez de forma atómica —como una venta que descuenta stock y genera una factura en la misma transacción—, el modelo relacional sigue siendo la opción más segura, porque es el que sabe garantizar esa consistencia de forma nativa, con claves foráneas y transacciones reales.
+Cuando los datos son autocontenidos y su estructura puede evolucionar con flexibilidad, el modelo documental encaja especialmente bien. Cuando, en cambio, el dominio tiene muchas relaciones entre entidades que deben mantenerse consistentes —por ejemplo, una venta relacionada con clientes, productos y facturas—, el modelo relacional suele resultar más natural gracias a sus claves foráneas, restricciones y `JOIN`.
 
-Profundizarás en esta comparación, con más detalle y más casos concretos, en el siguiente apartado.
+Esto no significa que MongoDB carezca de transacciones: las operaciones sobre un único documento son atómicas y también admite transacciones sobre varios documentos. La diferencia está sobre todo en **cómo modelas los datos y sus relaciones**, no en que un motor tenga transacciones y el otro no.
 
 ---
 
@@ -136,7 +136,7 @@ En paralelo al `datasource` de PostgreSQL que ya conoces del Tema 1, esta es tod
 public class NotaLectura {
 
     @Id
-    private String id; // alfanumérico, tipo ObjectId — no un Long autogenerado
+    private String id; // Spring Data puede representar aquí el ObjectId generado por MongoDB
 
     private Long libroId; // relación "lógica" con el catálogo en PostgreSQL
     private String autor;
@@ -145,7 +145,7 @@ public class NotaLectura {
 }
 ```
 
-`@Document(collection = "nota_lectura")` es el equivalente Mongo de `@Entity`/`@Table` — declara en qué colección vive. El `@Id` es `String`, no `Long`: en Mongo los identificadores son alfanuméricos por naturaleza (`ObjectId`), a diferencia del autoincremental que has usado siempre en PostgreSQL.
+`@Document(collection = "nota_lectura")` es el equivalente Mongo de `@Entity`/`@Table` — declara en qué colección vive. Aquí declaras el `@Id` como `String` porque Spring Data puede mapear a él el `ObjectId` que MongoDB genera normalmente cuando no proporcionas un `_id`. Es una elección de mapeo de esta aplicación, no una obligación de que todos los identificadores de MongoDB sean siempre `String` u `ObjectId`.
 
 !!! warning "`libroId` no es una clave foránea real"
     Aunque el campo se llame `libroId` y apunte conceptualmente a un `Libro` de PostgreSQL, **no hay ninguna integridad referencial automática** entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.
@@ -211,12 +211,14 @@ Falta la otra mitad: cómo se crea una nota de lectura nueva. Aquí aparece algo
 
 ```java
 public record NotaLecturaRequestDTO(
-        @Min(1) @Max(10) Integer puntuacion,
+        @NotNull @Min(1) @Max(10) Integer puntuacion,
         @NotBlank String comentario
 ) {}
 
 public record NotaLecturaCreateDTO(Long libroId, String autor, Integer puntuacion, String comentario) {}
 ```
+!!! note "MongoDB flexible no significa API sin reglas"
+    MongoDB permite por defecto que dos documentos de una colección tengan campos distintos. Eso no impide que tu aplicación imponga reglas más estrictas: en GameVault, por ejemplo, `ReviewRequestDTO` exigirá un comentario no vacío. Son dos capas diferentes: lo que admite el motor y lo que permite tu API.
 
 `NotaLecturaRequestDTO` es literalmente lo único que el cliente controla: la puntuación y el comentario, con sus validaciones de siempre. `NotaLecturaCreateDTO` añade los dos campos que decide el servidor: `libroId` (que llega por la URL, no por el cuerpo) y `autor`. Así se juntan los dos, en el controller:
 
@@ -256,7 +258,7 @@ El controller combina eso (`autor`, decidido por el servidor) con lo que sí man
 
 ### Una agregación sencilla, en memoria
 
-Junto al listado de notas de lectura, tiene sentido ofrecer también un resumen: cuántas tiene un libro y cuál es su puntuación media. Este método se añade al mismo `NotaLecturaService`, y se expone igual que el anterior — un controller que lo llama, sin nada nuevo que mostrar ahí:
+Junto al listado de notas de lectura, tiene sentido ofrecer también un resumen: cuántas tiene un libro y cuál es su puntuación media. Para centrarnos aquí en el cálculo, el fragmento muestra solo la parte que consulta MongoDB; en el servicio real repetirás antes la misma comprobación `existsById(...)` contra PostgreSQL que ya has usado en los métodos anteriores. Después, el cálculo se añade al mismo `NotaLecturaService` y se expone desde el controller como siempre:
 
 ```java
 public NotaLecturaResumenDTO getResumenByLibroId(Long libroId) {
@@ -282,9 +284,9 @@ Para este curso, con pocas notas de lectura por libro, la primera opción es má
 
 ??? tip "Abrir resumen"
 
-    - **NoSQL** abandona tablas/filas/SQL; las bases **documentales** (MongoDB) son una de varias familias (clave-valor, columnares, de grafos).
-    - Un **documento** es un objeto autocontenido; una **colección** los agrupa sin esquema fijo — nada de tablas ni `JOIN`.
-    - MongoDB usa BSON y `ObjectId` (alfanumérico) como identificador — distinto del `Long` autoincremental de JPA.
+    - **NoSQL** agrupa distintos modelos no relacionales; las bases **documentales** (MongoDB) son una de varias familias, junto a las de clave-valor, columnares y de grafos.
+    - Un **documento** es un objeto autocontenido; una **colección** los agrupa con un esquema flexible por defecto. MongoDB no utiliza tablas ni `JOIN` SQL, aunque dispone de operaciones como `$lookup` para relacionar datos entre colecciones.
+    - MongoDB almacena documentos en BSON y todo documento tiene un `_id`; si no proporcionas uno, normalmente se genera un `ObjectId`, que Spring Data puede mapear a un `String`.
     - `libroId` en `NotaLectura` es una relación **lógica**, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.
     - El patrón de **integridad referencial manual**: el código comprueba en PostgreSQL antes de tocar Mongo, porque el motor no puede hacerlo por sí solo.
     - La propiedad real de conexión es `spring.mongodb.uri` (no `spring.data.mongodb.uri`).

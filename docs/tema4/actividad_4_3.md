@@ -42,7 +42,7 @@ Cada tramo encadena sobre el mismo `videojuegoId`, así que declara esa variable
 
 ### Tramo 1 — la reseña y el resumen
 
-Crea el videojuego reutilizando el mismo patrón de `POST /api/v1/videojuegos` con `detallesPlataforma` que ya ves en los tests existentes de la clase, y crea la reseña con un `ReviewRequestDTO` (`puntuacion`, `comentario`) — esas dos peticiones las escribes tú, siguiendo el mismo patrón que el resto de la clase. La comprobación del resumen sí te la doy hecha:
+Crea el videojuego reutilizando el mismo patrón de `POST /api/v1/videojuegos` con `detallesPlataforma` que ya ves en los tests existentes de la clase, y guarda su `videojuegoId`. Después crea una reseña con un `ReviewRequestDTO` (`puntuacion`, `comentario`), enviando también `adminToken` en la cabecera `Authorization`: crear reseñas exige estar autenticado, aunque no exige un rol concreto, así que el propio administrador sirve para esta prueba. Esas dos peticiones las escribes tú siguiendo el mismo patrón que el resto de la clase. La comprobación del resumen sí te la doy hecha:
 
 ```java
 // crea el videojuego (POST /api/v1/videojuegos) y guarda su videojuegoId
@@ -57,7 +57,7 @@ mockMvc.perform(get("/api/v1/videojuegos/" + videojuegoId + "/reviews/resumen"))
 
 ### Tramo 2 — el borrado en cascada
 
-Borra el videojuego (`DELETE /api/v1/videojuegos/{videojuegoId}`, con `adminToken`, exige rol `ADMIN`) y verifica el borrado en cascada de la Actividad 3.2. El `RabbitMQContainer` ya entrega el mensaje de verdad, pero sigue siendo asíncrono: entre que borras y que el listener procesa el evento pasa un instante, así que hace falta un margen de espera antes de comprobar que la reseña ya no está — este proyecto no tiene ninguna librería de espera activa (como Awaitility) entre sus dependencias, así que un `Thread.sleep(...)` sencillo es suficiente:
+Borra el videojuego (`DELETE /api/v1/videojuegos/{videojuegoId}`, con `adminToken`, exige rol `ADMIN`) y verifica el borrado en cascada de la Actividad 3.2. El `RabbitMQContainer` ya entrega el mensaje de verdad, pero sigue siendo asíncrono: entre que borras y que el listener procesa el evento pasa un instante, así que hace falta un margen de espera antes de comprobar que la reseña ya no está — este proyecto no tiene ninguna librería de espera activa (como Awaitility) entre sus dependencias, así que para mantener la práctica sencilla usarás un pequeño `Thread.sleep(...)` como margen fijo. Es una simplificación didáctica: en una batería de tests de producción sería más robusto esperar activamente hasta que se cumpliera la condición, en lugar de confiar en un tiempo fijo.
 
 ```java
 // borra el videojuego (DELETE /api/v1/videojuegos/{videojuegoId}, con adminToken)
@@ -97,14 +97,14 @@ Antes de comprobar nada, hay algo que arreglar en `.github/workflows/ci.yml`. Es
 !!! tip "Antes de tocar el filtro, mira qué es `GamevaultApplicationTests`"
     Ábrelo: es el `contextLoads()` vacío que genera Spring Initializr por defecto, contra el perfil `@ActiveProfiles("dev")` — de ahí que necesite una PostgreSQL, MongoDB y RabbitMQ reales que el runner no tiene. Pero tu `VideojuegoApiIntegrationTest` (Paso 1) ya arranca ese mismo contexto completo, con Testcontainers en vez de un perfil que el runner no puede satisfacer. Ya no aporta ninguna cobertura que el otro test no tenga: solo repite la misma pregunta ("¿arranca la aplicación?"), peor.
 
-**Bórralo.** Con esa clase fuera, ya no queda ningún test que no pueda ejecutarse en cualquier entorno, así que el filtro entero deja de hacer falta:
+**Bórralo.** Con esa clase fuera, ya no necesitas mantener un filtro por nombre de test: Maven puede descubrir y ejecutar automáticamente los tests de controller, los tests aislados y `VideojuegoApiIntegrationTest`. Los tests basados en Testcontainers seguirán necesitando Docker disponible en el entorno donde se ejecuten.
 
 ```yaml
       - name: Ejecutar los tests
         run: ./mvnw test -B
 ```
 
-Sin `-Dtest`, Maven Surefire ejecuta todo lo que encuentra —controller, integración, componente aislado, y cualquier test nuevo que construyas después— sin que tengas que tocar el YAML otra vez. La complejidad que aquella nota de PSP 1.3 dejaba fuera de alcance (levantar Postgres a mano dentro del workflow, con un servicio de GitHub Actions) nunca ha llegado a hacer falta: Testcontainers la resuelve sola, porque `ubuntu-latest` ya trae Docker instalado.
+Sin `-Dtest`, Maven Surefire recoge automáticamente los tests que siguen sus convenciones habituales de nombre —como los `*ControllerTest`, `*ImplTest` y `*IntegrationTest` que tienes en el proyecto— sin que tengas que ampliar el filtro cada vez que aparece un nuevo tipo. Testcontainers se encarga de levantar PostgreSQL, MongoDB y RabbitMQ durante la ejecución; en el runner `ubuntu-latest` de GitHub Actions dispones de Docker para hacerlo.
 
 Haz `push` de tus cambios y comprueba, en la pestaña **Actions** de tu repositorio GitHub, que el pipeline ejecuta correctamente todos tus tests — de controller, de integración y de componente aislado. **Captura**: el resultado en verde del workflow.
 

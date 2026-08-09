@@ -22,7 +22,7 @@ Tu `CatalogoConsultaService` (Actividad 4.1) como referencia visual constante.
 
 ## Paso 1 — Planteamiento: el contrato mínimo
 
-¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define tú mismo el contrato mínimo: dos métodos, uno que devuelva cuántas reseñas tiene un videojuego (`long`) y otro que devuelva su puntuación media (`double`), los dos recibiendo el `id` del videojuego. La lógica de ambos **ya existe** dentro de `ReviewService.getResumenByVideojuegoId` — no la vas a reescribir, solo a exponerla como componente.
+¿Qué necesitaría saber el módulo `catalogo` (u otro futuro) sobre las reseñas, sin conocer nada de MongoDB? Define tú mismo el contrato mínimo: dos métodos, uno que devuelva cuántas reseñas tiene un videojuego (`long`) y otro que devuelva su puntuación media (`double`), los dos recibiendo el `id` del videojuego. La regla de cálculo ya la conoces de `ReviewService.getResumenByVideojuegoId`; ahora vas a implementar esa misma idea detrás de un contrato específico para que otros módulos puedan consultarla sin conocer `ReviewRepository` ni MongoDB.
 
 ---
 
@@ -63,6 +63,9 @@ Sin código dado, ahora te toca a ti conectar las dos piezas — y esta vez usas
 !!! warning "Esto rompe tu `VideojuegoControllerTest`"
     Igual que pasó con `detallesPlataforma` en la Actividad 2.1, añadir dos campos nuevos a `VideojuegoResponseDTO` rompe cualquier `new VideojuegoResponseDTO(...)` que siga usando el constructor de los seis campos antiguos. Localiza los **tres** sitios de `VideojuegoControllerTest` donde pasa esto, y añade un valor `long` y un valor `Double` cualquiera al final de cada uno — los valores concretos no importan, ninguno de esos tests comprueba nada sobre `totalReviews` ni `puntuacionMedia`, solo necesitan que el DTO compile.
 
+!!! note "Un diseño deliberadamente sencillo"
+    Tal como has definido el contrato, `mapToDTO` llama a dos métodos y cada uno consulta las reseñas del videojuego, así que puedes terminar haciendo dos accesos a MongoDB por cada videojuego que mapeas. Para esta actividad lo mantenemos así porque permite practicar claramente dos operaciones del componente. En una aplicación con muchos datos sería mejor exponer una única operación de resumen que devolviera ambos valores con una sola consulta o cálculo.
+
 ---
 
 ## Paso 4 — Verificación
@@ -73,14 +76,14 @@ curl http://localhost:8080/api/v1/videojuegos/1
 
 Usa el `id` que quieras, `1` o cualquier otro — pero elige uno que tenga **al menos una reseña** ya creada: con `totalReviews = 0`, `puntuacionMedia` sale `0.0` por el propio `.orElse(0.0)`, y no se distingue de un fallo real en el cálculo. Si no tienes claro qué videojuego tiene reseñas, consúltalo primero con `GET /api/v1/videojuegos/{id}/reviews`.
 
-**Comprueba**: que la respuesta incluye `totalReviews` y `puntuacionMedia`, y que los dos datos coinciden con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — están usando la misma lógica por debajo, expuesta ahora desde dos sitios distintos.
+**Comprueba**: que la respuesta incluye `totalReviews` y `puntuacionMedia`, y que los dos datos coinciden con lo que calcula `GET /api/v1/videojuegos/{id}/reviews/resumen` para el mismo videojuego — ambos deben aplicar la misma regla de cálculo.
 
 **Captura**: la respuesta de `GET /videojuegos/{id}` (con reseñas de verdad) con `totalReviews` y `puntuacionMedia`, junto a la de `GET /reviews/resumen` mostrando los mismos valores.
 
 !!! warning "`VideojuegoApiIntegrationTest` necesita MongoDB a partir de ahora"
-    Antes de esta actividad, `VideojuegoApiIntegrationTest` (Actividad 2.3) solo tocaba PostgreSQL — nunca pasaba por `reviews`. Desde el Paso 3, `mapToDTO` llama a `ReviewsConsultaService` en **cada** petición sobre `Videojuego`, así que este test también necesita un contenedor de MongoDB real, o falla con un error de conexión en cuanto ejecutes cualquier test de la clase.
+    Antes de esta actividad, `VideojuegoApiIntegrationTest` ya necesitaba PostgreSQL y RabbitMQ, pero todavía no consultaba MongoDB. Desde el Paso 3, `mapToDTO` llama a `ReviewsConsultaService` en **cada** petición sobre `Videojuego`, así que el test necesita ahora también un contenedor de MongoDB real, o falla con un error de conexión en cuanto ejecutes cualquier test de la clase.
 
-    Añade la dependencia a tu `pom.xml`, junto a la de `postgresql` que ya tienes:
+    Añade la dependencia a tu `pom.xml`, junto a las demás dependencias de Testcontainers que ya tienes:
 
     ```xml
     <dependency>
@@ -90,7 +93,7 @@ Usa el `id` que quieras, `1` o cualquier otro — pero elige uno que tenga **al 
     </dependency>
     ```
 
-    Y el contenedor, junto al de `postgres` que ya tienes en `VideojuegoApiIntegrationTest` (mismo patrón `@Container`/`@ServiceConnection`, no hace falta tocar nada más):
+    Y el contenedor, junto a los de `postgres` y `rabbitmq` que ya tienes en `VideojuegoApiIntegrationTest`:
 
     ```java
     @Container
@@ -107,6 +110,9 @@ Usa el `id` que quieras, `1` o cualquier otro — pero elige uno que tenga **al 
 ---
 
 ## Paso 5 — Prueba del componente aislado
+
+Crea `ReviewsConsultaServiceImplTest` en `src/test/java/com/tunombre/gamevault/reviews/ReviewsConsultaServiceImplTest.java`, dentro del mismo paquete `reviews` que `ReviewsConsultaServiceImpl`. Al ser la implementación *package-private*, el test necesita compartir paquete con ella para poder acceder a su tipo.
+
 
 Con `ReviewsConsultaService` ya construido, integrado en `catalogo` y verificado de extremo a extremo, toca aislarlo: un test aislado, siguiendo exactamente el patrón de `CatalogoConsultaServiceImplTest` (`@Mock` sobre `ReviewRepository`, `@InjectMocks` sobre `ReviewsConsultaServiceImpl`). Cubre, como mínimo, estos tres casos:
 
@@ -131,7 +137,9 @@ Rellena esta tabla con tu propia experiencia:
 
 **Conclusión** (2-3 frases propias): ¿en qué se diferencian las implementaciones de ambos componentes? ¿En qué son idénticas sus interfaces vistas desde fuera? La respuesta esperada: el patrón de componente es independiente del motor de persistencia que hay por debajo — se replica con exactamente el mismo molde.
 
-**Una pregunta más**: con `CatalogoConsultaService` (Actividad 4.1) y `ReviewsConsultaService` (hoy), `catalogo` y `reviews` pasan a depender el uno del otro — cada módulo expone un contrato que el otro consume. ¿Te parece un problema que dos módulos dependan mutuamente el uno del otro? Razónalo (pista: fíjate en qué depende de qué exactamente — ¿es `VideojuegoService` quien depende de `ReviewService`, o de algo más concreto?).
+**Una pregunta más**: con `CatalogoConsultaService` (Actividad 4.1) y `ReviewsConsultaService` (hoy), `reviews` importa `catalogo.api` y `catalogo` importa `reviews.api`. Las interfaces evitan que cada módulo conozca la implementación interna del otro, pero no eliminan por completo la dependencia entre ambos.
+
+¿Qué se ha desacoplado realmente y qué dependencia sigue existiendo? ¿Por qué esta relación funciona dentro de la estructura actual del proyecto, pero podría convertirse en un problema si algún día `catalogo` y `reviews` se separasen en módulos Maven independientes que tuvieran que depender uno del otro?
 
 ---
 

@@ -8,7 +8,7 @@ La comparación relacional/documental y el porqué de usar dos motores a la vez 
 
 ## 🛠️ Colecciones: crear, eliminar, listar
 
-Todo lo que ves en este apartado se hace desde `mongosh`, no desde tu código Java — no vas a anotar nada de esto en `NotaLectura` ni en su repositorio. Con PostgreSQL tienes a Hibernate de tu lado: `ddl-auto` puede crear la tabla por ti (ya lo viste en el Tema 1), sin que escribas ni un `CREATE TABLE`. Spring Data MongoDB no tiene ningún mecanismo equivalente para colecciones con reglas — no existe una anotación que convierta tus `@Min`/`@Max` en un validador. Por eso esto se hace a mano, como una tarea puntual de configuración. En la práctica de hoy lo harás tú mismo, con las manos, sobre tu propia colección real.
+Todo lo que ves en este apartado se hace desde `mongosh`, no desde tu código Java — no vas a anotar nada de esto en `NotaLectura` ni en su repositorio. Con PostgreSQL tienes a Hibernate de tu lado: `ddl-auto` puede crear la tabla por ti (ya lo viste en el Tema 1), sin que escribas ni un `CREATE TABLE`. Spring Data MongoDB no convierte automáticamente tus anotaciones de Bean Validation (`@Min`, `@Max`, etc.) en reglas de validación de la colección. Son dos capas independientes. En este apartado vas a configurar el validador directamente desde `mongosh`, para ver con claridad que la regla vive también en la propia base de datos.
 
 Ya sabes que MongoDB no valida claves foráneas — eso lo comprueba tu código, con la integridad referencial manual del apartado anterior. Pero hay un segundo hueco, más básico todavía: por defecto, MongoDB **tampoco valida la forma de un documento**. Nada te impide, desde `mongosh`, insertar esto directamente en la colección:
 
@@ -18,7 +18,7 @@ db.nota_lectura.insertOne({ libroId: 1, autor: "ana", puntuacion: 999 })
 
 `puntuacion: 999` no tiene ningún sentido — tu DTO en Java, con `@Min(1) @Max(10)`, nunca dejaría pasar algo así a través de tu API. Pero esa validación vive **solo** en tu código Java: cualquiera con acceso directo a Mongo (`mongosh`, un script, otra aplicación) se la salta sin ningún esfuerzo, porque la propia base de datos no sabe que esa regla existe.
 
-Para cerrar ese hueco, MongoDB deja poner un **validador** directamente en la colección — pero tiene que estar ahí desde el momento en que la colección se crea, así que ya no te vale la creación implícita (al primer `insert`, sin condiciones). Necesitas crearla tú mismo, explícitamente, con las reglas puestas:
+Para cerrar ese hueco, MongoDB deja poner un **validador** directamente en la colección. Puedes añadir o modificar la validación posteriormente con `collMod`, pero en esta práctica vas a seguir la opción más sencilla de observar: eliminar la colección de pruebas y crearla explícitamente desde el principio con sus reglas.
 
 ```javascript
 db.createCollection("nota_lectura", {
@@ -50,8 +50,8 @@ db.nota_lectura.drop()
 show collections
 ```
 
-!!! tip "El mismo resultado que un `CHECK`, con otra sintaxis"
-    Un `CHECK (puntuacion BETWEEN 1 AND 10)` en el `CREATE TABLE` de PostgreSQL y este `$jsonSchema` en `createCollection` hacen exactamente el mismo trabajo: que la propia base de datos rechace un dato inválido, sin depender de que la aplicación lo valide bien. La diferencia es que Hibernate te ahorra escribir el `CREATE TABLE`; nada te ahorra escribir este `createCollection`.
+!!! tip "El mismo objetivo que las restricciones de PostgreSQL, con otra sintaxis"
+    `minimum: 1` y `maximum: 10` cumplen un papel similar a un `CHECK (puntuacion BETWEEN 1 AND 10)` de PostgreSQL, mientras que incluir `puntuacion` en `required` obliga además a que el campo exista, de forma comparable a un `NOT NULL`. En ambos casos, la idea es la misma: que la propia base de datos también proteja la validez de los datos, sin depender únicamente de la aplicación.
 
 ---
 
@@ -73,8 +73,7 @@ public interface NotaLecturaRepository extends MongoRepository<NotaLectura, Stri
 }
 ```
 
-`deleteByLibroId` borra de golpe todas las notas de lectura de un libro concreto. Pero, por sí solo, este método no hace nada: alguien tiene que **llamarlo**, y justo en el momento en que el libro se borra, ni antes ni después. Ese "alguien" no es una línea más en tu código: es el broker de mensajería que construiste en Programación de Servicios y Procesos (RabbitMQ) — el mismo mecanismo de eventos que ya usaste para el registro de actividad, pero escuchando ahora el borrado de un libro en vez de su creación. En la práctica de este tema ves exactamente cómo conectarlo a tu propio proyecto, para que `deleteByLibroId` se dispare solo, sin que tengas que acordarte de llamarlo cada vez que borres algo.
-
+`deleteByLibroId` borra de golpe todas las notas de lectura de un libro concreto. Pero, por sí solo, este método no hace nada: alguien tiene que **llamarlo** cuando se produzca el borrado del libro. En el diseño que vas a construir, el servicio que elimina el libro publica un evento en RabbitMQ y un *consumer* lo recibe de forma asíncrona para llamar a `deleteByLibroId`. La limpieza no tiene por qué ocurrir exactamente al mismo tiempo que el borrado: durante un breve intervalo pueden existir notas huérfanas, hasta que el *consumer* procese el evento. En la práctica de este tema vas a construir precisamente ese flujo.
 ---
 
 ## 🔍 Cuando el naming ya no basta: `@Query`
@@ -143,7 +142,7 @@ Cada `if` añade una condición solo si ese criterio ha llegado — igual que ib
 
 ??? tip "Abrir resumen"
 
-    - Por defecto, MongoDB no valida la forma de un documento (a diferencia de un `CHECK` en PostgreSQL) — una colección se crea implícitamente al primer `insert`, sin ninguna regla. Para tener validación real, hay que crearla explícitamente con `createCollection` y un `$jsonSchema`, antes de insertar nada. Se elimina con `drop()`.
-    - Borrar un `Libro` no borra sus notas de lectura en Mongo — se quedan huérfanas, porque son dos motores independientes. `deleteByLibroId` elimina documentos en bloque por naming de método, pero alguien tiene que llamarlo en el momento justo: el broker de mensajería de PSP (RabbitMQ), no una llamada directa desde tu código.
+    - Por defecto, MongoDB no valida la forma de un documento (a diferencia de un `CHECK` en PostgreSQL) — una colección se crea implícitamente al primer `insert`, sin ninguna regla. La validación puede definirse al crear la colección con `createCollection` y `$jsonSchema`, o añadirse posteriormente a una colección existente.
+    - Borrar un `Libro` no borra automáticamente sus notas de lectura en Mongo, porque son dos motores independientes. `deleteByLibroId` elimina documentos en bloque por naming de método; en la práctica, un *consumer* recibe de forma asíncrona el evento de borrado publicado en RabbitMQ y llama a ese método, por lo que la consistencia entre ambos motores es eventual.
     - `@Query`, con sintaxis de filtro de Mongo, es la vía de escape cuando el naming se vuelve largo o ilegible — el mismo papel que `@Query` en Spring Data JPA, con otro idioma dentro de las comillas.
     - Para filtros opcionales combinables en tiempo de ejecución, `Criteria`/`Query` con `MongoTemplate` es el equivalente Mongo de `Specification` — no se practica en este módulo, pero existe para cuando haga falta.

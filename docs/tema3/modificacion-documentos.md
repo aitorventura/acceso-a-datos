@@ -22,13 +22,13 @@ db.nota_lectura.replaceOne({ _id: ObjectId("...") }, { libroId: 1, autor: "ana",
 db.nota_lectura.deleteOne({ _id: ObjectId("...") })
 ```
 
-Hay una diferencia conceptual importante entre `updateOne` con `$set` (modifica solo los campos indicados, deja el resto intacto) y `replaceOne` (sustituye el documento entero). Conviene que sepas que `$set` existe, aunque no lo uses directamente desde Java: `save()` de Spring Data MongoDB, que ya conoces, hace lo segundo — reemplaza el documento completo, no un *merge* parcial.
+Hay una diferencia conceptual importante entre `updateOne` con `$set` (modifica solo los campos indicados, deja el resto intacto) y `replaceOne` (sustituye el documento entero). Conviene que sepas que `$set` existe, aunque en esta práctica no lo uses desde Java: `save()` de Spring Data MongoDB, que ya conoces, hace lo segundo — reemplaza el documento completo, no un *merge* parcial.
 
 | | `updateOne` + `$set` | `replaceOne` | `save()` (Spring Data) |
 |---|---|---|---|
 | Qué toca | Solo los campos que indicas | Todo el documento | Todo el documento |
 | Campos que no incluyes | Se quedan como estaban | Desaparecen | Se sobrescriben con lo que traiga el objeto Java |
-| ¿Se usa desde Java? | No directamente | No directamente | Sí — es lo que ya usas |
+| ¿Lo usas desde Java en esta práctica? | No | No | Sí — es lo que ya usas |
 
 !!! warning "El riesgo silencioso de `save()`"
     `save()` no hace un *merge*: sustituye el documento entero por el objeto Java que le pasas. Si ese objeto llega sin todos los campos rellenos (por ejemplo, porque olvidaste copiar `comentario` antes de guardar), MongoDB los sobrescribe con `null` sin ningún aviso — a diferencia de `$set`, que solo toca lo que le dices explícitamente. Por eso el patrón de la siguiente sección siempre carga el documento completo antes de tocar nada: para no perder por el camino los campos que no vas a cambiar.

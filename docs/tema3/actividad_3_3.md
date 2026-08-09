@@ -4,7 +4,7 @@
     📄 [Plantilla 3.3 — PUT y DELETE de reseñas con control de autoría](plantillas/Actividad_3_3_AD_Plantilla.docx){target="_blank" rel="noopener"}
 
 !!! info "Práctica guiada"
-    Hoy añades el `PUT` que falta en tu módulo `reviews`, con control de autoría: solo quien escribió una reseña puede modificarla.
+    Hoy completas la modificación y el borrado de `reviews` con control de acceso: el autor puede modificar o eliminar su propia reseña, y un usuario con rol `ADMIN` puede hacerlo también como vía de moderación.
 
 ## Qué vas a practicar
 
@@ -90,7 +90,7 @@ Crea una reseña con el usuario `user` (o el que uses habitualmente) y anota el 
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
-  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $USER_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 7, "comentario": "Buena, pero corta"}'
 ```
 
@@ -98,7 +98,7 @@ Modifícala con el **mismo** usuario:
 
 ```bash
 curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_USER" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $USER_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'
 ```
 
@@ -110,11 +110,17 @@ curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
 
 ## Paso 3 — Probar con dos usuarios: el caso denegado
 
-Consigue un token de un **segundo** usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:
+Consigue un token de un **segundo** usuario (crea uno nuevo si solo tienes uno de prueba) y guarda el token de ese segundo usuario en otra variable para no confundirlo con el anterior:
+
+```bash
+OTHER_USER_TOKEN="pega-aqui-el-token-del-segundo-usuario"
+```
+
+E intenta modificar la reseña del primero:
 
 ```bash
 curl -i -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_OTRO_USUARIO" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OTHER_USER_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'
 ```
 
@@ -128,17 +134,17 @@ curl -i -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
 
 ## Paso 4 — Probar con un administrador: el rol también permite
 
-Con `$TOKEN_ADMIN`, modifica la misma reseña del Paso 3 — sin ser el autor:
+Con `$ADMIN_TOKEN`, modifica la misma reseña del Paso 3 — sin ser el autor:
 
 ```bash
 curl -X PUT http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_ADMIN" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 5, "comentario": "Moderado por un administrador"}'
 ```
 
 **Comprueba**: `200 OK` — a diferencia del Paso 3, aunque tampoco sea el autor.
 
-**Captura**: la respuesta del `PUT` con `200 OK`, hecha con `$TOKEN_ADMIN`.
+**Captura**: la respuesta del `PUT` con `200 OK`, hecha con `$ADMIN_TOKEN`.
 
 ---
 
@@ -184,7 +190,7 @@ No hace falta repetir las tres pruebas del Paso 2-4 — la lógica de permiso es
 
 ```bash
 curl -i -X DELETE http://localhost:8080/api/v1/videojuegos/1/reviews/{reviewId} \
-  -H "Authorization: Bearer $TOKEN_USER"
+  -H "Authorization: Bearer $USER_TOKEN"
 ```
 
 **Comprueba**: `204 No Content`, y que un `GET` posterior a esa reseña ya no la incluye.

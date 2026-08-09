@@ -35,7 +35,7 @@ Un test aislado con mocks prueba la **lógica interna** de un componente, sin ni
 
 Un mock no miente, pero sí puede estar equivocado: cuando escribes `when(libroRepository.existsById(1L)).thenReturn(true)`, ese valor lo has puesto tú a mano — el test no ha comprobado que `LibroRepository` se comporte así de verdad, solo que tu código reacciona bien *si* se comporta así.
 
-Piensa en el borrado en cascada del apartado anterior: al borrar un `Libro`, alguien tiene que llamar a `deleteByLibroId` sobre `NotaLecturaRepository` en el momento justo — y ese "alguien" es un evento que viaja por RabbitMQ hasta un listener asíncrono. Un test aislado de ese listener, con mocks, podría comprobar "si me llega el evento, borro las notas correctamente" — pero nunca demuestra que el evento **llega**. Si el listener no estuviera bien registrado, o la cola tuviera un nombre distinto al que espera quien publica, el mock ni se enteraría: no hay ningún RabbitMQ real de por medio con el que ese fallo pueda ocurrir. Para comprobar que la cadena completa —evento, cola, listener, borrado— funciona de verdad, hace falta un test que hable con un RabbitMQ real, no con una promesa sobre cómo se comporta.
+Piensa en el borrado en cascada del apartado anterior: al borrar un `Libro`, el catálogo publica un evento que RabbitMQ enruta hacia una cola y un listener asíncrono termina llamando a `deleteByLibroId` sobre `NotaLecturaRepository`. Un test aislado de ese listener, con mocks, podría comprobar "si me llega el evento, borro las notas correctamente" — pero nunca demuestra que el evento **llega**. Si el listener no estuviera bien registrado, o el *binding* utilizara una *routing key* distinta de la que publica el catálogo, el mock ni se enteraría: no hay ningún RabbitMQ real por medio con el que ese fallo pueda ocurrir. Para comprobar que la cadena completa —evento, exchange, cola, listener y borrado— funciona de verdad, hace falta un test de integración con RabbitMQ real.
 
 !!! question "Antes de seguir, predícelo"
     Ese evento de borrado no va directo a una cola: pasa primero por un *exchange* —el punto de RabbitMQ, visto en PSP, que reparte cada mensaje entre las colas enlazadas a él según su *routing key*—, y tu proyecto tiene, sobre ese mismo exchange, **dos** colas independientes escuchando el borrado: la del registro de actividad (Programación de Servicios y Procesos, todas las `videojuego.*`) y la del borrado en cascada de reseñas (solo `videojuego.eliminado`). Imagina que un día, sin querer, dejas la segunda cola enlazada a la routing key equivocada — `videojuego.actualizado` en vez de `videojuego.eliminado`. ¿Lo detectaría un test aislado (con mocks) del listener de borrado? ¿Y un test de integración con RabbitMQ real? Razona tu respuesta antes de seguir leyendo.
@@ -43,7 +43,7 @@ Piensa en el borrado en cascada del apartado anterior: al borrar un `Libro`, alg
 ??? tip "Comprueba tu respuesta"
     El test aislado **no** lo detectaría — sigue probando "si me llega el evento, borro bien", y eres tú quien decide a mano que le llega. El test de integración **sí**: publicas el evento de borrado de verdad, y el listener nunca se dispara, porque su binding real no coincide con la routing key que se publica. Es exactamente el tipo de error de configuración que solo un RabbitMQ real puede delatar.
 
-El test de integración más completo no mockea nada — levanta **todos** los motores reales que usa la aplicación, simultáneamente, en contenedores Docker, solo para la duración del test. Sobre el ejemplo de `Libro`, eso significa tres motores a la vez: PostgreSQL (catálogo), MongoDB (notas de lectura) y RabbitMQ (la cadena de eventos de arriba):
+El test de integración de este flujo utiliza las **infraestructuras reales que participan en lo que quiere comprobar**, levantadas temporalmente con Testcontainers. En este caso son tres: PostgreSQL (catálogo), MongoDB (notas de lectura) y RabbitMQ (cadena de eventos). Sobre el ejemplo de `Libro`, eso significa tres motores a la vez: PostgreSQL (catálogo), MongoDB (notas de lectura) y RabbitMQ (la cadena de eventos de arriba):
 
 ```java
 @Testcontainers
@@ -55,17 +55,19 @@ class LibroFlujoCompletoIntegrationTest {
 
     @Container
     @ServiceConnection
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:7");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:8");
 
     @Container
     @ServiceConnection
-    static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:3-management");
+    static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:4-management");
 
     // ...
 }
 ```
 
-Los tres son los servicios reales del `docker-compose.yml` de este proyecto de ejemplo, arrancados solo para este test (si mañana añadieras un motor más, se sumaría aquí igual, un `@Container` por servicio). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las notas de lectura y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa.
+Redis no aparece en este test porque la caché está deshabilitada en el perfil `test`, como decidiste en PSP: aquí no estás comprobando el comportamiento de la caché, sino la integración catálogo → mensajería → reseñas.
+
+Los tres son los servicios reales del `docker-compose.yml` de este proyecto de ejemplo, arrancados solo para este test (si otro flujo que quieras probar dependiera de una infraestructura externa adicional, podrías incorporarla también mediante Testcontainers). Este es el ejemplo definitivo de "probar la integración de componentes reales, no mockeados": que el catálogo, las notas de lectura y el borrado en cascada — construidos por separado, en temas distintos — funcionen correctamente cuando se integran juntos, en la aplicación completa.
 
 !!! tip "En tu proyecto no partes de cero"
     No vas a crear una clase nueva desde cero en la Actividad 4.3: tu `VideojuegoApiIntegrationTest` (Actividad 2.3) ya levanta PostgreSQL desde el principio, y ya has ido añadiendo MongoDB y RabbitMQ a esa misma clase en actividades posteriores, a medida que `VideojuegoService` ha empezado a necesitarlos de verdad. Los tres motores reales ya están conectados ahí — en la 4.3 **amplías** ese test con el flujo que todavía falta (reseñas y borrado en cascada), no lo repites.
@@ -125,7 +127,7 @@ flowchart LR
     C --> D["ci.yml<br/>los ejecuta todos automáticamente"]
 ```
 
-Ahora mismo ese workflow solo ejecuta los tests que terminan en `ControllerTest` — un filtro que tenía sentido cuando ese era el único tipo de test del proyecto, pero que se queda corto en cuanto construyes tests de otro tipo, como los aislados y de integración de este tema. Lo arreglas en la Actividad 4.3, cerrando el círculo del todo: que el CI ejecute, sin excepción, cualquier test que construyas de aquí en adelante.
+Ahora mismo ese workflow solo ejecuta los tests que terminan en `ControllerTest` — un filtro que tenía sentido cuando ese era el único tipo de test del proyecto, pero que se queda corto en cuanto construyes tests de otro tipo, como los aislados y de integración de este tema. En la Actividad 4.3 eliminas ese filtro y dejas que Maven descubra automáticamente los tests que siguen sus convenciones habituales de nombre.
 
 ---
 
@@ -134,7 +136,7 @@ Ahora mismo ese workflow solo ejecuta los tests que terminan en `ControllerTest`
 ??? tip "Abrir resumen"
 
     - Un test **aislado** (mocks) prueba la lógica interna de un componente; un test de **integración** (Testcontainers) prueba que varios componentes reales funcionan bien juntos.
-    - Un test de integración completo levanta todos los motores reales de la aplicación (PostgreSQL, MongoDB, RabbitMQ...) simultáneamente en Docker, solo para el test.
+    - Un test de integración utiliza las infraestructuras reales que participan en el flujo que quiere comprobar; en este caso, PostgreSQL, MongoDB y RabbitMQ mediante Testcontainers. Redis queda fuera porque la caché está deshabilitada en el perfil `test`.
     - La pirámide de tests: muchos aislados (rápidos, baratos) en la base, pocos de integración (lentos, más caros) en la punta — ninguno de los dos niveles sustituye al otro.
     - Un test bien nombrado es documentación viva: vale igual para un test aislado (documenta una pieza) que para uno de integración (documenta cómo encajan varias).
-    - El `ci.yml` de tu GameVault (construido en la Actividad 1.3 de PSP) ejecuta tus tests automáticamente en cada `push` — su filtro actual solo recoge los de controller, y lo amplías en la Actividad 4.3 para que cubra también los aislados y los de integración.
+    - El `ci.yml` de tu GameVault (construido en la Actividad 1.3 de PSP) ejecuta tests automáticamente en cada `push`; en la Actividad 4.3 eliminas el filtro limitado a `*ControllerTest` para que Maven descubra también los tests aislados y de integración.

@@ -19,7 +19,7 @@
 
 ## El resultado esperado, de principio a fin
 
-Antes de tocar nada, esto es lo que vas a conseguir que pase cuando termines la actividad — una petición `DELETE` que responde al instante, y una limpieza que ocurre después, en segundo plano:
+Antes de tocar nada, esto es lo que vas a conseguir que pase cuando termines la actividad: el `DELETE` publica un evento y, a partir de ahí, la respuesta HTTP y la limpieza de MongoDB avanzan de forma independiente.
 
 ```mermaid
 sequenceDiagram
@@ -36,18 +36,18 @@ sequenceDiagram
     Controller->>Service: delete(id)
     Service->>PG: borra el videojuego
     Service->>MQ: publica evento videojuego.eliminado
-    Service-->>Controller: OK
-    Controller-->>Cliente: 204 No Content
-    Note over Cliente,Controller: La petición ya ha terminado,<br/>no espera a lo que viene después
 
-    par En otro hilo, en su propio momento
+    par Respuesta HTTP
+        Service-->>Controller: OK
+        Controller-->>Cliente: 204 No Content
+    and Procesamiento asíncrono
         MQ-->>Consumer: entrega el mensaje
         Consumer->>RS: deleteByVideojuegoId(id)
         RS->>Mongo: borra las reseñas de ese videojuego
     end
 ```
 
-El `Cliente` recibe su `204` sin saber que las reseñas todavía existen en ese instante — el bloque `par` de abajo ocurre después, en un hilo distinto, sin que nadie lo espere. El Paso 1 retoma este mismo flujo con más detalle, centrado solo en la mitad que vas a construir tú.
+La petición HTTP no espera a que termine la limpieza de MongoDB: tras publicar el evento, el flujo de la respuesta y el procesamiento del consumer avanzan de forma independiente. El consumer puede terminar antes o después de que el cliente reciba físicamente el `204`; lo importante es que el borrado de reseñas ya no forma parte del tiempo de respuesta de esa petición.
 
 ---
 
@@ -96,7 +96,9 @@ flowchart TD
 `VideojuegoService.delete()` (en el módulo `catalogo`) no llama directamente a nada de `reviews` — publica un evento a través de `VideojuegoEventPublisher`, y sigue su camino sin esperar, sin saber siquiera que `reviews` existe. En otro hilo, en su propio momento, un consumer nuevo —`ReviewsVideojuegoEventConsumer`, que vas a escribir en el Paso 2— recibe ese evento desde la cola que has creado en el Paso 0 y actúa: si el evento dice que un videojuego se ha eliminado, borra sus reseñas.
 
 !!! tip "¿Por qué un broker, y no algo más ligero como el warm-up de caché de PSP?"
-    Publicador y consumer viven en la misma aplicación, igual que en el warm-up de caché — pero ahí perder un evento es inofensivo (la caché se autocorrige sola), mientras que aquí perder uno deja reseñas huérfanas **para siempre**, nada más va a reintentarlo. El broker aporta justo lo que aquí sí importa: el mensaje sobrevive aunque la aplicación se caiga entre el `publishEvent` y que el consumer llegue a procesarlo.
+    Publicador y consumer viven en la misma aplicación, igual que en el warm-up de caché, pero aquí perder un aviso puede dejar reseñas huérfanas. RabbitMQ desacopla ambos trabajos y permite que el mensaje permanezca pendiente hasta que un consumer pueda procesarlo, además de soportar reintentos y posibles redeliveries.
+
+    Aun así, PostgreSQL y RabbitMQ siguen siendo sistemas distintos: el borrado en la base de datos y la publicación del mensaje no forman una única operación atómica. En sistemas donde esa garantía fuera crítica se utilizarían patrones adicionales, como *transactional outbox*. Para esta práctica nos quedamos con el modelo sencillo de consistencia eventual.
 
 **Fíjate**: el borrado de reseñas va a ocurrir en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que ya has analizado en PSP.
 
@@ -153,9 +155,9 @@ public long deleteByVideojuegoId(Long videojuegoId) {
 
 ## Paso 3 — Protege tu colección con un validador
 
-Antes de probar nada con datos reales, un momento para cerrar un hueco que arrastras desde que empezaste con `reviews`: `puntuacion` solo está protegida en `ReviewRequestDTO` (`@Min(1)`/`@Max(10)`) — una validación que vive en tu código Java y que cualquiera con acceso directo a Mongo puede saltarse sin esfuerzo. Hazlo ahora, antes de crear tu primera reseña de verdad en el próximo paso, para que nazca ya protegida desde el primer documento.
+Antes de seguir trabajando con nuevos datos, cierra un hueco que arrastras desde que empezaste con `reviews`: `puntuacion` está protegida en `ReviewRequestDTO` (`@NotNull`, `@Min(1)` y `@Max(10)`), pero esa validación vive en tu código Java y cualquiera con acceso directo a Mongo puede saltársela. Vas a añadir ahora la misma protección a nivel de base de datos, antes de continuar con las pruebas.
 
-Borra tu colección `review` (todavía no tienes datos reales, así que no pierdes nada) y recréala explícitamente, esta vez con un validador:
+Borra la colección `review` con los datos de prueba de la Actividad 3.1 y recréala explícitamente, esta vez con un validador:
 
 ```bash
 docker exec -it <tu-contenedor-mongo> mongosh gamevault_db
@@ -206,18 +208,18 @@ Aquí tienes los comandos con `curl`, pero puedes hacer exactamente lo mismo des
 ```bash
 # Crea un videojuego y una reseña
 curl -X POST http://localhost:8080/api/v1/videojuegos \
-  -H "Authorization: Bearer $TOKEN_ADMIN" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ADMIN_TOKEN" -H "Content-Type: application/json" \
   -d '{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'
 
 curl -X POST http://localhost:8080/api/v1/videojuegos/{id}/reviews \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $USER_TOKEN" -H "Content-Type: application/json" \
   -d '{"puntuacion": 7, "comentario": "Prueba"}'
-# $TOKEN: crear una reseña solo exige estar autenticado, no rol ADMIN —
-# vale el token de cualquier usuario registrado, a diferencia del $TOKEN_ADMIN de arriba y abajo
+# $USER_TOKEN: crear una reseña solo exige estar autenticado, no rol ADMIN —
+# vale el token de cualquier usuario registrado, a diferencia del $ADMIN_TOKEN de arriba y abajo
 
 # Borra el videojuego (exige rol ADMIN, igual que crearlo)
 curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
-  -H "Authorization: Bearer $TOKEN_ADMIN"
+  -H "Authorization: Bearer $ADMIN_TOKEN"
 ```
 
 Fíjate en que esa segunda petición ha devuelto `201`, exactamente como siempre — el validador del Paso 3 no ha cambiado nada del comportamiento normal de tu aplicación, solo bloquea lo que nunca debería haber entrado.

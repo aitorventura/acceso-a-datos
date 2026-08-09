@@ -51,7 +51,7 @@ spring:
 
 Otra vez el mismo motivo de la Actividad 1.1 con PostgreSQL: `mongodb` es el nombre del servicio, no `localhost` — tu aplicación sigue corriendo dentro del contenedor `app`, y `mongodb` es ahora un tercer contenedor hermano en la misma red.
 
-Reconstruye o reinicia tu Dev Container desde tu editor para que levante también el nuevo servicio.
+Reconstruye tu Dev Container desde tu editor para que vuelva a procesar `docker-compose.yml` y levante también el nuevo servicio `mongodb`.
 
 ---
 
@@ -95,20 +95,21 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
 }
 ```
 
-`@Document(collection = "review")` es el equivalente Mongo de `@Entity`; el `@Id` es `String` porque en Mongo los identificadores son alfanuméricos. `findByVideojuegoId` se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.
+`@Document(collection = "review")` es el equivalente Mongo de `@Entity`; el `@Id` es `String` porque Spring Data puede mapear de esta forma el `_id`/`ObjectId` generado por MongoDB. `findByVideojuegoId` se genera automáticamente por Spring Data a partir del nombre del método, sin que escribas ninguna query.
 
 Los DTOs van en un subpaquete `dto`, igual que ya tienes en `catalogo` — `ReviewCreateDTO.java`, `ReviewRequestDTO.java`, `ReviewResponseDTO.java`, los tres en `src/main/java/com/tunombre/gamevault/reviews/dto/` (cada uno en su propio fichero, aunque aquí se muestren juntos por brevedad):
 
 ```java
 package com.tunombre.gamevault.reviews.dto;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 
 public record ReviewCreateDTO(Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
 public record ReviewRequestDTO(
-        @Min(1) @Max(10) Integer puntuacion,
+        @NotNull @Min(1) @Max(10) Integer puntuacion,
         @NotBlank String comentario
 ) {}
 public record ReviewResponseDTO(String id, Long videojuegoId, String autor, Integer puntuacion, String comentario) {}
@@ -231,7 +232,7 @@ Ahora sí, prueba con tu token. Aquí tienes los comandos con `curl`, pero puede
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/videojuegos/1/reviews \
-  -H "Authorization: Bearer $TOKEN" \
+  -H "Authorization: Bearer $USER_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"puntuacion": 9, "comentario": "Excelente banda sonora"}'
 ```
@@ -270,7 +271,7 @@ Crea un videojuego, añádele un par de reseñas, y bórralo desde tu API normal
 
 ```bash
 curl -X DELETE http://localhost:8080/api/v1/videojuegos/{id} \
-  -H "Authorization: Bearer $TOKEN_ADMIN"
+  -H "Authorization: Bearer $ADMIN_TOKEN"
 ```
 
 (recuerda: `DELETE /api/v1/videojuegos/{id}` exige rol `ADMIN` desde la Actividad 2.5 de PSP)
