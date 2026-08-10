@@ -3041,7 +3041,7 @@
 <p>Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 2 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.</p>
 <hr>
 <h2 id="que-es-nosql">🗂️ Qué es NoSQL<a class="headerlink" href="#que-es-nosql" title="Permanent link">¶</a></h2>
-<p>Esa base de datos "completamente distinta" que acabas de leer no es una sola cosa: es una familia entera, agrupada bajo un nombre común precisamente porque todas comparten lo que <strong>no</strong> hacen. <strong>NoSQL</strong> es el nombre que se le da a esa familia de bases de datos que abandonan el modelo tabla/fila/SQL en favor de otros modelos de datos. No es un único tipo de motor, sino cuatro grandes categorías, cada una pensada para un problema distinto:</p>
+<p>Esa base de datos "completamente distinta" que acabas de leer no es una sola cosa: <strong>NoSQL</strong> agrupa distintas familias de bases de datos que no siguen como modelo principal el relacional tradicional de tablas relacionadas mediante claves y <code>JOIN</code>. No es un único tipo de motor, sino varias categorías, cada una pensada para problemas distintos:</p>
 <pre class="mermaid"><code>flowchart TB
     N["NoSQL"] --&gt; DOC["📄 Documentales&lt;br/&gt;MongoDB"]
     N --&gt; KV["🔑 Clave-valor&lt;br/&gt;Redis"]
@@ -3050,7 +3050,7 @@
 <ul>
 <li><strong>Documentales</strong>: documentos autocontenidos, tipo JSON (donde se sitúa este tema) — uso habitual: catálogos de producto, perfiles de usuario, contenido con estructura variable (notas personales, artículos).</li>
 <li><strong>Clave-valor</strong>: pares simples clave → valor (como Redis) — uso habitual: cachés, sesiones de usuario, contadores; lecturas y escrituras muy rápidas, sin necesidad de consultas complejas.</li>
-<li><strong>Columnares</strong>: optimizadas para leer columnas completas de grandes volúmenes de datos — uso habitual: analítica a gran escala, series temporales (métricas, sensores).</li>
+<li><strong>Columnares</strong>: organizan los datos en tablas distribuidas por particiones y diseña su estructura pensando en las consultas que la aplicación necesita realizar — uso habitual: grandes volúmenes de datos distribuidos, con alta disponibilidad y muchas lecturas y escrituras.</li>
 <li><strong>De grafos</strong>: optimizadas para relaciones muy conectadas (nodos y aristas) — uso habitual: redes sociales (amigos de amigos), sistemas de recomendación.</li>
 </ul>
 <hr>
@@ -3058,7 +3058,7 @@
 <p>De las cuatro, este tema se centra en la primera — la documental, con MongoDB como motor concreto — porque es la que vas a usar en las próximas actividades. Antes de verla en código, dos piezas la definen, y ninguna es una tabla:</p>
 <ul>
 <li><strong>Documento</strong>: un objeto completo, tipo JSON, autocontenido — con su propia estructura, que puede variar de un documento a otro dentro de la misma colección.</li>
-<li><strong>Colección</strong>: un grupo de documentos, sin esquema fijo impuesto por el motor.</li>
+<li><strong>Colección</strong>: un grupo de documentos. Por defecto admite un esquema flexible, aunque MongoDB permite añadir reglas de validación si necesitas imponer una estructura determinada.</li>
 </ul>
 <p>Así se ve en la práctica: dos documentos reales dentro de la misma colección <code>nota_lectura</code> (el ejemplo que vas a construir en este tema), con estructura distinta entre sí — el segundo tiene un campo (<code>comentario</code>) que el primero ni siquiera necesita:</p>
 <div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
@@ -3085,10 +3085,10 @@
 <td>Ninguna tabla — todo es documento</td>
 </tr>
 <tr>
-<td>Columnas fijas</td>
+<td>Estructura fija por defecto</td>
 <td>Sí</td>
-<td>Sí, salvo la columna JSONB</td>
-<td>No</td>
+<td>Sí, salvo el contenido de la columna JSONB</td>
+<td>No — aunque puede añadirse validación</td>
 </tr>
 <tr>
 <td>Claves foráneas</td>
@@ -3100,7 +3100,7 @@
 <td><code>JOIN</code></td>
 <td>Sí</td>
 <td>Sí</td>
-<td>No</td>
+<td>No como en SQL; MongoDB dispone de operaciones como <code>$lookup</code></td>
 </tr>
 </tbody>
 </table>
@@ -3108,7 +3108,7 @@
 <hr>
 <h2 id="que-es-mongodb">🍃 Qué es MongoDB<a class="headerlink" href="#que-es-mongodb" title="Permanent link">¶</a></h2>
 <p>Siguiendo con el ejemplo que llevamos trabajando toda la teoría: podríamos necesitar una base de datos documental para las notas de lectura de nuestra librería — cada nota de lectura es un documento independiente, sin relaciones fuertes que mantener entre ellas, con una forma que podría cambiar con el tiempo (más adelante volveremos sobre esto con más detalle). El motor documental que vas a usar para eso es <strong>MongoDB</strong>.</p>
-<p><strong>MongoDB</strong> es el gestor documental más usado. Sus documentos se almacenan en <strong>BSON</strong> (una versión binaria de JSON), y su identificador es un <code>ObjectId</code> — alfanumérico, no un número autoincremental como los que has usado hasta ahora en PostgreSQL. Se organiza en niveles: servidor → bases de datos → colecciones → documentos.</p>
+<p><strong>MongoDB</strong> almacena sus documentos en <strong>BSON</strong> (una representación binaria de JSON). Todo documento tiene un campo <code>_id</code> único y, si no proporcionas uno, MongoDB genera normalmente un <code>ObjectId</code>. En Spring Data puedes representarlo cómodamente con un <code>String</code>, en lugar del <code>Long</code> autoincremental que has usado hasta ahora en PostgreSQL.</p>
 <pre class="mermaid"><code>flowchart TB
     S["🖥️ Servidor MongoDB"] --&gt; D["🗄️ Base de datos&lt;br/&gt;(p. ej. libreria_db)"]
     D --&gt; C1["📁 Colección&lt;br/&gt;nota_lectura"]
@@ -3129,8 +3129,8 @@
 <p>Vale la pena verlo en esta forma cruda antes de que Spring lo esconda tras un repositorio.</p>
 <hr>
 <h2 id="cuando-encaja-lo-documental">⚖️ Cuándo encaja lo documental<a class="headerlink" href="#cuando-encaja-lo-documental" title="Permanent link">¶</a></h2>
-<p>Cuando los datos son autocontenidos y su estructura puede variar de un registro a otro sin que eso sea un problema —como una nota de lectura, que a veces lleva un comentario largo y a veces solo una puntuación— el modelo documental encaja bien: cada documento se guarda tal cual, sin forzarlo a una plantilla fija que todos los registros tengan que cumplir por igual. Cuando, en cambio, hay relaciones fuertes entre entidades que hay que mantener consistentes, y operaciones que necesitan modificar varias de ellas a la vez de forma atómica —como una venta que descuenta stock y genera una factura en la misma transacción—, el modelo relacional sigue siendo la opción más segura, porque es el que sabe garantizar esa consistencia de forma nativa, con claves foráneas y transacciones reales.</p>
-<p>Profundizarás en esta comparación, con más detalle y más casos concretos, en el siguiente apartado.</p>
+<p>Cuando los datos son autocontenidos y su estructura puede evolucionar con flexibilidad, el modelo documental encaja especialmente bien. Cuando, en cambio, el dominio tiene muchas relaciones entre entidades que deben mantenerse consistentes —por ejemplo, una venta relacionada con clientes, productos y facturas—, el modelo relacional suele resultar más natural gracias a sus claves foráneas, restricciones y <code>JOIN</code>.</p>
+<p>Esto no significa que MongoDB carezca de transacciones: las operaciones sobre un único documento son atómicas y también admite transacciones sobre varios documentos. La diferencia está sobre todo en <strong>cómo modelas los datos y sus relaciones</strong>, no en que un motor tenga transacciones y el otro no.</p>
 <hr>
 <h2 id="un-ejemplo-completo-las-notas-de-lectura-de-la-libreria">📚 Un ejemplo completo: las notas de lectura de la librería<a class="headerlink" href="#un-ejemplo-completo-las-notas-de-lectura-de-la-libreria" title="Permanent link">¶</a></h2>
 <h3 id="por-que-dos-bases-de-datos-distintas">Por qué dos bases de datos distintas<a class="headerlink" href="#por-que-dos-bases-de-datos-distintas" title="Permanent link">¶</a></h3>
@@ -3177,7 +3177,7 @@
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">NotaLectura</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="nd">@Id</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">// alfanumérico, tipo ObjectId — no un Long autogenerado</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">// Spring Data puede representar aquí el ObjectId generado por MongoDB</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6"></a>
 <a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">;</span><span class="w"> </span><span class="c1">// relación "lógica" con el catálogo en PostgreSQL</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">;</span>
@@ -3185,7 +3185,7 @@
 <a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">;</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<p><code>@Document(collection = "nota_lectura")</code> es el equivalente Mongo de <code>@Entity</code>/<code>@Table</code> — declara en qué colección vive. El <code>@Id</code> es <code>String</code>, no <code>Long</code>: en Mongo los identificadores son alfanuméricos por naturaleza (<code>ObjectId</code>), a diferencia del autoincremental que has usado siempre en PostgreSQL.</p>
+<p><code>@Document(collection = "nota_lectura")</code> es el equivalente Mongo de <code>@Entity</code>/<code>@Table</code> — declara en qué colección vive. Aquí declaras el <code>@Id</code> como <code>String</code> porque Spring Data puede mapear a él el <code>ObjectId</code> que MongoDB genera normalmente cuando no proporcionas un <code>_id</code>. Es una elección de mapeo de esta aplicación, no una obligación de que todos los identificadores de MongoDB sean siempre <code>String</code> u <code>ObjectId</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title"><code>libroId</code> no es una clave foránea real</p>
 <p>Aunque el campo se llame <code>libroId</code> y apunte conceptualmente a un <code>Libro</code> de PostgreSQL, <strong>no hay ninguna integridad referencial automática</strong> entre dos motores de base de datos distintos. MongoDB no sabe nada de PostgreSQL, ni al revés — es responsabilidad de tu código mantener esa relación con sentido.</p>
@@ -3246,12 +3246,16 @@
 <span class="normal"><a href="#__codelineno-8-4">4</a></span>
 <span class="normal"><a href="#__codelineno-8-5">5</a></span>
 <span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">NotaLecturaRequestDTO</span><span class="p">(</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">        </span><span class="nd">@Min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nd">@Max</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">        </span><span class="nd">@NotNull</span><span class="w"> </span><span class="nd">@Min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="nd">@Max</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">        </span><span class="nd">@NotBlank</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5"></a>
 <a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">NotaLecturaCreateDTO</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">libroId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">autor</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">puntuacion</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">comentario</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">MongoDB flexible no significa API sin reglas</p>
+<p>MongoDB permite por defecto que dos documentos de una colección tengan campos distintos. Eso no impide que tu aplicación imponga reglas más estrictas: en GameVault, por ejemplo, <code>ReviewRequestDTO</code> exigirá un comentario no vacío. Son dos capas diferentes: lo que admite el motor y lo que permite tu API.</p>
+</div>
 <p><code>NotaLecturaRequestDTO</code> es literalmente lo único que el cliente controla: la puntuación y el comentario, con sus validaciones de siempre. <code>NotaLecturaCreateDTO</code> añade los dos campos que decide el servidor: <code>libroId</code> (que llega por la URL, no por el cuerpo) y <code>autor</code>. Así se juntan los dos, en el controller:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
 <span class="normal"><a href="#__codelineno-9-2">2</a></span>
@@ -3288,7 +3292,7 @@
 <p>Por debajo es el mismo <code>Authentication</code> que el filtro JWT que ya construiste en PSP (Actividad 2.4) guarda al validar el token — <code>Principal</code> es, simplemente, esa misma identidad. <code>principal.getName()</code> te da directamente el <code>username</code>, el mismo que ya usas en tu <code>/me</code> de PSP.</p>
 <p>El controller combina eso (<code>autor</code>, decidido por el servidor) con lo que sí manda el cliente (<code>puntuacion</code>, <code>comentario</code>) para construir el <code>NotaLecturaCreateDTO</code> completo, antes de pasárselo al service.</p>
 <h3 id="una-agregacion-sencilla-en-memoria">Una agregación sencilla, en memoria<a class="headerlink" href="#una-agregacion-sencilla-en-memoria" title="Permanent link">¶</a></h3>
-<p>Junto al listado de notas de lectura, tiene sentido ofrecer también un resumen: cuántas tiene un libro y cuál es su puntuación media. Este método se añade al mismo <code>NotaLecturaService</code>, y se expone igual que el anterior — un controller que lo llama, sin nada nuevo que mostrar ahí:</p>
+<p>Junto al listado de notas de lectura, tiene sentido ofrecer también un resumen: cuántas tiene un libro y cuál es su puntuación media. Para centrarnos aquí en el cálculo, el fragmento muestra solo la parte que consulta MongoDB; en el servicio real repetirás antes la misma comprobación <code>existsById(...)</code> contra PostgreSQL que ya has usado en los métodos anteriores. Después, el cálculo se añade al mismo <code>NotaLecturaService</code> y se expone desde el controller como siempre:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
 <span class="normal"><a href="#__codelineno-10-2">2</a></span>
 <span class="normal"><a href="#__codelineno-10-3">3</a></span>
@@ -3329,9 +3333,9 @@
 <details class="tip">
 <summary>Abrir resumen</summary>
 <ul>
-<li><strong>NoSQL</strong> abandona tablas/filas/SQL; las bases <strong>documentales</strong> (MongoDB) son una de varias familias (clave-valor, columnares, de grafos).</li>
-<li>Un <strong>documento</strong> es un objeto autocontenido; una <strong>colección</strong> los agrupa sin esquema fijo — nada de tablas ni <code>JOIN</code>.</li>
-<li>MongoDB usa BSON y <code>ObjectId</code> (alfanumérico) como identificador — distinto del <code>Long</code> autoincremental de JPA.</li>
+<li><strong>NoSQL</strong> agrupa distintos modelos no relacionales; las bases <strong>documentales</strong> (MongoDB) son una de varias familias, junto a las de clave-valor, columnares y de grafos.</li>
+<li>Un <strong>documento</strong> es un objeto autocontenido; una <strong>colección</strong> los agrupa con un esquema flexible por defecto. MongoDB no utiliza tablas ni <code>JOIN</code> SQL, aunque dispone de operaciones como <code>$lookup</code> para relacionar datos entre colecciones.</li>
+<li>MongoDB almacena documentos en BSON y todo documento tiene un <code>_id</code>; si no proporcionas uno, normalmente se genera un <code>ObjectId</code>, que Spring Data puede mapear a un <code>String</code>.</li>
 <li><code>libroId</code> en <code>NotaLectura</code> es una relación <strong>lógica</strong>, no una clave foránea real — no hay integridad referencial automática entre dos motores distintos.</li>
 <li>El patrón de <strong>integridad referencial manual</strong>: el código comprueba en PostgreSQL antes de tocar Mongo, porque el motor no puede hacerlo por sí solo.</li>
 <li>La propiedad real de conexión es <code>spring.mongodb.uri</code> (no <code>spring.data.mongodb.uri</code>).</li>

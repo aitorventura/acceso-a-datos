@@ -3026,7 +3026,7 @@
 </ul>
 <hr>
 <h2 id="el-resultado-esperado-de-principio-a-fin">El resultado esperado, de principio a fin<a class="headerlink" href="#el-resultado-esperado-de-principio-a-fin" title="Permanent link">¶</a></h2>
-<p>Antes de tocar nada, esto es lo que vas a conseguir que pase cuando termines la actividad — una petición <code>DELETE</code> que responde al instante, y una limpieza que ocurre después, en segundo plano:</p>
+<p>Antes de tocar nada, esto es lo que vas a conseguir que pase cuando termines la actividad: el <code>DELETE</code> publica un evento y, a partir de ahí, la respuesta HTTP y la limpieza de MongoDB avanzan de forma independiente.</p>
 <pre class="mermaid"><code>sequenceDiagram
     participant Cliente
     participant Controller as VideojuegoController
@@ -3041,16 +3041,16 @@
     Controller-&gt;&gt;Service: delete(id)
     Service-&gt;&gt;PG: borra el videojuego
     Service-&gt;&gt;MQ: publica evento videojuego.eliminado
-    Service--&gt;&gt;Controller: OK
-    Controller--&gt;&gt;Cliente: 204 No Content
-    Note over Cliente,Controller: La petición ya ha terminado,&lt;br/&gt;no espera a lo que viene después
 
-    par En otro hilo, en su propio momento
+    par Respuesta HTTP
+        Service--&gt;&gt;Controller: OK
+        Controller--&gt;&gt;Cliente: 204 No Content
+    and Procesamiento asíncrono
         MQ--&gt;&gt;Consumer: entrega el mensaje
         Consumer-&gt;&gt;RS: deleteByVideojuegoId(id)
         RS-&gt;&gt;Mongo: borra las reseñas de ese videojuego
     end</code></pre>
-<p>El <code>Cliente</code> recibe su <code>204</code> sin saber que las reseñas todavía existen en ese instante — el bloque <code>par</code> de abajo ocurre después, en un hilo distinto, sin que nadie lo espere. El Paso 1 retoma este mismo flujo con más detalle, centrado solo en la mitad que vas a construir tú.</p>
+<p>La petición HTTP no espera a que termine la limpieza de MongoDB: tras publicar el evento, el flujo de la respuesta y el procesamiento del consumer avanzan de forma independiente. El consumer puede terminar antes o después de que el cliente reciba físicamente el <code>204</code>; lo importante es que el borrado de reseñas ya no forma parte del tiempo de respuesta de esa petición.</p>
 <hr>
 <h2 id="requisitos-previos">Requisitos previos<a class="headerlink" href="#requisitos-previos" title="Permanent link">¶</a></h2>
 <p>Tu módulo <code>reviews</code> de la Actividad 3.1, y RabbitMQ funcionando con el registro de actividad del catálogo — se construye en Programación de Servicios y Procesos, Actividad 3.1. Si todavía no has llegado a esa actividad en PSP, complétala antes de seguir: hoy vas a ampliar el <code>RabbitMQConfig</code> y el <code>VideojuegoEventPublisher</code> que se construyen ahí, no a crearlos desde cero.</p>
@@ -3092,7 +3092,8 @@
 <p><code>VideojuegoService.delete()</code> (en el módulo <code>catalogo</code>) no llama directamente a nada de <code>reviews</code> — publica un evento a través de <code>VideojuegoEventPublisher</code>, y sigue su camino sin esperar, sin saber siquiera que <code>reviews</code> existe. En otro hilo, en su propio momento, un consumer nuevo —<code>ReviewsVideojuegoEventConsumer</code>, que vas a escribir en el Paso 2— recibe ese evento desde la cola que has creado en el Paso 0 y actúa: si el evento dice que un videojuego se ha eliminado, borra sus reseñas.</p>
 <div class="admonition tip">
 <p class="admonition-title">¿Por qué un broker, y no algo más ligero como el warm-up de caché de PSP?</p>
-<p>Publicador y consumer viven en la misma aplicación, igual que en el warm-up de caché — pero ahí perder un evento es inofensivo (la caché se autocorrige sola), mientras que aquí perder uno deja reseñas huérfanas <strong>para siempre</strong>, nada más va a reintentarlo. El broker aporta justo lo que aquí sí importa: el mensaje sobrevive aunque la aplicación se caiga entre el <code>publishEvent</code> y que el consumer llegue a procesarlo.</p>
+<p>Publicador y consumer viven en la misma aplicación, igual que en el warm-up de caché, pero aquí perder un aviso puede dejar reseñas huérfanas. RabbitMQ desacopla ambos trabajos y permite que el mensaje permanezca pendiente hasta que un consumer pueda procesarlo, además de soportar reintentos y posibles redeliveries.</p>
+<p>Aun así, PostgreSQL y RabbitMQ siguen siendo sistemas distintos: el borrado en la base de datos y la publicación del mensaje no forman una única operación atómica. En sistemas donde esa garantía fuera crítica se utilizarían patrones adicionales, como <em>transactional outbox</em>. Para esta práctica nos quedamos con el modelo sencillo de consistencia eventual.</p>
 </div>
 <p><strong>Fíjate</strong>: el borrado de reseñas va a ocurrir en un hilo distinto al de la petición HTTP que originó el borrado del videojuego — el mismo patrón de "hilo del listener de RabbitMQ" que ya has analizado en PSP.</p>
 <hr>
@@ -3163,8 +3164,8 @@
 </div>
 <hr>
 <h2 id="paso-3-protege-tu-coleccion-con-un-validador">Paso 3 — Protege tu colección con un validador<a class="headerlink" href="#paso-3-protege-tu-coleccion-con-un-validador" title="Permanent link">¶</a></h2>
-<p>Antes de probar nada con datos reales, un momento para cerrar un hueco que arrastras desde que empezaste con <code>reviews</code>: <code>puntuacion</code> solo está protegida en <code>ReviewRequestDTO</code> (<code>@Min(1)</code>/<code>@Max(10)</code>) — una validación que vive en tu código Java y que cualquiera con acceso directo a Mongo puede saltarse sin esfuerzo. Hazlo ahora, antes de crear tu primera reseña de verdad en el próximo paso, para que nazca ya protegida desde el primer documento.</p>
-<p>Borra tu colección <code>review</code> (todavía no tienes datos reales, así que no pierdes nada) y recréala explícitamente, esta vez con un validador:</p>
+<p>Antes de seguir trabajando con nuevos datos, cierra un hueco que arrastras desde que empezaste con <code>reviews</code>: <code>puntuacion</code> está protegida en <code>ReviewRequestDTO</code> (<code>@NotNull</code>, <code>@Min(1)</code> y <code>@Max(10)</code>), pero esa validación vive en tu código Java y cualquiera con acceso directo a Mongo puede saltársela. Vas a añadir ahora la misma protección a nivel de base de datos, antes de continuar con las pruebas.</p>
+<p>Borra la colección <code>review</code> con los datos de prueba de la Actividad 3.1 y recréala explícitamente, esta vez con un validador:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;tu-contenedor-mongo&gt;<span class="w"> </span>mongosh<span class="w"> </span>gamevault_db
 </code></pre></div></td></tr></table></div>
 <div class="language-javascript highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">JavaScript</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
@@ -3227,18 +3228,18 @@
 <span class="normal"><a href="#__codelineno-7-13">13</a></span>
 <span class="normal"><a href="#__codelineno-7-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Crea un videojuego y una reseña</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"titulo":"Test","precio":1,"fechaLanzamiento":"2020-01-01","estudioId":1}'</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5"></a>
 <a id="__codelineno-7-6" name="__codelineno-7-6"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span>/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$USER_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Prueba"}'</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="c1"># $TOKEN: crear una reseña solo exige estar autenticado, no rol ADMIN —</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="c1"># vale el token de cualquier usuario registrado, a diferencia del $TOKEN_ADMIN de arriba y abajo</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="c1"># $USER_TOKEN: crear una reseña solo exige estar autenticado, no rol ADMIN —</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="c1"># vale el token de cualquier usuario registrado, a diferencia del $ADMIN_TOKEN de arriba y abajo</span>
 <a id="__codelineno-7-11" name="__codelineno-7-11"></a>
 <a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="c1"># Borra el videojuego (exige rol ADMIN, igual que crearlo)</span>
 <a id="__codelineno-7-13" name="__codelineno-7-13"></a>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/<span class="o">{</span>id<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span>
 </code></pre></div></td></tr></table></div>
 <p>Fíjate en que esa segunda petición ha devuelto <code>201</code>, exactamente como siempre — el validador del Paso 3 no ha cambiado nada del comportamiento normal de tu aplicación, solo bloquea lo que nunca debería haber entrado.</p>
 <p><strong>Captura</strong>: los logs de tu aplicación mostrando dos nombres de hilo distintos — uno para la petición <code>DELETE</code>, otro para el consumer.</p>

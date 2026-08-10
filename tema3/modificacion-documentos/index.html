@@ -2937,7 +2937,7 @@
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1">// Eliminar</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nx">db</span><span class="p">.</span><span class="nx">nota_lectura</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="w"> </span><span class="nx">_id</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s2">"..."</span><span class="p">)</span><span class="w"> </span><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
-<p>Hay una diferencia conceptual importante entre <code>updateOne</code> con <code>$set</code> (modifica solo los campos indicados, deja el resto intacto) y <code>replaceOne</code> (sustituye el documento entero). Conviene que sepas que <code>$set</code> existe, aunque no lo uses directamente desde Java: <code>save()</code> de Spring Data MongoDB, que ya conoces, hace lo segundo — reemplaza el documento completo, no un <em>merge</em> parcial.</p>
+<p>Hay una diferencia conceptual importante entre <code>updateOne</code> con <code>$set</code> (modifica solo los campos indicados, deja el resto intacto) y <code>replaceOne</code> (sustituye el documento entero). Conviene que sepas que <code>$set</code> existe, aunque en esta práctica no lo uses desde Java: <code>save()</code> de Spring Data MongoDB, que ya conoces, hace lo segundo — reemplaza el documento completo, no un <em>merge</em> parcial.</p>
 <table>
 <thead>
 <tr>
@@ -2961,9 +2961,9 @@
 <td>Se sobrescriben con lo que traiga el objeto Java</td>
 </tr>
 <tr>
-<td>¿Se usa desde Java?</td>
-<td>No directamente</td>
-<td>No directamente</td>
+<td>¿Lo usas desde Java en esta práctica?</td>
+<td>No</td>
+<td>No</td>
 <td>Sí — es lo que ya usas</td>
 </tr>
 </tbody>

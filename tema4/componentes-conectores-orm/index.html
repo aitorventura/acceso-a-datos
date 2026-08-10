@@ -3022,7 +3022,7 @@
 <p class="admonition-title">Idea clave</p>
 <p>Un <strong>componente</strong> de software es la misma idea aplicada a código: una pieza autocontenida, con una responsabilidad concreta, que expone un <strong>contrato público</strong> — lo único que hace falta conocer para usarla — sin que quien la usa necesite saber cómo resuelve ese trabajo por dentro. Igual que el teléfono no sabe, ni le importa, qué hay dentro del cargador.</p>
 </div>
-<p>Ya usas componentes, sin haberlos llamado así todavía. Cada <code>@Service</code>, cada <code>@Repository</code> que has escrito en este módulo es uno: una pieza que hace una cosa concreta (gestionar libros, hablar con la base de datos...), que otras clases usan sin saber ni necesitar saber cómo está construida por dentro. Eso es, en esencia, la <strong>programación orientada a componentes</strong>: construir la aplicación ensamblando piezas autocontenidas y reutilizables, cada una con una responsabilidad clara y un <strong>contrato público</strong> — lo único que hace falta conocer para usarla, nunca cómo resuelve esa responsabilidad por dentro.</p>
+<p>Ya usas componentes, sin haberlos llamado así todavía. Tus servicios gestionados por Spring y los repositorios de Spring Data son ejemplos de piezas que otras clases pueden utilizar sin conocer cómo resuelven internamente su trabajo: una pieza que hace una cosa concreta (gestionar libros, hablar con la base de datos...), que otras clases usan sin saber ni necesitar saber cómo está construida por dentro. Eso es, en esencia, la <strong>programación orientada a componentes</strong>: construir la aplicación ensamblando piezas autocontenidas y reutilizables, cada una con una responsabilidad clara y un <strong>contrato público</strong> — lo único que hace falta conocer para usarla, nunca cómo resuelve esa responsabilidad por dentro.</p>
 <p>Ese contrato no siempre es una interfaz Java separada — depende de qué tipo de pieza sea:</p>
 <table>
 <thead>
@@ -3036,12 +3036,12 @@
 <tr>
 <td><code>@Service</code> normal (<code>LibroService</code>)</td>
 <td>No</td>
-<td>Sus propios métodos públicos — la clase concreta hace de contrato, nadie la va a sustituir por otra</td>
+<td>Sus métodos públicos; los consumidores dependen directamente de la clase concreta</td>
 </tr>
 <tr>
 <td><code>@Repository</code> (<code>LibroRepository</code>)</td>
-<td>Sí, y la genera Spring por ti</td>
-<td>La interfaz <code>JpaRepository</code> que extiendes (lo ves en detalle en "Nivel 1", más abajo)</td>
+<td>Sí</td>
+<td>La interfaz <code>LibroRepository</code>, que extiende <code>JpaRepository</code>; Spring genera su implementación</td>
 </tr>
 <tr>
 <td>El patrón que construyes hoy</td>
@@ -3082,7 +3082,7 @@
 </tr>
 </tbody>
 </table>
-<p>Lo único que cambia de verdad es quién ensambla las piezas: antes lo hacía el propio IDE, al arrastrarlas sobre el lienzo; ahora lo hace Spring, leyendo tus anotaciones (<code>@Service</code>, <code>@Autowired</code>...) y montando el objeto completo por ti.</p>
+<p>Lo único que cambia de verdad es quién ensambla las piezas: antes lo hacía el propio IDE, al arrastrarlas sobre el lienzo; ahora lo hace Spring, detectando tus componentes (<code>@Service</code>, <code>@Repository</code>, <code>@Component</code>...) e inyectando sus dependencias — normalmente por constructor, como llevas haciendo con <code>@RequiredArgsConstructor</code>.</p>
 <h3 id="ventajas-e-inconvenientes">Ventajas e inconvenientes<a class="headerlink" href="#ventajas-e-inconvenientes" title="Permanent link">¶</a></h3>
 <p>Como cualquier decisión de diseño, programar por componentes trae ventajas claras, pero no es gratis:</p>
 <table>
@@ -3171,14 +3171,14 @@
     end
     subgraph Con["🧩 Con componente — un único sitio"]
         direction TB
-        I2["Interfaz del componente&lt;br/&gt;(no cambia)"]
+        I2["Interfaz del componente&lt;br/&gt;(contrato estable)"]
         IMPL2["Su implementación&lt;br/&gt;(el único sitio que cambia)"]
         N1["NotaLecturaService"] --&gt; I2
         N2["Módulo B"] --&gt; I2
         N3["Módulo C"] --&gt; I2
         I2 -.-&gt; IMPL2
     end</code></pre>
-<p>En "Sin componente", cada módulo apunta directamente a lo que cambia — tres sitios que tocar. En "Con componente", todos apuntan a una interfaz que no cambia nunca; el único que se entera del cambio es su implementación, oculta detrás. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo, sin decir cómo se decide por dentro, y esconder todo lo demás detrás. Así se construye uno, paso a paso:</p>
+<p>En "Sin componente", cada módulo apunta directamente a un detalle interno que puede cambiar — tres sitios que tocar. En "Con componente", todos dependen de una interfaz diseñada para mantenerse estable aunque cambie la implementación; mientras el contrato siga siendo el mismo, los consumidores no necesitan enterarse de esos cambios internos. Este es exactamente el problema que resuelve un componente bien diseñado: exponer solo un contrato mínimo y esconder detrás cómo se resuelve realmente.</p>
 <h3 id="construyendo-el-componente-interfaz-implementacion-oculta">Construyendo el componente: interfaz + implementación oculta<a class="headerlink" href="#construyendo-el-componente-interfaz-implementacion-oculta" title="Permanent link">¶</a></h3>
 <p>La solución es una interfaz pequeña, pensada para que otros módulos la usen, con una implementación que sí conoce los detalles pero permanece oculta. Antes de ver el código, dos modificadores de Java que hacen todo el trabajo aquí:</p>
 <table>
@@ -3239,8 +3239,8 @@
     SERV -.-&gt;|"bloqueado: el compilador no la deja ni nombrar"| IMPL</code></pre>
 <p><code>NotaLecturaService</code>, desde su propio paquete, puede importar y usar <code>LibroConsultaService</code> sin ningún problema — es <code>public</code>, para eso está. Pero no tiene ninguna forma de escribir <code>LibroConsultaServiceImpl</code> en su código: el compilador ni se lo permite, porque esa clase no existe para nadie fuera de <code>catalogo</code>.</p>
 <div class="admonition warning">
-<p class="admonition-title">Un error fácil de cometer: la implementación dentro de <code>api</code></p>
-<p>Si <code>LibroConsultaServiceImpl</code> viviera en <code>catalogo.api</code>, junto a la interfaz, el <code>package-private</code> dejaría de proteger nada: cualquier módulo que ya importa ese paquete para usar la interfaz vería también la implementación, porque estaría en el mismo paquete. El <code>package-private</code> solo cumple su función si la implementación vive en el paquete "normal" (<code>catalogo</code>), separado de <code>api</code> — la interfaz es lo único que sale de ahí.</p>
+<p class="admonition-title">La implementación no forma parte del API público</p>
+<p>Aunque <code>LibroConsultaServiceImpl</code> estuviera en <code>catalogo.api</code> y siguiera siendo <em>package-private</em>, continuaría siendo invisible para las clases de otros paquetes: en Java, <em>package-private</em> solo permite el acceso desde clases declaradas en el mismo paquete. Aun así, conviene mantener la implementación fuera de <code>api</code>, en <code>catalogo</code>, para que la estructura deje clara la intención: <code>api</code> contiene el contrato público que otros módulos pueden usar; <code>catalogo</code>, los detalles internos de su implementación.</p>
 </div>
 <p><code>NotaLecturaService</code> pasa a depender solo de la interfaz, nunca de <code>LibroRepository</code> ni de la clase que la implementa:</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
@@ -3376,9 +3376,9 @@
 <li>El origen histórico son los JavaBeans; en Spring Boot, el equivalente son los <strong>beans gestionados por inyección de dependencias</strong>.</li>
 <li>Ventajas: reutilización, sustituibilidad, pruebas aisladas, división del trabajo. Inconveniente: más interfaces e indirección.</li>
 <li>Spring (<code>@Service</code>/<code>@Repository</code>/<code>@Component</code> + inyección) ES la "herramienta de desarrollo de componentes" en este contexto — no hay paleta visual.</li>
-<li>Un <code>JpaRepository</code> ya es un componente básico; una interfaz + implementación oculta (<code>LibroConsultaService</code>/<code>LibroConsultaServiceImpl</code>) es el siguiente nivel: contrato en <code>api</code>, implementación oculta, desacoplamiento real entre módulos.</li>
+<li>Un <code>JpaRepository</code> ya es un componente básico; una interfaz + implementación oculta (<code>LibroConsultaService</code>/<code>LibroConsultaServiceImpl</code>) es el siguiente nivel: contrato en <code>api</code>, implementación oculta y menor acoplamiento, porque los consumidores dependen del contrato público y no de los detalles internos del otro módulo.</li>
 <li>El problema no es inyectar un repositorio — es inyectar el repositorio de <strong>otro módulo</strong>. Usar tu propio repositorio directamente (<code>NotaLecturaRepository</code> desde <code>NotaLecturaService</code>) nunca ha sido el problema.</li>
-<li>La implementación tiene que vivir fuera de <code>api</code>, en el paquete "normal" — si estuviera dentro de <code>api</code> junto a la interfaz, el <code>package-private</code> no protegería nada.</li>
+<li>Conviene mantener la implementación fuera de <code>api</code>, en el paquete "normal", para que la estructura separe claramente el contrato público de sus detalles internos. <code>package-private</code> seguiría limitando su acceso aunque estuviera dentro de <code>api</code>; la separación de paquetes expresa aquí una decisión de diseño.</li>
 <li>Un componente con una única dependencia se presta a un test aislado con Mockito: <code>@Mock</code> sustituye esa dependencia por un doble de prueba, <code>@InjectMocks</code> construye la clase real inyectándoselo — sin arrancar Spring, mucho más rápido que un <code>@SpringBootTest</code>.</li>
 <li>El mismo patrón funciona en cualquier dirección y con cualquier motor detrás: <code>NotaLecturaConsultaService</code> expone MongoDB hacia el catálogo, igual que <code>LibroConsultaService</code> expone PostgreSQL hacia notas de lectura — ningún módulo es "el importante" al que los demás preguntan.</li>
 </ul>

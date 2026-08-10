@@ -2983,7 +2983,7 @@
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
 <span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$USER_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Sigue funcionando igual"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: mismo comportamiento de siempre — <code>201 Created</code> si el videojuego existe, <code>404 Not Found</code> si no. El refactor no debería cambiar ni un código de estado, solo de dónde viene la comprobación.</p>
@@ -3020,7 +3020,7 @@
 <p><strong>Captura</strong>: la respuesta de <code>/resumen</code> mostrando el campo <code>tituloVideojuego</code>.</p>
 <hr>
 <h2 id="paso-5-prueba-del-componente-aislado">Paso 5 — Prueba del componente aislado<a class="headerlink" href="#paso-5-prueba-del-componente-aislado" title="Permanent link">¶</a></h2>
-<p>Siguiendo el patrón de <code>@Mock</code>/<code>@InjectMocks</code> de la teoría de este apartado:</p>
+<p>Siguiendo el patrón de <code>@Mock</code>/<code>@InjectMocks</code> de la teoría de este apartado, crea el test en <code>src/test/java/com/tunombre/gamevault/catalogo/CatalogoConsultaServiceImplTest.java</code>, con el mismo <code>package com.tunombre.gamevault.catalogo;</code> que la implementación. Esto es necesario porque <code>CatalogoConsultaServiceImpl</code> es <em>package-private</em>: desde un paquete distinto el propio test no podría ni nombrar esa clase.</p>
 <div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-2-3"> 3</a></span>

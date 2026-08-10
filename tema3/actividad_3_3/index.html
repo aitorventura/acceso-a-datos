@@ -2941,7 +2941,7 @@
 </div>
 <div class="admonition info">
 <p class="admonition-title">Práctica guiada</p>
-<p>Hoy añades el <code>PUT</code> que falta en tu módulo <code>reviews</code>, con control de autoría: solo quien escribió una reseña puede modificarla.</p>
+<p>Hoy completas la modificación y el borrado de <code>reviews</code> con control de acceso: el autor puede modificar o eliminar su propia reseña, y un usuario con rol <code>ADMIN</code> puede hacerlo también como vía de moderación.</p>
 </div>
 <h2 id="que-vas-a-practicar">Qué vas a practicar<a class="headerlink" href="#que-vas-a-practicar" title="Permanent link">¶</a></h2>
 <ul>
@@ -3051,95 +3051,98 @@ Otra vez basta con estar autenticado, sin rol concreto — quién puede modifica
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$USER_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 7, "comentario": "Buena, pero corta"}'</span>
 </code></pre></div></td></tr></table></div>
 <p>Modifícala con el <strong>mismo</strong> usuario:</p>
 <div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
 <span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$USER_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 8, "comentario": "Buena, pero corta — la he rejugado y mejora"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>200 OK</code>, con los datos actualizados en la respuesta.</p>
 <p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>200 OK</code> y los datos ya actualizados.</p>
 <hr>
 <h2 id="paso-3-probar-con-dos-usuarios-el-caso-denegado">Paso 3 — Probar con dos usuarios: el caso denegado<a class="headerlink" href="#paso-3-probar-con-dos-usuarios-el-caso-denegado" title="Permanent link">¶</a></h2>
-<p>Consigue un token de un <strong>segundo</strong> usuario (crea uno nuevo si solo tienes uno de prueba) e intenta modificar la reseña del primero:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_OTRO_USUARIO</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'</span>
+<p>Consigue un token de un <strong>segundo</strong> usuario (crea uno nuevo si solo tienes uno de prueba) y guarda el token de ese segundo usuario en otra variable para no confundirlo con el anterior:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="nv">OTHER_USER_TOKEN</span><span class="o">=</span><span class="s2">"pega-aqui-el-token-del-segundo-usuario"</span>
+</code></pre></div></td></tr></table></div>
+<p>E intenta modificar la reseña del primero:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$OTHER_USER_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 1, "comentario": "Intento de modificación ajena"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>403 Forbidden</code>.</p>
 <p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>403 Forbidden</code>.</p>
 <p><strong>Documenta</strong> ambos resultados (Paso 2 y este) con el código de estado y el cuerpo de cada respuesta.</p>
 <hr>
 <h2 id="paso-4-probar-con-un-administrador-el-rol-tambien-permite">Paso 4 — Probar con un administrador: el rol también permite<a class="headerlink" href="#paso-4-probar-con-un-administrador-el-rol-tambien-permite" title="Permanent link">¶</a></h2>
-<p>Con <code>$TOKEN_ADMIN</code>, modifica la misma reseña del Paso 3 — sin ser el autor:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_ADMIN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 5, "comentario": "Moderado por un administrador"}'</span>
+<p>Con <code>$ADMIN_TOKEN</code>, modifica la misma reseña del Paso 3 — sin ser el autor:</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"puntuacion": 5, "comentario": "Moderado por un administrador"}'</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>200 OK</code> — a diferencia del Paso 3, aunque tampoco sea el autor.</p>
-<p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>200 OK</code>, hecha con <code>$TOKEN_ADMIN</code>.</p>
+<p><strong>Captura</strong>: la respuesta del <code>PUT</code> con <code>200 OK</code>, hecha con <code>$ADMIN_TOKEN</code>.</p>
 <hr>
 <h2 id="paso-5-el-delete-que-falta-con-el-mismo-patron">Paso 5 — El <code>DELETE</code> que falta, con el mismo patrón<a class="headerlink" href="#paso-5-el-delete-que-falta-con-el-mismo-patron" title="Permanent link">¶</a></h2>
 <p>Hasta ahora un autor puede crear y modificar su reseña, pero nunca borrarla — cierra ese hueco reutilizando exactamente el mismo patrón de permiso que acabas de aplicar en el <code>PUT</code>, esta vez sobre <code>delete()</code>. Sin código dado esta vez — es la misma estructura que ya has escrito en el Paso 1, cambiando solo qué haces al final:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span>
-<span class="normal"><a href="#__codelineno-7-3">3</a></span>
-<span class="normal"><a href="#__codelineno-7-4">4</a></span>
-<span class="normal"><a href="#__codelineno-7-5">5</a></span>
-<span class="normal"><a href="#__codelineno-7-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">// En ReviewService</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">usuarioActual</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">esAdmin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">    </span><span class="c1">// Mismo patrón que update(): cargar (404 si no existe), comprobar que pertenece a videojuegoId</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">    </span><span class="c1">// (404 si no), comprobar autor o esAdmin (403 si no), y solo entonces reviewRepository.deleteById(reviewId)</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="c1">// — el heredado de MongoRepository del que ya habla la teoría, nunca lo habías usado de verdad hasta ahora.</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// En ReviewService</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">usuarioActual</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">esAdmin</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">    </span><span class="c1">// Mismo patrón que update(): cargar (404 si no existe), comprobar que pertenece a videojuegoId</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="c1">// (404 si no), comprobar autor o esAdmin (403 si no), y solo entonces reviewRepository.deleteById(reviewId)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">    </span><span class="c1">// — el heredado de MongoRepository del que ya habla la teoría, nunca lo habías usado de verdad hasta ahora.</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-8-10">10</a></span>
-<span class="normal"><a href="#__codelineno-8-11">11</a></span>
-<span class="normal"><a href="#__codelineno-8-12">12</a></span>
-<span class="normal"><a href="#__codelineno-8-13">13</a></span>
-<span class="normal"><a href="#__codelineno-8-14">14</a></span>
-<span class="normal"><a href="#__codelineno-8-15">15</a></span>
-<span class="normal"><a href="#__codelineno-8-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// En VideojuegoReviewController</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Eliminar una reseña (solo el autor o un administrador)"</span><span class="p">)</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"204"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña eliminada correctamente"</span><span class="p">),</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"401"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No autenticado"</span><span class="p">),</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"403"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No eres el autor ni un administrador"</span><span class="p">),</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña no encontrada"</span><span class="p">)</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="p">})</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{reviewId}"</span><span class="p">)</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="w">        </span><span class="n">Authentication</span><span class="w"> </span><span class="n">authentication</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="w">    </span><span class="c1">// Misma extracción de esAdmin que en el PUT del Paso 1, y la llamada al service</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="p">}</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1">// En VideojuegoReviewController</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nd">@Operation</span><span class="p">(</span><span class="n">summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Eliminar una reseña (solo el autor o un administrador)"</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="nd">@ApiResponses</span><span class="p">({</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"204"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña eliminada correctamente"</span><span class="p">),</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"401"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No autenticado"</span><span class="p">),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"403"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"No eres el autor ni un administrador"</span><span class="p">),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">        </span><span class="nd">@ApiResponse</span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"404"</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Reseña no encontrada"</span><span class="p">)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="p">})</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">"/{reviewId}"</span><span class="p">)</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">videojuegoId</span><span class="p">,</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reviewId</span><span class="p">,</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">        </span><span class="n">Authentication</span><span class="w"> </span><span class="n">authentication</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">    </span><span class="c1">// Misma extracción de esAdmin que en el PUT del Paso 1, y la llamada al service</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Añade también la regla que falta a tu <code>SecurityConfig</code>, igual que hiciste con el <code>PUT</code>:</p>
-<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">DELETE</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/*"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
+<div class="language-java highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Java</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="p">.</span><span class="na">requestMatchers</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="na">DELETE</span><span class="p">,</span><span class="w"> </span><span class="s">"/api/v1/videojuegos/*/reviews/*"</span><span class="p">).</span><span class="na">authenticated</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 <p>No hace falta repetir las tres pruebas del Paso 2-4 — la lógica de permiso es idéntica y ya la has verificado. Basta con una comprobación:</p>
-<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
-<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN_USER</span><span class="s2">"</span>
+<div class="language-bash highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/v1/videojuegos/1/reviews/<span class="o">{</span>reviewId<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$USER_TOKEN</span><span class="s2">"</span>
 </code></pre></div></td></tr></table></div>
 <p><strong>Comprueba</strong>: <code>204 No Content</code>, y que un <code>GET</code> posterior a esa reseña ya no la incluye.</p>
 <p><strong>Captura</strong>: la respuesta del <code>DELETE</code> con <code>204 No Content</code>.</p>
