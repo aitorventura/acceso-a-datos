@@ -5,7 +5,7 @@
 ![Persistencia de objetos con JSONB](diapositivas/persistencia-objetos-jsonb.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/persistencia-objetos-jsonb.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/persistencia-objetos-jsonb.pptx){target="_blank" rel="noopener"}
 
 ---
 

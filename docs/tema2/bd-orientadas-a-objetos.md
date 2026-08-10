@@ -5,7 +5,7 @@
 ![Bases de datos orientadas a objetos, pruebas y documentación](diapositivas/bd-orientadas-a-objetos.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/bd-orientadas-a-objetos.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/bd-orientadas-a-objetos.pptx){target="_blank" rel="noopener"}
 
 ---
 

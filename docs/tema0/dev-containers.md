@@ -3,7 +3,7 @@
 ![Dev Containers](diapositivas/dev-containers.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/dev-containers.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/dev-containers.pptx){target="_blank" rel="noopener"}
 
 ---
 

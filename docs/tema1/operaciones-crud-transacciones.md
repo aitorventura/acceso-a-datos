@@ -5,7 +5,7 @@
 ![Operaciones CRUD y gestión de transacciones](diapositivas/operaciones-crud-transacciones.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/operaciones-crud-transacciones.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/operaciones-crud-transacciones.pptx){target="_blank" rel="noopener"}
 
 ---
 

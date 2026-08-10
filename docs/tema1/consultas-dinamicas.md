@@ -5,7 +5,7 @@
 ![Consultas dinámicas: Specifications y paginación](diapositivas/consultas-dinamicas.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/consultas-dinamicas.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/consultas-dinamicas.pptx){target="_blank" rel="noopener"}
 
 ---
 

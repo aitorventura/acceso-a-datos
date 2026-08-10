@@ -5,7 +5,7 @@
 ![Componentes](diapositivas/componentes-conectores-orm.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/componentes-conectores-orm.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/componentes-conectores-orm.pptx){target="_blank" rel="noopener"}
 
 ---
 

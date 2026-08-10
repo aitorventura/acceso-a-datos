@@ -5,7 +5,7 @@
 ![Fundamentos de Spring Boot](diapositivas/spring-boot-fundamentos.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/spring-boot-fundamentos.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/spring-boot-fundamentos.pptx){target="_blank" rel="noopener"}
 
 ---
 

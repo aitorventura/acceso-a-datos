@@ -5,7 +5,7 @@
 ![Hibernate a fondo: decisiones de mapeo y ciclo de vida](diapositivas/hibernate-a-fondo.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/hibernate-a-fondo.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/hibernate-a-fondo.pptx){target="_blank" rel="noopener"}
 
 ---
 

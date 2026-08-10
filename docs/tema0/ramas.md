@@ -3,7 +3,7 @@
 ![Ramas](diapositivas/ramas.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/ramas.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/ramas.pptx){target="_blank" rel="noopener"}
 
 Las **ramas** son una de las características más útiles de Git. Permiten trabajar en una nueva funcionalidad, arreglar un error o hacer un experimento sin tocar el código que ya funciona. Cuando terminas, decides si integras ese trabajo o lo descartas.
 

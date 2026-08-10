@@ -3,7 +3,7 @@
 ![Introducción a Docker](diapositivas/introduccion-docker.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
 !!!info "Descarga de diapositivas"
-    [Descarga las diapositivas](diapositivas/introduccion-docker.pdf){target="_blank" rel="noopener"}
+    [Descarga las diapositivas](diapositivas/introduccion-docker.pptx){target="_blank" rel="noopener"}
 
 ---
 
