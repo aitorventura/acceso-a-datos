@@ -2,6 +2,13 @@
 
 # 🧩 1. Componentes
 
+![Componentes](diapositivas/componentes-conectores-orm.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/componentes-conectores-orm.pdf){target="_blank" rel="noopener"}
+
+---
+
 Último tema del módulo. Todo lo que has construido hasta ahora — repositorios, servicios, controladores — lo vas a mirar ahora bajo una óptica distinta: la de **componente**. Vas a identificar un problema que ya tienes en tu propio código desde el Tema 3, y resolverlo construyendo un componente con un contrato explícito — primero en una dirección, con PostgreSQL (Actividad 4.1), y después exactamente con el mismo molde en la dirección contraria, con MongoDB (Actividad 4.2).
 
 ---

@@ -2,6 +2,13 @@
 
 # 🧩 1. Conexión a MongoDB y consultas sobre notas de lectura
 
+![Conexión a MongoDB y consultas sobre notas de lectura](diapositivas/conexion-mongodb.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/conexion-mongodb.pdf){target="_blank" rel="noopener"}
+
+---
+
 Hasta ahora, todo lo que has persistido ha vivido dentro de PostgreSQL — incluso el JSONB del Tema 2 seguía siendo una columna de una tabla relacional. Este tema da un salto real: una base de datos completamente distinta, sin tablas de ningún tipo.
 
 ---

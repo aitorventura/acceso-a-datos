@@ -2,6 +2,13 @@
 
 # 🧩 2. Colecciones documentales: gestión y consultas
 
+![Colecciones documentales: gestión y consultas](diapositivas/colecciones-documentales.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/colecciones-documentales.pdf){target="_blank" rel="noopener"}
+
+---
+
 La comparación relacional/documental y el porqué de usar dos motores a la vez ya los has visto con detalle en el apartado anterior — no hace falta repetirlos aquí. Lo que te falta es más práctico y algo más concreto: en el ejemplo de las notas de lectura, la colección `nota_lectura` se crea sola, sin que nadie lo pida explícitamente, en cuanto `NotaLecturaRepository` guarda el primer documento. Hoy ves esa creación **explícita** (y su contrapartida, eliminarla), y una herramienta nueva para cuando una consulta ya no cabe cómodamente en el nombre de un método.
 
 ---

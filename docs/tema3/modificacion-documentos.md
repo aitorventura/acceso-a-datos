@@ -2,6 +2,13 @@
 
 # 🧩 3. Modificación de documentos
 
+![Modificación de documentos](diapositivas/modificacion-documentos.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/modificacion-documentos.pdf){target="_blank" rel="noopener"}
+
+---
+
 Te falta la pieza final del bloque documental: modificar un documento concreto, con una particularidad que no habías tenido que resolver hasta ahora — comprobar quién tiene permiso para hacerlo.
 
 ---

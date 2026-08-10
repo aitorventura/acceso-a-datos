@@ -2,6 +2,13 @@
 
 # 🧩 2. Integración y pruebas
 
+![Integración y pruebas](diapositivas/integracion-y-pruebas.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
+
+!!!info "Descarga de diapositivas"
+    [Descarga las diapositivas](diapositivas/integracion-y-pruebas.pdf){target="_blank" rel="noopener"}
+
+---
+
 Último apartado del módulo. Responde a la pregunta que da sentido a todo lo anterior: ¿cómo sabes que tus componentes, diseñados por separado, funcionan bien **juntos**?
 
 ---
