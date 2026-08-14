@@ -141,3 +141,18 @@
 - Persistencia del componente. Serialización.
 - Herramientas para desarrollo de componentes.
 - Desarrollo, empaquetado y utilización de componentes.
+
+---
+
+## Dónde se trabaja cada RA
+
+| RA | Tema | Peso orientativo |
+|---|---|---|
+| RA1 | Formación en Empresa (FE) | 10 % |
+| RA2 + RA3 | Tema 1 | 40 % |
+| RA4 | Tema 2 | 20 % |
+| RA5 | Tema 3 | 25 % |
+| RA6 | Tema 4 | 15 % |
+
+!!! note "RA1 en la Formación en Empresa"
+    El RA1 (Gestión de ficheros) se evalúa en la FE. Ese 10 % se reparte a partes iguales entre el resto de RA para calcular la nota final del módulo en el centro.
