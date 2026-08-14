@@ -83,11 +83,11 @@
 
 | RA | Tema | Peso orientativo |
 |---|---|---|
-| RA1 | Formación en Empresa (FE) | 10 % |
+| RA1 | Formación en Empresa (FE) | 0 % (repartido) |
 | RA2 + RA3 | Tema 1 | 40 % |
 | RA4 | Tema 2 | 20 % |
 | RA5 | Tema 3 | 25 % |
 | RA6 | Tema 4 | 15 % |
 
 !!! note "RA1 en la Formación en Empresa"
-    El RA1 (Gestión de ficheros) se evalúa en la FE. Ese 10 % se reparte a partes iguales entre el resto de RA para calcular la nota final del módulo en el centro.
+    El RA1 (Gestión de ficheros) se evalúa en la FE y por eso figura con un 0 % propio en la tabla: su peso oficial (10 %) no se pierde, sino que se reparte a partes iguales entre el resto de RA — por eso los pesos de RA2 a RA6 ya suman 100 % en vez de 90 %.
