@@ -104,6 +104,7 @@ nav:
       - Integración y pruebas:
           - Integración y pruebas: tema4/integracion-y-pruebas.md
           - Actividad 4.3 - Integración final del proyecto: tema4/actividad_4_3.md
+  - Currículo: curriculum.md
   - Cierre del módulo: cierre.md
 
 markdown_extensions:
