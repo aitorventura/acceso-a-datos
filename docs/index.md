@@ -18,13 +18,18 @@ En este módulo aprendes a que tus programas guarden y recuperen información de
 
 ## 📘 Temas del módulo
 
+Los temas se van publicando a medida que avanza el curso. Los que todavía no están disponibles aparecen bloqueados en la tabla.
+
 | Tema | Qué cubre | RA |
 |------|-----------|-----|
 | 🔁 [Tema 0 — Introducción](tema0/index.md) | Repaso de Git/GitHub, Docker y Dev Containers | — |
-| 🧩 [Tema 1 — Manejo de conectores y herramientas ORM](tema1/index.md) | Conectores, JDBC, CRUD, transacciones, procedimientos almacenados, Hibernate, Specifications y consultas JPQL | RA2 + RA3 |
-| 🧩 [Tema 2 — BD objeto relacionales](tema2/index.md) | Persistencia y consultas sobre columnas JSONB en PostgreSQL | RA4 |
-| 🧩 [Tema 3 — BD documentales](tema3/index.md) | MongoDB, colecciones y documentos, control de autoría | RA5 |
-| 🧩 [Tema 4 — Componentes de acceso a datos](tema4/index.md) | Componentes reutilizables, integración y pruebas finales | RA6 |
+| 🔒 Tema 1 — Manejo de conectores y herramientas ORM *(próximamente)* | Conectores, JDBC, CRUD, transacciones, procedimientos almacenados, Hibernate, Specifications y consultas JPQL | RA2 + RA3 |
+| 🔒 Tema 2 — BD objeto relacionales *(próximamente)* | Persistencia y consultas sobre columnas JSONB en PostgreSQL | RA4 |
+| 🔒 Tema 3 — BD documentales *(próximamente)* | MongoDB, colecciones y documentos, control de autoría | RA5 |
+| 🔒 Tema 4 — Componentes de acceso a datos *(próximamente)* | Componentes reutilizables, integración y pruebas finales | RA6 |
+
+<!-- Al desbloquear un tema (ver mkdocs.yml): cambia su fila de "🔒 Tema N — título *(próximamente)*"
+     a "[emoji] [Tema N — título](temaN/index.md)", igual que la fila del Tema 0. -->
 
 ---
 
