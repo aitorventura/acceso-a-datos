@@ -9,6 +9,7 @@ exclude_docs: |
   tema2/*
   tema3/*
   tema4/*
+  cierre.md
 
 site_name: Acceso a Datos
 
@@ -117,7 +118,7 @@ nav:
   #         - Integración y pruebas: tema4/integracion-y-pruebas.md
   #         - Actividad 4.3 - Integración final del proyecto: tema4/actividad_4_3.md
   - Currículo: curriculum.md
-  - Cierre del módulo: cierre.md
+  # - Cierre del módulo: cierre.md
 
 markdown_extensions:
   - md_in_html
