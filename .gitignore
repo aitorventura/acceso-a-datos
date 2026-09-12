@@ -5,5 +5,8 @@
 *_solved.pdf
 soluciones/
 
+# Excepción: Tema 0 es repaso no evaluable, su solución SÍ es pública (autoevaluación)
+!docs/tema0/plantillas/*Solucion*.docx
+
 # Salida de mkdocs build
 site/
