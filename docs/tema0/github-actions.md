@@ -1,4 +1,4 @@
-**# ⚙️ 5. Integración Continua con GitHub Actions**
+# ⚙️ 5. Integración Continua con GitHub Actions**
 
 ![Integración Continua con GitHub Actions]\(diapositivas/github-actions.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
