@@ -2,7 +2,8 @@
 
 ![Integración Continua con GitHub Actions](diapositivas/github-actions.pdf){ type=application/pdf style="width:100%;min-height:80vh" }
 
-!!!info "Descarga de diapositivas"
+!!! info "Descarga de diapositivas"
+
     [Descarga las diapositivas](diapositivas/github-actions.pptx){target="_blank" rel="noopener"}
 
 ---
@@ -87,37 +88,30 @@ mi-proyecto-ci/
 ```yaml
 # .github/workflows/ci.yml
 name: CI — Build y Tests               # Nombre que aparece en el panel Actions
-
 on:                                    # Eventos que disparan este workflow
   push:
     branches: [main]                   # Solo en push a main
   pull_request:                        # En cualquier PR hacia main
     branches: [main]
-
 jobs:                                  # Conjunto de jobs del workflow
   build:                               # Nombre del job (lo eliges tú)
     runs-on: ubuntu-latest             # Máquina virtual donde corre
-
     steps:                             # Pasos del job, en orden
       - name: Descargar el código fuente
-        uses: actions/checkout@v4      # Action oficial: clona el repo en el runner
-
+        uses: actions/checkout@v7      # Action oficial: clona el repo en el runner
       - name: Instalar Java 21 (Temurin)
-        uses: actions/setup-java@v4    # Action oficial: instala el JDK
+        uses: actions/setup-java@v6    # Action oficial: instala el JDK
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'               # cachea ~/.m2 entre ejecuciones
-
       - name: Compilar el proyecto
         run: mvn compile -B            # Comando de shell normal
-
       - name: Ejecutar los tests
         run: mvn test -B
-
       - name: Guardar el informe de tests
         if: always()                   # se ejecuta aunque los tests fallen
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: informe-tests
           path: target/surefire-reports/
@@ -126,15 +120,24 @@ jobs:                                  # Conjunto de jobs del workflow
 Cada sección tiene su función:
 
 - **`name`** — el nombre que verás en la interfaz de GitHub. Ponlo descriptivo.
+
 - **`on`** — define qué eventos activan el workflow. Puedes listar varios.
+
 - **`jobs`** — aquí defines uno o más jobs. Por defecto se ejecutan en paralelo.
+
 - **`runs-on`** — el tipo de runner. `ubuntu-latest` es el más común y el más rápido.
-- **`steps`** — lista de pasos. Se ejecutan en orden, uno tras otro. Si uno falla, el job se detiene.
+
+- **`steps`** — lista de pasos. Por defecto se ejecutan en orden, uno tras otro. Si uno falla, los siguientes pasos no se ejecutan salvo que su condición indique lo contrario (por ejemplo, `if: always()`).
+
 - **`uses`** — invoca una Action del Marketplace (código reutilizable de otro repositorio).
+
 - **`run`** — ejecuta un comando de shell directamente en el runner.
 
 !!! tip "¿Qué versión de Action usar?"
-    Fíjate en el `@v4` de `actions/checkout@v4`. Indica la versión de la Action. Siempre fija una versión concreta; si escribes `@main` usarías siempre la última versión y un cambio incompatible podría romper tu workflow sin que hayas tocado nada.
+
+    Fíjate en el `@v7` de `actions/checkout@v7`. Indica la versión mayor de la Action. En estos ejemplos utilizamos la **versión mayor estable recomendada** de cada Action oficial. Evita referencias como `@main`: apuntan al desarrollo más reciente y pueden introducir cambios inesperados sin que hayas modificado tu workflow.
+
+    Desde junio de 2026 los runners de GitHub Actions utilizan **Node.js 24** por defecto para las Actions JavaScript. Por eso conviene mantener actualizadas las Actions oficiales. Si utilizas runners autohospedados, también debes mantener actualizado el software del runner.
 
 ---
 
@@ -146,21 +149,16 @@ Para que el workflow de CI tenga algo que comprobar, el proyecto tiene una clase
 
 ```java
 package com.ejemplo;
-
 public class Calculadora {
-
     public int sumar(int a, int b) {
         return a + b;
     }
-
     public int restar(int a, int b) {
         return a - b;
     }
-
     public int multiplicar(int a, int b) {
         return a * b;
     }
-
     public double dividir(double a, double b) {
         if (b == 0) {
             throw new IllegalArgumentException("No se puede dividir por cero");
@@ -174,34 +172,26 @@ public class Calculadora {
 
 ```java
 package com.ejemplo;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 class CalculadoraTest {
-
     private final Calculadora calc = new Calculadora();
-
     @Test
     void sumarDosPositivos() {
         assertEquals(5, calc.sumar(2, 3));
     }
-
     @Test
     void restarResultadoNegativo() {
         assertEquals(-1, calc.restar(2, 3));
     }
-
     @Test
     void multiplicarPorCero() {
         assertEquals(0, calc.multiplicar(7, 0));
     }
-
     @Test
     void dividirNormal() {
         assertEquals(2.5, calc.dividir(5, 2));
     }
-
     @Test
     void dividirPorCeroLanzaExcepcion() {
         assertThrows(IllegalArgumentException.class, () -> calc.dividir(10, 0));
@@ -213,11 +203,11 @@ Cuando se hace `push` de este proyecto a GitHub con el fichero `ci.yml` en su si
 
 ### Qué hace cada step con la Calculadora
 
-**Step 1 — `actions/checkout@v4`**
+**Step 1 — `actions/checkout@v7`**
 
 El runner arranca como una máquina virtual vacía: no tiene ni el código del proyecto. Este step clona el repositorio dentro del runner, igual que harías tú con `git clone`. Sin él, los pasos siguientes no encontrarían ni el `pom.xml` ni las clases Java.
 
-**Step 2 — `actions/setup-java@v4`**
+**Step 2 — `actions/setup-java@v6`**
 
 Una vez que el código está descargado, el runner necesita Java para poder compilar y ejecutar los tests. Este step instala el JDK 21 de Temurin (la distribución de Adoptium). El parámetro `cache: 'maven'` guarda la carpeta `~/.m2` entre ejecuciones para que Maven no tenga que descargar JUnit y el resto de dependencias cada vez desde cero.
 
@@ -229,11 +219,12 @@ Compila todas las clases Java del proyecto: `Calculadora.java` y `CalculadoraTes
 
 Ejecuta los cinco tests de `CalculadoraTest`. Maven lanza JUnit, que a su vez llama a cada método anotado con `@Test` y comprueba que el resultado es el esperado. Si todos pasan, el step termina en verde. Si alguno falla —por ejemplo porque `sumar` devuelve el valor equivocado— Maven termina con error y el workflow se marca como fallido.
 
-**Step 5 — `actions/upload-artifact@v4` con `if: always()`**
+**Step 5 — `actions/upload-artifact@v7` con `if: always()`**
 
 Surefire (el plugin de Maven que ejecuta los tests) genera un informe XML en `target/surefire-reports/` con el detalle de cada test: cuántos han pasado, cuántos han fallado y el tiempo de cada uno. Este step guarda ese informe como un *artifact* descargable desde el panel de GitHub. El `if: always()` es importante: sin él, si el step de tests falla, este step no se ejecutaría y perderías el informe justo cuando más lo necesitas.
 
 !!! example "Resumen del flujo"
+
     Cada vez que haces `push` a `main` o abres una PR, el runner hace exactamente esto en orden:
 
     1. Descarga tu código → 2. Instala Java 21 → 3. Compila → 4. Ejecuta los 5 tests de la Calculadora → 5. Guarda el informe
@@ -253,7 +244,9 @@ Una vez que el workflow se ha ejecutado, toda la información está disponible e
 **Vista general** — lista todos los runs que han ocurrido. El icono de estado indica en qué punto está cada uno:
 
 - 🟠 **Naranja (girando)** — el workflow está en ejecución en ese momento.
+
 - ✅ **Verde** — todos los steps han pasado correctamente.
+
 - ❌ **Rojo** — algún step ha fallado.
 
 Cada fila corresponde a un push o una PR, e indica el nombre del commit que lo disparó y el tiempo transcurrido.
@@ -275,6 +268,7 @@ Cada fila corresponde a un push o una PR, e indica el nombre del commit que lo d
 ```
 
 !!! example "Cómo leer un log de error"
+
     Si un step falla, su fondo se vuelve rojo y aparece una `✕`. El log muestra la salida del comando justo antes del error. Busca la última línea antes de `Process completed with exit code 1` — ahí está el problema.
 
 ---
@@ -295,7 +289,6 @@ Los fallos de un workflow tienen dos orígenes distintos, y conviene distinguirl
     [ERROR] com.ejemplo.CalculadoraTest.sumarDosPositivos
     org.opentest4j.AssertionFailedError: expected: <5> but was: <-1>
             at com.ejemplo.CalculadoraTest.sumarDosPositivos(CalculadoraTest.java:13)
-
     [ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
     [INFO] BUILD FAILURE
     ```
@@ -321,11 +314,12 @@ Los fallos de un workflow tienen dos orígenes distintos, y conviene distinguirl
     Error: JAVA_HOME is not set and 'java' is not in PATH
     ```
 
-    **Solución:** añade el step de instalación que falta antes del step que falla. En nuestro proyecto, el step `actions/setup-java@v4` se encarga de esto.
+    **Solución:** añade el step de instalación que falta antes del step que falla. En nuestro proyecto, el step `actions/setup-java@v6` se encarga de esto.
 
 </div>
 
 !!! warning "El workflow falla pero el código está bien en tu máquina"
+
     Si los tests pasan en local pero fallan en el runner, la causa más frecuente es una diferencia de entorno: versión de Java distinta, dependencia que no se instala, o un test que depende de un fichero local que no está en el repositorio. El runner parte de cero cada vez.
 
 ---
@@ -338,17 +332,17 @@ En el proyecto de la Calculadora ya usamos tres de las más habituales:
 
 | Action | Para qué sirve |
 |---|---|
-| `actions/checkout@v4` | Clona el repositorio en el runner. Siempre el primer step. |
-| `actions/setup-java@v4` | Instala un JDK concreto (Temurin, Zulu, Corretto…). |
-| `actions/setup-node@v4` | Instala Node.js y npm. |
-| `actions/cache@v4` | Guarda en caché dependencias (Maven, npm…) para acelerar los builds. |
-| `actions/upload-artifact@v4` | Guarda ficheros del runner (JARs, informes de tests) para descargarlos después. |
+| `actions/checkout@v7` | Clona el repositorio en el runner. Siempre el primer step. |
+| `actions/setup-java@v6` | Instala un JDK concreto (Temurin, Zulu, Corretto…). |
+| `actions/setup-node@v7` | Instala Node.js y npm. |
+| `actions/cache@v6` | Guarda en caché dependencias (Maven, npm…) para acelerar los builds. |
+| `actions/upload-artifact@v7` | Guarda ficheros del runner (JARs, informes de tests) para descargarlos después. |
 
 Usar una Action es tan sencillo como referenciarla con `uses:` y pasarle parámetros con `with:`:
 
 ```yaml
 - name: Instalar Java 21
-  uses: actions/setup-java@v4
+  uses: actions/setup-java@v6
   with:
     java-version: '21'
     distribution: 'temurin'
@@ -356,6 +350,7 @@ Usar una Action es tan sencillo como referenciarla con `uses:` y pasarle paráme
 ```
 
 !!! tip "Verifica las Actions de terceros"
+
     Las Actions oficiales de GitHub (`actions/...`) son de confianza. Las de terceros (`empresa/action-name`) conviene revisarlas antes de usarlas: ejecutan código en tu runner con acceso a tus secrets. Comprueba que el repositorio de la Action es conocido y tiene buena reputación.
 
 ---
@@ -369,8 +364,11 @@ GitHub ofrece los **Secrets**: variables cifradas que se almacenan en la configu
 ### Crear un secret
 
 1. En tu repositorio, ve a **Settings → Secrets and variables → Actions**.
+
 2. Pulsa **New repository secret**.
+
 3. Dale un nombre en mayúsculas (convenio): `MAVEN_PASSWORD`, `DEPLOY_TOKEN`...
+
 4. Pega el valor. A partir de ese momento GitHub lo cifra y nadie puede leerlo, ni tú.
 
 ![Página de Secrets en Settings — muestra el botón New repository secret](img/actions/secrets-settings.png)
@@ -388,6 +386,7 @@ GitHub ofrece los **Secrets**: variables cifradas que se almacenan en la configu
 La sintaxis `${{ secrets.NOMBRE }}` le indica a GitHub Actions que sustituya ese valor por el secret almacenado. En los logs, ese valor aparece como `***` aunque alguien intente imprimirlo con `echo`.
 
 !!! warning "Los secrets no están disponibles en PRs de forks"
+
     Por seguridad, los secrets no se pasan a workflows disparados por PRs que vienen de un fork externo. Esto evita que alguien cree un fork, añada `echo ${{ secrets.TOKEN }}` al workflow y extraiga tus credenciales. En PRs de tu propio repositorio, sí funcionan.
 
 ---
@@ -395,9 +394,15 @@ La sintaxis `${{ secrets.NOMBRE }}` le indica a GitHub Actions que sustituya ese
 ## ✅ Ideas clave
 
 !!! tip "Resumen"
+
     - **CI**: ejecutar comprobaciones automáticas en cada cambio para detectar errores cuanto antes, antes de que lleguen a `main`.
+
     - **GitHub Actions**: el sistema de CI/CD integrado en GitHub. Se configura con ficheros YAML en `.github/workflows/`.
+
     - Un **workflow** se activa con un **event** (`push`, `pull_request`...), contiene **jobs** que corren en un **runner**, y cada job tiene **steps** que ejecutan comandos o **Actions** del Marketplace.
+
     - Si un workflow falla, el log indica exactamente qué test ha fallado y con qué valores — en nuestro ejemplo, `expected: <5> but was: <-1>` apuntaba directamente al bug en `sumar()`.
+
     - Los **secrets** almacenan credenciales de forma segura: nunca escribas contraseñas directamente en el YAML.
+
     - `if: always()` en un step garantiza que se ejecute aunque los anteriores fallen — útil para guardar informes de tests.

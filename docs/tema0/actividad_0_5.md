@@ -194,10 +194,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el código fuente
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Instalar Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -208,7 +208,7 @@ jobs:
 
       - name: Guardar el informe de tests
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: informe-tests
           path: target/surefire-reports/
@@ -256,10 +256,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el código fuente
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Instalar Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -270,7 +270,7 @@ jobs:
 
       - name: Guardar el informe de tests
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: informe-tests
           path: target/surefire-reports/
@@ -280,10 +280,10 @@ jobs:
     needs: test
     steps:
       - name: Descargar el código fuente
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Instalar Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -293,7 +293,7 @@ jobs:
         run: mvn package -DskipTests -B
 
       - name: Guardar el JAR como artefacto
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: validador-dni-jar
           path: target/validador-dni.jar
