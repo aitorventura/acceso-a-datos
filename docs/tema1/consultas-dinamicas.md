@@ -50,6 +50,8 @@ Y el problema no es solo teórico: en cuanto el buscador tiene varios filtros op
 | 3 (+ precio máximo) | 8 — incluyendo `findByTituloContainingAndPrecioGreaterThanEqualAndPrecioLessThanEqual(...)` |
 | 4 (+ editorial) | 16 — con nombres como `findByTituloContainingAndPrecioGreaterThanEqualAndPrecioLessThanEqualAndEditorialId(...)` |
 
+![Explosión combinatoria: cada filtro nuevo duplica los métodos necesarios](img/tema1_explosion_combinatoria.png)
+
 Con solo 4 filtros ya tienes 16 combinaciones posibles, y cada filtro nuevo que añadas **duplica** ese número — sin contar con que un nombre de método así de largo deja de ser legible mucho antes de llegar a 16.
 
 ---
@@ -184,6 +186,8 @@ Con una tabla de 47 libros y páginas de 20 en 20, así quedaría trocearla:
 | **0** (la primera) | Filas 1 a 20 |
 | **1** | Filas 21 a 40 |
 | **2** (la última) | Filas 41 a 47 |
+
+![Paginación de 47 filas en páginas de 20](img/tema1_paginacion.png)
 
 Fíjate en el número de la primera página: es `0`, no `1` — Spring Data numera las páginas empezando desde cero, igual que un índice de array. Pedir la "página 1" te da la **segunda** página, no la primera; es un error habitual olvidarlo.
 

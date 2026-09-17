@@ -238,6 +238,8 @@ Fíjate en `mapToDTO`, porque va a reaparecer en todo lo que queda de apartado. 
 | `editorial` | Un `EditorialDTO` nuevo, construido aparte a partir de `libro.getEditorial()` — la misma traducción, un nivel más adentro |
 | *(no aparece)* | `coste` no tiene fila en esta tabla: no se copia a ningún sitio, por eso desaparece del JSON — no hay ninguna regla mágica ocultándolo |
 
+![De la entidad Libro al DTO que ve el cliente](img/tema1_entidad_vs_dto.png)
+
 No hay ninguna librería detrás de esta conversión (existen herramientas que la automatizan, como MapStruct, pero escribirla a mano tiene la ventaja de que se ve exactamente qué campo va a parar a dónde). A partir de aquí, cualquier método de `LibroService` que necesite devolver un libro (`findAll`, `create`, `update`) va a llamar a este mismo `mapToDTO` en vez de repetir la traducción cada vez.
 
 Y el controller cambia una sola palabra — el tipo que envuelve `ResponseEntity`:

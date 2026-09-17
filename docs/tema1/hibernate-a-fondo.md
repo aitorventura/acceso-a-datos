@@ -114,6 +114,8 @@ En JPA existen operaciones internas distintas para guardar entidades nuevas y en
 
     En los métodos anotados con `@Transactional`, lo habitual es que el objeto permanezca gestionado durante la transacción.
 
+![El contexto de persistencia: managed dentro, detached fuera](img/tema1_contexto_persistencia.png)
+
 ---
 
 ## 🗄️ Hibernate en un proyecto Spring Boot

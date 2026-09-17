@@ -57,6 +57,8 @@ Ya conoces dos formas de construir consultas; ahora incorporas una tercera:
 | **Specifications** (apartado anterior) | Filtros dinámicos, combinables en tiempo de ejecución. |
 | **`@Query` con JPQL** | Consultas complejas y fijas — típicamente, agregaciones. |
 
+![Las tres vías de consulta de Spring Data](img/tema1_tres_vias_consulta.png)
+
 Una **agregación** (por si el repaso de SQL lo necesita) es una operación que resume varias filas en un único resultado: `COUNT` (cuántas), `SUM` (suma), `AVG` (media)... normalmente combinada con `GROUP BY`, que agrupa las filas antes de aplicar la agregación a cada grupo por separado.
 
 ---
@@ -115,6 +117,8 @@ Desglosado, fragmento a fragmento:
 Junta las cinco piezas y la consulta completa dice: «para cada editorial, cuenta sus libros y ordénalas de la que más tiene a la que menos».
 
 Se utiliza `LEFT JOIN` para que también aparezcan las editoriales que todavía no tienen libros. En ese caso, `COUNT(l)` vale `0` y la editorial queda al final del ranking.
+
+![GROUP BY editorial + COUNT: de libros sueltos a un ranking ordenado](img/tema1_ranking_groupby.png)
 
 ```text
 Editorial con 5 libros → COUNT(l) = 5

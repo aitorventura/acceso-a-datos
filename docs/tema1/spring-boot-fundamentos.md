@@ -65,6 +65,8 @@ Una dependencia en el `pom.xml` tiene esta forma:
 
 `groupId` identifica quién publica la librería (aquí, el propio equipo de Spring Boot) y `artifactId` identifica cuál de sus paquetes quieres. Con esa entrada, Maven descarga ese *starter* y todo lo que necesita para funcionar.
 
+![Anatomía de un starter de Maven](img/tema1_maven_starter.png)
+
 En este curso vas a trabajar, entre otras, con estas dos dependencias clave:
 
 ```xml
@@ -280,6 +282,8 @@ Ese `-dev` en el nombre es un **perfil**: un conjunto de configuración que solo
 ## 🧭 Dónde estás y hacia dónde vas
 
 Estas piezas —el proyecto Maven, las capas, la inyección de dependencias, la configuración— las vas a trabajar durante todo el curso desde dos módulos a la vez: en **Acceso a Datos** te centrarás en la persistencia, todo lo que hay del service hacia abajo (JDBC, JPA, JSONB, MongoDB); en **Programación de Servicios y Procesos** te centrarás en los servicios en red y la seguridad, del controller hacia fuera (REST, JWT, hilos, sockets). En las actividades de ambos módulos irás construyendo, pieza a pieza, tu propia aplicación con esta misma estructura.
+
+![La arquitectura en capas, repartida entre Acceso a Datos y PSP](img/tema1_capas_ad_psp.png)
 
 ---
 

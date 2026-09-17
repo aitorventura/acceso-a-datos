@@ -26,6 +26,8 @@ Hoy vas a levantar esa capa y ver qué hay debajo — la API sobre la que se apo
 | `Statement` / `PreparedStatement` | Transporta el SQL que quieres ejecutar. |
 | `ResultSet` | El cursor sobre las filas que devuelve una consulta. |
 
+![Las cuatro piezas de JDBC](img/tema1_cuatro_piezas_jdbc.png)
+
 Cada una de estas piezas es un **recurso**: mientras está abierta, mantiene ocupada una conexión de red y memoria en el gestor de base de datos. Un recurso que se abre y no se cierra no desaparece solo — sigue consumiendo esos recursos hasta que algo lo cierre explícitamente (o, en el peor caso, hasta que el proceso entero termine).
 
 ---

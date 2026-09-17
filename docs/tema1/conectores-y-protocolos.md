@@ -106,6 +106,8 @@ Un gestor **embebido** vive dentro de tu propio proceso: no hay nada que instala
 
 Un gestor **independiente** corre como su propio servicio, escuchando en un puerto de red, y puede atender a muchos clientes (distintas aplicaciones, distintas instancias de la misma aplicación) al mismo tiempo. Es el mismo concepto de IP/puerto del apartado 1, aplicado ahora a una base de datos en vez de a tu propia aplicación: es lo que ya conoces de Docker, un contenedor de PostgreSQL, separado de tu aplicación, al que te conectas por IP/puerto.
 
+![Gestor embebido frente a gestor independiente](img/tema1_gestor_embebido_vs_independiente.png)
+
 ---
 
 ## 🏊 Pooling de conexiones
