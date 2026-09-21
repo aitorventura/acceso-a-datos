@@ -29,6 +29,8 @@ Sin Docker, instalar el entorno de un proyecto suele terminar así:
 
 Con Docker, cada servicio vive en su propio contenedor: se instala con un comando, se borra con otro, y no deja rastro en tu sistema si no quieres.
 
+![Sin Docker frente a con Docker](img/docker/docker_problema_entornos.png)
+
 ---
 
 ## 🆚 Docker vs. máquina virtual
@@ -56,6 +58,8 @@ flowchart TB
 
 Cada máquina virtual carga un sistema operativo completo propio, lo que la hace pesada y lenta de arrancar. Los contenedores comparten el kernel del sistema operativo del host y solo empaquetan la aplicación y sus dependencias: por eso arrancan en segundos y pesan una fracción de una máquina virtual equivalente.
 
+![Máquina virtual frente a contenedor Docker](img/docker/docker_vm_vs_contenedor.png)
+
 Ojo con una idea equivocada bastante común: Docker no sustituye a tu sistema operativo, ni monta una máquina virtual completa por debajo. Sigues teniendo un único Windows, macOS o Linux instalado; lo único que hace Docker es añadir una capa para ejecutar aplicaciones aisladas dentro de ese sistema. Lo que sustituye, en realidad, es la costumbre de instalar el programa directamente en tu máquina.
 
 ---
@@ -75,6 +79,8 @@ Un **contenedor** es lo que resulta de arrancar una imagen: un proceso en ejecuc
 !!! example "La imagen es la receta; el contenedor, el pastel horneado"
     La **imagen** es como la receta de un pastel: un documento fijo que no cambia. El **contenedor** es el pastel que sale del horno al seguir esa receta. Con la misma receta puedes hornear tantos pasteles como quieras, y cada uno es un pastel independiente — si te comes uno, los demás siguen intactos.
 
+![Una imagen, varios contenedores independientes](img/docker/docker_imagen_vs_contenedor.png)
+
 Esta es la relación entre los cuatro conceptos, de dónde sale una imagen a dónde van a parar sus datos:
 
 ```mermaid
@@ -89,6 +95,8 @@ flowchart LR
 
 Un contenedor está pensado para poder borrarse y recrearse sin drama, y ahí está la trampa: si una base de datos guarda sus ficheros solo dentro del contenedor, al eliminarlo pierdes todos los datos con él. Un **volumen** es justo lo contrario: un espacio de almacenamiento que Docker gestiona por fuera del contenedor, así que sobrevive aunque el contenedor se borre y se vuelva a crear desde cero. Es como guardar tus fotos en una nube en vez de en el propio ordenador: si el ordenador se estropea, las fotos siguen ahí.
 
+![Qué pasa con los datos con y sin volumen](img/docker/docker_volumen_persistencia.png)
+
 ### Registry: de dónde salen las imágenes
 
 Un **registry** es un servidor donde la gente publica imágenes para que otros las descarguen, algo parecido a una tienda de aplicaciones pero para contenedores. **Docker Hub** es el registry público más usado, y ahí es donde viven las imágenes oficiales que vas a usar en este módulo (`postgres`, `mongo`, `redis`...). Cuando ejecutas `docker pull postgres:18-alpine`, le estás pidiendo a Docker Hub exactamente esa imagen.
@@ -96,6 +104,8 @@ Un **registry** es un servidor donde la gente publica imágenes para que otros l
 ### Puerto mapeado: cómo entrar en algo que está aislado
 
 Por defecto, un contenedor está aislado de la red de tu ordenador — nada de fuera puede hablar con lo que hay dentro, ni falta que hace la mayoría de las veces. El problema es que sí necesitas conectarte tú, desde tu máquina, a la base de datos que corre ahí dentro. Un **puerto mapeado** abre una puerta concreta entre los dos: asocia un puerto de tu máquina con el puerto en el que escucha el servicio dentro del contenedor, para que puedas llegar hasta él desde fuera.
+
+![Los cinco conceptos clave de Docker](img/docker/docker_cinco_conceptos.png)
 
 Resumen en una frase por concepto, para consulta rápida:
 
@@ -156,8 +166,12 @@ volumes:
 
 Con esto guardado como `docker-compose.yml` y ejecutando `docker compose up -d`, Docker descarga la imagen `postgres:18-alpine` si no la tienes ya, crea el contenedor `db`, le pasa usuario, contraseña y nombre de base de datos por `environment`, abre el puerto `5432` de tu máquina hacia el `5432` del contenedor, y guarda los datos en el volumen `db_data` para que sobrevivan aunque el contenedor se recree. Te conectarías desde cualquier cliente (DBeaver, `psql`, tu propio código) a `localhost:5432` con esas credenciales.
 
+![Anatomía de un docker-compose.yml](img/docker/docker_compose_anatomia.png)
+
 !!! tip "Si ya tienes PostgreSQL instalado en tu máquina"
     Aquí el puerto no se ha remapeado (`5432:5432`, el mismo número a los dos lados). Si tu ordenador ya tiene un PostgreSQL local escuchando ahí, este contenedor chocará con él — en ese caso, cambia el primer número, por ejemplo a `"5444:5432"`, y conéctate a `localhost:5444`.
+
+![Puerto mapeado: de localhost:5444 al puerto 5432 del contenedor](img/docker/docker_puerto_mapeado.png)
 
 Este ejemplo tiene un único servicio, así que no hace falta que hable con nadie más. En cuanto un proyecto necesita dos o más —por ejemplo, una aplicación web y su propia base de datos—, entran en juego dos cosas que aquí no se ven: los contenedores se dirigen unos a otros por red usando el **nombre del servicio** como si fuera una dirección, y `depends_on` decide en qué orden arrancan. Vas a practicar exactamente esto en la Actividad 0.6, montando un WordPress completo con su base de datos.
 
@@ -178,6 +192,8 @@ Con el fichero `docker-compose.yml` en la raíz del proyecto:
 
 !!! danger "`down -v` borra los datos de verdad"
     Si tienes datos importantes en tus bases de datos de desarrollo, `docker compose down -v` los elimina sin posibilidad de recuperarlos. Para un reinicio normal, usa `docker compose down` (sin `-v`) o `docker compose stop`.
+
+![Ciclo de vida de un proyecto con Docker Compose](img/docker/docker_compose_ciclo_comandos.png)
 
 ---
 
