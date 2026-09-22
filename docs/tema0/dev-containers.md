@@ -26,7 +26,8 @@ Instalar Java, Node o cualquier herramienta del curso directamente en tu ordenad
 
 ```mermaid
 flowchart TD
-    A["Abres la carpeta del proyecto en tu editor (VS Code o IntelliJ IDEA)"] --> B{"¿Hay un .devcontainer/devcontainer.json?"}
+    A["Abres la carpeta del proyecto en tu editor (VS Code o IntelliJ IDEA)"] --> B{"¿Hay una configuración Dev Container?
+(.devcontainer/devcontainer.json o .devcontainer.json)"}
     B -- No --> H["Tu editor funciona como siempre, sobre tu máquina"]
     B -- Sí --> C["Tu editor te propone reabrir dentro del contenedor"]
     C --> D["Docker construye o descarga la imagen y crea el contenedor"]
@@ -76,6 +77,19 @@ Todo lo anterior lo define un único fichero, `.devcontainer/devcontainer.json`,
 
 !!! tip "También puede apoyarse en un docker-compose.yml"
     En vez de `image`, un `devcontainer.json` puede usar `dockerComposeFile` y `service` para decir "mi entorno de desarrollo es este servicio concreto de este `docker-compose.yml`". Así, el mismo fichero de Compose que levanta tu base de datos puede levantar, en otro de sus servicios, el contenedor donde vive tu editor — los dos usos de Docker conviven en el mismo fichero.
+
+    En este caso, la herramienta de Dev Containers invoca Docker Compose para crear y arrancar los servicios. Después, el editor se conecta al contenedor correspondiente al servicio indicado en `service`. Esta propiedad no determina qué servicios se arrancan: únicamente indica en cuál de ellos trabajará el editor.
+
+    Por ejemplo, si `devcontainer.json` se encuentra dentro de `.devcontainer/` y `compose.yaml` está en la raíz:
+
+    ```json
+    {
+      "dockerComposeFile": "../compose.yaml",
+      "service": "java",
+      "workspaceFolder": "/workspace",
+      "shutdownAction": "stopCompose"
+    }
+    ```
 
 ---
 

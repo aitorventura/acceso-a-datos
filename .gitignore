@@ -10,3 +10,5 @@ soluciones/
 
 # Salida de mkdocs build
 site/
+
+*DS_Store
