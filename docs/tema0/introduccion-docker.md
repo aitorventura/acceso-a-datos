@@ -150,8 +150,10 @@ Un ejemplo sencillo:
 !!! info "Construir una imagen no es ejecutar un contenedor"
     `docker build` crea una **imagen** siguiendo el Dockerfile. Después, `docker run` crea y arranca un **contenedor** a partir de esa imagen.
 
-!!! tip "En este módulo basta con entender la idea"
-    Un Dockerfile real puede incluir caché, construcciones multietapa, usuarios sin privilegios y otras optimizaciones. Aquí nos interesa sobre todo entender **cómo pasamos de nuestros ficheros a una imagen reproducible**; esos detalles se trabajan con más profundidad en Despliegue de Aplicaciones Web.
+!!! tip "Para ampliar"
+    En este apartado nos centramos en entender **cómo pasamos de nuestros ficheros a una imagen reproducible** mediante un `Dockerfile`.
+
+    En proyectos reales pueden aparecer técnicas más avanzadas, como el aprovechamiento de la caché, las construcciones multietapa, el uso de usuarios sin privilegios o la elección de imágenes base más reducidas. No necesitas dominarlas ahora, pero puedes investigarlas si quieres profundizar en la construcción y optimización de imágenes Docker.
 
 ---
 
