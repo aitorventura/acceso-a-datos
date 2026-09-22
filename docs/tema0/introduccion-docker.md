@@ -37,28 +37,9 @@ Con Docker, cada servicio vive en su propio contenedor: se instala con un comand
 
 Es habitual confundir contenedores con máquinas virtuales, pero no comparten recursos de la misma forma:
 
-```mermaid
-flowchart TB
-    subgraph VM["💻 Máquina virtual"]
-        direction TB
-        HW1[Hardware] --> HV[Hipervisor]
-        HV --> SO1[Sistema operativo invitado 1]
-        HV --> SO2[Sistema operativo invitado 2]
-        SO1 --> A1[Aplicación A]
-        SO2 --> A2[Aplicación B]
-    end
-    subgraph DK["🐳 Docker"]
-        direction TB
-        HW2[Hardware] --> SOH[Sistema operativo del host]
-        SOH --> DE[Docker Engine]
-        DE --> C1[Contenedor A]
-        DE --> C2[Contenedor B]
-    end
-```
+![Máquina virtual frente a contenedor Docker](img/docker/docker_vm_vs_contenedor.png)
 
 Cada máquina virtual carga un sistema operativo completo propio, lo que la hace pesada y lenta de arrancar. Los contenedores comparten el kernel del sistema operativo del host y solo empaquetan la aplicación y sus dependencias: por eso arrancan en segundos y pesan una fracción de una máquina virtual equivalente.
-
-![Máquina virtual frente a contenedor Docker](img/docker/docker_vm_vs_contenedor.png)
 
 Ojo con una idea equivocada bastante común: Docker no sustituye a tu sistema operativo, ni monta una máquina virtual completa por debajo. Sigues teniendo un único Windows, macOS o Linux instalado; lo único que hace Docker es añadir una capa para ejecutar aplicaciones aisladas dentro de ese sistema. Lo que sustituye, en realidad, es la costumbre de instalar el programa directamente en tu máquina.
 
@@ -116,6 +97,61 @@ Resumen en una frase por concepto, para consulta rápida:
 | **Registry** | Servidor donde se publican y descargan imágenes (Docker Hub). |
 | **Volumen** | Almacenamiento fuera del contenedor que sobrevive a su borrado. |
 | **Puerto mapeado** | Puerta entre un puerto de tu máquina y uno del contenedor. |
+
+---
+
+## 🧾 Crear nuestras propias imágenes con un Dockerfile
+
+Hasta ahora hemos hablado de descargar imágenes ya preparadas desde Docker Hub, como `postgres:18-alpine`. Pero Docker también permite **construir nuestras propias imágenes**. Para describir cómo debe crearse una imagen se utiliza un fichero llamado **`Dockerfile`**.
+
+Un Dockerfile es un fichero de texto con instrucciones que Docker ejecuta durante la construcción de la imagen. Las más habituales son:
+
+| Instrucción | Qué hace |
+|---|---|
+| `FROM` | Elige la imagen de partida. |
+| `WORKDIR` | Fija el directorio de trabajo dentro de la imagen. |
+| `COPY` | Copia ficheros del proyecto a la imagen. |
+| `RUN` | Ejecuta órdenes mientras se construye la imagen. |
+| `EXPOSE` | Documenta el puerto en el que escuchará la aplicación. |
+| `ENTRYPOINT` / `CMD` | Indican qué proceso se ejecutará al arrancar el contenedor. |
+
+Por ejemplo, si ya tenemos compilada una aplicación Java como `app.jar`, una imagen muy sencilla podría describirse así:
+
+```dockerfile
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY app.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+Aquí `FROM` parte de una imagen que ya contiene Java, `COPY` incorpora nuestra aplicación y `ENTRYPOINT` indica qué proceso debe arrancarse cuando se cree un contenedor.
+
+Para construir la imagen usamos:
+
+```bash
+docker build -t mi-aplicacion:1.0 .
+```
+
+El `.` final indica el **contexto de construcción**: la carpeta cuyos ficheros puede utilizar Docker durante el build. Si esa carpeta contiene ficheros que no deben enviarse al proceso de construcción —por ejemplo, carpetas del IDE o secretos locales— podemos excluirlos mediante un fichero `.dockerignore`.
+
+Un ejemplo sencillo:
+
+```dockerignore
+.idea/
+.vscode/
+.env
+```
+
+!!! info "Construir una imagen no es ejecutar un contenedor"
+    `docker build` crea una **imagen** siguiendo el Dockerfile. Después, `docker run` crea y arranca un **contenedor** a partir de esa imagen.
+
+!!! tip "En este módulo basta con entender la idea"
+    Un Dockerfile real puede incluir caché, construcciones multietapa, usuarios sin privilegios y otras optimizaciones. Aquí nos interesa sobre todo entender **cómo pasamos de nuestros ficheros a una imagen reproducible**; esos detalles se trabajan con más profundidad en Despliegue de Aplicaciones Web.
 
 ---
 
