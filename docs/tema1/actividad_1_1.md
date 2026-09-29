@@ -366,24 +366,6 @@ Repite la pregunta del Paso 3, pero ahora con la evidencia delante: mirando la t
 
 ---
 
-## Paso 5 — Repositorio privado en GitHub
-
-Este va a ser tu repositorio de GameVault durante todo el curso, en Acceso a Datos y en Programación de Servicios y Procesos — lo vas a ir usando actividad a actividad, sin crear ninguno nuevo. Súbelo ahora a GitHub:
-
-1. En [github.com](https://github.com), crea un repositorio nuevo **privado** (no público) llamado `gamevault` — o el nombre que le hayas dado a la carpeta. No marques ninguna opción de inicialización (README, `.gitignore`, licencia): ya tienes tu propio historial local desde el Paso 0.
-2. Conecta tu repositorio local con el remoto y sube el commit que ya tenías:
-    ```bash
-    git remote add origin https://github.com/tu-usuario/gamevault.git
-    git branch -M main
-    git push -u origin main
-    ```
-3. Invita al profesor como colaborador: en el repositorio, **Settings → Collaborators → Add people**, y añade el usuario `aitorventura`.
-
-!!! warning "Privado, no público"
-    GameVault es tu entrega evaluable del curso — el repositorio tiene que ser privado, con el profesor invitado como colaborador para poder revisarlo. Un repositorio público no cumple los requisitos de entrega.
-
----
-
 ## ✅ Cierre
 
-Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un Dev Container que arranca tu entorno y PostgreSQL a la vez, en cualquier equipo (Paso 1), la conexión configurada (Paso 2), dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 3-4) y tu repositorio privado en GitHub con el profesor como colaborador (Paso 5). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.
+Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un Dev Container que arranca tu entorno y PostgreSQL a la vez, en cualquier equipo (Paso 1), la conexión configurada (Paso 2) y dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 3-4). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.
