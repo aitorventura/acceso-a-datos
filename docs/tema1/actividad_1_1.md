@@ -64,6 +64,17 @@ Ve a [start.spring.io](https://start.spring.io) y genera un proyecto con:
 
 Pulsa **Generate**, descomprime el `.zip`, y renombra la carpeta a `gamevault` (o el nombre que prefieras) — todavía no la abras en tu IDE.
 
+Antes de seguir, abre una terminal en esa carpeta e inicializa el repositorio Git — lo vas a necesitar para entregar tus actividades, y además el propio Dev Container del Paso 1 espera encontrar un repositorio ya creado:
+
+```bash
+git init
+git add .
+git commit -m "Proyecto inicial generado con Spring Initializr"
+```
+
+!!! danger "Si te saltas este paso, falla al montar el Dev Container"
+    Spring Initializr genera los ficheros del proyecto (incluido un `.gitignore`), pero no crea un repositorio Git de verdad — eso solo lo hace `git init`. Si abres el Dev Container del Paso 1 sobre una carpeta sin repositorio, falla con un error relacionado con que Git no está inicializado. Ejecuta estos tres comandos antes de crear `.devcontainer`.
+
 !!! warning "No añadas todavía el resto de dependencias"
     Tu GameVault terminado va a incluir también MongoDB, RabbitMQ, Redis, seguridad, OpenAPI... pero no las necesitas hoy. Las irás añadiendo actividad a actividad, cuando toque cada una — añadirlas todas de golpe ahora solo te va a confundir sobre qué hace falta para qué.
 
@@ -85,7 +96,6 @@ services:
     image: mcr.microsoft.com/devcontainers/base:bookworm
     volumes:
       - ..:/workspace:cached
-      - /var/run/docker.sock:/var/run/docker.sock
     command: sleep infinity
 
   postgres:
@@ -106,7 +116,10 @@ volumes:
 !!! warning "Con Postgres 18, el volumen va en `/var/lib/postgresql`, no en `/var/lib/postgresql/data`"
     Desde la versión 18, la imagen organiza los datos en subcarpetas por versión mayor dentro de `/var/lib/postgresql` — si montas el volumen directamente en `/var/lib/postgresql/data` (la ruta que usaban las versiones anteriores), el contenedor se niega a arrancar y sale con error nada más crearse. Si ya te ha pasado esto, sigue las instrucciones de abajo para limpiar el volumen roto antes de continuar.
 
-`app` parte esta vez de la imagen **base** genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero. El segundo `volumes` de `app`, `/var/run/docker.sock:/var/run/docker.sock`, monta dentro del contenedor el mismo Docker que ya tiene tu equipo — no lo vas a necesitar hasta el Tema 3, cuando uses Testcontainers para lanzar contenedores de prueba desde tus propios tests, pero sin este montaje tu contenedor no tendría ningún Docker al que pedírselo.
+`app` parte esta vez de la imagen **base** genérica (la misma familia que ya viste en el Tema 0) — git y las herramientas básicas ya incluidas, pero sin Java todavía. `command: sleep infinity` mantiene el contenedor vivo esperando a que tu editor se conecte (sin este comando, un contenedor sin ningún proceso principal se pararía solo nada más arrancar). `postgres` es exactamente el servicio que ya conoces de la Actividad 0.6, solo que ahora convive con tu entorno de trabajo en el mismo fichero.
+
+!!! warning "No montes tú el socket de Docker a mano"
+    Podría parecer que a `app` le falta un `volumes` con `/var/run/docker.sock:/var/run/docker.sock` para poder usar Docker dentro del contenedor. No lo añadas: la *feature* `docker-outside-of-docker` del `devcontainer.json` (justo debajo) ya se encarga de montar y exponer ese socket ella sola. Si montas el socket a mano **y además** usas esa *feature*, las dos cosas compiten por la misma ruta dentro del contenedor, y según la máquina el resultado es un error al arrancar (algo como `openat run/docker.sock: no such device or address`) que no aparece en todos los ordenadores por igual — depende de cómo esté montado Docker en cada equipo.
 
 Y, junto a él, `devcontainer.json`:
 
@@ -140,7 +153,7 @@ Java ya no viene incluido en la imagen — lo añades como *feature*, igual que 
 !!! tip "La clave `customizations.vscode` es solo para VS Code"
     Si usas IntelliJ IDEA, esas extensiones no hacen falta: el soporte de Java, Maven y Spring Boot ya viene integrado en el propio editor (Ultimate), sin instalar nada aparte.
 
-`service: "app"` le dice a la extensión Dev Containers (o al soporte nativo de IntelliJ) a cuál de los dos servicios del `docker-compose.yml` debe conectar tu editor — al otro, `postgres`, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. `forwardPorts` publica hacia tu máquina tanto el `8080` (tu aplicación, cuando la arranques) como el `5432` (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La *feature* `docker-outside-of-docker` instala dentro de `app` el cliente `docker` (el programa, no un Docker completo) apuntando al socket que acabas de montar — gracias a esto, desde la propia terminal integrada de tu editor vas a poder ejecutar `docker`, `docker compose` o `docker exec` como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo.
+`service: "app"` le dice a la extensión Dev Containers (o al soporte nativo de IntelliJ) a cuál de los dos servicios del `docker-compose.yml` debe conectar tu editor — al otro, `postgres`, lo levanta igualmente, pero solo como servicio de fondo, sin que tu editor "entre" en él. `forwardPorts` publica hacia tu máquina tanto el `8080` (tu aplicación, cuando la arranques) como el `5432` (PostgreSQL, por si quieres conectarte con una herramienta gráfica desde fuera del contenedor). La *feature* `docker-outside-of-docker` instala dentro de `app` el cliente `docker` (el programa, no un Docker completo) y ella sola monta y expone el socket del Docker de tu equipo — no hace falta que tú montes nada a mano en el `docker-compose.yml`. Gracias a esto, desde la propia terminal integrada de tu editor vas a poder ejecutar `docker`, `docker compose` o `docker exec` como si estuvieras fuera del contenedor, controlando los mismos contenedores que ve tu sistema operativo. Es lo mismo que vas a usar en el Tema 3 para lanzar contenedores de prueba con Testcontainers desde tus propios tests, sin tocar nada más.
 
 <div class="tabs-colored" markdown>
 
@@ -353,6 +366,24 @@ Repite la pregunta del Paso 3, pero ahora con la evidencia delante: mirando la t
 
 ---
 
+## Paso 5 — Repositorio privado en GitHub
+
+Este va a ser tu repositorio de GameVault durante todo el curso, en Acceso a Datos y en Programación de Servicios y Procesos — lo vas a ir usando actividad a actividad, sin crear ninguno nuevo. Súbelo ahora a GitHub:
+
+1. En [github.com](https://github.com), crea un repositorio nuevo **privado** (no público) llamado `gamevault` — o el nombre que le hayas dado a la carpeta. No marques ninguna opción de inicialización (README, `.gitignore`, licencia): ya tienes tu propio historial local desde el Paso 0.
+2. Conecta tu repositorio local con el remoto y sube el commit que ya tenías:
+    ```bash
+    git remote add origin https://github.com/tu-usuario/gamevault.git
+    git branch -M main
+    git push -u origin main
+    ```
+3. Invita al profesor como colaborador: en el repositorio, **Settings → Collaborators → Add people**, y añade el usuario `aitorventura`.
+
+!!! warning "Privado, no público"
+    GameVault es tu entrega evaluable del curso — el repositorio tiene que ser privado, con el profesor invitado como colaborador para poder revisarlo. Un repositorio público no cumple los requisitos de entrega.
+
+---
+
 ## ✅ Cierre
 
-Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un Dev Container que arranca tu entorno y PostgreSQL a la vez, en cualquier equipo (Paso 1), la conexión configurada (Paso 2) y dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 3-4). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.
+Al terminar esta actividad tienes: tu propio proyecto Spring Boot (Paso 0), un Dev Container que arranca tu entorno y PostgreSQL a la vez, en cualquier equipo (Paso 1), la conexión configurada (Paso 2), dos entidades JPA con su relación mapeada y verificada contra la base de datos (Pasos 3-4) y tu repositorio privado en GitHub con el profesor como colaborador (Paso 5). Todavía no tienes ningún endpoint HTTP — eso, y el CRUD completo, llega en la Actividad 1.2.
