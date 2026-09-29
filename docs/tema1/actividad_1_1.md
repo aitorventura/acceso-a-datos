@@ -377,7 +377,7 @@ Este va a ser tu repositorio de GameVault durante todo el curso, en Acceso a Dat
     git branch -M main
     git push -u origin main
     ```
-3. Invita al profesor como colaborador: en el repositorio, **Settings → Collaborators → Add people**, y añade el usuario `aitorventura`.
+3. Invita al profesor como colaborador: en el repositorio, **Settings → Collaborators → Add people**, y añade el usuario de tu profesor.
 
 !!! warning "Privado, no público"
     GameVault es tu entrega evaluable del curso — el repositorio tiene que ser privado, con el profesor invitado como colaborador para poder revisarlo. Un repositorio público no cumple los requisitos de entrega.
