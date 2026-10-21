@@ -29,6 +29,8 @@ Con los tres modelos ya vistos —el relacional puro del Tema 1, el objeto-relac
 | **Lenguaje de consulta** | SQL | SQL y operadores o funciones JSONB | Depende del gestor: OQL, JPQL, JDOQL o APIs propias |
 | **Adopción** | Muy extendida | Muy extendida en gestores como PostgreSQL | Mucho menos habitual |
 
+![El mismo libro en el modelo relacional, el objeto-relacional con JSONB y el orientado a objetos](img/tema2_tres_modelos_almacenamiento.png)
+
 Esa última fila resume la desventaja real de este modelo: menos documentación, menos gente con experiencia a la que preguntar, y el riesgo de quedarte atado a un gestor que puede dejar de mantenerse — por eso casi nadie elige hoy una BD orientada a objetos pura para un proyecto nuevo.
 
 Al no existir la separación entre objetos y tablas relacionales, no hace falta un **ORM objeto-relacional** como Hibernate. Sigue siendo necesaria una API o un controlador que permita al programa comunicarse con el gestor, pero ya no tiene que traducir entidades a filas y claves foráneas.
@@ -51,6 +53,8 @@ Ya conoces el test de **controller**, del Tema 1 de PSP (aunque aquí es Acceso 
 ### Test de integración real (con Testcontainers)
 
 Los dos tests de arriba tienen algo en común: ninguno toca una base de datos de verdad, todo lo que hay debajo está mockeado. **Testcontainers** es la librería que resuelve ese hueco — levanta contenedores Docker reales (una base de datos, una cola de mensajes, lo que haga falta) solo para la duración del test, y los destruye al terminar, sin dejar nada instalado en tu máquina ni depender de ningún servicio externo compartido. No viene incluida en ningún starter que ya tengas — es la primera vez que aparece en el curso, así que hace falta añadirla.
+
+![Qué es real y qué se sustituye en cada tipo de test](img/tema2_tres_tipos_de_test.png)
 
 `spring-boot-starter-parent` gestiona también versiones de numerosas dependencias externas, entre ellas Testcontainers. Sin embargo, en este curso se fija expresamente **Testcontainers 1.20.4**, porque los módulos y los imports utilizados en las actividades corresponden a la línea 1.x.
 
@@ -105,6 +109,8 @@ Esto también deja el terreno preparado para el resto del curso: cuando más ade
 
 !!! tip "Por qué esto funciona dentro de tu Dev Container"
     Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, has montado el socket de Docker del host dentro de `app` y has añadido la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
+
+![Los dos fallos de Testcontainers dentro de un Dev Container](img/tema2_devcontainer_socket_dos_fallos.png)
 
 Esa misma idea —tu JVM, dentro de `app`, pidiéndole contenedores al Docker del *host*, no a uno propio— es justo lo que puede fallar de dos maneras distintas, cada una en un momento distinto del proceso. Primero, antes de nada: ¿tiene tu JVM permiso siquiera para *hablar* con ese Docker? Y si lo tiene: una vez que Docker crea un contenedor nuevo (Ryuk, tu Postgres de test...), ¿puede tu JVM *alcanzarlo por red* desde dentro de `app`? Ninguno de los dos es un fallo en tu código — son fricciones conocidas de mezclar Docker Desktop con un Dev Container que monta el socket del host, y las dos tienen arreglo fijo:
 
@@ -166,6 +172,8 @@ class LibreriaApiTest {
     ```
     La contraseña que pongas aquí tiene que ser exactamente la misma que envíe `loginComoAdmin()` en su petición de login, más abajo — los dos viven dentro del mismo mundo de test, aislado del perfil `dev` (que ni siquiera se carga con `@ActiveProfiles("test")` activo). De ahí el nombre `admintest123`: dice de un vistazo que es una credencial solo de test, sin que tengas que recordar que no tiene relación con la de `dev`. El valor de `expiration-minutes`, en cambio, no importa para el test — `60` (el mismo de `dev`) sirve igual que cualquier otro.
     Este fichero puede subirse a Git porque contiene valores ficticios, utilizados únicamente por el perfil `test` y por una base de datos desechable. La condición es que esas credenciales y secretos no se reutilicen nunca en `dev`, producción ni en ningún servicio persistente o compartido.
+
+![Ciclo de vida de un test con Testcontainers](img/tema2_testcontainers_ciclo.png)
 
 ¿Por qué esto da más confianza que mockear el repositorio? Porque prueba el mapeo JSONB **real** contra un PostgreSQL **real** — una base de datos en memoria genérica (como H2) podría no soportar `jsonb_exists` exactamente igual, o ni siquiera soportar el tipo `jsonb` de PostgreSQL. Un test con Testcontainers detectaría un error de mapeo que un test con mocks jamás vería, porque el mock nunca ejecuta SQL de verdad contra ningún motor.
 

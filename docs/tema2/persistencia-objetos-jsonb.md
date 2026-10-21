@@ -46,6 +46,8 @@ Se ha convertido en el formato universal de intercambio de datos porque es legib
 
 PostgreSQL tiene un tipo de columna especial, **`jsonb`** (JSON binario), que permite que una fila normal, de una tabla normal, lleve dentro un objeto JSON completo — con estructura que puede variar de una fila a otra — conviviendo con las columnas y claves foráneas de siempre. No hace falta una base de datos documental aparte (eso lo verás en el Tema 3) para tener esta flexibilidad en casos puntuales, ni tampoco una conexión distinta: sigue siendo el mismo PostgreSQL, el mismo `DataSource` que configuraste en el Tema 1, gestionado exactamente igual — una columna `jsonb` no abre ni cierra nada por su cuenta.
 
+![Una fila de libro: columnas simples y una columna jsonb con el documento](img/tema2_fila_hibrida.png)
+
 !!! tip "`json` vs. `jsonb`, en una frase"
     PostgreSQL tiene dos tipos: `json` guarda el texto tal cual, sin analizarlo; `jsonb` lo analiza y lo guarda en un formato binario indexable y más rápido de consultar — por eso `jsonb` es casi siempre la opción preferida, salvo que necesites preservar el texto original exacto (espacios, orden de claves).
 
@@ -94,11 +96,15 @@ Hibernate necesita una biblioteca capaz de convertir el `Map<String, Object>` a 
 
 Al detectar `@JdbcTypeCode(SqlTypes.JSON)` y encontrar Jackson en el classpath, Hibernate lo utiliza para realizar esa conversión. Por eso aquí no necesitas añadir una dependencia ni escribir un conversor manual.
 
+![Cómo se mapea un Map de Java a una columna jsonb](img/tema2_mapeo_map_a_jsonb.png)
+
 ---
 
 ## ⚖️ Por qué JSONB y no una tabla nueva
 
 Con lo que ya sabes del Tema 1, podrías haber modelado esto como una tabla `detalle_edicion` con una relación `@OneToMany` desde `Libro` — una fila por formato, con sus propias columnas. ¿Por qué elegir JSONB en su lugar?
+
+![Modelo relacional frente a columna JSONB](img/tema2_relacional_vs_jsonb.png)
 
 | | Modelo relacional | Columna JSONB |
 |---|---|---|
@@ -139,6 +145,8 @@ El índice GIN puede acelerar este tipo de consultas sobre el contenido del JSON
 
 Para que el índice resulte especialmente útil suelen coincidir dos condiciones: que exista un volumen considerable de datos y que la consulta sea selectiva, es decir, que descarte la mayoría de las filas.
 
+![Sin índice, con índice GIN y diferencia con B-tree](img/tema2_indice_btree_vs_gin.png)
+
 !!! tip "Con pocas filas no se nota — por eso en la actividad generas muchas"
     Con una tabla de prueba de un puñado de filas no verías ninguna diferencia real: el motor decide el plan por coste estimado, y con pocos datos un recorrido completo de la tabla ya es barato de por sí. En la Actividad 2.1 vas a generar 100.000 filas de golpe y comparar el plan de la misma consulta antes y después de crear el índice — con ese volumen, la diferencia deja de ser cuestión de suerte.
 
@@ -147,6 +155,8 @@ Para que el índice resulte especialmente útil suelen coincidir dos condiciones
 ## ⚠️ `NULL` de la columna vs. `null` dentro del JSON
 
 Con JSONB hay tres estados distintos que se confunden con facilidad:
+
+![Los tres estados: NULL de la columna, null dentro del JSON y objeto vacío](img/tema2_tres_estados_null.png)
 
 | Caso | Qué significa |
 |---|---|

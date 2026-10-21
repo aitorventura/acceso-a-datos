@@ -34,6 +34,8 @@ SELECT detalles_edicion ->> 'ebook' FROM libro;      -- como texto
 | `columna -> 'clave'` | Extrae el valor de una clave, manteniéndolo como JSON (útil si vas a seguir navegando dentro) | `jsonb` |
 | `columna ->> 'clave'` | Extrae el valor de una clave como texto plano | `text` |
 
+![Los operadores JSONB sobre un mismo documento](img/tema2_operadores_jsonb.png)
+
 Fíjate en que esto es SQL puro, directamente contra PostgreSQL — antes de verlo envuelto en Java, conviene tenerlo claro a este nivel.
 
 !!! tip "El índice GIN de la Actividad 2.1 está pensado para operadores JSONB"
@@ -144,6 +146,8 @@ SELECT titulo FROM libro WHERE detalles_edicion #>> '{ebook,formato}' = 'mobi';
 
 Esta vez el resultado es solo **1984** — `jsonb_exists(..., 'ebook')` no distinguiría entre los dos libros, porque nunca mira el valor de la clave, solo si está presente.
 
+![Los cuatro libros: que exista la clave no es lo mismo que su valor](img/tema2_cuatro_libros_existe_vs_valor.png)
+
 Desde Criteria API el patrón es el mismo que acabas de ver con `jsonb_exists`: otra función nativa de PostgreSQL —`jsonb_extract_path_text`, en este caso—, envuelta en `criteriaBuilder.function(...)` y comparada con `criteriaBuilder.equal(...)`:
 
 ```java
@@ -160,6 +164,8 @@ criteriaBuilder.equal(
 ```
 
 La técnica es idéntica a la de `disponibleEnFormato`: nombre de la función nativa, tipo de retorno, argumentos — solo cambia la función y qué haces con el resultado. La construyes tú mismo en la Actividad 2.2, con tus propios datos de plataforma.
+
+![Qué consultas JSONB puede acelerar un índice GIN](img/tema2_gin_que_consultas_acelera.png)
 
 !!! warning "El índice GIN anterior no acelera automáticamente esta comparación"
     El índice GIN sobre la columna completa está pensado para determinados operadores JSONB, como `?` o `@>`. Una comparación basada en extraer un valor como texto mediante `->>` o `#>>` no aprovecha automáticamente ese mismo índice.
@@ -204,6 +210,8 @@ List<Libro> buscarPorFormatoEbook(@Param("formato") String formato);
 | Sintaxis | Más verbosa (función, tipo, argumentos) | SQL directo, más legible |
 | Cuándo usarla | Un filtro más dentro de un buscador con varias condiciones opcionales | Una consulta propia y fija, pensada solo para esto |
 
+![Specification con criteriaBuilder.function frente a @Query nativa](img/tema2_specification_vs_query_nativa.png)
+
 ---
 
 ## ✏️ Modificar objetos JSONB: reemplazo, no *merge*
@@ -214,6 +222,8 @@ Un `update()` que recibe un `Map` nuevo reemplaza el contenido completo de `deta
 |---|---|---|---|
 | **Lo que ocurre de verdad (reemplazo)** | `{tapaDura, ebook}` | `{ebook}` | `{ebook}` — `tapaDura` ha desaparecido |
 | **Lo que alguien podría esperar (*merge*, y no pasa)** | `{tapaDura, ebook}` | `{ebook}` | `{tapaDura, ebook}` combinados |
+
+![Un PUT sobre JSONB reemplaza el documento, no lo combina](img/tema2_reemplazo_vs_merge.png)
 
 ```java
 libro.setDetallesEdicion(dto.detallesEdicion()); // sustituye el Map entero
