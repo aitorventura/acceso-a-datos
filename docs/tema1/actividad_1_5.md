@@ -24,7 +24,7 @@ Tu CRUD de `Videojuego` del Tema 1.
 
 ## Paso 0 — Mismos datos para todos, sembrados desde un fichero `data.sql`
 
-Con los 3-4 videojuegos que tengas sueltos de actividades anteriores, la paginación es invisible: caben todos en una sola página y `@PageableDefault(size = 5)` nunca llega a mostrar una segunda. En vez de sembrarlos a mano por `curl` o `psql`, vas a usar la vía automática que ya conoces de la teoría: un fichero `data.sql`.
+Con los 3-4 videojuegos que tengas sueltos de actividades anteriores, la paginación es invisible: caben todos en una sola página y `@PageableDefault(size = 5)` nunca llega a mostrar una segunda. En vez de sembrarlos a mano por `curl` o `psql`, vas a usar la vía automática: un fichero `data.sql`, que Spring Boot ejecuta por ti en cada arranque.
 
 Crea `src/main/resources/data.sql`:
 
