@@ -21,6 +21,7 @@ Imagina que quieres un ranking de editoriales, ordenado por cuántos libros tien
 - **Specifications**: están pensadas para construir condiciones `WHERE` dinámicas y combinables entre sí (Tema 1, apartado anterior) — no para expresar un `GROUP BY` con `ORDER BY` sobre el resultado de una agregación. Se podría forzar con `CriteriaBuilder`, pero a cambio de perder justo lo que hace útiles a las Specifications (filtros simples, combinables) por una consulta rígida y bastante más difícil de leer que el propio JPQL.
 
 Aquí entra `@Query` con JPQL: permite escribir consultas fijas —siempre con la misma estructura— que resultan demasiado elaboradas para expresarlas mediante el nombre de un método o combinando Specifications.
+
 ---
 
 ## 🔤 Qué es JPQL
