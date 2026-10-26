@@ -2077,7 +2077,7 @@
 <p>Tu CRUD de <code>Videojuego</code> del Tema 1.</p>
 <hr>
 <h2 id="paso-0-mismos-datos-para-todos-sembrados-desde-un-fichero-datasql">Paso 0 — Mismos datos para todos, sembrados desde un fichero <code>data.sql</code><a class="headerlink" href="#paso-0-mismos-datos-para-todos-sembrados-desde-un-fichero-datasql" title="Permanent link">¶</a></h2>
-<p>Con los 3-4 videojuegos que tengas sueltos de actividades anteriores, la paginación es invisible: caben todos en una sola página y <code>@PageableDefault(size = 5)</code> nunca llega a mostrar una segunda. En vez de sembrarlos a mano por <code>curl</code> o <code>psql</code>, vas a usar la vía automática que ya conoces de la teoría: un fichero <code>data.sql</code>.</p>
+<p>Con los 3-4 videojuegos que tengas sueltos de actividades anteriores, la paginación es invisible: caben todos en una sola página y <code>@PageableDefault(size = 5)</code> nunca llega a mostrar una segunda. En vez de sembrarlos a mano por <code>curl</code> o <code>psql</code>, vas a usar la vía automática: un fichero <code>data.sql</code>, que Spring Boot ejecuta por ti en cada arranque.</p>
 <p>Crea <code>src/main/resources/data.sql</code>:</p>
 <div class="language-sql highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">SQL</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
