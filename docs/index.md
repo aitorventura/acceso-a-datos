@@ -24,7 +24,7 @@ Los temas se van publicando a medida que avanza el curso. Los que todavía no es
 |------|-----------|-----|
 | 🔁 [Tema 0 — Introducción](tema0/index.md) | Repaso de Git/GitHub, Docker y Dev Containers | — |
 | 🧩 [Tema 1 — Manejo de conectores y herramientas ORM](tema1/index.md) | Conectores, JDBC, CRUD, transacciones, procedimientos almacenados, Hibernate, Specifications y consultas JPQL | RA2 + RA3 |
-| 🔒 Tema 2 — BD objeto relacionales *(próximamente)* | Persistencia y consultas sobre columnas JSONB en PostgreSQL | RA4 |
+| 🗃️ [Tema 2 — BD objeto relacionales](tema2/index.md) | Persistencia y consultas sobre columnas JSONB en PostgreSQL | RA4 |
 | 🔒 Tema 3 — BD documentales *(próximamente)* | MongoDB, colecciones y documentos, control de autoría | RA5 |
 | 🔒 Tema 4 — Componentes de acceso a datos *(próximamente)* | Componentes reutilizables, integración y pruebas finales | RA6 |
 
