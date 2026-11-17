@@ -31,6 +31,8 @@ Con los tres modelos ya vistos —el relacional puro del Tema 1, el objeto-relac
 
 ![El mismo libro en el modelo relacional, el objeto-relacional con JSONB y el orientado a objetos](img/tema2_tres_modelos_almacenamiento.png)
 
+*Figura 1. Tres formas de representar un libro y sus ediciones. Elaboración propia.*
+
 Esa última fila resume la desventaja real de este modelo: menos documentación, menos gente con experiencia a la que preguntar, y el riesgo de quedarte atado a un gestor que puede dejar de mantenerse — por eso casi nadie elige hoy una BD orientada a objetos pura para un proyecto nuevo.
 
 Al no existir la separación entre objetos y tablas relacionales, no hace falta un **ORM objeto-relacional** como Hibernate. Sigue siendo necesaria una API o un controlador que permita al programa comunicarse con el gestor, pero ya no tiene que traducir entidades a filas y claves foráneas.
@@ -52,40 +54,18 @@ Ya conoces el test de **controller**, del Tema 1 de PSP (aunque aquí es Acceso 
 
 ### Test de integración real (con Testcontainers)
 
-Los dos tests de arriba tienen algo en común: ninguno toca una base de datos de verdad, todo lo que hay debajo está mockeado. **Testcontainers** es la librería que resuelve ese hueco — levanta contenedores Docker reales (una base de datos, una cola de mensajes, lo que haga falta) solo para la duración del test, y los destruye al terminar, sin dejar nada instalado en tu máquina ni depender de ningún servicio externo compartido. No viene incluida en ningún starter que ya tengas — es la primera vez que aparece en el curso, así que hace falta añadirla.
+Los dos tests de arriba tienen algo en común: ninguno utiliza una base de datos real. En el test de controller se sustituye el service. En el de service se sustituye el repositorio. Los recuadros grises de la figura representan capas que quedan fuera de la ejecución. **Testcontainers** es la librería que resuelve ese hueco — levanta contenedores Docker reales (una base de datos, una cola de mensajes, lo que haga falta) solo para la duración del test, y los destruye al terminar, sin dejar nada instalado en tu máquina ni depender de ningún servicio externo compartido. No viene incluida en ningún starter que ya tengas — es la primera vez que aparece en el curso, así que hace falta añadirla.
 
 ![Qué es real y qué se sustituye en cada tipo de test](img/tema2_tres_tipos_de_test.png)
 
-`spring-boot-starter-parent` gestiona también versiones de numerosas dependencias externas, entre ellas Testcontainers. Sin embargo, en este curso se fija expresamente **Testcontainers 1.20.4**, porque los módulos y los imports utilizados en las actividades corresponden a la línea 1.x.
+*Figura 2. Capas que intervienen en los tests de controller, de service y de integración. Elaboración propia.*
 
-Testcontainers 2 cambió los nombres de sus módulos y trasladó varias clases a paquetes nuevos. Por tanto, utilizar directamente la versión actual gestionada por Spring Boot no sería un cambio transparente: también habría que adaptar las coordenadas Maven y algunos imports. El BOM explícito mantiene todos los ejemplos del tema en una versión común y compatible, sin realizar ahora esa migración.
+El `spring-boot-starter-parent` gestiona las versiones de los módulos de **Testcontainers 2**.
 
 !!! info "Idea clave: qué es un BOM"
-    Un **BOM** (*Bill of Materials*, "lista de materiales") es un POM especial que coordina las versiones de un conjunto de artefactos compatibles, pero no añade por sí mismo esas librerías al proyecto.
+    Un **BOM** (*Bill of Materials*, «lista de materiales») es un POM especial que coordina las versiones de un conjunto de artefactos compatibles. Spring Boot incorpora esa gestión de versiones. Tú declaras en `pom.xml` los módulos que vas a utilizar.
 
-    `spring-boot-starter-parent` ya incorpora su propia gestión de dependencias. Al importar el BOM de Testcontainers 1.20.4, este proyecto fija explícitamente la versión de todos sus módulos y permite mantener las coordenadas e imports utilizados en las actividades.
-
-Va junto al `<parent>`, no dentro del bloque de dependencias habitual:
-
-```xml
-<properties>
-    <testcontainers.version>1.20.4</testcontainers.version>
-</properties>
-
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-bom</artifactId>
-            <version>${testcontainers.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-```
-
-Con el BOM explícito ya importado, las dependencias de Testcontainers utilizan la versión coordinada que has fijado y no necesitan declarar una `<version>` individual:
+Añade las siguientes dependencias al bloque `<dependencies>` de tu proyecto.
 
 ```xml
 <dependency>
@@ -95,41 +75,34 @@ Con el BOM explícito ya importado, las dependencias de Testcontainers utilizan 
 </dependency>
 <dependency>
     <groupId>org.testcontainers</groupId>
-    <artifactId>junit-jupiter</artifactId>
+    <artifactId>testcontainers-junit-jupiter</artifactId>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
+    <artifactId>testcontainers-postgresql</artifactId>
     <scope>test</scope>
 </dependency>
 ```
 
-Esto también deja el terreno preparado para el resto del curso: cuando más adelante añadas otros contenedores de Testcontainers (MongoDB, RabbitMQ...), ninguno va a necesitar tampoco su propia `<version>` — todos quedan cubiertos por este mismo BOM, ya importado una sola vez.
+Esto también deja el terreno preparado para el resto del curso: cuando más adelante añadas otros contenedores de Testcontainers (MongoDB, RabbitMQ...), ninguno va a necesitar tampoco su propia `<version>` — la versión la gestiona Spring Boot.
 
 !!! tip "Por qué esto funciona dentro de tu Dev Container"
     Testcontainers necesita arrancar contenedores de verdad — y tu proyecto entero corre dentro de un contenedor (`app`) desde la Actividad 1.1. Funciona porque, ya desde entonces, has montado el socket de Docker del host dentro de `app` y has añadido la *feature* `docker-outside-of-docker`: tu contenedor puede pedirle contenedores nuevos al mismo Docker que usa tu sistema operativo, sin necesitar un Docker propio dentro del Docker.
 
-![Los dos fallos de Testcontainers dentro de un Dev Container](img/tema2_devcontainer_socket_dos_fallos.png)
+![Los dos fallos de Testcontainers dentro de un Dev Container](img/tema2_devcontainer_socket_dos_fallos-actualizada.png)
 
-Esa misma idea —tu JVM, dentro de `app`, pidiéndole contenedores al Docker del *host*, no a uno propio— es justo lo que puede fallar de dos maneras distintas, cada una en un momento distinto del proceso. Primero, antes de nada: ¿tiene tu JVM permiso siquiera para *hablar* con ese Docker? Y si lo tiene: una vez que Docker crea un contenedor nuevo (Ryuk, tu Postgres de test...), ¿puede tu JVM *alcanzarlo por red* desde dentro de `app`? Ninguno de los dos es un fallo en tu código — son fricciones conocidas de mezclar Docker Desktop con un Dev Container que monta el socket del host, y las dos tienen arreglo fijo:
+*Figura 3. Acceso al motor Docker y a los puertos de los contenedores desde el Dev Container. Elaboración propia.*
 
-!!! warning "Primer fallo posible: `Permission denied` al conectar con `/var/run/docker.sock`"
-    Este es el de "ni siquiera puede hablar con Docker": un `java.io.IOException` / `Permission denied` sobre el propio socket, antes de llegar a crear ningún contenedor. En Docker Desktop (a diferencia de un Docker nativo en Linux), ese socket pertenece al grupo `root`, no a un grupo `docker` — y la *feature* `docker-outside-of-docker` no puede añadirte automáticamente a `root` por seguridad, así que el usuario del contenedor se queda sin permiso para usarlo. La solución es forzar los permisos del socket cada vez que arranca el contenedor: añade a `devcontainer.json` (no a `docker-compose.yml`, esto es una clave propia de `devcontainer.json`):
-    ```json
-    "postStartCommand": "sudo chmod 666 /var/run/docker.sock || true"
-    ```
-    El `|| true` evita que el propio arranque del contenedor falle si el comando no puede ejecutarse por algún motivo. Tras añadirlo, reconstruye el contenedor — a partir de ahí se aplica solo, en cada arranque, sin que tengas que repetirlo a mano.
+!!! warning "`docker info` falla dentro de `app`"
+    Comprueba que Docker está iniciado y que tu Dev Container se ha creado con `docker-outside-of-docker`. Si el error es `Permission denied` sobre el socket, revisa el usuario y los permisos que tiene en ese entorno antes de seguir.
 
-!!! warning "Segundo fallo posible: `Connection refused` al conectar con Ryuk (o con tu propio contenedor de Postgres)"
-    Este es el de "habla con Docker, pero no alcanza lo que Docker acaba de crear". Testcontainers levanta, además de tu PostgreSQL de test, un contenedor auxiliar llamado **Ryuk** que limpia automáticamente los contenedores al terminar — y tanto Ryuk como tu propio Postgres de test arrancan como contenedores hermanos en la red del *host*, no en la de `app`. Tu `app` no siempre puede alcanzarlos por red desde su propia red aislada: el síntoma es un `Connection refused` hacia una IP tipo `172.17.0.1`, ya sea al arrancar (Ryuk) o al intentar la primera conexión JDBC (tu Postgres de test). La solución es indicarle a Testcontainers una dirección que `app` sí pueda alcanzar: añade a `.devcontainer/docker-compose.yml`, en el servicio `app`:
-    ```yaml
-    environment:
-      - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
-    ```
-    y reconstruye el contenedor (**"Dev Containers: Rebuild Container"**). `host.docker.internal` es el nombre especial que Docker Desktop sí resuelve correctamente desde cualquier contenedor hacia los puertos publicados — con esto, tanto Ryuk como el resto de contenedores que levante Testcontainers (tu PostgreSQL de test incluido) quedan alcanzables.
+!!! warning "Docker arranca Ryuk, pero aparece `Connection refused`"
+    Ryuk ayuda a retirar los recursos temporales del test. Si usas Docker Desktop desde un Dev Container y el log muestra que la JVM intenta alcanzarlo por una IP como `172.17.0.1`, añade `TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal` a `environment` del servicio `app` en `.devcontainer/docker-compose.yml`. Reconstruye el Dev Container. Esa dirección permite que la JVM llegue a los puertos publicados de Ryuk y PostgreSQL. [Testcontainers con Docker Desktop](https://java.testcontainers.org/supported_docker_environment/continuous_integration/dind_patterns/)
 
-Con las dependencias ya resueltas, así queda la clase de test en sí:
+Si ejecutas Maven en el equipo anfitrión, o en un job de GitHub Actions sobre `ubuntu-latest` sin `container:`, Testcontainers utiliza Docker desde ese entorno. Si tu CI filtra las pruebas con `-Dtest`, incluye también la clase de integración. [Ejecución de jobs en GitHub Actions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/run-jobs-in-a-container)
+
+Importa `org.testcontainers.postgresql.PostgreSQLContainer`. La clase de test queda así:
 
 ```java
 @SpringBootTest
@@ -140,7 +113,7 @@ class LibreriaApiTest {
 
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+    static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18-alpine");
 
     @Autowired
     private MockMvc mockMvc;
@@ -149,19 +122,18 @@ class LibreriaApiTest {
 }
 ```
 
-`@Testcontainers` + `@Container` levantan un **PostgreSQL real** dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. `@ServiceConnection` conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión. `@ActiveProfiles("test")` activa un perfil propio, distinto del `dev` de siempre — así puedes usar `ddl-auto: create-drop` (cada ejecución parte de una base de datos limpia) sin tocar la configuración con la que trabajas a diario.
+`@Testcontainers` + `@Container` levantan un **PostgreSQL real** dentro de un contenedor Docker, solo para la duración del test — no una base de datos en memoria, no un mock. `@ServiceConnection` conecta automáticamente ese contenedor a tu aplicación de test, sin que configures manualmente la URL de conexión. `@ActiveProfiles("test")` activa un perfil propio, distinto del `dev` de siempre — Hibernate crea el esquema con `ddl-auto: create` al arrancar el contexto. Testcontainers retira el PostgreSQL temporal al finalizar la clase. Los métodos de la misma clase comparten el contenedor, así que cada prueba debe preparar sus propios datos.
 
 !!! warning "La anotación sola no basta: el perfil `test` tiene que existir"
-    `@ActiveProfiles("test")` le dice a Spring qué perfil activar, pero no crea nada por sí sola — igual que te pasó con `dev` al depurar `GamevaultApplicationTests` (PSP, Actividad 1.3). Y aquí hay tres propiedades que, sin valor, impiden arrancar del todo: `@Value("${gamevault.admin.password}")` (el `ApplicationRunner` que siembra el `admin`), `@Value("${gamevault.jwt.secret}")` (los beans `JwtEncoder`/`JwtDecoder`) y `@Value("${gamevault.jwt.expiration-minutes}")` (`JwtService`, para construir cualquier token) — ninguna de las tres lleva un valor por defecto, así que sin ellas el contexto ni siquiera llega a levantarse, y ningún test de la clase se ejecuta. `spring.datasource` no hace falta escribirlo: eso ya lo resuelve `@ServiceConnection` en tiempo de ejecución. Crea `src/test/resources/application-test.yml`:
+    `@ActiveProfiles("test")` le dice a Spring qué perfil activar, pero no crea nada por sí sola — igual que te pasó con `dev` al depurar `GamevaultApplicationTests` (PSP, Actividad 1.3). Y aquí hay tres propiedades que, sin valor, impiden arrancar del todo: `@Value("${gamevault.admin.password}")` (el `ApplicationRunner` que siembra el `admin`), `@Value("${gamevault.jwt.secret}")` (los beans `JwtEncoder`/`JwtDecoder`) y `@Value("${gamevault.jwt.expiration-minutes}")` (`JwtService`, para construir cualquier token) — ninguna de las tres lleva un valor por defecto, así que sin ellas el contexto ni siquiera llega a levantarse, y ningún test de la clase se ejecuta. `spring.datasource` no hace falta escribirlo: eso ya lo resuelve `@ServiceConnection` en tiempo de ejecución. Crea `src/test/resources/application-test.yml`. `spring.sql.init.mode: never` evita que `data.sql` cargue los datos de desarrollo:
     ```yaml
     spring:
-      config:
-        activate:
-          on-profile: test
       jpa:
         hibernate:
-          ddl-auto: create-drop
-        show-sql: true
+          ddl-auto: create
+      sql:
+        init:
+          mode: never
 
     gamevault:
       admin:
@@ -173,13 +145,15 @@ class LibreriaApiTest {
     La contraseña que pongas aquí tiene que ser exactamente la misma que envíe `loginComoAdmin()` en su petición de login, más abajo — los dos viven dentro del mismo mundo de test, aislado del perfil `dev` (que ni siquiera se carga con `@ActiveProfiles("test")` activo). De ahí el nombre `admintest123`: dice de un vistazo que es una credencial solo de test, sin que tengas que recordar que no tiene relación con la de `dev`. El valor de `expiration-minutes`, en cambio, no importa para el test — `60` (el mismo de `dev`) sirve igual que cualquier otro.
     Este fichero puede subirse a Git porque contiene valores ficticios, utilizados únicamente por el perfil `test` y por una base de datos desechable. La condición es que esas credenciales y secretos no se reutilicen nunca en `dev`, producción ni en ningún servicio persistente o compartido.
 
-![Ciclo de vida de un test con Testcontainers](img/tema2_testcontainers_ciclo.png)
+![Ciclo de vida de un test con Testcontainers](img/tema2_testcontainers_ciclo-actualizada.png)
+
+*Figura 4. Ciclo de vida de PostgreSQL en un test de integración con Testcontainers. Elaboración propia.*
 
 ¿Por qué esto da más confianza que mockear el repositorio? Porque prueba el mapeo JSONB **real** contra un PostgreSQL **real** — una base de datos en memoria genérica (como H2) podría no soportar `jsonb_exists` exactamente igual, o ni siquiera soportar el tipo `jsonb` de PostgreSQL. Un test con Testcontainers detectaría un error de mapeo que un test con mocks jamás vería, porque el mock nunca ejecuta SQL de verdad contra ningún motor.
 
 ### Peticiones autenticadas dentro del test
 
-Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, con roles y todo—, el test debe recorrer el mismo flujo de autenticación y autorización de la aplicación: no hay ningún atajo que salte la seguridad «porque es un test».
+Los ejemplos de este apartado usan Librería. En su perfil de prueba, las propiedades de administrador y JWT llevan el prefijo `libreria`. Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, con roles y todo—, el test debe recorrer el mismo flujo de autenticación y autorización de la aplicación: no hay ningún atajo que salte la seguridad «porque es un test».
 
 `MockMvc` no abre una conexión HTTP real ni arranca un servidor. Construye peticiones y respuestas simuladas, pero las hace pasar por el `DispatcherServlet`, la cadena de filtros de seguridad, los controllers y el resto del contexto real de Spring. Por eso puedes realizar el login, extraer el token y utilizarlo después en otra petición dentro del test.
 
@@ -187,22 +161,22 @@ Si tu API tiene rutas protegidas —y a estas alturas del curso ya las tiene, co
 sequenceDiagram
     participant Test
     participant MockMvc
-    participant App as GameVault (Testcontainers)
+    participant App as Librería con PostgreSQL de prueba
 
-    Test->>MockMvc: perform(POST /auth/login)
+    Test->>MockMvc: perform(POST /api/v1/auth/login)
     MockMvc->>App: petición simulada dentro del contexto real
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
     Test->>Test: JsonPath.read($.accessToken)
 
-    Test->>MockMvc: perform(POST /libros,<br/>Authorization: Bearer token)
+    Test->>MockMvc: perform(POST /api/v1/libros,<br/>Authorization: Bearer token)
     MockMvc->>App: petición simulada con el token Bearer
     App-->>MockMvc: 201 + cuerpo creado
     MockMvc-->>Test: respuesta
     Test->>Test: andExpect(jsonPath(...))
 ```
 
-Así se traduce a código: primero el ayudante que hace login y devuelve el token, después el test que lo usa:
+Primero va el ayudante que hace login y devuelve el token. En el test de Librería, `crearEditorialDePrueba()` representa la preparación de una editorial en PostgreSQL y devuelve su ID. Puedes guardarla con `EditorialRepository` antes del `POST`.
 
 ```java
 private String loginComoAdmin() throws Exception {
@@ -225,31 +199,38 @@ private String loginComoAdmin() throws Exception {
 @Test
 void crearLibro_DebeGuardarDetallesEdicion_CuandoEsValido() throws Exception {
     String adminToken = loginComoAdmin();
+    long editorialId = crearEditorialDePrueba();
 
-    mockMvc.perform(post("/api/v1/libros")
+    String respuesta = mockMvc.perform(post("/api/v1/libros")
                     .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("""
                             {
                               "titulo": "Rayuela",
+                              "precio": 16.40,
+                              "fechaPublicacion": "1963-06-28",
+                              "editorialId": %d,
                               "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}
                             }
-                            """))
+                            """.formatted(editorialId)))
             .andExpect(status().isCreated())
+            .andReturn().getResponse().getContentAsString();
+
+    Number id = JsonPath.read(respuesta, "$.id");
+    mockMvc.perform(get("/api/v1/libros/{id}", id.longValue()))
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$.titulo").value("Rayuela"))
             .andExpect(jsonPath("$.detallesEdicion.editorial").value("Sudamericana"));
 }
 ```
 
-`loginComoAdmin()` no lleva `@Test`: es un método ayudante que cualquier otro test de la clase puede utilizar cuando necesite un token válido. Requiere `import com.jayway.jsonpath.JsonPath;`, ya incluido en `spring-boot-starter-test`.
+`loginComoAdmin()` no lleva `@Test`: es un método ayudante que cualquier otro test de la clase puede utilizar cuando necesite un token válido. Requiere `import com.jayway.jsonpath.JsonPath;`, disponible con las dependencias de pruebas de Spring Boot.
 
-El test ejecuta el flujo completo de creación contra un PostgreSQL real y comprueba tanto el código de estado como el cuerpo devuelto, incluida la propiedad anidada `detallesEdicion.editorial`. De esta forma se ejercitan el mapeo JSONB y la escritura en la base de datos.
-
-Sin embargo, las aserciones mostradas solo inspeccionan la respuesta del `POST`. Para comprobar de forma independiente que el dato puede recuperarse después, haría falta una segunda petición `GET` o una consulta al repositorio, como se indica en el aviso final del apartado.
+El `POST` verifica el alta y proporciona el ID. El `GET` posterior comprueba que la aplicación puede recuperar desde PostgreSQL el libro y la propiedad anidada `detallesEdicion.editorial`.
 
 ### Comprobar también los casos de error
 
-Un test de integración que solo prueba el camino feliz deja fuera la mitad del comportamiento real de tu API: qué pasa cuando la petición **no** debería tener éxito. Con tu `GlobalExceptionHandler` ya construido (PSP, Tema 2), cada error tiene un formato consistente — y ese formato también se comprueba con `jsonPath`, campo a campo, igual que un cuerpo de éxito. Aquí la petición sí está autenticada —el token de `user` es válido—, pero no autorizada, así que ni siquiera llega a tu controller:
+Un test de integración que solo prueba el camino feliz deja fuera la mitad del comportamiento real de tu API: qué pasa cuando la petición **no** debería tener éxito. Los manejadores de MVC y Spring Security comparten el formato `ErrorResponse` — y ese formato también se comprueba con `jsonPath`, campo a campo, igual que un cuerpo de éxito. Aquí la petición sí está autenticada —el token de `user` es válido—, pero no autorizada, así que ni siquiera llega a tu controller:
 
 ```mermaid
 sequenceDiagram
@@ -257,28 +238,29 @@ sequenceDiagram
     participant MockMvc
     participant SecurityFilterChain
     participant AccessDeniedHandler
-    participant App as GameVault (Testcontainers)
+    participant App as Librería con PostgreSQL de prueba
 
-    Test->>MockMvc: perform(POST /auth/login, user)
+    Test->>MockMvc: perform(POST /api/v1/auth/login, user)
     MockMvc->>App: petición simulada dentro del contexto real
     App-->>MockMvc: 200 + accessToken (rol USER)
     MockMvc-->>Test: respuesta
 
-    Test->>MockMvc: perform(POST /libros,<br/>Authorization: Bearer token)
+    Test->>MockMvc: perform(POST /api/v1/libros,<br/>Authorization: Bearer token)
     MockMvc->>SecurityFilterChain: petición simulada, ya autenticada
     Note right of SecurityFilterChain: Token válido → autenticado.<br/>hasRole("ADMIN") → no coincide (rol USER)
     SecurityFilterChain->>AccessDeniedHandler: AccessDeniedException
     AccessDeniedHandler-->>MockMvc: 403 + ErrorResponse
     MockMvc-->>Test: respuesta
-    Test->>Test: andExpect(jsonPath($.status, $.error))
+    Test->>Test: andExpect(jsonPath($.status, $.path))
 ```
 
-El test que reproduce ese flujo, con las aserciones sobre el cuerpo del error:
+El test reproduce ese flujo y comprueba el cuerpo del error. `registrarYAutenticarUsuario()` representa el registro de una cuenta de prueba y su login para obtener un JWT de `USER`.
 
 ```java
 @Test
 void crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin() throws Exception {
-    String userToken = loginComoUsuario(); // igual que loginComoAdmin(), con credenciales sin rol ADMIN
+    long editorialId = crearEditorialDePrueba();
+    String userToken = registrarYAutenticarUsuario();
 
     mockMvc.perform(post("/api/v1/libros")
                     .header("Authorization", "Bearer " + userToken)
@@ -286,12 +268,15 @@ void crearLibro_DebeDevolver403_CuandoElUsuarioNoEsAdmin() throws Exception {
                     .content("""
                             {
                               "titulo": "Rayuela",
+                              "precio": 16.40,
+                              "fechaPublicacion": "1963-06-28",
+                              "editorialId": %d,
                               "detallesEdicion": {"editorial": "Sudamericana", "paginas": 634}
                             }
-                            """))
+                            """.formatted(editorialId)))
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.status").value(403))
-            .andExpect(jsonPath("$.error").value("No autorizado"));
+            .andExpect(jsonPath("$.path").value("/api/v1/libros"));
 }
 ```
 

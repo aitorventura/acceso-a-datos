@@ -23,52 +23,19 @@ Tu columna `detallesPlataforma` (Actividad 2.1) y el filtro `disponibleEnPlatafo
 
 ## Paso 1 — Configuración del test, guiada al completo
 
-!!! tip "Por qué esto funciona dentro de tu Dev Container (y qué hacer si Docker da problemas)"
-    Tu JVM, dentro de `app`, le pide contenedores nuevos al Docker del *host* — y eso puede fallar de dos maneras distintas: primero, que ni siquiera pueda hablar con ese Docker; segundo, que hable con él pero no alcance por red los contenedores que acaba de crear. Tienes la explicación completa en la teoría de este apartado — resumen rápido de los dos:
+!!! tip "Comprueba Docker desde la terminal de pruebas"
+    Ejecuta `docker info`. Si falla dentro del Dev Container, verifica que Docker está iniciado, que el entorno se ha creado con `docker-outside-of-docker` y que tu usuario tiene acceso al socket.
 
-    - **Primero: `Permission denied` sobre `/var/run/docker.sock`**. Añade a `devcontainer.json`:
-      ```json
-      "postStartCommand": "sudo chmod 666 /var/run/docker.sock || true"
-      ```
-    - **Segundo: `Connection refused` hacia una IP tipo `172.17.0.1`** (Ryuk, o el propio contenedor de Postgres de Testcontainers, ya arrancados pero inalcanzables). Añade al servicio `app` de tu `.devcontainer/docker-compose.yml` (junto a `volumes` y `command`, no en `postgres`):
-      ```yaml
-      services:
-        app:
-          image: mcr.microsoft.com/devcontainers/base:bookworm
-          volumes:
-            - ..:/workspace:cached
-            - /var/run/docker.sock:/var/run/docker.sock
-          environment:
-            - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
-          command: sleep infinity
+    Con Docker Desktop y Java dentro del Dev Container, añade al servicio `app` de `.devcontainer/docker-compose.yml` el ajuste de red. Si ya hay un bloque `environment`, añade solo la entrada.
 
-        postgres:
-          # ... tu servicio postgres, sin cambios
-      ```
+    ```yaml
+        environment:
+          TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+    ```
 
-    En los dos casos, reconstruye el contenedor (**"Dev Containers: Rebuild Container"**) después de editar.
+    Reconstruye el entorno y comprueba que `printenv TESTCONTAINERS_HOST_OVERRIDE` devuelve `host.docker.internal`. La JVM podrá alcanzar los puertos publicados de Ryuk y PostgreSQL. [Testcontainers con Docker Desktop](https://java.testcontainers.org/supported_docker_environment/continuous_integration/dind_patterns/)
 
-Añade las dependencias de Testcontainers a tu `pom.xml` — las mismas que acabas de ver en la teoría de este apartado, **incluido el BOM** en `dependencyManagement` (junto al `<parent>`, no dentro de `<dependencies>`): sin él, Maven falla con `'dependencies.dependency.version' ... is missing` antes de compilar nada, porque `org.testcontainers:junit-jupiter` y `org.testcontainers:postgresql` no traen versión gestionada por `spring-boot-starter-parent`.
-
-```xml
-<properties>
-    <testcontainers.version>1.20.4</testcontainers.version>
-</properties>
-
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-bom</artifactId>
-            <version>${testcontainers.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-```
-
-Y, dentro de tu `<dependencies>` habitual, las tres de siempre — ya sin necesitar `<version>` propia:
+Añade al bloque `<dependencies>` las siguientes tres dependencias. `spring-boot-starter-parent` gestiona sus versiones.
 
 ```xml
 <dependency>
@@ -78,12 +45,12 @@ Y, dentro de tu `<dependencies>` habitual, las tres de siempre — ya sin necesi
 </dependency>
 <dependency>
     <groupId>org.testcontainers</groupId>
-    <artifactId>junit-jupiter</artifactId>
+    <artifactId>testcontainers-junit-jupiter</artifactId>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
+    <artifactId>testcontainers-postgresql</artifactId>
     <scope>test</scope>
 </dependency>
 ```
@@ -102,7 +69,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -117,7 +84,7 @@ class VideojuegoApiIntegrationTest {
 
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+    static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18-alpine");
 
     @Autowired
     private MockMvc mockMvc;
@@ -139,16 +106,16 @@ class VideojuegoApiIntegrationTest {
         return JsonPath.read(respuesta, "$.accessToken");
     }
 
-    private Long crearEstudio(String adminToken) throws Exception {
+    private Long crearEstudio(String adminToken, String nombre) throws Exception {
         String respuesta = mockMvc.perform(post("/api/v1/estudios")
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                  "nombre": "Team Cherry",
+                                  "nombre": "%s",
                                   "pais": "Australia"
                                 }
-                                """))
+                                """.formatted(nombre)))
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
@@ -161,19 +128,18 @@ class VideojuegoApiIntegrationTest {
 }
 ```
 
-`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yml` — Spring Boot lo resuelve por ti. Fíjate en que la imagen es `postgres:16-alpine`, no la `18-alpine` de tu `docker-compose.yml` de desarrollo — recuerda del Tema 1 que ambas versiones no tienen por qué coincidir, mientras sean compatibles con las características (como JSONB) que usa el proyecto.
+`@ServiceConnection` es la pieza clave: conecta automáticamente el `PostgreSQLContainer` a tu aplicación de test, sin que tengas que configurar manualmente `spring.datasource.url` en ningún `application-test.yml` — Spring Boot lo resuelve por ti. La imagen `postgres:18-alpine` alinea la versión de PostgreSQL con la de desarrollo. Docker asigna un puerto libre al contenedor de prueba.
 
-`@ActiveProfiles("test")` activa un perfil que todavía no existe en tu proyecto. Sin él, el contexto de Spring no arranca y ningún test se ejecuta — así que antes de nada, crea `src/test/resources/application-test.yml`:
+`@ActiveProfiles("test")` activa un perfil que todavía no existe en tu proyecto. Sin él, el contexto de Spring no arranca y ningún test se ejecuta — así que antes de nada, crea `src/test/resources/application-test.yml`. El directorio `resources` va al mismo nivel que `src/test/java`:
 
 ```yaml
 spring:
-  config:
-    activate:
-      on-profile: test
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: true
+      ddl-auto: create
+  sql:
+    init:
+      mode: never
 
 gamevault:
   admin:
@@ -183,14 +149,14 @@ gamevault:
     expiration-minutes: 60
 ```
 
-`ddl-auto: create-drop` deja cada ejecución del test con una base de datos limpia, sin arrastrar datos de la anterior. La limpieza se produce al arrancar un nuevo contexto de pruebas, no antes de cada método `@Test`. Como el contenedor y el contexto se comparten durante la ejecución de esta clase, los datos creados por un método podrían seguir presentes cuando se ejecute el siguiente.
+Con `ddl-auto: create`, Hibernate prepara el esquema al arrancar el contexto. Testcontainers retira el PostgreSQL temporal al finalizar la clase. `spring.sql.init.mode: never` evita cargar los datos de desarrollo. Como el contenedor y el contexto se comparten durante la ejecución de esta clase, los datos creados por un método podrían seguir presentes cuando se ejecute el siguiente.
 
 !!! warning "Sin `admin.password`, `jwt.secret` y `jwt.expiration-minutes`, el contexto ni arranca"
     Ninguna de las tres tiene valor por defecto en el código (`@Value` sin *fallback*) — sin ellas, ningún test de la clase llega a ejecutarse. La contraseña que pongas aquí tiene que coincidir con la que envíe `loginComoAdmin()` en su petición de login (más arriba, dentro de la misma clase) — de ahí el nombre `admintest123`, para que quede claro de un vistazo que es una credencial solo de test, sin relación con la de `dev`. El valor de `expiration-minutes` no importa para el test — `60` (el mismo de `dev`) sirve igual que cualquier otro. Este fichero sí se sube a Git: las credenciales de dentro no son reales, solo existen en el contenedor Postgres desechable que Testcontainers destruye al terminar el test.
 
-`loginComoAdmin()` es nuevo respecto a lo que tenías hasta ahora: hace un login real contra `/api/v1/auth/login` (el mismo endpoint que has construido en PSP, Actividad 2.4) y extrae el `accessToken` de la respuesta con `JsonPath`, la misma clase que ya conoces de otros tests con MockMvc. Lo necesitas porque, desde que tu política de rutas quedó cerrada por defecto (PSP, Actividad 2.5), crear un videojuego exige un token de `ADMIN` — antes de esa actividad, el `POST` de más abajo habría funcionado sin credenciales; ahora ya no.
+`loginComoAdmin()` hace un login contra `/api/v1/auth/login` (el mismo endpoint que has construido en PSP, Actividad 2.4) y extrae el `accessToken` de la respuesta con `JsonPath`, la misma clase que ya conoces de otros tests con MockMvc. Lo necesitas porque, desde que tu política de rutas quedó cerrada por defecto (PSP, Actividad 2.5), crear un videojuego exige un token de `ADMIN`.
 
-`crearEstudio()` resuelve otro problema: `ddl-auto: create-drop` deja tu base de datos de test completamente vacía en cada ejecución, así que ningún `estudioId` fijo (como `1`) existe todavía cuando el test arranca. Este ayudante crea un `Estudio` de verdad, autenticado igual que el resto, y devuelve su `id` real — que es justo lo que necesitas para crear un videojuego que apunte a un estudio que sí existe.
+`crearEstudio()` resuelve otro problema: `ddl-auto: create` deja tu base de datos de test completamente vacía en cada ejecución, así que ningún `estudioId` fijo (como `1`) existe todavía cuando el test arranca. Este ayudante crea un `Estudio` con el nombre que le pasas, usa el JWT de administrador y devuelve su `id` — que es justo lo que necesitas para crear un videojuego que apunte a un estudio que sí existe.
 
 ---
 
@@ -217,7 +183,7 @@ sequenceDiagram
     App-->>MockMvc: 201 Created
     MockMvc-->>Test: respuesta
 
-    Test->>MockMvc: perform(GET /videojuegos?plataforma=steam)
+    Test->>MockMvc: perform(GET /videojuegos?plataforma=steam&titulo=Hades%20prueba%20Steam)
     MockMvc->>App: petición pública, sin token
     App-->>MockMvc: 200 + lista con el videojuego
     MockMvc-->>Test: respuesta
@@ -230,14 +196,14 @@ Así se traduce a código:
 @Test
 void filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene() throws Exception {
     String adminToken = loginComoAdmin();
-    Long estudioId = crearEstudio(adminToken);
+    Long estudioId = crearEstudio(adminToken, "Estudio filtro Steam");
 
     mockMvc.perform(post("/api/v1/videojuegos")
                     .header("Authorization", "Bearer " + adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("""
                             {
-                              "titulo": "Hades",
+                              "titulo": "Hades prueba Steam",
                               "precio": 24.99,
                               "fechaLanzamiento": "2020-09-17",
                               "estudioId": %d,
@@ -246,9 +212,12 @@ void filtrarPorPlataforma_DebeDevolverElVideojuego_CuandoLaTiene() throws Except
                             """.formatted(estudioId)))
             .andExpect(status().isCreated());
 
-    mockMvc.perform(get("/api/v1/videojuegos?plataforma=steam"))
+    mockMvc.perform(get("/api/v1/videojuegos")
+                    .param("plataforma", "steam")
+                    .param("titulo", "Hades prueba Steam"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content[0].titulo").value("Hades"));
+            .andExpect(jsonPath("$.content[0].titulo").value("Hades prueba Steam"))
+            .andExpect(jsonPath("$.content[0].detallesPlataforma.steam.idApp").value(123));
 }
 ```
 
@@ -269,28 +238,28 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/login, admin)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /estudios,<br/>Authorization: Bearer token)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     App-->>MockMvc: 201 + id del estudio
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /videojuegos,<br/>Authorization: Bearer token,<br/>estudioId real,<br/>detallesPlataforma: steam)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     App-->>MockMvc: 201 Created
     MockMvc-->>Test: respuesta
 
-    Test->>MockMvc: perform(GET /videojuegos?plataforma=xbox)
+    Test->>MockMvc: perform(GET /videojuegos?plataforma=xbox&titulo=...)
     MockMvc->>App: petición pública, sin token
     App-->>MockMvc: 200 + lista SIN el videojuego
     MockMvc-->>Test: respuesta
     Test->>Test: andExpect(jsonPath($.content).isEmpty())
 ```
 
-Solo se indica el nombre del test — tú escribes todo lo demás, siguiendo el patrón del Paso 2 (recuerda: también necesitas `crearEstudio()` antes del videojuego, y este test crea el suyo propio, no reutiliza el del test anterior, así no depende del orden en que JUnit ejecute los tests de la clase):
+Completa el método siguiendo el patrón del Paso 2. Crea su propio estudio con un nombre distinto y un videojuego con un título exclusivo. Incluye ese título al pedir `plataforma=xbox` para que la comprobación de que `content` está vacío se refiera solo a los datos de este test.
 
 ```java
 @Test
@@ -317,12 +286,12 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/login, admin)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /videojuegos,<br/>Authorization: Bearer token,<br/>estudioId: 999999)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     Note right of App: VideojuegoService.create()<br/>estudioRepository.findById(999999)<br/>.orElseThrow(...)
     App-->>MockMvc: 404 + ErrorResponse
     MockMvc-->>Test: respuesta
@@ -353,7 +322,7 @@ void crearVideojuego_DebeDevolver404_CuandoElEstudioNoExiste() throws Exception 
 }
 ```
 
-`estudioId: 999999` es, deliberadamente, un id que no existe en tu base de datos de test (recién creada por `ddl-auto: create-drop`, así que ningún id llega a esa cifra). Fíjate en que esto también pasa por Testcontainers de verdad: un mock del repositorio nunca ejecutaría el `orElseThrow` contra una base de datos real, así que este test comprueba el camino de error tal y como ocurriría en producción, no una simulación de él.
+`estudioId: 999999` es, deliberadamente, un id que no existe en tu base de datos de test (recién creada por `ddl-auto: create`, así que ningún id llega a esa cifra). Fíjate en que esto también pasa por Testcontainers de verdad: un mock del repositorio nunca ejecutaría el `orElseThrow` contra una base de datos real, así que este test comprueba el camino de error tal y como ocurriría en producción, no una simulación de él.
 
 ---
 
@@ -372,22 +341,22 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/login, admin)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /estudios,<br/>Authorization: Bearer token)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     App-->>MockMvc: 201 + id del estudio
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /videojuegos,<br/>cuerpo válido)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     App-->>MockMvc: 201 + id del videojuego
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(PUT /videojuegos/{id},<br/>precio: -10)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     Note right of App: @Valid rechaza el DTO<br/>antes de llegar al service
     App-->>MockMvc: 400 + ErrorResponse
     MockMvc-->>Test: respuesta
@@ -400,8 +369,8 @@ El esqueleto a completar:
 @Test
 void actualizarVideojuego_DebeDevolver400_CuandoElPrecioEsNegativo() throws Exception {
     String adminToken = loginComoAdmin();
-    // tu turno: crearEstudio(adminToken) y luego un videojuego válido (reutiliza el
-    //           patrón del Paso 2) — anota el id del videojuego para el PUT de abajo
+    // tu turno: crea un estudio con un nombre propio del test y después un videojuego válido.
+    //           Sigue el patrón del Paso 2 y guarda el id del videojuego para el PUT.
 
     mockMvc.perform(put("/api/v1/videojuegos/" + /* el id que acabas de crear */ "")
                     .header("Authorization", "Bearer " + adminToken)
@@ -425,12 +394,12 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/login, admin)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 200 + accessToken
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(PUT /videojuegos/999999,<br/>Authorization: Bearer token)
-    MockMvc->>App: petición HTTP real, ya autenticada
+    MockMvc->>App: petición simulada en el contexto de Spring, ya autenticada
     Note right of App: videojuegoRepository.findById(999999)<br/>.orElseThrow(...)
     App-->>MockMvc: 404 + ErrorResponse
     MockMvc-->>Test: respuesta
@@ -458,17 +427,17 @@ sequenceDiagram
     participant App as GameVault (Testcontainers)
 
     Test->>MockMvc: perform(POST /auth/register,<br/>usuario sin rol ADMIN)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 201 Created
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(POST /auth/login, ese mismo usuario)
-    MockMvc->>App: petición HTTP real
+    MockMvc->>App: petición simulada en el contexto de Spring
     App-->>MockMvc: 200 + accessToken (rol USER)
     MockMvc-->>Test: respuesta
 
     Test->>MockMvc: perform(PUT /videojuegos/{id},<br/>Authorization: Bearer token)
-    MockMvc->>SecurityFilterChain: petición HTTP real, ya autenticada
+    MockMvc->>SecurityFilterChain: petición simulada en el contexto de Spring, ya autenticada
     Note right of SecurityFilterChain: hasRole("ADMIN") → no coincide
     SecurityFilterChain->>AccessDeniedHandler: AccessDeniedException
     AccessDeniedHandler-->>MockMvc: 403 + ErrorResponse
@@ -492,7 +461,13 @@ void actualizarVideojuego_DebeDevolver403_CuandoElUsuarioNoEsAdmin() throws Exce
 
 **Pregunta**: los tres tests de este paso comparten casi toda la estructura (login, `PUT`, cuerpo JSON, aserciones). ¿Por qué no merece la pena extraer esa parte común a un método ayudante, como sí has hecho con `loginComoAdmin()`? Piensa en qué cambia realmente entre los tres — el cuerpo de la petición, el token usado, y sobre todo la aserción final, que es lo que hace que cada test verifique algo distinto.
 
-**Captura**: los seis tests de `VideojuegoApiIntegrationTest` en verde, ejecutados desde tu IDE.
+**Captura**: los seis tests de `VideojuegoApiIntegrationTest` en verde. Puedes ejecutarlos desde el IDE o desde la terminal.
+
+```bash
+./mvnw -B -Dtest=VideojuegoApiIntegrationTest test
+```
+
+En el registro, comprueba que arranca PostgreSQL y que Spring activa el perfil `test`. Si usas CI con un filtro `-Dtest`, incluye esta clase en la selección.
 
 ---
 
