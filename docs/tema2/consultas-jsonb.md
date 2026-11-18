@@ -170,6 +170,15 @@ La técnica es idéntica a la de `disponibleEnFormato`: nombre de la función na
 !!! warning "El índice GIN anterior no acelera automáticamente esta comparación"
     El índice GIN sobre la columna completa está pensado para determinados operadores JSONB, como `?` o `@>`. Una comparación basada en extraer un valor como texto mediante `->>` o `#>>` no aprovecha automáticamente ese mismo índice.
 
+    `@>` es el operador de **contención**: `a @> b` es verdadero si el documento `a` contiene la estructura `b`, con sus claves **y sus valores**, a cualquier profundidad. A diferencia de `?`, que solo mira si existe una clave de primer nivel, `@>` sí permite preguntar por un valor anidado. La consulta de «ebook en formato `mobi`» de antes se puede escribir así:
+
+    ```sql
+    SELECT titulo FROM libro
+    WHERE detalles_edicion @> '{"ebook": {"formato": "mobi"}}';
+    ```
+
+    Devuelve solo **1984**, igual que la versión con `->>`, pero con una diferencia: `@>` es uno de los operadores para los que PostgreSQL puede usar el índice GIN de la columna.
+
     Si una consulta sobre `ebook.formato` se utilizara con mucha frecuencia en una tabla grande, podría crearse un índice de expresión sobre `(detalles_edicion -> 'ebook' ->> 'formato')`. Queda fuera del alcance de este apartado, pero conviene no dar por hecho que cualquier consulta sobre JSONB será rápida por tener un índice GIN: depende de la expresión y del operador utilizados.
 
 ---
